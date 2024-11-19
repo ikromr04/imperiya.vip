@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+.container {
+  @apply w-[90vw] max-w-screen-xl mx-auto;
+}
+
+.certificates {
+  .swiper-pagination-bullet {
+    @apply flex !m-0 !p-0 min-w-3 min-h-3 max-w-3 max-h-3 bg-transparent border opacity-100 border-indigo-400;
+  }
+
+  .swiper-pagination-bullet-active {
+    @apply bg-indigo-400;
+  }
+}
+
+.partners {
+  .swiper-pagination-bullet {
+    @apply flex !m-0 !p-0 min-w-3 min-h-3 max-w-3 max-h-3 bg-transparent border opacity-100 border-brand;
+  }
+
+  .swiper-pagination-bullet-active {
+    @apply bg-brand;
+  }
+}
+
+.title {
+  @apply text-2xl font-semibold leading-[1.2];
+}
