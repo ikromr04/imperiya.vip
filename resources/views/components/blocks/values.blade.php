@@ -9,7 +9,7 @@
         <div class="hidden md:block pointer-events-none absolute -top-[5px] -left-[.5px] h-10 rounded-[10px] bg-white w-[240px] -z-10"></div>
         <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-brand rounded-[10px]"></div>
 
-        <div class="pt-4 p-6 mb-4 overflow-hidden relative z-10">
+        <div class="pt-4 p-6 overflow-hidden relative z-10 lg:p-8">
           <h2 class="font-semibold text-lg mb-3">
             {{ __('Базовые') }}
           </h2>
@@ -55,7 +55,7 @@
         <div class="hidden md:block pointer-events-none absolute -top-[5px] -left-[.5px] h-10 rounded-[10px] bg-white w-[240px] -z-10"></div>
         <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-brand rounded-[10px]"></div>
 
-        <div class="pt-4 p-6 mb-4 overflow-hidden relative z-10">
+        <div class="pt-4 p-6 overflow-hidden relative z-10 lg:p-8">
           <h2 class="font-semibold text-lg mb-3">
             {{ __('Духовные') }}
           </h2>
@@ -109,7 +109,7 @@
         <div class="hidden md:block pointer-events-none absolute -top-[5px] -left-[.5px] h-10 rounded-[10px] bg-white w-[240px] -z-10"></div>
         <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-brand rounded-[10px]"></div>
 
-        <div class="pt-4 p-6 mb-4 overflow-hidden relative z-10">
+        <div class="pt-4 p-6 overflow-hidden relative z-10 lg:p-8">
           <h2 class="font-semibold text-lg mb-3">
             {{ __('Общественные') }}
           </h2>
