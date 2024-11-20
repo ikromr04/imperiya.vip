@@ -1,4 +1,4 @@
-<section class="container" id="team">
+<section class="container">
   <h2 class="title mb-6 md:mb-8 xl:mb-10 text-center">{{ __('СМИ о нас') }}</h2>
 
   <div class="relative z-0 press mx-14">
@@ -7,7 +7,7 @@
         <div class="swiper-slide">
           <div>
             <div class="h-auto aspect-[550/310] mb-2">
-              <iframe class="h-full w-full border rounded-lg" src="https://www.youtube.com/embed/oNBqtojw_ZQ?si=SytlE2ixVIsFO4df" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+              <iframe class="h-full w-full border rounded-lg" src="https://www.youtube.com/embed/oNBqtojw_ZQ?si=SytlE2ixVIsFO4df" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
             </div>
             <h3 class="font-semibold line-clamp-2">
               {{ __('Таджикские школьники стали победителями Международной Олимпиады «ЭРУДИТЫ ПЛАНЕТЫ» - 2024') }}
@@ -17,7 +17,7 @@
         <div class="swiper-slide">
           <div>
             <div class="h-auto aspect-[550/310] mb-2">
-              <iframe class="h-full w-full border rounded-lg" src="https://www.youtube.com/embed/R4gOH6qVZYY?si=LX7pQ4REbWimY6Dd" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+              <iframe class="h-full w-full border rounded-lg" src="https://www.youtube.com/embed/R4gOH6qVZYY?si=LX7pQ4REbWimY6Dd" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
             </div>
             <h3 class="font-semibold line-clamp-2">
               {{ __('«Удивительные люди». Манижа Тошболтаева. Определение скорости') }}
@@ -27,7 +27,7 @@
         <div class="swiper-slide">
           <div>
             <div class="h-auto aspect-[550/310] mb-2">
-              <iframe class="h-full w-full border rounded-lg" src="https://www.youtube.com/embed/7LIoGij4FOc?si=BOy9basOCQysnNjL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+              <iframe class="h-full w-full border rounded-lg" src="https://www.youtube.com/embed/7LIoGij4FOc?si=BOy9basOCQysnNjL" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
             </div>
             <h3 class="font-semibold line-clamp-2">
               {{ __('"ИМПЕРИЯ ЗНАНИЙ" - школа, где воспитывают вундеркиндов') }}
@@ -37,7 +37,7 @@
         <div class="swiper-slide">
           <div>
             <div class="h-auto aspect-[550/310] mb-2">
-              <iframe class="h-full w-full border rounded-lg" src="https://www.youtube.com/embed/UlQ7roh0OP0?si=lJ8P6osOXlknoarC" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+              <iframe class="h-full w-full border rounded-lg" src="https://www.youtube.com/embed/UlQ7roh0OP0?si=lJ8P6osOXlknoarC" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
             </div>
             <h3 class="font-semibold line-clamp-2">
               {{ __('«Удивительные люди». Ёсуман Исмонзода. Молниеносный счет в уме') }}

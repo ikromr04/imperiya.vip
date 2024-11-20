@@ -14,13 +14,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   @vite(['resources/css/public.css'])
 
   <title>{{ config('app.name') }}</title>
 </head>
 
-<body class="flex flex-col group gap-8 mb-8 md:gap-10 md:mb-10 xl:gap-12 xl:mb-12">
+<body class="flex flex-col group gap-8 md:gap-10xl:gap-12">
   <x-icons />
 
   <main class="flex flex-col gap-8 md:gap-10 lg:gap-12">
@@ -44,6 +44,8 @@
 
     <x-blocks.ad />
   </main>
+
+  <x-layouts.footer />
 
   @vite(['resources/js/public.js'])
 </body>

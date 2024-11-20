@@ -7,7 +7,7 @@
       ],
       [
           'title' => 'UNESCO Associated Schools',
-          'link' => 'https://www.unesco.org/en/aspnet"',
+          'link' => 'https://www.unesco.org/en/aspnet',
           'logo' => 'unesco.png',
       ],
       [
