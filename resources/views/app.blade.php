@@ -23,12 +23,16 @@
 <body class="flex flex-col group gap-8 mb-8 md:gap-10 md:mb-10 xl:gap-12 xl:mb-12">
   <x-icons />
 
-  <main class="flex flex-col gap-8 md:gap-10 lg:gap-12 mb-8 md:mb-10 lg:mb-12">
+  <main class="flex flex-col gap-8 md:gap-10 lg:gap-12">
     <x-blocks.vitrin />
 
     <x-blocks.partners />
 
     <x-blocks.about />
+
+    <x-blocks.facts />
+
+    <x-blocks.team />
   </main>
 
   @vite(['resources/js/public.js'])

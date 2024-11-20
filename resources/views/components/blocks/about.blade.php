@@ -47,8 +47,8 @@
   <ol class="md:flex md:flex-col md:gap-2 lg:grid lg:grid-cols-2 xl:grid-cols-3">
     @foreach ($items as $key => $item)
       <li class="relative z-0 group mb-6 md:border md:border-brand md:py-8 md:px-6 rounded-[10px] bg-white md:mb-0 md:mt-[5px]" data-sizable-wrapper>
-        <div class="hidden sm:block pointer-events-none absolute -top-[5px] -left-[.5px] h-10 rounded-[10px] bg-brand w-[240px] -z-10"></div>
-        <div class="hidden sm:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-white rounded-[10px]"></div>
+        <div class="hidden md:block pointer-events-none absolute -top-[5px] -left-[.5px] h-10 rounded-[10px] bg-brand w-[240px] -z-10"></div>
+        <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-white rounded-[10px]"></div>
 
         <div class="max-h-32 overflow-hidden transition-all duration-300 md:!max-h-none relative z-0" data-sizable="128">
           <h3 class="font-semibold mb-1 text-lg md:flex md:items-center md:gap-x-3 md:mb-4">

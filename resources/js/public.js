@@ -1,7 +1,9 @@
 import 'swiper/css';
+import 'photoswipe/style.css';
 
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import Swiper from 'swiper';
-import { Pagination, Autoplay } from 'swiper/modules';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
 const
   screenWidth = window.innerWidth,
@@ -72,36 +74,31 @@ new Swiper('.partners .swiper', {
   }
 });
 
-if (screenWidth < 1024) {
-  let startX = 0;
-  let endX = 0;
-
-  document.addEventListener('touchstart', (evt) => {
-    startX = evt.touches[0].clientX;
-
-    if (!document.body.classList.contains('overflow-hidden') && startX < screenWidth * 0.9) {
-      startX = null;
+new Swiper('.team .swiper', {
+  modules: [Navigation, Autoplay],
+  loop: true,
+  autoplay: {
+    delay: 5000,
+    disableOnInteraction: false,
+    pauseOnMouseEnter: true,
+  },
+  spaceBetween: 8,
+  navigation: {
+    nextEl: '.team .swiper-button-next',
+    prevEl: '.team .swiper-button-prev',
+  },
+  breakpoints: {
+    640: {
+      slidesPerView: 2,
+    },
+    1024: {
+      slidesPerView: 3,
+    },
+    1280: {
+      slidesPerView: 4,
     }
-  });
-
-  document.addEventListener('touchmove', (evt) => {
-    if (startX !== null) {
-      endX = evt.touches[0].clientX;
-    }
-  });
-
-  document.addEventListener('touchend', () => {
-    if (startX !== null) {
-      const deltaX = startX - endX;
-
-      if (deltaX > 50 && !document.body.classList.contains('overflow-hidden')) {
-        document.body.classList.add('overflow-hidden');
-      } else if (deltaX < -50 && document.body.classList.contains('overflow-hidden')) {
-        document.body.classList.remove('overflow-hidden');
-      }
-    }
-  });
-}
+  }
+});
 
 document.addEventListener('click', (evt) => {
   const
@@ -128,3 +125,11 @@ document.addEventListener('click', (evt) => {
     setMaxHeight(activeWrapper, false);
   }
 });
+
+
+const lightbox = new PhotoSwipeLightbox({
+  gallery: '#my-gallery',
+  children: 'a',
+  pswpModule: () => import('photoswipe')
+});
+lightbox.init();
