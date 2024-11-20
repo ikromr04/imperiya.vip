@@ -98,6 +98,76 @@ new Swiper('.team .swiper', {
   }
 });
 
+new Swiper('.team .swiper', {
+  modules: [Navigation, Autoplay],
+  loop: true,
+  autoplay: {
+    delay: 5000,
+    disableOnInteraction: false,
+    pauseOnMouseEnter: true,
+  },
+  spaceBetween: 8,
+  navigation: {
+    nextEl: '.team .swiper-button-next',
+    prevEl: '.team .swiper-button-prev',
+  },
+  breakpoints: {
+    640: {
+      slidesPerView: 2,
+    },
+    1024: {
+      slidesPerView: 3,
+    },
+    1280: {
+      slidesPerView: 4,
+    }
+  }
+});
+
+new Swiper('.press .swiper', {
+  modules: [Navigation, Autoplay],
+  loop: true,
+  autoplay: {
+    delay: 5000,
+    disableOnInteraction: false,
+    pauseOnMouseEnter: true,
+  },
+  spaceBetween: 8,
+  navigation: {
+    nextEl: '.press .swiper-button-next',
+    prevEl: '.press .swiper-button-prev',
+  },
+  breakpoints: {
+    768: {
+      slidesPerView: 2,
+    },
+    1280: {
+      slidesPerView: 3,
+    }
+  }
+});
+
+new Swiper('.reviews-swiper .swiper', {
+  modules: [Navigation, Autoplay],
+  loop: true,
+  spaceBetween: 8,
+  navigation: {
+    nextEl: '.reviews-swiper .swiper-button-next',
+    prevEl: '.reviews-swiper .swiper-button-prev',
+  },
+  breakpoints: {
+    640: {
+      slidesPerView: 2,
+    },
+    1024: {
+      slidesPerView: 3,
+    },
+    1280: {
+      slidesPerView: 4,
+    }
+  }
+});
+
 document.addEventListener('click', (evt) => {
   const
     clickedWrapper = evt.target.closest('[data-sizable-wrapper]'),

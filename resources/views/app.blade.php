@@ -37,6 +37,12 @@
     <x-blocks.gallery />
 
     <x-blocks.values />
+
+    <x-blocks.press />
+
+    <x-blocks.reviews />
+
+    <x-blocks.ad />
   </main>
 
   @vite(['resources/js/public.js'])
