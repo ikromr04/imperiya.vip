@@ -6,8 +6,6 @@ import Swiper from 'swiper';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
 const
-  screenWidth = window.innerWidth,
-
   setMaxHeight = (wrapper, expanded) => {
     const sizable = wrapper.querySelector('[data-sizable]');
     sizable.style.maxHeight = expanded
@@ -127,9 +125,12 @@ document.addEventListener('click', (evt) => {
 });
 
 
-const lightbox = new PhotoSwipeLightbox({
-  gallery: '#my-gallery',
-  children: 'a',
-  pswpModule: () => import('photoswipe')
+document.querySelectorAll('[data-gallery]').forEach((gallery) => {
+  const lightbox = new PhotoSwipeLightbox({
+    gallery,
+    children: 'a',
+    pswpModule: () => import('photoswipe')
+  });
+
+  lightbox.init();
 });
-lightbox.init();

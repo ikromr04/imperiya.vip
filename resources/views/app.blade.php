@@ -33,6 +33,8 @@
     <x-blocks.facts />
 
     <x-blocks.team />
+
+    <x-blocks.gallery />
   </main>
 
   @vite(['resources/js/public.js'])
