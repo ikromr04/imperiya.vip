@@ -20,8 +20,8 @@
         <div class="swiper-wrapper flex items-center">
           @foreach (range(1, 7) as $key)
             <div class="swiper-slide">
-              <a class="relative z-0 bg-blue-400 flex rounded-md overflow-hidden" href="{{ asset("/images/certificates/$key.jpg") }}" target="_blank">
-                <img class="w-full h-full object-contain" src="{{ asset("/images/certificates/$key.jpg") }}" width="80" height="80" alt="Сертификат">
+              <a class="relative z-0 bg-blue-400 max-w-max max-h-max mx-auto flex rounded-md overflow-hidden" href="{{ asset("/images/certificates/$key.jpg") }}" target="_blank">
+                <img class="w-[90px] h-auto object-contain" src="{{ asset("/images/certificates/$key.jpg") }}" width="80" height="80" alt="Сертификат">
                 <div class="absolute top-0 left-0 w-full h-full bg-black opacity-0 hover:opacity-40 transition-all duration-300"></div>
               </a>
             </div>
