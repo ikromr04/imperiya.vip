@@ -18,12 +18,15 @@
     </g>
   </symbol>
   <symbol id="arrow-right" viewBox="0 0 64 42" fill="none">
-    <path fill="currentColor" d="m44.636 1.072 18.742 18.581.105.096c.32.318.492.725.517 1.141v.22a1.75 1.75 0 0 1-.517 1.142l-.093.078-18.754 18.6a1.786 1.786 0 0 1-2.897-.571 1.752 1.752 0 0 1 .385-1.922L58.14 22.554H1.776A1.767 1.767 0 0 1 0 20.794a1.768 1.768 0 0 1 1.778-1.763H57.72L42.124 3.564a1.75 1.75 0 0 1 0-2.492 1.787 1.787 0 0 1 2.512 0Zm17.79 19.72L43.38 39.683 62.226 21v-.007l-.105-.094-.107-.107h.413Z"/>
+    <path fill="currentColor" d="m44.636 1.072 18.742 18.581.105.096c.32.318.492.725.517 1.141v.22a1.75 1.75 0 0 1-.517 1.142l-.093.078-18.754 18.6a1.786 1.786 0 0 1-2.897-.571 1.752 1.752 0 0 1 .385-1.922L58.14 22.554H1.776A1.767 1.767 0 0 1 0 20.794a1.768 1.768 0 0 1 1.778-1.763H57.72L42.124 3.564a1.75 1.75 0 0 1 0-2.492 1.787 1.787 0 0 1 2.512 0Zm17.79 19.72L43.38 39.683 62.226 21v-.007l-.105-.094-.107-.107h.413Z" />
   </symbol>
   <symbol id="prev" viewBox="0 0 8 16" fill="none">
-    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m7 .999-6 7 6 7"/>
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m7 .999-6 7 6 7" />
   </symbol>
   <symbol id="next" viewBox="0 0 8 16" fill="none">
-    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m1 .999 6 7-6 7"/>
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m1 .999 6 7-6 7" />
+  </symbol>
+  <symbol id="check" viewBox="0 0 12 9" fill="none">
+    <path d="M4.43441 5.43441L2.75011 3.75011C2.3359 3.33591 1.66432 3.33591 1.25011 3.75011C0.835901 4.16431 0.835901 4.83591 1.25011 5.25011L4.29301 8.29301C4.68351 8.68351 5.31671 8.68351 5.70721 8.29301L11.2501 2.75011C11.6643 2.3359 11.6643 1.66432 11.2501 1.25011C10.8359 0.835901 10.1643 0.835901 9.75011 1.25011L5.56581 5.43441C5.25341 5.74681 4.74681 5.74681 4.43441 5.43441Z" fill="currentColor" />
   </symbol>
 </svg>
