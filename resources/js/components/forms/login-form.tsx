@@ -4,6 +4,9 @@ import * as yup from 'yup';
 import { Form, Formik, FormikHelpers } from 'formik';
 import classNames from 'classnames';
 import Input from '../ui/input/input';
+import Button from '../ui/button';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const';
 
 export default function LoginForm({
   className,
@@ -35,16 +38,23 @@ export default function LoginForm({
       onSubmit={onSubmit}
     >
       {({ isSubmitting }) => (
-        <Form className={classNames(className, 'flex flex-col gap-6 bg-white p-6')}>
-          <Input
-            name="login"
-            label="Логин"
-          />
-          <Input
-            name="password"
-            label="Пароль"
-            placeholder="********"
-          />
+        <Form className={classNames(className, 'flex flex-col max-w-[400px] sm:min-w-[400px]')}>
+          <Input className="mb-2" name="login" label="Логин" />
+
+          <div className="flex flex-col mb-8">
+            <Link className="ml-auto text-blue-600 transition-all duration-300 hover:text-blue-400" to={AppRoute.Auth.ResetPassword}>
+              Забыли пароль?
+            </Link>
+            <Input name="password" label="Пароль" />
+          </div>
+
+          <Button
+            className="justify-center"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            Войти
+          </Button>
         </Form>
       )}
     </Formik>

@@ -17,6 +17,9 @@ export default {
       },
       colors: {
         'brand': '#0d457e',
+      },
+      backgroundImage: {
+        'illustrations': 'url(/images/illustrations.png)',
       }
     },
   },

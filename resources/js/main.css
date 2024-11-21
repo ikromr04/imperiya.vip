@@ -6,6 +6,10 @@
   @apply w-[90vw] max-w-screen-2xl mx-auto;
 }
 
+.title {
+  @apply leading-[1.2] text-xl font-semibold;
+}
+
 .input {
   @apply flex grow items-center px-4 border bg-gray-50 rounded-md h-11 transition-colors duration-300 focus:placeholder:text-gray-400;
 
@@ -27,7 +31,7 @@
 }
 
 .input-label {
-  @apply absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-500 transition-all duration-300 !leading-none;
+  @apply absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-500 transition-all duration-300 !leading-none rounded;
 
   .input:focus + & {
     @apply top-0 left-3 text-sm px-1 text-blue-800 bg-white;

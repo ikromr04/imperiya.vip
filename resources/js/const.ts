@@ -3,6 +3,7 @@ export const AppRoute = {
   Auth: {
     Index: '/auth',
     Login: '/auth/login',
+    ResetPassword: '/auth/reset-password',
   },
   NotFound: '*',
 };

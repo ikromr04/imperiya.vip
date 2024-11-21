@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import classNames from 'classnames';
 
@@ -12,23 +12,23 @@ export default function MainLogo({
 
   if (pathname === AppRoute.Index) {
     return (
-      <div className={classNames('max-w-max max-h-max p-2', className)}>
+      <div className={classNames(className, 'max-w-max max-h-max')}>
         <picture>
-          <source media="(min-width: 1024px)" srcSet="/images/logo-full.svg" width={64} height={25} />
-          <source srcSet="/images/logo.svg" width={32} height={23} />
-          <img className="w-10 h-auto lg:h-10 lg:w-auto" src="/images/logo.svg" alt="Логотип Poputi TJ" />
+          <source media="(min-width: 640px)" srcSet="/images/main-logo-dark.desktop.svg" width={185} height={52} />
+          <source srcSet="/images/main-logo-dark.mobile.svg" width={40} height={40} />
+          <img src="/images/main-logo-dark.mobile.svg" alt="Логотип школы «Империя Знаний»" />
         </picture>
       </div>
     );
   }
 
   return (
-    <Link className={classNames('max-w-max max-h-max p-2', className)} to="/">
+    <a className={classNames(className, 'max-w-max max-h-max')} href="/">
       <picture>
-        <source media="(min-width: 1024px)" srcSet="/images/logo-full.svg" width={64} height={25} />
-        <source srcSet="/images/logo.svg" width={32} height={23} />
-        <img className="w-10 h-auto lg:h-10 lg:w-auto" src="/images/logo.svg" alt="На главную страницу" />
+        <source media="(min-width: 640px)" srcSet="/images/main-logo-dark.desktop.svg" width={185} height={52} />
+        <source srcSet="/images/main-logo-dark.mobile.svg" width={40} height={40} />
+        <img src="/images/main-logo-dark.mobile.svg" alt="Логотип школы «Империя Знаний»" />
       </picture>
-    </Link>
+    </a>
   );
 }
