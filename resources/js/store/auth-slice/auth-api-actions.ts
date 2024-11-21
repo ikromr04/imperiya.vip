@@ -5,7 +5,7 @@ import { APIRoute } from '../../const';
 import { AuthUser } from '../../types/auth';
 import { ValidationError } from '../../types/validation-error';
 import { LoginCredentials } from '../../dto/auth-dto';
-import { saveToken, Token } from '../../services/token';
+import { dropToken, saveToken, Token } from '../../services/token';
 
 export const checkAuthAction = createAsyncThunk<AuthUser, undefined, {
   extra: AxiosInstance
@@ -36,5 +36,15 @@ export const loginAction = createAsyncThunk<AuthUser, {
       onError(error.response.data);
       return rejectWithValue(error.response.data);
     }
+  },
+);
+
+export const logoutAction = createAsyncThunk<void, undefined, {
+  extra: AxiosInstance
+}>(
+  'auth/logout',
+  async (_arg, { extra: api }) => {
+    await api.delete(APIRoute.Auth.Login);
+    dropToken();
   },
 );

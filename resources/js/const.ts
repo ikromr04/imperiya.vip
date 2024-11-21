@@ -1,9 +1,12 @@
+export const DEFAULT_AVATAR_PATH = '/images/default-avatar.png';
+
 export const AppRoute = {
   Journal: '/journal',
   Auth: {
     Index: '/auth',
     Login: '/auth/login',
     ResetPassword: '/auth/reset-password',
+    Profile: '/auth/profile',
   },
   NotFound: '*',
 };

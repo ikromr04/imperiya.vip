@@ -19,7 +19,7 @@
 </head>
 
 <body>
-  <div class="flex flex-col min-w-screen min-h-screen bg-gray-50" id="root"></div>
+  <div class="flex flex-col min-w-screen min-h-screen bg-gray-100 text-gray-600" id="root"></div>
 
   @viteReactRefresh
   @vite('resources/js/main.tsx')

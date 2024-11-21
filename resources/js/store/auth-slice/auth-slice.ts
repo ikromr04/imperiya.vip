@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { checkAuthAction, loginAction } from './auth-api-actions';
+import { checkAuthAction, loginAction, logoutAction } from './auth-api-actions';
 import { AuthorizationStatus, SliceName } from '../../const';
 import { AuthUser } from '../../types/auth';
 
@@ -32,6 +32,9 @@ export const authSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(loginAction.rejected, (state) => {
+        state.authStatus = AuthorizationStatus.NoAuth;
+      })
+      .addCase(logoutAction.fulfilled, (state) => {
         state.authStatus = AuthorizationStatus.NoAuth;
       });
   },
