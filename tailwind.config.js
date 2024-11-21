@@ -1,5 +1,3 @@
-import defaultTheme from 'tailwindcss/defaultTheme';
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -7,6 +5,8 @@ export default {
     './storage/framework/views/*.php',
     './resources/**/*.blade.php',
     './resources/**/*.js',
+    './resources/**/*.ts',
+    './resources/**/*.tsx',
     './resources/**/*.vue',
   ],
   theme: {
