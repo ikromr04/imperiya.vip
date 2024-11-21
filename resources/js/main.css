@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .container {
-  @apply w-[90vw] max-w-screen-2xl mx-auto;
+  @apply w-[90vw] max-w-[1728px] mx-auto;
 }
 
 .title {

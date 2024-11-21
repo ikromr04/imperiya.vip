@@ -1,5 +1,5 @@
 export const AppRoute = {
-  Index: '/journal',
+  Journal: '/journal',
   Auth: {
     Index: '/auth',
     Login: '/auth/login',
@@ -9,8 +9,8 @@ export const AppRoute = {
 };
 
 export const APIRoute = {
-  Places: {
-    Index: '/places',
+  Auth: {
+    Login: '/auth/login',
   }
 };
 

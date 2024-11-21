@@ -21,16 +21,14 @@ export default function Input({
   const [field, meta] = useField(name);
 
   return (
-    <label className={classNames(className, 'relative flex flex-col')}>
-      <span className="relative z-0 flex">
-        <input
-          className={classNames('input', (meta.error && meta.touched) ? 'border-red-400' : 'border-gray-200')}
-          {...field}
-          {...attributes}
-          placeholder={placeholder}
-        />
-        <Label label={label} />
-      </span>
+    <label className={classNames(className, 'flex flex-col')}>
+      <Label label={label} />
+      <input
+        className={classNames((meta.error && meta.touched) ? 'border-red-400' : 'border-gray-200', 'flex grow bg-gray-50 border border-gray-200 rounded h-9 px-4 leading-none text-base focus:outline-none hover:bg-gray-100 focus:border-brand focus:bg-gray-100')}
+        {...field}
+        {...attributes}
+        placeholder={placeholder}
+      />
       <ErrorMessage name={name} />
     </label>
   );

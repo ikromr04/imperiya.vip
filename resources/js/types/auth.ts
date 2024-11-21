@@ -1,4 +1,5 @@
-export type LoginCredentials = {
-  login: string;
-  password: string;
+import { ID } from './index';
+
+export type AuthUser = {
+  id: ID;
 };
