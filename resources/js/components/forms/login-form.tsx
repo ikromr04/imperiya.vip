@@ -35,8 +35,16 @@ export default function LoginForm({
       onSubmit={onSubmit}
     >
       {({ isSubmitting }) => (
-        <Form className={classNames(className, 'bg-white p-6 !w-[400px]')}>
-          <Input name="login" label="Логин" placeholder="Введите Ваш логин" />
+        <Form className={classNames(className, 'flex flex-col gap-6 bg-white p-6')}>
+          <Input
+            name="login"
+            label="Логин"
+          />
+          <Input
+            name="password"
+            label="Пароль"
+            placeholder="********"
+          />
         </Form>
       )}
     </Formik>

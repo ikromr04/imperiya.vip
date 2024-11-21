@@ -11,7 +11,7 @@ export default function ErrorMessage({
   if (!meta.error || !meta.touched) return null;
 
   return (
-    <span className="flex text-red-600 pt-1 text-sm pl-2">
+    <span className="flex text-red-600 pt-1 text-sm pl-2 leading-none">
       {meta.error}
     </span>
   );

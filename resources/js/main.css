@@ -7,30 +7,34 @@
 }
 
 .input {
-  @apply flex grow items-center px-4 border border-gray-200 bg-gray-50 rounded-md h-10 transition-colors duration-300 focus:placeholder:text-gray-400;
+  @apply flex grow items-center px-4 border bg-gray-50 rounded-md h-11 transition-colors duration-300 focus:placeholder:text-gray-400;
 
   &:hover {
-    @apply bg-blue-50 bg-opacity-80;
+    @apply bg-white bg-opacity-80;
   }
 
   &:focus {
-    @apply outline-none border-blue-400 bg-gray-50;
+    @apply outline-none border-blue-400 bg-white;
   }
 
   &::placeholder {
     @apply text-transparent transition duration-300;
   }
+
+  &:not(:placeholder-shown) {
+    @apply bg-white;
+  }
 }
 
 .input-label {
-  @apply absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-500 transition-all duration-300;
+  @apply absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-500 transition-all duration-300 !leading-none;
 
   .input:focus + & {
-    @apply top-0 left-2 -translate-y-full pb-1 text-sm;
+    @apply top-0 left-3 text-sm px-1 text-blue-800 bg-white;
   }
 
   .input:not(:placeholder-shown) + & {
-    @apply top-0 left-2 -translate-y-full pb-1 text-sm;
+    @apply top-0 left-3 text-sm px-1 text-blue-800 bg-white;
   }
 }
 
