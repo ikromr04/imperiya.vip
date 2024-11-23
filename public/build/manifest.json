@@ -5,10 +5,24 @@
     "src": "node_modules/photoswipe/dist/photoswipe.esm.js",
     "isDynamicEntry": true
   },
+  "resources/css/emails.css": {
+    "file": "assets/emails-DfHrbdug.css",
+    "src": "resources/css/emails.css",
+    "isEntry": true
+  },
   "resources/css/public.css": {
-    "file": "assets/public-OcYln8kf.css",
+    "file": "assets/public-D1iqtLTj.css",
     "src": "resources/css/public.css",
     "isEntry": true
+  },
+  "resources/js/main.tsx": {
+    "file": "assets/main-Did7kDsT.js",
+    "name": "main",
+    "src": "resources/js/main.tsx",
+    "isEntry": true,
+    "css": [
+      "assets/emails-DfHrbdug.css"
+    ]
   },
   "resources/js/public.js": {
     "file": "assets/public-DPyOTBSy.js",

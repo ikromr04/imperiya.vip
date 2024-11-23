@@ -54,7 +54,7 @@ export default function LoginForm({
           <Input name="login" label="Логин" autoComplete="off" />
 
           <div className="flex flex-col mb-5">
-            <Link className="flex ml-auto transform translate-y-full text-sm text-blue-600 transition-all duration-300 hover:text-blue-400" to={AppRoute.Auth.ResetPassword}>
+            <Link className="flex ml-auto transform translate-y-full text-sm text-blue-600 transition-all duration-300 hover:text-blue-400" to={AppRoute.Auth.ForgotPassword}>
               Забыли пароль?
             </Link>
             <Input name="password" label="Пароль" type="password" autoComplete="off" />

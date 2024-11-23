@@ -6,6 +6,7 @@ import { AuthUser } from '../../types/auth';
 import { ValidationError } from '../../types/validation-error';
 import { LoginCredentials } from '../../dto/auth-dto';
 import { dropToken, saveToken, Token } from '../../services/token';
+import { ResponseMessage } from '../../types';
 
 export const checkAuthAction = createAsyncThunk<AuthUser, undefined, {
   extra: AxiosInstance
@@ -46,5 +47,27 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   async (_arg, { extra: api }) => {
     await api.delete(APIRoute.Auth.Login);
     dropToken();
+  },
+);
+
+export const sendResetPasswordLinkAction = createAsyncThunk<void, {
+  dto: { email: string },
+  onError: (error: ValidationError) => void,
+  onSuccess: (message: string) => void,
+}, {
+  extra: AxiosInstance,
+  rejectWithValue: ValidationError,
+}>(
+  'auth/login',
+  async ({ dto, onError, onSuccess }, { extra: api, rejectWithValue }) => {
+    try {
+      const { data } = await api.post<ResponseMessage>(APIRoute.Auth.ForgotPassword, dto);
+      onSuccess(data.message);
+    } catch (err: any) {
+      const error: AxiosError<ValidationError> = err;
+      if (!error.response) throw err;
+      onError(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
   },
 );
