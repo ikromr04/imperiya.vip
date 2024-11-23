@@ -4,7 +4,7 @@ import { AxiosError, AxiosInstance } from 'axios';
 import { APIRoute } from '../../const';
 import { AuthUser } from '../../types/auth';
 import { ValidationError } from '../../types/validation-error';
-import { LoginCredentials } from '../../dto/auth-dto';
+import { LoginCredentials, ResetPasswordDTO } from '../../dto/auth-dto';
 import { dropToken, saveToken, Token } from '../../services/token';
 import { ResponseMessage } from '../../types';
 
@@ -58,11 +58,33 @@ export const sendResetPasswordLinkAction = createAsyncThunk<void, {
   extra: AxiosInstance,
   rejectWithValue: ValidationError,
 }>(
-  'auth/login',
+  'auth/forgot-password',
   async ({ dto, onError, onSuccess }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.post<ResponseMessage>(APIRoute.Auth.ForgotPassword, dto);
-      onSuccess(data.message);
+      const response = await api.post<ResponseMessage>(APIRoute.Auth.ForgotPassword, dto);
+      onSuccess(response.data.message);
+    } catch (err: any) {
+      const error: AxiosError<ValidationError> = err;
+      if (!error.response) throw err;
+      onError(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const resetPasswordAction = createAsyncThunk<void, {
+  dto: ResetPasswordDTO,
+  onError: (error: ValidationError) => void,
+  onSuccess: (message: string) => void,
+}, {
+  extra: AxiosInstance,
+  rejectWithValue: ValidationError,
+}>(
+  'auth/reset-password',
+  async ({ dto, onError, onSuccess }, { extra: api, rejectWithValue }) => {
+    try {
+      const response = await api.post<ResponseMessage>(APIRoute.Auth.ResetPassword, dto);
+      onSuccess(response.data.message);
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;
       if (!error.response) throw err;

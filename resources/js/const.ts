@@ -4,8 +4,8 @@ export const AppRoute = {
   Journal: '/journal',
   Auth: {
     Login: '/auth/login',
-    ResetPassword: '/auth/reset-password',
     ForgotPassword: '/auth/forgot-password',
+    ResetPassword: '/auth/reset-password/:token',
     Profile: '/auth/profile',
   },
   NotFound: '*',
@@ -15,6 +15,7 @@ export const APIRoute = {
   Auth: {
     Login: '/auth/login',
     ForgotPassword: '/auth/forgot-password',
+    ResetPassword: '/auth/reset-password',
   }
 };
 

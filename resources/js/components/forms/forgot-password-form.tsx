@@ -20,6 +20,7 @@ export default function ForgotPasswordForm({
   const
     dispatch = useAppDispatch(),
     [successMessage, setSuccessMessage] = useState<string>(''),
+    [errorMessage, setErrorMessage] = useState<string>(''),
     initialValues: FormValues = { email: '' },
     validationSchema = yup.object().shape({
       email: yup.string()
@@ -32,9 +33,13 @@ export default function ForgotPasswordForm({
       actions: FormikHelpers<FormValues>
     ) => {
       setSuccessMessage('');
+      setErrorMessage('');
       await dispatch(sendResetPasswordLinkAction({
         dto: values,
-        onError: (error) => actions.setErrors({ email: error.errors?.email?.[0] }),
+        onError: (error) => {
+          actions.setErrors({ email: error.errors?.email?.[0] });
+          setErrorMessage(error.message);
+        },
         onSuccess: (message) => setSuccessMessage(message),
       }));
       actions.setSubmitting(false);
@@ -49,6 +54,7 @@ export default function ForgotPasswordForm({
       {({ isSubmitting }) => (
         <Form className={classNames(className, 'flex flex-col')}>
           {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
+          {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
 
           <Input
             className="mb-5"

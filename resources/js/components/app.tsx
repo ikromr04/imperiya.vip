@@ -7,6 +7,7 @@ import { useAppSelector } from '../hooks';
 import { getAuthStatus } from '../store/auth-slice/auth-selector';
 import Spinner from './ui/spinner';
 import ForgotPasswordPage from './pages/auth/forgot-password-page';
+import ResetPasswordPage from './pages/auth/reset-password-page';
 
 export default function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -22,10 +23,10 @@ export default function App(): JSX.Element {
     >
       <Routes>
         <Route path={AppRoute.Journal} element={<JournalPage />} />
+
         <Route path={AppRoute.Auth.Profile} element={<>Profile</>} />
         <Route path={AppRoute.Auth.ForgotPassword} element={<ForgotPasswordPage />} />
-        <Route path={AppRoute.Auth.ResetPassword} element={<>Reset password</>} />
-
+        <Route path={AppRoute.Auth.ResetPassword} element={<ResetPasswordPage />} />
         <Route path={AppRoute.Auth.Login} element={<LoginPage />} />
 
         <Route path={AppRoute.NotFound} element={<>Not found</>} />

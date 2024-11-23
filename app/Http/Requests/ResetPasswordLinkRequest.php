@@ -18,7 +18,7 @@ class ResetPasswordLinkRequest extends FormRequest
     ];
   }
 
-  public function messages()
+  public function messages(): array
   {
     return [
       'email.required' => 'Требуется электронная почта.',

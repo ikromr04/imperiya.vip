@@ -19,6 +19,7 @@ export default function ForgotPasswordPage(): JSX.Element {
         </p>
 
         <ForgotPasswordForm />
+
         <button className="flex items-center gap-x-1 text-blue-600 transition-all duration-300 hover:text-blue-400 text-sm py-1 px-2 mt-2" type="button" onClick={() => navigate(-1)}>
           <Icons.arrowLeft width={14} height={14} /> Назад
         </button>

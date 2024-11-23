@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ResetPasswordLinkRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Mail\ResetPasswordLinkEmail;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
@@ -82,18 +83,38 @@ class AuthController extends Controller
       ],
     );
 
-    Mail::to($request->email)->send(new ResetPasswordLinkEmail($token));
+    try {
+      Mail::to($request->email)->send(new ResetPasswordLinkEmail($token));
 
-    return response()->json(['message' => 'Письмо со ссылкой для сброса пароля успешно отправлено!']);
+      return response()->json(['message' => 'Письмо со ссылкой для сброса пароля успешно отправлено!'], 200);
+    } catch (\Throwable $th) {
+      return response()->json(['message' => 'Не удалось отправить ссылку для сброса.'], 500);
+    }
+  }
 
-    // $status = Password::sendResetLink(
-    //   $request->only('email')
-    // );
+  public function resetPassword(ResetPasswordRequest $request)
+  {
+    $resetRecord = DB::table('password_reset_tokens')
+      ->where('token', $request->token)
+      ->first();
 
-    // Mail::to('recipient@example.com')->send(new ResetPasswordLinkEmail($data));
+    if (!$resetRecord) return response()->json(['message' => 'Сброс не удался. Недействительный или просроченный токен.'], 500);
 
-    // return $status === Password::RESET_LINK_SENT
-    //   ? response()->json(['message' => 'Reset link sent.'])
-    //   : response()->json(['message' => 'Unable to send reset link.'], 400);
+    if (!Carbon::parse($resetRecord->created_at)->addMinutes(config('auth.passwords.' . config('auth.defaults.passwords') . '.expire'))->isFuture())
+      return response()->json(['message' => 'Просроченный токен.'], 400);
+
+    try {
+      $user = User::where('email', $resetRecord->email)->first();
+      $user->password = bcrypt($request->password);
+      $user->save();
+
+      DB::table('password_reset_tokens')
+        ->where('token', $request->token)
+        ->delete();
+
+      return response()->json(['message' => 'Пароль успешно сброшен.'], 200);
+    } catch (\Throwable $th) {
+      response()->json(['message' => 'Сброс не удался.'], 400);
+    }
   }
 }
