@@ -109,9 +109,9 @@ class AuthController extends Controller
       $user->password = bcrypt($request->password);
       $user->save();
 
-      // DB::table('password_reset_tokens')
-      //   ->where('token', $request->token)
-      //   ->delete();
+      DB::table('password_reset_tokens')
+        ->where('token', $request->token)
+        ->delete();
 
       if ($request->mail) {
         Mail::to($user->email)->send(new SendNewCredentialsMail([
