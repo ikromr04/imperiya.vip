@@ -8,7 +8,7 @@ export default function Label({
   if (!label) return null;
 
   return (
-    <span className="relative z-0 rounded flex max-w-max text-sm text-gray-500 ml-2">
+    <span className="flex text-sm text-gray-500 ml-2">
       {label}
     </span>
   );

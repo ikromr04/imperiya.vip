@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\ResetPasswordLinkRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Mail\ResetPasswordLinkEmail;
+use App\Mail\SendNewCredentialsMail;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
@@ -108,9 +109,16 @@ class AuthController extends Controller
       $user->password = bcrypt($request->password);
       $user->save();
 
-      DB::table('password_reset_tokens')
-        ->where('token', $request->token)
-        ->delete();
+      // DB::table('password_reset_tokens')
+      //   ->where('token', $request->token)
+      //   ->delete();
+
+      if ($request->mail) {
+        Mail::to($user->email)->send(new SendNewCredentialsMail([
+          'login' => $user->login,
+          'password' => $request->password,
+        ]));
+      }
 
       return response()->json(['message' => 'Пароль успешно сброшен.'], 200);
     } catch (\Throwable $th) {

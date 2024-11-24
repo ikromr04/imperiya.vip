@@ -1,9 +1,9 @@
 import React from 'react';
 import MainLogo from '../../layouts/main-logo';
-import ResetPasswordForm from '../../forms/reset-password-form';
 import { Icons } from '../../icons';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../../const';
+import ResetPasswordForm from '../../forms/reset-password-form/reset-password-form';
 
 export default function ResetPasswordPage(): JSX.Element {
   return (

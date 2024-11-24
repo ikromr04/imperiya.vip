@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import * as yup from 'yup';
 import { Form, Formik, FormikHelpers } from 'formik';
 import classNames from 'classnames';
-import Input from '../ui/input/input';
-import Button from '../ui/button';
-import { useAppDispatch } from '../../hooks/index';
-import { resetPasswordAction } from '../../store/auth-slice/auth-api-actions';
-import Spinner from '../ui/spinner';
+import Input from '../../ui/input/input';
+import Button from '../../ui/button';
+import { useAppDispatch } from '../../../hooks/index';
+import { resetPasswordAction } from '../../../store/auth-slice/auth-api-actions';
+import Spinner from '../../ui/spinner';
 import { useParams } from 'react-router-dom';
-import { ResetPasswordDTO } from '../../dto/auth-dto';
+import { ResetPasswordDTO } from '../../../dto/auth-dto';
+import Password from './password';
+import { generateRandomPassword } from '../../../utils';
+import PasswordConfirmation from './password-confirmation';
+import Checkbox from '../../ui/checkbox/checkbox';
 
 export default function ResetPasswordForm({
   className,
@@ -24,6 +28,7 @@ export default function ResetPasswordForm({
       token: token || '',
       password: '',
       password_confirmation: '',
+      mail: true,
     },
     validationSchema = yup.object().shape({
       password: yup.string()
@@ -36,14 +41,14 @@ export default function ResetPasswordForm({
 
     onSubmit = async (
       values: ResetPasswordDTO,
-      actions: FormikHelpers<ResetPasswordDTO>
+      helpers: FormikHelpers<ResetPasswordDTO>
     ) => {
       setSuccessMessage('');
       setErrorMessage('');
       await dispatch(resetPasswordAction({
         dto: values,
         onError: (error) => {
-          actions.setErrors({
+          helpers.setErrors({
             password: error.errors?.password?.[0],
             password_confirmation: error.errors?.password_confirmation?.[0],
           });
@@ -51,10 +56,20 @@ export default function ResetPasswordForm({
         },
         onSuccess: (message) => {
           setSuccessMessage(message);
-          actions.resetForm();
+          helpers.resetForm();
         },
       }));
-      actions.setSubmitting(false);
+      helpers.setSubmitting(false);
+    },
+
+    handlePasswordGenerate = (setValues: (values: SetStateAction<ResetPasswordDTO>, shouldValidate?: boolean) => void) => (): void => {
+      const newPassword = generateRandomPassword();
+
+      setValues((prevValues) => ({
+        ...prevValues,
+        password: newPassword,
+        password_confirmation: newPassword,
+      }));
     };
 
   return (
@@ -63,26 +78,18 @@ export default function ResetPasswordForm({
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {({ isSubmitting }) => (
+      {({ isSubmitting, setValues }) => (
         <Form className={classNames(className, 'flex flex-col')}>
           {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
           {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
 
           <Input name="token" type="hidden" />
 
-          <Input
-            className="mb-5"
-            name="password"
-            label="Новый пароль"
-            type="password"
-          />
+          <Password onPasswordGenerate={handlePasswordGenerate(setValues)} />
 
-          <Input
-            className="mb-5"
-            name="password_confirmation"
-            label="Подтвердите пароль"
-            type="password"
-          />
+          <PasswordConfirmation />
+
+          <Checkbox className="mb-5" name="mail" label="Отправить данные для входа на почту." />
 
           <Button
             className={classNames('justify-center', isSubmitting && 'opacity-60')}

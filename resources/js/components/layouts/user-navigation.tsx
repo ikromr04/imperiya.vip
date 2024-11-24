@@ -32,7 +32,7 @@ export default function UserNavigation({
           onError={(evt: BaseSyntheticEvent) => evt.target.setAttribute('src', DEFAULT_AVATAR_PATH)}
         />
         <span className="sr-only">{user.name}</span>
-        <Icons.caretDown className={classNames('transition-all duration-300 transform', isOpen && '-scale-y-100')} width={14} height={14} />
+        <Icons.caretDown className={classNames('transition-all duration-300 transform', isOpen && '-scale-y-100')} width={9} />
       </button>
 
       <div className={classNames('absolute top-[calc(100%+16px)] right-0 border rounded-md py-1 bg-white shadow-sm text-sm min-w-max transition-all duration-300', isOpen ? 'visible opacity-100' : 'invisible opacity-0')}>
