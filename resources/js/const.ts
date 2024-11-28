@@ -13,9 +13,11 @@ export const AppRoute = {
 
 export const APIRoute = {
   Auth: {
+    Check: '/auth/check',
     Login: '/auth/login',
     ForgotPassword: '/auth/forgot-password',
     ResetPassword: '/auth/reset-password',
+    Logout: '/auth/logout',
   }
 };
 

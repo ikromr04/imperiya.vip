@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ResetPasswordRequest extends FormRequest
+class PasswordResetRequest extends FormRequest
 {
   public function authorize(): bool
   {
@@ -15,7 +15,8 @@ class ResetPasswordRequest extends FormRequest
   {
     return [
       'token' => 'required',
-      'password' => 'required|confirmed|min:6',
+      'password' => 'required|min:6',
+      'password_confirmation' => 'required|same:password',
     ];
   }
 
@@ -23,8 +24,9 @@ class ResetPasswordRequest extends FormRequest
   {
     return [
       'password.required' => 'Пароль обязателен.',
-      'password.confirmed' => 'Подтверждение пароля не совпадает.',
       'password.min' => 'Пароль должен содержать не менее :min символов.',
+      'password_confirmation.required' => 'Подтверждение пароля не обязателен.',
+      'password_confirmation.same' => 'Подтверждение пароля не совпадает.',
     ];
   }
 }

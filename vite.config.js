@@ -8,7 +8,6 @@ export default defineConfig({
     laravel({
       input: [
         'resources/css/public.css',
-        'resources/css/emails.css',
         'resources/js/public.js',
         'resources/js/main.tsx',
       ],

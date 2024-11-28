@@ -14,7 +14,7 @@
       </p>
 
       <div>
-        <p><strong>Логин:</strong> {{ $credentials['login'] }}</p>
+        <p><strong>E-mail:</strong> {{ $credentials['email'] }}</p>
         <p><strong>Пароль:</strong> {{ $credentials['password'] }}</p>
       </div>
     </div>
