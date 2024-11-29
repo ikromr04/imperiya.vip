@@ -4,7 +4,7 @@ import UserNavigation from './user-navigation';
 
 export default function PageHeader(): JSX.Element {
   return (
-    <header className="bg-white shadow py-3">
+    <header className="bg-white shadow py-2">
       <div className="container flex justify-between">
         <MainLogo imgClass="h-9 w-auto" />
 

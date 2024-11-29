@@ -10,7 +10,7 @@
 
   <div class="fixed left-0 top-0 w-screen h-screen bg-black bg-opacity-50 z-20 opacity-0 group-[.overflow-hidden]:opacity-100 group-[.overflow-hidden]:visible transition-all duration-300 invisible lg:hidden" onclick="document.body.classList.remove('overflow-hidden')"></div>
 
-  <div class="fixed top-0 right-0 z-20 bg-white text-brand transition-all duration-300 font-semibold h-screen invisible opacity-0 translate-x-full group-[.overflow-hidden]:opacity-100 group-[.overflow-hidden]:visible group-[.overflow-hidden]:translate-x-0 lg:visible lg:static lg:opacity-100 lg:bg-transparent lg:py-0 lg:text-inherit lg:flex lg:w-auto lg:h-auto lg:translate-x-0">
+  <div class="fixed top-0 right-0 z-20 bg-white text-primary transition-all duration-300 font-semibold h-screen invisible opacity-0 translate-x-full group-[.overflow-hidden]:opacity-100 group-[.overflow-hidden]:visible group-[.overflow-hidden]:translate-x-0 lg:visible lg:static lg:opacity-100 lg:bg-transparent lg:py-0 lg:text-inherit lg:flex lg:w-auto lg:h-auto lg:translate-x-0">
     <button class="flex items-center justify-center lg:hidden ml-auto w-8 h-8 mr-4 mt-2" type="button" onclick="document.body.classList.remove('overflow-hidden')">
       <span class="sr-only">{{ __('Скрыть меню') }}</span>
       <svg class="sm:w-6 sm:h-6" width="24" height="24">

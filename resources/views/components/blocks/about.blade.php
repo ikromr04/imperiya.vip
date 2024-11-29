@@ -28,9 +28,9 @@
 @endphp
 
 <section {{ $attributes->merge([
-    'class' => 'relative z-0 container md:bg-white md:py-10 md:px-20 md:border md:border-brand md:rounded-[10px] md:mt-[10px]',
+    'class' => 'relative z-0 container md:bg-white md:py-10 md:px-20 md:border md:border-primary md:rounded-[10px] md:mt-[10px]',
 ]) }} id="about">
-  <div class="hidden md:block pointer-events-none absolute -top-[10px] -left-[.5px] h-10 rounded-[20px] bg-brand w-[448px] -z-10"></div>
+  <div class="hidden md:block pointer-events-none absolute -top-[10px] -left-[.5px] h-10 rounded-[20px] bg-primary w-[448px] -z-10"></div>
   <div class="hidden md:block pointer-events-none absolute top-0 left-0 w-full h-10 bg-white rounded-[10px]"></div>
 
   <h2 class="title mb-2">{{ __('О нас') }}</h2>
@@ -46,13 +46,13 @@
 
   <ol class="md:flex md:flex-col md:gap-2 lg:grid lg:grid-cols-2 xl:grid-cols-3">
     @foreach ($items as $key => $item)
-      <li class="relative z-0 group mb-6 md:border md:border-brand md:py-8 md:px-6 rounded-[10px] bg-white md:mb-0 md:mt-[5px]" data-sizable-wrapper>
-        <div class="hidden md:block pointer-events-none absolute -top-[5px] -left-[.5px] h-10 rounded-[10px] bg-brand w-[240px] -z-10"></div>
+      <li class="relative z-0 group mb-6 md:border md:border-primary md:py-8 md:px-6 rounded-[10px] bg-white md:mb-0 md:mt-[5px]" data-sizable-wrapper>
+        <div class="hidden md:block pointer-events-none absolute -top-[5px] -left-[.5px] h-10 rounded-[10px] bg-primary w-[240px] -z-10"></div>
         <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-white rounded-[10px]"></div>
 
         <div class="max-h-32 overflow-hidden transition-all duration-300 md:!max-h-none relative z-0" data-sizable="128">
           <h3 class="font-semibold mb-1 text-lg md:flex md:items-center md:gap-x-3 md:mb-4">
-            <span class="md:flex md:items-center md:justify-center md:min-w-10 md:min-h-10 md:max-w-10 md:max-h-10 md:rounded-full md:bg-brand md:text-white md:leading-none md:pt-[1px] md:pr-[1px]">
+            <span class="md:flex md:items-center md:justify-center md:min-w-10 md:min-h-10 md:max-w-10 md:max-h-10 md:rounded-full md:bg-primary md:text-white md:leading-none md:pt-[1px] md:pr-[1px]">
               {{ '0' . ++$key }}
             </span>
             {{ $item['title'] }}

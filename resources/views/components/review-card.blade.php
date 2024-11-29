@@ -1,8 +1,8 @@
 @props(['review'])
 
 <article {{ $attributes->merge(['class' => 'relative flex flex-col w-[240px] md:w-full md:mt-[5px] group mx-auto']) }} data-sizable-wrapper>
-  <div class="hidden md:block pointer-events-none absolute -top-[5px] left-0 h-10 rounded-[10px] bg-brand w-[120px] -z-10"></div>
-  <div class="bg-white py-8 px-5 rounded-[10px] border border-brand min-h-[300px]">
+  <div class="hidden md:block pointer-events-none absolute -top-[5px] left-0 h-10 rounded-[10px] bg-primary w-[120px] -z-10"></div>
+  <div class="bg-white py-8 px-5 rounded-[10px] border border-primary min-h-[300px]">
     <header class="mb-3">
       <div class="flex items-center gap-x-2 mb-2">
         <span class="text-white w-12 h-1/2 min-w-12 min-h-12 flex items-center justify-center bg-[#EB5757] rounded-full overflow-hidden">

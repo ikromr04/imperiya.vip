@@ -1,5 +1,5 @@
 <section {{ $attributes->merge([
-    'class' => 'bg-brand text-white py-8 md:py-10 lg:py-12',
+    'class' => 'bg-primary text-white py-8 md:py-10 lg:py-12',
 ]) }} id="values">
   <div class="relative z-0 container">
     <h2 class="title mb-4 md:mb-6 xl:mb-8">{{ __('Наши ценности') }}</h2>
@@ -7,7 +7,7 @@
     <div class="flex flex-col gap-2 md:gap-6 md:grid md:grid-cols-2 lg:grid-cols-3">
       <div class="relative border border-white rounded-[10px] flex flex-col md:mt-[5px]">
         <div class="hidden md:block pointer-events-none absolute -top-[5px] -left-[.5px] h-10 rounded-[10px] bg-white w-[240px] -z-10"></div>
-        <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-brand rounded-[10px]"></div>
+        <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-primary rounded-[10px]"></div>
 
         <div class="pt-4 p-6 overflow-hidden relative z-10 lg:p-8">
           <h2 class="font-semibold text-lg mb-3">
@@ -53,7 +53,7 @@
 
       <div class="relative border border-white rounded-[10px] flex flex-col md:mt-[5px]">
         <div class="hidden md:block pointer-events-none absolute -top-[5px] -left-[.5px] h-10 rounded-[10px] bg-white w-[240px] -z-10"></div>
-        <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-brand rounded-[10px]"></div>
+        <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-primary rounded-[10px]"></div>
 
         <div class="pt-4 p-6 overflow-hidden relative z-10 lg:p-8">
           <h2 class="font-semibold text-lg mb-3">
@@ -107,7 +107,7 @@
 
       <div class="relative border border-white rounded-[10px] flex flex-col md:mt-[5px]">
         <div class="hidden md:block pointer-events-none absolute -top-[5px] -left-[.5px] h-10 rounded-[10px] bg-white w-[240px] -z-10"></div>
-        <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-brand rounded-[10px]"></div>
+        <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-primary rounded-[10px]"></div>
 
         <div class="pt-4 p-6 overflow-hidden relative z-10 lg:p-8">
           <h2 class="font-semibold text-lg mb-3">

@@ -48,12 +48,12 @@
     </div>
 
     <div class="absolute top-[calc(50%-20px)] left-1/2 transform -translate-x-1/2 w-[calc(100%+112px)] flex justify-between z-10">
-      <button class="swiper-button-prev m-0 left-0 top-0 after:hidden flex justify-center items-center w-10 h-10 bg-brand rounded-full" type="button">
+      <button class="swiper-button-prev m-0 left-0 top-0 after:hidden flex justify-center items-center w-10 h-10 bg-primary rounded-full" type="button">
         <svg class="flex text-white !w-2 !h-4" width="8" height="16">
           <use xlink:href="#prev" />
         </svg>
       </button>
-      <button class="swiper-button-next m-0 right-0 top-0 after:hidden flex justify-center items-center w-10 h-10 bg-brand rounded-full" type="button">
+      <button class="swiper-button-next m-0 right-0 top-0 after:hidden flex justify-center items-center w-10 h-10 bg-primary rounded-full" type="button">
         <svg class="flex text-white !w-2 !h-4" width="8" height="16">
           <use xlink:href="#next" />
         </svg>

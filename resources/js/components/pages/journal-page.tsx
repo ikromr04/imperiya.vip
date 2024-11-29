@@ -5,7 +5,7 @@ export default function JournalPage(): JSX.Element {
   return (
     <PageLayout>
       <main>
-        HomePage
+        JournalPage
       </main>
     </PageLayout>
   );

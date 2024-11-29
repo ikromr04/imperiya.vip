@@ -1,4 +1,4 @@
-<section class="flex flex-col bg-brand text-white py-8 md:py-10 lg:py-12" id="facts">
+<section class="flex flex-col bg-primary text-white py-8 md:py-10 lg:py-12" id="facts">
   <div class="container">
     <h2 class="title mb-2">{{ __('Факты о нас') }}</h2>
     <p class="max-w-[690px]">
@@ -7,9 +7,9 @@
 
     <x-statistics class="mt-6 mb-14" />
 
-    <blockquote class="relative z-0 md:border md:border-white md:py-8 md:px-6 rounded-[10px] bg-brand md:mt-[5px]">
+    <blockquote class="relative z-0 md:border md:border-white md:py-8 md:px-6 rounded-[10px] bg-primary md:mt-[5px]">
       <div class="hidden md:block pointer-events-none absolute -top-[5px] -left-[1px] h-10 rounded-[10px] bg-white w-[240px] -z-10"></div>
-      <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-brand rounded-[10px]"></div>
+      <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-primary rounded-[10px]"></div>
 
       <div class="relative z-0">
         <q class="block text-lg text-[17px] mb-2">

@@ -1,5 +1,5 @@
 <div {{ $attributes->merge([
-    'class' => 'relative z-10 bg-brand text-white',
+    'class' => 'relative z-10 bg-primary text-white',
 ]) }}>
   <x-layouts.header />
 

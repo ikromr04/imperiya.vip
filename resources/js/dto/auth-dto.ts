@@ -1,5 +1,5 @@
 export type LoginCredentials = {
-  login: string;
+  email: string;
   password: string;
 };
 

@@ -7,16 +7,15 @@ export default {
     './resources/**/*.js',
     './resources/**/*.ts',
     './resources/**/*.tsx',
-    './resources/**/*.vue',
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Source Sans 3"', 'sans-serif'],
-        sourceSans: ['"Source Sans 3"', 'sans-serif'],
+        'sans': ['"Source Sans 3"', 'sans-serif'],
+        'sourceSans': ['"Source Sans 3"', 'sans-serif'],
       },
       colors: {
-        'brand': '#0d457e',
+        'primary': '#0d457e',
       },
       backgroundImage: {
         'illustrations': 'url(/images/illustrations.png)',

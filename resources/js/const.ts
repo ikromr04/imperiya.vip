@@ -1,5 +1,3 @@
-export const DEFAULT_AVATAR_PATH = '/images/default-avatar.png';
-
 export const AppRoute = {
   Journal: '/journal',
   Auth: {

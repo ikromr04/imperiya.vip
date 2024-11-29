@@ -22,11 +22,11 @@ html {
 
 .partners {
   .swiper-pagination-bullet {
-    @apply flex !m-0 !p-0 min-w-3 min-h-3 max-w-3 max-h-3 bg-transparent border opacity-100 border-brand;
+    @apply flex !m-0 !p-0 min-w-3 min-h-3 max-w-3 max-h-3 bg-transparent border opacity-100 border-primary;
   }
 
   .swiper-pagination-bullet-active {
-    @apply bg-brand;
+    @apply bg-primary;
   }
 }
 
