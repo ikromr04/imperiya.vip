@@ -44,9 +44,13 @@ export default function PasswordField({
       <div className="flex">
         <Label label={label} htmlFor={uniqueId} />
         {generatable &&
-          <button className="relative flex justify-center items-center w-5 h-5 group" type="button" onClick={handleGenerateButtonClick}>
+          <button
+            className="relative flex justify-center items-center w-5 h-5 group"
+            type="button"
+            onClick={handleGenerateButtonClick}
+          >
             <Icons.rotate className="text-green-600" width={12} height={12} />
-            {/* <Tooltip label="Сгенерировать" position="right" /> */}
+            <span className="sr-only">Сгенерировать пароль</span>
           </button>}
       </div>
 

@@ -30,20 +30,19 @@ export default function LoginForm({
       password: yup.string().required('Введите Ваш пароль.'),
     }),
 
-    onSubmit = (
+    onSubmit = async (
       values: LoginCredentials,
       actions: FormikHelpers<LoginCredentials>
     ) => {
-      dispatch(loginAction({
+      actions.setSubmitting(true);
+      await dispatch(loginAction({
         dto: values,
-        onError(error) {
-          actions.setSubmitting(false);
-          actions.setErrors({
-            email: error.errors?.email?.[0],
-            password: error.errors?.password?.[0],
-          });
-        },
+        onValidationError: (error) => actions.setErrors({
+          email: error.errors?.email?.[0],
+          password: error.errors?.password?.[0],
+        }),
       }));
+      actions.setSubmitting(false);
     };
 
   return (

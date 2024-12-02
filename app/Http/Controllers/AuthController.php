@@ -79,7 +79,7 @@ class AuthController extends Controller
     $resetRecord = DB::table('password_reset_tokens')->where('token', $request->token)->first();
 
     if (!$resetRecord || !Carbon::parse($resetRecord->created_at)->addMinutes(config('auth.passwords.' . config('auth.defaults.passwords') . '.expire'))->isFuture())
-      return response()->json(['message' => 'Сброс не удался. Недействительный или просроченный токен.'], 500);
+      return response()->json(['message' => 'Сброс не удался. Недействительный или просроченный токен.'], 423);
 
     $user = User::where('email', $resetRecord->email)->first();
     $user->password = Hash::make($request->password);

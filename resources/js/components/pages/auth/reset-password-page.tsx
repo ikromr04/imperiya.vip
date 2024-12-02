@@ -3,7 +3,7 @@ import MainLogo from '../../layouts/main-logo';
 import { Icons } from '../../icons';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../../const';
-import ResetPasswordForm from '../../forms/reset-password-form/reset-password-form';
+import ResetPasswordForm from '../../forms/reset-password-form';
 
 export default function ResetPasswordPage(): JSX.Element {
   return (
@@ -16,7 +16,7 @@ export default function ResetPasswordPage(): JSX.Element {
         <ResetPasswordForm />
 
         <Link className="flex items-center gap-x-1 text-blue-600 transition-all duration-300 hover:text-blue-400 text-sm py-1 px-2 mt-2" to={AppRoute.Auth.Login}>
-          <Icons.arrowLeft width={14} height={14} /> Вход в онлайн-дневник
+          <Icons.arrowLeftLong width={12} /> Вход в онлайн-дневник
         </Link>
       </div>
     </main>

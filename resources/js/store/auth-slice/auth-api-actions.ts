@@ -19,22 +19,22 @@ export const checkAuthAction = createAsyncThunk<AuthUser, undefined, {
 
 export const loginAction = createAsyncThunk<AuthUser, {
   dto: LoginCredentials,
-  onError: (error: ValidationError) => void,
+  onValidationError?: (error: ValidationError) => void,
 }, {
   extra: AxiosInstance,
   rejectWithValue: ValidationError,
 }>(
   'auth/login',
-  async ({ dto, onError }, { extra: api, rejectWithValue }) => {
+  async ({ dto, onValidationError }, { extra: api, rejectWithValue }) => {
     try {
       const { data } = await api.post<{ user: AuthUser, token: Token }>(APIRoute.Auth.Login, dto);
       saveToken(data.token);
       return data.user;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;
       if (!error.response) throw err;
-      onError(error.response.data);
+      if (onValidationError) onValidationError(error.response.data);
       return rejectWithValue(error.response.data);
     }
   },
@@ -52,22 +52,24 @@ export const logoutAction = createAsyncThunk<void, undefined, {
 
 export const sendResetPasswordLinkAction = createAsyncThunk<void, {
   dto: { email: string },
-  onError: (error: ValidationError) => void,
-  onSuccess: (message: string) => void,
+  onSuccess?: (message: string) => void,
+  onValidationError?: (error: ValidationError) => void,
+  onFail?: (message: string) => void,
 }, {
   extra: AxiosInstance,
   rejectWithValue: ValidationError,
 }>(
   'auth/forgot-password',
-  async ({ dto, onError, onSuccess }, { extra: api, rejectWithValue }) => {
+  async ({ dto, onSuccess, onValidationError, onFail }, { extra: api, rejectWithValue }) => {
     try {
       const response = await api.post<ResponseMessage>(APIRoute.Auth.ForgotPassword, dto);
-      onSuccess(response.data.message);
+      if (onSuccess) onSuccess(response.data.message);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;
       if (!error.response) throw err;
-      onError(error.response.data);
+      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
       return rejectWithValue(error.response.data);
     }
   },
@@ -75,22 +77,24 @@ export const sendResetPasswordLinkAction = createAsyncThunk<void, {
 
 export const resetPasswordAction = createAsyncThunk<void, {
   dto: ResetPasswordDTO,
-  onError: (error: ValidationError) => void,
-  onSuccess: (message: string) => void,
+  onSuccess?: (message: string) => void,
+  onValidationError?: (error: ValidationError) => void,
+  onFail?: (message: string) => void,
 }, {
   extra: AxiosInstance,
   rejectWithValue: ValidationError,
 }>(
   'auth/reset-password',
-  async ({ dto, onError, onSuccess }, { extra: api, rejectWithValue }) => {
+  async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
       const response = await api.post<ResponseMessage>(APIRoute.Auth.ResetPassword, dto);
-      onSuccess(response.data.message);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (onSuccess) onSuccess(response.data.message);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;
       if (!error.response) throw err;
-      onError(error.response.data);
+      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
       return rejectWithValue(error.response.data);
     }
   },

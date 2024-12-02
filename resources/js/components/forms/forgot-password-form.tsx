@@ -2,15 +2,12 @@ import React, { useState } from 'react';
 import * as yup from 'yup';
 import { Form, Formik, FormikHelpers } from 'formik';
 import classNames from 'classnames';
-import Input from '../ui/input/input';
 import Button from '../ui/button';
 import { useAppDispatch } from '../../hooks/index';
 import { sendResetPasswordLinkAction } from '../../store/auth-slice/auth-api-actions';
 import Spinner from '../ui/spinner';
-
-type FormValues = {
-  email: string;
-};
+import TextField from '../ui/fields/text-field';
+import { ResetPasswordEmailDTO } from '../../dto/auth-dto';
 
 export default function ForgotPasswordForm({
   className,
@@ -19,28 +16,25 @@ export default function ForgotPasswordForm({
 }): JSX.Element {
   const
     dispatch = useAppDispatch(),
-    [successMessage, setSuccessMessage] = useState<string>(''),
-    [errorMessage, setErrorMessage] = useState<string>(''),
-    initialValues: FormValues = { email: '' },
+    initialValues: ResetPasswordEmailDTO = { email: '' },
     validationSchema = yup.object().shape({
       email: yup.string()
         .required('Введите адрес электронной почты.')
         .email('Неверный адрес электронной почты.'),
     }),
+    [message, setMessage] = useState<[message: string, success: boolean]>(['', true]),
 
     onSubmit = async (
-      values: FormValues,
-      actions: FormikHelpers<FormValues>
+      values: ResetPasswordEmailDTO,
+      actions: FormikHelpers<ResetPasswordEmailDTO>
     ) => {
-      setSuccessMessage('');
-      setErrorMessage('');
+      setMessage(['', true]);
+      actions.setSubmitting(true);
       await dispatch(sendResetPasswordLinkAction({
         dto: values,
-        onError: (error) => {
-          actions.setErrors({ email: error.errors?.email?.[0] });
-          setErrorMessage(error.message);
-        },
-        onSuccess: (message) => setSuccessMessage(message),
+        onSuccess: (message) => setMessage([message, true]),
+        onValidationError: (error) => actions.setErrors({ email: error.errors?.email?.[0] }),
+        onFail: (message) => setMessage([message, false]),
       }));
       actions.setSubmitting(false);
     };
@@ -53,10 +47,9 @@ export default function ForgotPasswordForm({
     >
       {({ isSubmitting }) => (
         <Form className={classNames(className, 'flex flex-col')}>
-          {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
-          {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
+          {message[0] && <p className={classNames('mb-4', message[1] ? 'text-green-600' : 'text-red-600 ')}>{message}</p>}
 
-          <Input
+          <TextField
             className="mb-5"
             name="email"
             label="Электронная почта"

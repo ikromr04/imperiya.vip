@@ -23,8 +23,8 @@ export default function App(): JSX.Element {
     >
       <Routes>
         <Route path={AppRoute.Auth.Login} element={<LoginPage />} />
-        {/* <Route path={AppRoute.Auth.ForgotPassword} element={<ForgotPasswordPage />} /> */}
-        {/* <Route path={AppRoute.Auth.ResetPassword} element={<ResetPasswordPage />} /> */}
+        <Route path={AppRoute.Auth.ForgotPassword} element={<ForgotPasswordPage />} />
+        <Route path={AppRoute.Auth.ResetPassword} element={<ResetPasswordPage />} />
         {/* <Route path={AppRoute.Auth.Profile} element={<>Profile</>} /> */}
 
         <Route path={AppRoute.Journal} element={<JournalPage />} />
