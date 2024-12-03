@@ -3,6 +3,7 @@ import MainLogo from '../../layouts/main-logo';
 import { useNavigate } from 'react-router-dom';
 import { Icons } from '../../icons';
 import ForgotPasswordForm from '../../forms/forgot-password-form';
+import Button from '../../ui/button';
 
 export default function ForgotPasswordPage(): JSX.Element {
   const navigate = useNavigate();
@@ -20,13 +21,14 @@ export default function ForgotPasswordPage(): JSX.Element {
 
         <ForgotPasswordForm />
 
-        <button
-          className="flex items-center gap-x-1 text-blue-600 transition-all duration-300 hover:text-blue-400 text-sm py-1 px-2 mt-2"
+        <Button
+          className="text-sm mt-2"
+          variant="text"
           type="button"
           onClick={() => navigate(-1)}
         >
           <Icons.arrowLeftLong width={12} /> Назад
-        </button>
+        </Button>
       </div>
     </main>
   );

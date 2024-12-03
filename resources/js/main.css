@@ -7,5 +7,5 @@
 }
 
 .title {
-  @apply leading-[1.2] text-xl font-semibold;
+  @apply leading-[1.2] text-xl text-gray-900 font-semibold;
 }
