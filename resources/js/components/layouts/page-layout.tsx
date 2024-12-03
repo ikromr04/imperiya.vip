@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import PageHeader from './page-header';
-import PageFooter from './page-footer';
 import PrivateRoute from '../private-route';
 
 export default function PageLayout({
@@ -12,7 +11,6 @@ export default function PageLayout({
     <PrivateRoute>
       <PageHeader />
       {children}
-      <PageFooter />
     </PrivateRoute>
   );
 }

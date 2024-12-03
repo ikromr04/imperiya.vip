@@ -23,21 +23,23 @@ export default function UserNavigation({
   return (
     <div ref={ref} className={classNames(className, 'relative')}>
       <button
-        className="relative z-0 flex w-9 h-9 rounded-full border border-gray-300 bg-gray-100 overflow-hidden"
+        className="flex items-center gap-2 text-gray-900"
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {user.avatar &&
+        <span className="relative z-0 flex w-9 h-9 rounded-full border border-gray-300 bg-gray-100 overflow-hidden">
           <img
             className="absolute top-0 left-0 w-full h-full object-cover"
-            src={user.avatar}
+            src={user.avatar || 'undefined'}
             width={200}
             height={200}
             alt={user.name}
             onError={(evt: BaseSyntheticEvent) => evt.target.remove()}
-          />}
-        <Icons.user className="absolute -z-10 bottom-0 left-1/2 h-[88%] transform -translate-x-1/2 text-gray-300" />
-        <span className="sr-only">{user.name}</span>
+          />
+          <Icons.user className="absolute -z-10 bottom-0 left-1/2 h-[88%] transform -translate-x-1/2 text-gray-300" />
+        </span>
+        <span className="sr-only md:not-sr-only font-semibold">{user.name}</span>
+        <Icons.caretDown className={classNames('transition-all duration-300 transform', isOpen && '-scale-y-[1]')} width={8} />
       </button>
 
       <div

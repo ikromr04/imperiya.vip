@@ -1,4 +1,4 @@
-<footer class="bg-primary text-white pt-8 pb-6 md:pt-10 lg:pt-12">
+<footer class="bg-primary text-white py-8 md:py-10 lg:py-12">
   <div class="container flex flex-col gap-6 md:flex-row lg:grid lg:grid-cols-2">
     <div class="flex flex-col gap-6">
       <section class="rounded-lg border border-dashed p-6">
@@ -75,12 +75,6 @@
           </li>
         </ul>
       </section>
-    </div>
-  </div>
-
-  <div class="border-t border-dashed mt-8 pt-6">
-    <div class="container">
-      <x-main-logo />
     </div>
   </div>
 </footer>

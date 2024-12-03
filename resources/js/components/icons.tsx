@@ -31,4 +31,9 @@ export const Icons = {
       <path fill="currentColor" d="M.293 4.294a1 1 0 0 0 0 1.415l4 3.998A1.002 1.002 0 0 0 5.71 8.292L3.415 6H15a.999.999 0 1 0 0-2H3.415l2.294-2.292A1 1 0 1 0 4.293.293l-4 3.998v.003Z" />
     </svg>
   ),
+  caretDown: (props: SVGProps<SVGSVGElement>): JSX.Element => (
+    <svg viewBox="0 0 16 10" fill="none" {...props}>
+      <path fill="currentColor" d="M6.87 9.512c.625.65 1.64.65 2.264 0l6.397-6.664a1.71 1.71 0 0 0 .345-1.817C15.626.406 15.046 0 14.396 0L1.603.005C.957.005.372.411.122 1.036a1.72 1.72 0 0 0 .346 1.817l6.397 6.664.005-.005Z" />
+    </svg>
+  ),
 };
