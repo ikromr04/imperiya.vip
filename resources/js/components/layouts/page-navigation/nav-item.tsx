@@ -3,7 +3,7 @@ import { Link, LinkProps, useLocation } from 'react-router-dom';
 import { Icons } from '../../icons';
 import classNames from 'classnames';
 
-type 
+type
 
 export default function NavItem({
   icon,
@@ -28,7 +28,7 @@ export default function NavItem({
           className={classNames('flex items-center justify-center w-9 h-9 rounded-r-md', isActive && 'bg-blue-50')}
           to={href}
         >
-          <Icon className={isActive ? 'text-green-600' : ''} width={16} height={16} />
+          <Icon className={isActive ? 'text-success' : ''} width={16} height={16} />
         </Link>
       </li>
     );

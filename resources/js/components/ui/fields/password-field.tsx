@@ -48,7 +48,7 @@ export default function PasswordField({
             type="button"
             onClick={handleGenerateButtonClick}
           >
-            <Icons.autorenew className="text-green-600" width={14} height={14} />
+            <Icons.autorenew className="text-success" width={14} height={14} />
             <span className="sr-only">Сгенерировать пароль</span>
           </button>}
       </div>

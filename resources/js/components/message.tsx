@@ -2,10 +2,16 @@ import React, { ReactNode } from 'react';
 import { PropsWithClassname } from '../types';
 import classNames from 'classnames';
 
+const MessageVariant = {
+  'success': 'text-success',
+  'error': 'text-error',
+  'warn': 'text-warn',
+};
+
 export type MessageProps = PropsWithClassname<{
   message?: [
     message: string,
-    type: 'success' | 'error' | 'warn',
+    type: keyof typeof MessageVariant,
   ];
 }>;
 
@@ -16,7 +22,7 @@ export default function Message({
   if (!message) return null;
 
   return (
-    <p className={classNames(className, `text-${message[1]}`)}>
+    <p className={classNames(className, MessageVariant[message[1]])}>
       {message[0]}
     </p>
   );

@@ -18,9 +18,9 @@ export default {
         'primary': '#0d457e',
       },
       textColor: {
-        success: 'text-green-600',
-        error: 'text-red-600',
-        warn: 'text-orange-600',
+        'success': '#16a34a',
+        'error': '#db2626',
+        'warn': '#ea580c',
       },
       backgroundImage: {
         'illustrations': 'url(/images/illustrations.png)',
