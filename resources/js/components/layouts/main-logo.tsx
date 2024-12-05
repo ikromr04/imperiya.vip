@@ -1,13 +1,15 @@
 import React from 'react';
 import classNames from 'classnames';
+import { PropsWithClassname } from '../../types';
+
+type MainLogoProps = PropsWithClassname<{
+  imgClass?: string;
+}>;
 
 export default function MainLogo({
   className,
   imgClass,
-}: {
-  className?: string;
-  imgClass?: string;
-}): JSX.Element {
+}: MainLogoProps): JSX.Element {
   return (
     <a className={classNames(className, 'max-w-max max-h-max')} href="/">
       <picture>

@@ -9,3 +9,8 @@
 .title {
   @apply leading-[1.2] text-xl text-gray-900 font-semibold;
 }
+
+
+.no-scrollbar::-webkit-scrollbar {
+  @apply hidden;
+}

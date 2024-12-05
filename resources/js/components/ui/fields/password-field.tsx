@@ -24,20 +24,19 @@ export default function PasswordField({
   onGenerate,
   ...props
 }: PasswordFieldProps): JSX.Element {
-  const
-    [, , helper] = useField(name),
-    uniqueId = useId(),
-    [type, setType] = useState<'password' | 'text'>('password'),
+  const [, , helper] = useField(name);
+  const uniqueId = useId();
+  const [type, setType] = useState<'password' | 'text'>('password');
 
-    handleGenerateButtonClick = () => {
-      const password = generateRandomPassword();
+  const handleGenerateButtonClick = () => {
+    const password = generateRandomPassword();
 
-      if (onGenerate) {
-        onGenerate(password);
-      } else {
-        helper.setValue(password);
-      };
+    if (onGenerate) {
+      onGenerate(password);
+    } else {
+      helper.setValue(password);
     };
+  };
 
   return (
     <div className={classNames(className, 'flex flex-col')}>
@@ -49,7 +48,7 @@ export default function PasswordField({
             type="button"
             onClick={handleGenerateButtonClick}
           >
-            <Icons.rotate className="text-green-600" width={12} height={12} />
+            <Icons.autorenew className="text-green-600" width={14} height={14} />
             <span className="sr-only">Сгенерировать пароль</span>
           </button>}
       </div>
@@ -70,8 +69,8 @@ export default function PasswordField({
             onClick={() => type === 'password' ? setType('text') : setType('password')}
           >
             {type === 'password'
-              ? <Icons.eye width={20} />
-              : <Icons.eyeSlash width={22} />}
+              ? <Icons.visibility width={20} />
+              : <Icons.visibilityOff width={20} />}
           </button>
         </>} />
       </div>

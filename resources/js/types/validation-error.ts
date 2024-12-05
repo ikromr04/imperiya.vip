@@ -3,4 +3,4 @@ export type ValidationError = {
   errors?: {
     [fieldName:string]: string[];
   };
-}
+};

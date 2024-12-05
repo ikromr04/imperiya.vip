@@ -1,5 +1,5 @@
 import React from 'react';
-import * as yup from 'yup';
+import * as Yup from 'yup';
 import { Form, Formik, FormikHelpers } from 'formik';
 import classNames from 'classnames';
 import Button from '../ui/button';
@@ -11,39 +11,34 @@ import { loginAction } from '../../store/auth-slice/auth-api-actions';
 import Spinner from '../ui/spinner';
 import TextField from '../ui/fields/text-field';
 import PasswordField from '../ui/fields/password-field';
+import { PropsWithClassname } from '../../types';
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .required('Введите адрес электронной почты.')
+    .email('Неверный адрес электронной почты.'),
+  password: Yup.string().required('Введите Ваш пароль.'),
+});
 
 export default function LoginForm({
   className,
-}: {
-  className?: string;
-}): JSX.Element {
-  const
-    dispatch = useAppDispatch(),
-    initialValues: LoginCredentials = {
-      email: '',
-      password: '',
-    },
-    validationSchema = yup.object().shape({
-      email: yup.string()
-        .required('Введите адрес электронной почты.')
-        .email('Неверный адрес электронной почты.'),
-      password: yup.string().required('Введите Ваш пароль.'),
-    }),
+}: PropsWithClassname): JSX.Element {
+  const dispatch = useAppDispatch();
+  const initialValues = { email: '', password: '' };
 
-    onSubmit = async (
-      values: LoginCredentials,
-      actions: FormikHelpers<LoginCredentials>
-    ) => {
-      actions.setSubmitting(true);
-      await dispatch(loginAction({
-        dto: values,
-        onValidationError: (error) => actions.setErrors({
-          email: error.errors?.email?.[0],
-          password: error.errors?.password?.[0],
-        }),
-      }));
-      actions.setSubmitting(false);
-    };
+  const onSubmit = async (
+    values: LoginCredentials,
+    helpers: FormikHelpers<LoginCredentials>
+  ) => {
+    helpers.setSubmitting(true);
+
+    await dispatch(loginAction({
+      dto: values,
+      onValidationError: (error) => helpers.setErrors({ ...error.errors }),
+    }));
+
+    helpers.setSubmitting(false);
+  };
 
   return (
     <Formik

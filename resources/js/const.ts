@@ -20,6 +20,7 @@ export const APIRoute = {
 };
 
 export enum SliceName {
+  App = 'App',
   Auth = 'Auth',
 };
 

@@ -34,7 +34,7 @@ export const loginAction = createAsyncThunk<AuthUser, {
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;
       if (!error.response) throw err;
-      if (onValidationError) onValidationError(error.response.data);
+      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
       return rejectWithValue(error.response.data);
     }
   },

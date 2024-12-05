@@ -27,7 +27,7 @@ export default function ForgotPasswordPage(): JSX.Element {
           type="button"
           onClick={() => navigate(-1)}
         >
-          <Icons.arrowLeftLong width={12} /> Назад
+          <Icons.west height={8} /> Назад
         </Button>
       </div>
     </main>

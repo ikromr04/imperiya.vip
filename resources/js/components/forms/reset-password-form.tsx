@@ -1,5 +1,5 @@
 import React, { SetStateAction, useState } from 'react';
-import * as yup from 'yup';
+import * as Yup from 'yup';
 import { Form, Formik, FormikHelpers } from 'formik';
 import classNames from 'classnames';
 import Button from '../ui/button';
@@ -11,51 +11,50 @@ import { ResetPasswordDTO } from '../../dto/auth-dto';
 import Checkbox from '../ui/checkbox/checkbox';
 import TextField from '../ui/fields/text-field';
 import PasswordField from '../ui/fields/password-field';
+import { PropsWithClassname } from '../../types';
+import Message, { MessageProps } from '../message';
+
+const validationSchema = Yup.object().shape({
+  password: Yup.string()
+    .required('Пароль обязателен.')
+    .min(6, 'Пароль должен содержать не менее 6 символов.'),
+  password_confirmation: Yup.string()
+    .required('Подтверждение пароля обязателен.')
+    .oneOf([Yup.ref('password')], 'Подтверждение пароля не совпадает.'),
+});
 
 export default function ResetPasswordForm({
   className,
-}: {
-  className?: string;
-}): JSX.Element {
-  const
-    dispatch = useAppDispatch(),
-    { token } = useParams(),
-    [message, setMessage] = useState<[message: string, success: boolean]>(['', true]),
-    initialValues: ResetPasswordDTO = {
-      token: token || '',
-      password: '',
-      password_confirmation: '',
-      email: true,
-    },
-    validationSchema = yup.object().shape({
-      password: yup.string()
-        .required('Пароль обязателен.')
-        .min(6, 'Пароль должен содержать не менее 6 символов.'),
-      password_confirmation: yup.string()
-        .required('Подтверждение пароля обязателен.')
-        .oneOf([yup.ref('password')], 'Подтверждение пароля не совпадает.'),
-    }),
+}: PropsWithClassname): JSX.Element {
+  const dispatch = useAppDispatch();
+  const { token } = useParams();
+  const [message, setMessage] = useState<MessageProps['message']>(undefined);
+  const initialValues: ResetPasswordDTO = {
+    token: token || '',
+    password: '',
+    password_confirmation: '',
+    email: true,
+  };
 
-    onSubmit = async (
-      values: ResetPasswordDTO,
-      actions: FormikHelpers<ResetPasswordDTO>
-    ) => {
-      setMessage(['', true]);
-      actions.setSubmitting(true);
-      await dispatch(resetPasswordAction({
-        dto: values,
-        onSuccess: (message) => {
-          setMessage([message, true]);
-          actions.resetForm();
-        },
-        onValidationError: (error) => actions.setErrors({
-          password: error.errors?.password?.[0],
-          password_confirmation: error.errors?.password_confirmation?.[0],
-        }),
-        onFail: (message) => setMessage([message, false]),
-      }));
-      actions.setSubmitting(false);
-    },
+  const onSubmit = async (
+    values: ResetPasswordDTO,
+    helpers: FormikHelpers<ResetPasswordDTO>
+  ) => {
+    helpers.setSubmitting(true);
+    setMessage(undefined);
+
+    await dispatch(resetPasswordAction({
+      dto: values,
+      onSuccess: (message) => {
+        setMessage([message, 'success']);
+        helpers.resetForm();
+      },
+      onValidationError: (error) => helpers.setErrors({ ...error.errors }),
+      onFail: (message) => setMessage([message, 'error']),
+    }));
+
+    helpers.setSubmitting(false);
+  },
 
     onPasswordGenerate = (setValues: (values: SetStateAction<ResetPasswordDTO>) => void) => (password: string): void => {
       setValues((prevValues) => ({
@@ -73,7 +72,7 @@ export default function ResetPasswordForm({
     >
       {({ isSubmitting, setValues }) => (
         <Form className={classNames(className, 'flex flex-col')}>
-          {message[0] && <p className={classNames('mb-4', message[1] ? 'text-green-600' : 'text-red-600 ')}>{message}</p>}
+          <Message className="mb-4" message={message} />
 
           <TextField name="token" type="hidden" />
 

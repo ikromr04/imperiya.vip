@@ -5,7 +5,9 @@ import { useAppSelector } from '../hooks/index';
 import { getAuthStatus } from '../store/auth-slice/auth-selector';
 import { AppRoute, AuthorizationStatus } from '../const';
 
-export default function PrivateRoute({ children }: PropsWithChildren): JSX.Element {
+export default function PrivateRoute({
+  children,
+}: PropsWithChildren): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
 
   return (

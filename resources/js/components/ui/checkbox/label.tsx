@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 export default function Label({
   label,
 }: {
-  label?: ReactNode;
+  label?: string;
 }): ReactNode {
   if (!label) return null;
 

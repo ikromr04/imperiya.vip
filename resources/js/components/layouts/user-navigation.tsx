@@ -7,16 +7,14 @@ import { AppRoute } from '../../const';
 import { Link } from 'react-router-dom';
 import { logoutAction } from '../../store/auth-slice/auth-api-actions';
 import { Icons } from '../icons';
+import { PropsWithClassname } from '../../types';
 
 export default function UserNavigation({
   className,
-}: {
-  className?: string;
-}): ReactNode {
-  const
-    user = useAppSelector(getAuthUser),
-    dispatch = useAppDispatch(),
-    { ref, isOpen, setIsOpen } = useDropdown<HTMLDivElement>();
+}: PropsWithClassname): ReactNode {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(getAuthUser);
+  const { ref, isOpen, setIsOpen } = useDropdown<HTMLDivElement>();
 
   if (!user) return null;
 
@@ -27,16 +25,16 @@ export default function UserNavigation({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="relative z-0 flex w-9 h-9 rounded-full border border-gray-300 bg-gray-100 overflow-hidden">
+        <span className="relative z-0 flex w-9 h-9 rounded-full bg-gray-100 overflow-hidden">
           <img
-            className="absolute top-0 left-0 w-full h-full object-cover"
+            className="absolute z-10 top-0 left-0 w-full h-full object-cover"
             src={user.avatar || 'undefined'}
             width={200}
             height={200}
             alt={user.name}
             onError={(evt: BaseSyntheticEvent) => evt.target.remove()}
           />
-          <Icons.user className="absolute -z-10 bottom-0 left-1/2 h-[88%] transform -translate-x-1/2 text-gray-300" />
+          <Icons.user className="text-gray-300" width={36} height={36} />
         </span>
         <span className="sr-only md:not-sr-only font-semibold">{user.name}</span>
         <Icons.caretDown className={classNames('transition-all duration-300 transform', isOpen && '-scale-y-[1]')} width={8} />

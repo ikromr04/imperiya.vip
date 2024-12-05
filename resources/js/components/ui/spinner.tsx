@@ -1,11 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
+import { PropsWithClassname } from '../../types';
 
 export default function Spinner({
   className,
-}: {
-  className?: string;
-}): JSX.Element {
+}: PropsWithClassname): JSX.Element {
   return (
     <svg className={classNames(className, 'text-white animate-spin fill-blue-600')} viewBox="0 0 100 101" fill="none">
       <title className="sr-only">Загрузка...</title>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as yup from 'yup';
+import * as Yup from 'yup';
 import { Form, Formik, FormikHelpers } from 'formik';
 import classNames from 'classnames';
 import Button from '../ui/button';
@@ -8,36 +8,38 @@ import { sendResetPasswordLinkAction } from '../../store/auth-slice/auth-api-act
 import Spinner from '../ui/spinner';
 import TextField from '../ui/fields/text-field';
 import { ResetPasswordEmailDTO } from '../../dto/auth-dto';
+import { PropsWithClassname } from '../../types';
+import Message, { MessageProps } from '../message';
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .required('Введите адрес электронной почты.')
+    .email('Неверный адрес электронной почты.'),
+});
 
 export default function ForgotPasswordForm({
   className,
-}: {
-  className?: string;
-}): JSX.Element {
-  const
-    dispatch = useAppDispatch(),
-    initialValues: ResetPasswordEmailDTO = { email: '' },
-    validationSchema = yup.object().shape({
-      email: yup.string()
-        .required('Введите адрес электронной почты.')
-        .email('Неверный адрес электронной почты.'),
-    }),
-    [message, setMessage] = useState<[message: string, success: boolean]>(['', true]),
+}: PropsWithClassname): JSX.Element {
+  const dispatch = useAppDispatch();
+  const initialValues = { email: '' };
+  const [message, setMessage] = useState<MessageProps['message']>(undefined);
 
-    onSubmit = async (
-      values: ResetPasswordEmailDTO,
-      actions: FormikHelpers<ResetPasswordEmailDTO>
-    ) => {
-      setMessage(['', true]);
-      actions.setSubmitting(true);
-      await dispatch(sendResetPasswordLinkAction({
-        dto: values,
-        onSuccess: (message) => setMessage([message, true]),
-        onValidationError: (error) => actions.setErrors({ email: error.errors?.email?.[0] }),
-        onFail: (message) => setMessage([message, false]),
-      }));
-      actions.setSubmitting(false);
-    };
+  const onSubmit = async (
+    values: ResetPasswordEmailDTO,
+    helpers: FormikHelpers<ResetPasswordEmailDTO>
+  ) => {
+    helpers.setSubmitting(true);
+    setMessage(undefined);
+
+    await dispatch(sendResetPasswordLinkAction({
+      dto: values,
+      onSuccess: (message) => setMessage([message, 'success']),
+      onValidationError: (error) => helpers.setErrors({ ...error.errors }),
+      onFail: (message) => setMessage([message, 'error']),
+    }));
+
+    helpers.setSubmitting(false);
+  };
 
   return (
     <Formik
@@ -47,7 +49,7 @@ export default function ForgotPasswordForm({
     >
       {({ isSubmitting }) => (
         <Form className={classNames(className, 'flex flex-col')}>
-          {message[0] && <p className={classNames('mb-4', message[1] ? 'text-green-600' : 'text-red-600 ')}>{message}</p>}
+          <Message className="mb-4" message={message} />
 
           <TextField
             className="mb-5"

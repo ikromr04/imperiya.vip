@@ -3,12 +3,12 @@ import { useField } from 'formik';
 import React, { InputHTMLAttributes } from 'react';
 import Label from './label';
 import { Icons } from '../../icons';
+import { PropsWithClassname } from '../../../types';
 
-type CheckboxProps = InputHTMLAttributes<HTMLInputElement> & {
+type CheckboxProps = PropsWithClassname<InputHTMLAttributes<HTMLInputElement> & {
   name: string;
-  className?: string;
   label?: string;
-};
+}>;
 
 export default function Checkbox({
   name,
@@ -21,15 +21,19 @@ export default function Checkbox({
   return (
     <label className={classNames(className, 'flex items-center max-w-max cursor-pointer')}>
       <input
-        className="sr-only peer"
         {...field}
         {...props}
+        className="sr-only"
         checked={field.value}
         type="checkbox"
       />
-      <span className="relative flex items-center border-gray-400 rounded-sm transition-all duration-300 peer-focus:border-gray-900 border-[2px] w-[14px] h-[14px]">
-        {field.value &&
-          <Icons.checked className="absolute -top-[2px] -left-[2px] text-green-600" width={14} height={14} />}
+      <span
+        className={classNames(
+          'flex items-center rounded-sm transition-all duration-300 border-[2px] w-4 h-4',
+          field.value ? ' border-green-600 bg-green-600' : 'border-gray-500',
+        )}
+      >
+        <Icons.checked className="text-white" />
       </span>
       <Label label={label} />
     </label>

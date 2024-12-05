@@ -1,10 +1,14 @@
 import React from 'react';
 import MainLogo from './main-logo';
 import UserNavigation from './user-navigation';
+import classNames from 'classnames';
+import { PropsWithClassname } from '../../types';
 
-export default function PageHeader(): JSX.Element {
+export default function PageHeader({
+  className,
+}: PropsWithClassname): JSX.Element {
   return (
-    <header className="bg-white shadow py-2">
+    <header className={classNames(className, 'bg-white shadow py-2')}>
       <div className="container flex justify-between">
         <MainLogo imgClass="h-9 w-auto" />
 

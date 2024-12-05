@@ -20,7 +20,7 @@ export default function ResetPasswordPage(): JSX.Element {
           variant="text"
           href={AppRoute.Auth.Login}
         >
-          <Icons.arrowLeftLong width={12} /> Вход в онлайн-дневник
+          <Icons.west height={8} /> Вход в онлайн-дневник
         </Button>
       </div>
     </main>
