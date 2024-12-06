@@ -7,8 +7,8 @@ export type AppSlice = {
 }
 
 const initialState: AppSlice = {
-    isNavigationCollapsed: getAppSettings().isNavigationCollapsed,
-  };
+  isNavigationCollapsed: getAppSettings().isNavigationCollapsed,
+};
 
 export const appSlice = createSlice({
   name: SliceName.App,
@@ -22,9 +22,18 @@ export const appSlice = createSlice({
       });
       state.isNavigationCollapsed = !settings.isNavigationCollapsed;
     },
+    collapseNavigationAction: (state) => {
+      const settings = getAppSettings();
+      saveAppSettings({
+        ...settings,
+        isNavigationCollapsed: true,
+      });
+      state.isNavigationCollapsed = true;
+    },
   },
 });
 
 export const {
   toggleNavigationAction,
+  collapseNavigationAction
 } = appSlice.actions;

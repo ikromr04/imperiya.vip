@@ -5,7 +5,7 @@ export type AppSettings = {
 }
 
 export const initialSettings: AppSettings = {
-  isNavigationCollapsed: false,
+  isNavigationCollapsed: true,
 };
 
 export const getAppSettings = (): AppSettings => {

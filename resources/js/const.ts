@@ -1,5 +1,20 @@
 export const AppRoute = {
   Journal: '/journal',
+  Schedule: {
+    Index: '/schedule',
+  },
+  Users: {
+    Index: '/users',
+  },
+  Class: {
+    Index: '/classes',
+  },
+  Monitoring: {
+    Index: '/monitoring',
+  },
+  Settings: {
+    Index: '/settings',
+  },
   Auth: {
     Login: '/auth/login',
     ForgotPassword: '/auth/forgot-password',

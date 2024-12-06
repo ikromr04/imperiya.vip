@@ -30,6 +30,11 @@ export default function App(): JSX.Element {
         <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
 
         <Route path={AppRoute.Journal} element={<JournalPage />} />
+        <Route path={AppRoute.Schedule.Index} element={<JournalPage />} />
+        <Route path={AppRoute.Users.Index} element={<JournalPage />} />
+        <Route path={AppRoute.Class.Index} element={<JournalPage />} />
+        <Route path={AppRoute.Monitoring.Index} element={<JournalPage />} />
+        <Route path={AppRoute.Settings.Index} element={<JournalPage />} />
 
         <Route path={AppRoute.NotFound} element={<NotFoundPage />} />
       </Routes>
