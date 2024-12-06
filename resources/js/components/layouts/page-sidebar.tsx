@@ -17,8 +17,8 @@ export default function PageSidebar(): JSX.Element {
 
   return (
     <aside className={classNames(
-      'bg-white shadow my-2 rounded-r-md h-max max-h-[calc(100vh-72px)] overflow-hidden transition-all duration-300',
-      isNavigationCollapsed ? 'max-w-10 min-w-10' : 'max-w-52 min-w-52',
+      'bg-white shadow my-2 rounded-r-md h-max max-h-[calc(100vh-72px)] overflow-hidden transition-all duration-300 md:my-4 md:rounded-md',
+      isNavigationCollapsed ? 'max-w-10 min-w-10 md:max-w-11 md:min-w-11' : 'max-w-52 min-w-52',
     )}>
       <nav className="flex flex-col max-h-[calc(100vh-72px)] no-scrollbar">
         <NavList links={[
