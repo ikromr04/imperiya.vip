@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { PropsWithClassname } from '../types';
+import { PropsWithClassname } from '../../types';
 import classNames from 'classnames';
 
 const MessageVariant = {

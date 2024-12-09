@@ -1,6 +1,5 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
-import { useAppDispatch } from '../../hooks';
 import { UserFilterDTO } from '../../dto/user';
 import classNames from 'classnames';
 import { PropsWithClassname } from '../../types';
@@ -11,15 +10,11 @@ import Spinner from '../ui/spinner';
 export function UsersSearchForm({
   className,
 }: PropsWithClassname): JSX.Element {
-  const dispatch = useAppDispatch();
-
   const onSubmit = async (
     values: UserFilterDTO,
     helpers: FormikHelpers<UserFilterDTO>
   ) => {
     helpers.setSubmitting(true);
-
-    await dispatch(filterUsers(values));
 
     helpers.setSubmitting(false);
   };

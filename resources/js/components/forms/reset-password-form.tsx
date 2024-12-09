@@ -12,7 +12,7 @@ import Checkbox from '../ui/checkbox/checkbox';
 import TextField from '../ui/fields/text-field';
 import PasswordField from '../ui/fields/password-field';
 import { PropsWithClassname } from '../../types';
-import Message, { MessageProps } from '../message';
+import Message, { MessageProps } from '../ui/message';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()

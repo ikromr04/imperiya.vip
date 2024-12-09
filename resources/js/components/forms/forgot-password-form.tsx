@@ -9,7 +9,7 @@ import Spinner from '../ui/spinner';
 import TextField from '../ui/fields/text-field';
 import { ResetPasswordEmailDTO } from '../../dto/auth-dto';
 import { PropsWithClassname } from '../../types';
-import Message, { MessageProps } from '../message';
+import Message, { MessageProps } from '../ui/message';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
