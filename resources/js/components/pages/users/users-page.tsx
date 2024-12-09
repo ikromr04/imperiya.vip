@@ -17,8 +17,6 @@ export default function UsersPage(): JSX.Element {
     }
   }, [users, dispatch]);
 
-  console.log(users);
-
   return (
     <PageLayout>
       <main>
