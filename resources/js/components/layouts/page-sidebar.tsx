@@ -30,8 +30,8 @@ export default function PageSidebar(): JSX.Element {
         <NavList
           className="overflow-y-scroll max-h-[50%] no-scrollbar"
           links={[
-            { label: 'Расписание', icon: 'schedule', href: AppRoute.Schedule.Index },
             { label: 'Пользователи', icon: 'users', href: AppRoute.Users.Index },
+            { label: 'Расписание', icon: 'schedule', href: AppRoute.Schedule.Index },
             { label: 'Классы', icon: 'class', href: AppRoute.Class.Index },
             { label: 'Отчет', icon: 'monitoring', href: AppRoute.Monitoring.Index },
           ]}
