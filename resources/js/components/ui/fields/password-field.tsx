@@ -62,7 +62,7 @@ export default function PasswordField({
           {...props}
         />
 
-        <After icon={<>
+        <After element={<>
           <button
             className="flex items-center justify-center w-full h-full hover:bg-gray-200 transition-all duration-300"
             type="button"

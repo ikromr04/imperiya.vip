@@ -22,7 +22,7 @@ export default function ForgotPasswordPage(): JSX.Element {
         <ForgotPasswordForm />
 
         <Button
-          className="text-sm mt-2"
+          className="text-sm mt-2 text-blue-600 hover:text-blue-400"
           variant="text"
           type="button"
           onClick={() => navigate(-1)}

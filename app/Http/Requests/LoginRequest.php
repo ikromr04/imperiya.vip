@@ -16,7 +16,7 @@ class LoginRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'email' => 'required|email|exists:users,email',
+      'login' => 'required|exists:users,login',
       'password' => ['required', function ($attribute, $value, $fail) {
         $user = User::where('email', $this->email)->first();
 
@@ -30,9 +30,8 @@ class LoginRequest extends FormRequest
   public function messages(): array
   {
     return [
-      'email.required' => 'Требуется электронная почта.',
-      'email.email' => 'Пожалуйста, укажите действительный адрес электронной почты.',
-      'email.exists' => 'Нам не удалось найти пользователя с таким адресом электронной почты.',
+      'login.required' => 'Требуется логин.',
+      'login.exists' => 'Нам не удалось найти пользователя с таким логином.',
       'password.required' => 'Пароль обязательно для заполнения.',
     ];
   }

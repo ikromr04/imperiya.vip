@@ -17,9 +17,11 @@ return new class extends Migration
       $table->string('name');
       $table->string('surname')->nullable();
       $table->string('patronymic')->nullable();
-      $table->string('email')->unique();
+      $table->string('login')->unique();
+      $table->string('email')->unique()->nullable();
       $table->string('password');
       $table->string('avatar')->nullable();
+      $table->string('avatar_thumb')->nullable();
       $table->date('birth_date')->nullable();
       $table->string('address')->nullable();
       $table->string('facebook')->nullable();
@@ -28,7 +30,7 @@ return new class extends Migration
       $table->string('odnoklassniki')->nullable();
       $table->integer('role_id');
       $table->integer('gender_id')->nullable();
-      $table->integer('classroom_id')->nullable();
+      $table->integer('grade_id')->nullable();
       $table->integer('nationality_id')->nullable();
       $table->timestamp('email_verified_at')->nullable();
       $table->rememberToken();

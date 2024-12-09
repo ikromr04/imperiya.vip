@@ -16,7 +16,7 @@ export default function ResetPasswordPage(): JSX.Element {
         <ResetPasswordForm />
 
         <Button
-          className="text-sm mt-2"
+          className="text-sm mt-2 text-blue-600 hover:text-blue-400"
           variant="text"
           href={AppRoute.Auth.Login}
         >

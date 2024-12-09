@@ -35,14 +35,17 @@ class AuthController extends Controller
 
   public function login(LoginRequest $request): JsonResponse
   {
-    $user = User::where('email', $request->email)->first();
+    $user = User::where('login', $request->login)->first();
 
     return response()->json([
       'user' => [
         'id' => $user->id,
         'name' => $user->name,
-        'email' => $user->email,
-        ...($user->avatar ? ['avatar' => $user->avatar] : []),
+        'login' => $user->login,
+        ...($user->avatar ? [
+          'avatar' => $user->avatar,
+          'avatar_thumb' => $user->avatar_thumb,
+        ] : []),
       ],
       'token' => $user->createToken('access_token')->plainTextToken,
     ], 200);

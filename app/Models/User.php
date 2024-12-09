@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,11 +14,7 @@ class User extends Authenticatable
 {
   use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
-  protected $fillable = [
-    'name',
-    'email',
-    'password',
-  ];
+  protected $guarded = [];
 
   protected $hidden = [
     'password',
@@ -44,9 +39,9 @@ class User extends Authenticatable
     return $this->hasMany(Phone::class, 'user_id');
   }
 
-  public function classroom(): BelongsTo
+  public function grade(): BelongsTo
   {
-    return $this->belongsTo(Classroom::class, 'classroom_id');
+    return $this->belongsTo(Grade::class, 'grade_id');
   }
 
   public function nationality(): BelongsTo

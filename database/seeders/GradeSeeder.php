@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Classroom;
+use App\Models\Grade;
 use Illuminate\Database\Seeder;
 
-class ClassroomSeeder extends Seeder
+class GradeSeeder extends Seeder
 {
   public function run(): void
   {
@@ -25,11 +25,11 @@ class ClassroomSeeder extends Seeder
       array('id' => '13', 'bind' => '1', 'group' => 'А', 'level' => 6, 'pupils' => '["830","972","976","1056","1160","1186","1208","1214","1223","1232","1326","1359","1439","1447"]', 'block' => '1', 'datetime' => '2024-09-12 11:39:38'),
       array('id' => '14', 'bind' => '1', 'group' => 'Б', 'level' => 6, 'pupils' => '["917","1024","1089","1096","1100","1163","1323","1341","1349","1352","1386","1475","1553","1566"]', 'block' => '1', 'datetime' => '2024-09-12 11:42:13'),
       array('id' => '15', 'bind' => '1', 'group' => 'А', 'level' => 7, 'pupils' => '["897","905","908","912","1026","1112","1131","1156","1268","1280","1299","1334","1442","1446","1464","1483","1506","1521","1626", "1559"]', 'block' => '1', 'datetime' => '2024-09-12 11:45:15'),
-      array('id' => '16', 'bind' => '1', 'group' => 'А', 'level' => 9, 'pupils' => '["885","888","891","894","1072","1260","1277","1279","1402","1406","1421","1554","1558","1560","1603", "1639"]', 'block' => '1', 'datetime' => '2024-09-12 11:47:46')
+      array('id' => '16', 'bind' => '1', 'group' => 'А', 'level' => 9, 'pupils' => '["885","888","891","894","1072","1260","1277","1279","1402","1406","1421","1554","1558","1560","1603", "1639"]', 'block' => '1', 'datetime' => '2024-09-12 11:47:46'),
     );
 
     foreach ($classes as $classroom) {
-      Classroom::create([
+      Grade::create([
         'id' => $classroom['id'],
         'level' => $classroom['level'],
         'group' => $classroom['group'],

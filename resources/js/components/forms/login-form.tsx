@@ -14,9 +14,7 @@ import PasswordField from '../ui/fields/password-field';
 import { PropsWithClassname } from '../../types';
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string()
-    .required('Введите адрес электронной почты.')
-    .email('Неверный адрес электронной почты.'),
+  login: Yup.string().required('Введите Ваш логин.'),
   password: Yup.string().required('Введите Ваш пароль.'),
 });
 
@@ -24,7 +22,7 @@ export default function LoginForm({
   className,
 }: PropsWithClassname): JSX.Element {
   const dispatch = useAppDispatch();
-  const initialValues = { email: '', password: '' };
+  const initialValues: LoginCredentials = { login: '', password: '' };
 
   const onSubmit = async (
     values: LoginCredentials,
@@ -48,7 +46,7 @@ export default function LoginForm({
     >
       {({ isSubmitting }) => (
         <Form className={classNames(className, 'flex flex-col')}>
-          <TextField name="email" label="Электронная почта" />
+          <TextField name="login" label="Логин" />
 
           <div className="flex flex-col mb-5">
             <Link

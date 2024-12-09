@@ -37,7 +37,7 @@ export default function UserNavigation({
           <Icons.user className="text-gray-300" width={36} height={36} />
         </span>
         <span className="sr-only md:not-sr-only font-semibold">{user.name}</span>
-        <Icons.caretDown className={classNames('transition-all duration-300 transform', isOpen && '-scale-y-[1]')} width={8} />
+        <Icons.dropDown className={classNames('transition-all duration-300 transform', isOpen && '-scale-y-[1]')} width={8} />
       </button>
 
       <div

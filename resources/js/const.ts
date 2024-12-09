@@ -31,12 +31,16 @@ export const APIRoute = {
     ForgotPassword: '/auth/forgot-password',
     ResetPassword: '/auth/reset-password',
     Logout: '/auth/logout',
-  }
+  },
+  Users: {
+    Index: '/users',
+  },
 };
 
 export enum SliceName {
   App = 'App',
   Auth = 'Auth',
+  Users = 'Users',
 };
 
 export enum AuthorizationStatus {

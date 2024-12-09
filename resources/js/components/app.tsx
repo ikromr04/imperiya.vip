@@ -10,6 +10,7 @@ import ForgotPasswordPage from './pages/auth/forgot-password-page';
 import ResetPasswordPage from './pages/auth/reset-password-page';
 import ProfilePage from './pages/auth/profile-page';
 import NotFoundPage from './pages/not-found-page';
+import UsersPage from './pages/users/users-page';
 
 export default function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -31,7 +32,7 @@ export default function App(): JSX.Element {
 
         <Route path={AppRoute.Journal} element={<JournalPage />} />
         <Route path={AppRoute.Schedule.Index} element={<JournalPage />} />
-        <Route path={AppRoute.Users.Index} element={<JournalPage />} />
+        <Route path={AppRoute.Users.Index} element={<UsersPage />} />
         <Route path={AppRoute.Class.Index} element={<JournalPage />} />
         <Route path={AppRoute.Monitoring.Index} element={<JournalPage />} />
         <Route path={AppRoute.Settings.Index} element={<JournalPage />} />

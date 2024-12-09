@@ -21,10 +21,14 @@ export default {
         'success': '#16a34a',
         'error': '#db2626',
         'warn': '#ea580c',
+        'base': '#4b5563',
+      },
+      backgroundColor: {
+        'success': '#66bb6a',
       },
       backgroundImage: {
         'illustrations': 'url(/images/illustrations.png)',
-      }
+      },
     },
   },
   plugins: [],

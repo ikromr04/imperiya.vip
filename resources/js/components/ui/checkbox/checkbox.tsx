@@ -29,7 +29,7 @@ export default function Checkbox({
       />
       <span
         className={classNames(
-          'flex items-center rounded-sm transition-all duration-300 border-[2px] w-4 h-4',
+          'flex items-center rounded-sm border-[2px] w-4 h-4',
           field.value ? ' border-green-600 bg-green-600' : 'border-gray-500',
         )}
       >
