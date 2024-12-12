@@ -46,6 +46,7 @@ export default function Button({
 
   return (
     <button
+      type="button"
       {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}
       className={classNames(className, ButtonVariant[variant])}
     >

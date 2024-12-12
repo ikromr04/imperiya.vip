@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
       GradeSeeder::class,
       RoleSeeder::class,
       GenderSeeder::class,
+      NationalitySeeder::class,
       UserSeeder::class,
     ]);
   }

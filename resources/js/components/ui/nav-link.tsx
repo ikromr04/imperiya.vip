@@ -4,8 +4,9 @@ import { LinkProps, useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 import Button from './button';
 import { PropsWithClassname } from '../../types';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getNavigationCollapsedState } from '../../store/app-slice/app-selector';
+import { collapseNavigationAction } from '../../store/app-slice/app-slice';
 
 export type NavLinkProps = PropsWithClassname<{
   label: string;
@@ -24,6 +25,7 @@ export default function NavLink({
   const Icon = Icons[icon];
   const isActive = href && (href != '/' ? pathname.startsWith(href) : (href === pathname));
   const isNavigationCollapsed = useAppSelector(getNavigationCollapsedState);
+  const dispatch = useAppDispatch();
 
   const children = <>
     <span className="flex items-center justify-center min-w-9 min-h-9">
@@ -46,6 +48,7 @@ export default function NavLink({
 
   return (
     <Button
+      onClick={() => { if (window.screen.width < 768) dispatch(collapseNavigationAction()); }}
       {...props}
       className={classNames(
         className,

@@ -9,12 +9,11 @@ export type UserId = ID
 export type User = {
   id: UserId;
   name: string;
-  surname?: string;
-  role: Role;
-  patronymic?: string;
   login: string;
+  role: Role;
   email?: string;
   avatar?: string;
+  avatarThumb?: string;
   birthDate?: string;
   address?: string;
   facebook?: string;

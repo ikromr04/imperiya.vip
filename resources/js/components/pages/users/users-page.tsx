@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PageLayout from '../../layouts/page-layout';
 import Button from '../../ui/button';
 import { UsersSearchForm } from '../../forms/users-search-form';
@@ -6,23 +6,27 @@ import Tooltip from '../../ui/tooltip';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { getUsers } from '../../../store/users-slice/users-selector';
 import { fetchUsersAction } from '../../../store/users-slice/users-api-actions';
+import UsersList from '../../users-list';
 
 export default function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
+  const headerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (!users) {
-      dispatch(fetchUsersAction());
+    if (!users) dispatch(fetchUsersAction());
+
+    if (headerRef.current) {
+      headerRef.current.nextElementSibling?.setAttribute('style', `height: ${(headerRef.current.parentElement?.parentElement?.clientHeight || 0) - headerRef.current.clientHeight}px`);
     }
   }, [users, dispatch]);
 
   return (
     <PageLayout>
-      <main>
-        <header className="flex flex-col gap-2">
+      <main className="flex flex-col h-full">
+        <header ref={headerRef} className="top flex flex-col gap-2">
           <div className="flex items-end justify-between gap-2">
-            <h1 className="title grow">
+            <h1 className="title overflow-hidden grow">
               Справочник пользователей
             </h1>
 
@@ -42,7 +46,7 @@ export default function UsersPage(): JSX.Element {
             </Button>
           </div>
 
-          <div className="flex bg-white rounded-md">
+          <div className="flex bg-white rounded-md mb-2">
             <UsersSearchForm className="grow" />
 
             <Button
@@ -59,11 +63,14 @@ export default function UsersPage(): JSX.Element {
               icon="gridView"
               variant="text"
             >
-              <Tooltip label="Таблица" position="bottom" />
+              <Tooltip label="Таблица" position="top" />
             </Button>
           </div>
         </header>
-        <p>Отображение 1 - 64 из {users?.length}</p>
+
+        <div>
+          <UsersList users={users} />
+        </div>
       </main>
     </PageLayout>
   );

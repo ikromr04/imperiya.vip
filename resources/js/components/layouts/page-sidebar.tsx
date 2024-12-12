@@ -1,26 +1,19 @@
 import React from 'react';
 import NavList from '../ui/nav-list';
 import { AppRoute } from '../../const';
-import { useAppDispatch, useAppSelector } from '../../hooks/index';
-import { getNavigationCollapsedState } from '../../store/app-slice/app-selector';
+import { useAppDispatch } from '../../hooks/index';
 import classNames from 'classnames';
-import { collapseNavigationAction, toggleNavigationAction } from '../../store/app-slice/app-slice';
-import { useRouteChange } from '../../hooks/use-route-change';
+import { toggleNavigationAction } from '../../store/app-slice/app-slice';
+import { PropsWithClassname } from '../../types';
 
-export default function PageSidebar(): JSX.Element {
+export default function PageSidebar({
+  className,
+}: PropsWithClassname): JSX.Element {
   const dispatch = useAppDispatch();
-  const isNavigationCollapsed = useAppSelector(getNavigationCollapsedState);
-
-  useRouteChange(() => {
-    if (window.screen.width < 768) dispatch(collapseNavigationAction());
-  });
 
   return (
-    <aside className={classNames(
-      'bg-white shadow my-2 rounded-r-md h-max max-h-[calc(100vh-72px)] overflow-hidden transition-all duration-300 md:my-4 md:rounded-md',
-      isNavigationCollapsed ? 'max-w-10 min-w-10 md:max-w-11 md:min-w-11' : 'max-w-52 min-w-52',
-    )}>
-      <nav className="flex flex-col max-h-[calc(100vh-72px)] no-scrollbar">
+    <aside className={classNames(className, 'bg-white shadow rounded-r-md max-h-[calc(100vh-68px)] overflow-hidden transition-all duration-300 md:h-max md:rounded-md')}>
+      <nav className="flex flex-col h-[calc(100vh-68px)] no-scrollbar md:max-h-[calc(100vh-84px)] md:h-auto">
         <NavList links={[
           { label: 'Журнал', icon: 'journal', href: AppRoute.Journal },
         ]} />
@@ -37,7 +30,7 @@ export default function PageSidebar(): JSX.Element {
           ]}
         />
 
-        <hr className="border-gray-300" />
+        <hr className="border-gray-300 mt-auto" />
 
         <NavList links={[
           { label: 'Настройки', icon: 'settings', href: AppRoute.Settings.Index },

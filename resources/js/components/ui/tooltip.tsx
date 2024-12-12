@@ -21,14 +21,16 @@ export default function Tooltip({
       position === 'top' && 'bottom-full left-1/2 -translate-x-1/2 -translate-y-[5px]',
       position === 'right' && 'left-full top-1/2 -translate-y-1/2 translate-x-[5px]',
       position === 'bottom' && 'left-1/2 top-full -translate-x-1/2 translate-y-[5px]',
+      position === 'left' && 'right-full top-1/2 -translate-y-1/2 -translate-x-[5px]',
     )}>
       {label}
       <Icons.caretDown
         className={classNames(
-          'absolute transform text-gray-700',
+          'absolute transform text-gray-900',
           position === 'top' && 'top-full left-1/2 -translate-x-1/2',
           position === 'right' && 'right-full top-1/2 rotate-90 translate-x-[3px] -translate-y-1/2',
           position === 'bottom' && 'right-1/2 bottom-full rotate-180 translate-x-[4px]',
+          position === 'left' && 'left-full top-1/2 -rotate-90 -translate-x-[3px] -translate-y-1/2',
         )}
         width={10}
       />

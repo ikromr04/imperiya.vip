@@ -15,7 +15,12 @@ import UsersPage from './pages/users/users-page';
 export default function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
 
-  if (authStatus === AuthorizationStatus.Unknown) return <Spinner className="m-auto w-12 h-12" />;
+  if (authStatus === AuthorizationStatus.Unknown)
+    return (
+      <div className="flex w-full h-full justify-center items-center">
+        <Spinner className="w-12 h-12" />
+      </div>
+    );
 
   return (
     <BrowserRouter
@@ -31,8 +36,8 @@ export default function App(): JSX.Element {
         <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
 
         <Route path={AppRoute.Journal} element={<JournalPage />} />
-        <Route path={AppRoute.Schedule.Index} element={<JournalPage />} />
         <Route path={AppRoute.Users.Index} element={<UsersPage />} />
+        <Route path={AppRoute.Schedule.Index} element={<JournalPage />} />
         <Route path={AppRoute.Class.Index} element={<JournalPage />} />
         <Route path={AppRoute.Monitoring.Index} element={<JournalPage />} />
         <Route path={AppRoute.Settings.Index} element={<JournalPage />} />

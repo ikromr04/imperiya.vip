@@ -28,8 +28,11 @@ class AuthController extends Controller
     return response()->json([
       'id' => $user->id,
       'name' => $user->name,
-      'email' => $user->email,
-      ...($user->avatar ? ['avatar' => $user->avatar] : []),
+      'login' => $user->login,
+      ...($user->avatar ? [
+        'avatar' => $user->avatar,
+        'avatarThumb' => $user->avatar_thumb,
+      ] : []),
     ], 200);
   }
 
@@ -44,7 +47,7 @@ class AuthController extends Controller
         'login' => $user->login,
         ...($user->avatar ? [
           'avatar' => $user->avatar,
-          'avatar_thumb' => $user->avatar_thumb,
+          'avatarThumb' => $user->avatar_thumb,
         ] : []),
       ],
       'token' => $user->createToken('access_token')->plainTextToken,

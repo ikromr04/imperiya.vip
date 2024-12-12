@@ -13,8 +13,6 @@ class UserController extends Controller
       ->select(
         'id',
         'name',
-        'surname',
-        'patronymic',
         'login',
         'email',
         'avatar',
@@ -72,8 +70,6 @@ class UserController extends Controller
       unset($user->grade_id);
       unset($user->nationality_id);
 
-      if (!$user->surname) unset($user->surname);
-      if (!$user->patronymic) unset($user->patronymic);
       if (!$user->email) unset($user->email);
       if (!$user->birthDate) unset($user->birthDate);
       if (!$user->address) unset($user->address);

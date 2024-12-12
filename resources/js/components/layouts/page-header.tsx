@@ -8,7 +8,7 @@ export default function PageHeader({
   className,
 }: PropsWithClassname): JSX.Element {
   return (
-    <header className={classNames(className, 'bg-white shadow py-2')}>
+    <header className={classNames(className, 'static z-10 bg-white shadow py-2')}>
       <div className="container flex justify-between">
         <MainLogo imgClass="h-9 w-auto" />
 
