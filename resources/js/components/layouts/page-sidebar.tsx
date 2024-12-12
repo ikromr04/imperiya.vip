@@ -12,7 +12,7 @@ export default function PageSidebar({
   const dispatch = useAppDispatch();
 
   return (
-    <aside className={classNames(className, 'bg-white shadow rounded-r-md max-h-[calc(100vh-68px)] overflow-hidden transition-all duration-300 md:h-max md:rounded-md')}>
+    <aside className={classNames(className, 'bg-white shadow rounded-r-md max-h-[calc(100vh-68px)]  transition-all duration-300 md:h-max md:rounded-md')}>
       <nav className="flex flex-col h-[calc(100vh-68px)] no-scrollbar md:max-h-[calc(100vh-84px)] md:h-auto">
         <NavList links={[
           { label: 'Журнал', icon: 'journal', href: AppRoute.Journal },
@@ -21,7 +21,7 @@ export default function PageSidebar({
         <hr className="border-gray-300" />
 
         <NavList
-          className="overflow-y-scroll max-h-[50%] no-scrollbar"
+          className="overflow-y-scroll no-scrollbar"
           links={[
             { label: 'Пользователи', icon: 'users', href: AppRoute.Users.Index },
             { label: 'Расписание', icon: 'schedule', href: AppRoute.Schedule.Index },

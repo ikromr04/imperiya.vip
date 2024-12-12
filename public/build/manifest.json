@@ -6,17 +6,17 @@
     "isDynamicEntry": true
   },
   "resources/css/public.css": {
-    "file": "assets/public-rlvixnAK.css",
+    "file": "assets/public-DMTaJKW-.css",
     "src": "resources/css/public.css",
     "isEntry": true
   },
   "resources/js/main.tsx": {
-    "file": "assets/main-m6NhvMVH.js",
+    "file": "assets/main-DLFs3bnk.js",
     "name": "main",
     "src": "resources/js/main.tsx",
     "isEntry": true,
     "css": [
-      "assets/main-CN2wOnjv.css"
+      "assets/main-CtBaAL9y.css"
     ]
   },
   "resources/js/public.js": {
