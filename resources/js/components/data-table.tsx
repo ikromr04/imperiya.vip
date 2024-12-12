@@ -43,14 +43,14 @@ export default function DataTable({
 
   useEffect(() => {
     if (tableRef.current) {
-      const decreaseHeight = (tableRef.current.previousElementSibling?.clientHeight || 0) + (tableRef.current.nextElementSibling?.clientHeight || 0);
-      tableRef.current.style.maxHeight = `${(tableRef.current.parentElement?.clientHeight || 0) - decreaseHeight}px`;
+      const decreaseHeight = (tableRef.current.parentElement?.previousElementSibling?.clientHeight || 0) + (tableRef.current.nextElementSibling?.clientHeight || 0);
+      tableRef.current.style.maxHeight = `${(tableRef.current.parentElement?.parentElement?.clientHeight || 0) - decreaseHeight}px`;
     }
   }, []);
 
   return (
     <div className={classNames(className, 'relative z-0 flex flex-col max-h-full')}>
-      <p className="mb-1">Отображение {from || 1} - {to} из {records.length}</p>
+      <p className="pb-1">Отображение {from || 1} - {to} из {records.length}</p>
 
       <div className="relative overflow-hidden rounded shadow bg-white border">
         <table ref={tableRef} className="flex flex-col overflow-scroll scrollbar">
