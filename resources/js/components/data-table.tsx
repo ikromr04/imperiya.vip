@@ -45,9 +45,9 @@ export default function DataTable({
     if (tableRef.current) {
       const decreaseHeight = (tableRef.current.parentElement?.previousElementSibling?.clientHeight || 0) + (tableRef.current.nextElementSibling?.clientHeight || 0);
       tableRef.current.style.maxHeight = `${(tableRef.current.parentElement?.parentElement?.clientHeight || 0) - decreaseHeight}px`;
+      console.log(decreaseHeight);
     }
 
-    console.log(tableRef.current?.nextElementSibling?.clientHeight);
   }, []);
 
   return (
