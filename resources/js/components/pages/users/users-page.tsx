@@ -24,10 +24,10 @@ export default function UsersPage(): JSX.Element {
       <main className="flex flex-col h-full">
         <header className="top flex flex-col gap-2 mb-2">
           <div className="flex items-end justify-between gap-2">
-            <h1 className="relative flex mr-auto title overflow-scroll no-scrollbar whitespace-nowrap">
+            <h1 className="relative flex mr-auto title overflow-scroll no-scrollbar whitespace-nowrap pr-6">
               Справочник пользователей
             </h1>
-            <div className="relative z-10 min-w-6 h-full -ml-7 bg-gradient-to-l from-gray-100 to-transparent"></div>
+            <div className="relative z-10 min-w-6 h-full pointer-events-none -ml-7 bg-gradient-to-l from-gray-100 to-transparent"></div>
 
             <Button
               type="button"
