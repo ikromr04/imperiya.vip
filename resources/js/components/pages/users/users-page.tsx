@@ -59,11 +59,11 @@ export default function UsersPage(): JSX.Element {
             <Button
               className="rounded-none border border-l-0 rounded-r-md"
               type="button"
-              icon={view === 'list' ? 'grid' : 'list'}
+              icon={view === 'list' ? 'list' : 'grid'}
               variant="text"
               href={`?view=${view === 'list' ? 'grid' : 'list'}`}
             >
-              <Tooltip label={view === 'list' ? 'Таблица' : 'Список'} position="top" />
+              <Tooltip label={view === 'list' ? 'Список' : 'Таблица'} position="top" />
             </Button>
           </div>
         </header>
