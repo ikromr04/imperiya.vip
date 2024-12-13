@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { BaseSyntheticEvent, ReactNode, useState } from 'react';
 import { PropsWithClassname } from '../types';
 import classNames from 'classnames';
 import { nanoid } from 'nanoid';
@@ -34,30 +34,23 @@ export default function DataTable({
   records,
   recordsPerPage = 16,
 }: DataTableProps): JSX.Element {
-  const tableRef = useRef<HTMLTableElement | null>(null);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(recordsPerPage);
   const from = (page - 1) * perPage;
   const to = (page * perPage) > records.length ? records.length : (page * perPage);
   const paginatedData = records.slice(from, to);
 
-  useEffect(() => {
-    if (tableRef.current) {
-      const decreaseHeight = (tableRef.current.parentElement?.previousElementSibling?.clientHeight || 0) + (tableRef.current.nextElementSibling?.clientHeight || 0);
-      tableRef.current.style.maxHeight = `${(tableRef.current.parentElement?.parentElement?.clientHeight || 0) - decreaseHeight}px`;
-      console.log(decreaseHeight);
-      console.log(tableRef.current.parentElement?.parentElement?.clientHeight);
-      console.log(`${(tableRef.current.parentElement?.parentElement?.clientHeight || 0) - decreaseHeight}px`);
-    }
-
-  }, []);
+  const onPerPageChange = (evt: BaseSyntheticEvent) => {
+    setPerPage(evt.target.value);
+    setPage(1);
+  };
 
   return (
-    <div className={classNames(className, 'relative z-0 flex flex-col max-h-full')}>
-      <p className="pb-1">Отображение {from || 1} - {to} из {records.length}</p>
+    <div className={classNames(className, 'relative z-0 flex flex-col')}>
+      <p className="mb-2 leading-none">Отображение {from || 1} - {to} из {records.length}</p>
 
       <div className="relative overflow-hidden rounded shadow bg-white border">
-        <table ref={tableRef} className="flex flex-col overflow-scroll scrollbar">
+        <table className="flex flex-col h-[calc(100%-49px)] overflow-scroll scrollbar">
           <thead className="sticky top-0 z-10 flex min-w-max border-b">
             <tr className="flex font-semibold text-left min-w-max">
               <th
@@ -107,12 +100,12 @@ export default function DataTable({
 
         <div className="flex gap-2 flex-wrap w-full p-2 bg-gray-100 border-t">
           <label className="flex items-center w-max gap-2">
-            Строк на странице
+            Строк
             <input
               className="flex leading-none border min-w-0 w-[46px] h-8 rounded text-center"
               type="number"
               value={perPage}
-              onInput={(evt: BaseSyntheticEvent) => setPerPage(evt.target.value)}
+              onInput={onPerPageChange}
             />
           </label>
 
