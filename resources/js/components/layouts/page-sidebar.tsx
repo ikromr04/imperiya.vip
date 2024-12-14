@@ -21,7 +21,7 @@ export default function PageSidebar({
         <hr className="border-gray-300" />
 
         <NavList
-          className="overflow-y-scroll no-scrollbar"
+          className="overflow-y-scroll overflow-x-hidden no-scrollbar"
           links={[
             { label: 'Пользователи', icon: 'users', href: AppRoute.Users.Index },
             { label: 'Расписание', icon: 'schedule', href: AppRoute.Schedule.Index },

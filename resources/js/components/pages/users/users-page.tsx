@@ -2,18 +2,15 @@ import React, { useEffect } from 'react';
 import PageLayout from '../../layouts/page-layout';
 import Button from '../../ui/button';
 import { UsersSearchForm } from '../../forms/users-search-form';
-import Tooltip from '../../ui/tooltip';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { getUsers } from '../../../store/users-slice/users-selector';
 import { fetchUsersAction } from '../../../store/users-slice/users-api-actions';
-import UsersList from '../../users-list';
-import { useLocation } from 'react-router-dom';
+import UsersTable from '../../users-table/users-table';
+import Spinner from '../../ui/spinner';
 
 export default function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
-  const searchParams = new URLSearchParams(useLocation().search);
-  const view = searchParams.get('view');
 
   useEffect(() => {
     if (!users) dispatch(fetchUsersAction());
@@ -21,8 +18,8 @@ export default function UsersPage(): JSX.Element {
 
   return (
     <PageLayout>
-      <main className="flex flex-col h-full">
-        <header className="top flex flex-col gap-2 mb-2">
+      <main className="relative flex flex-col h-full">
+        <header className="top flex flex-col gap-2 mb-2 md:mb-3 md:gap-3">
           <div className="flex items-end justify-between gap-2">
             <h1 className="relative flex mr-auto title overflow-scroll no-scrollbar whitespace-nowrap pr-6">
               Справочник пользователей
@@ -37,6 +34,7 @@ export default function UsersPage(): JSX.Element {
               <span className="sr-only md:not-sr-only">Экспорт</span>
             </Button>
             <Button
+              className="min-w-max"
               type="button"
               icon="add"
               variant="success"
@@ -56,19 +54,12 @@ export default function UsersPage(): JSX.Element {
             >
               <span className="sr-only md:not-sr-only">Фильтр</span>
             </Button>
-            <Button
-              className="rounded-none border border-l-0 rounded-r-md"
-              type="button"
-              icon={view === 'list' ? 'list' : 'grid'}
-              variant="text"
-              href={`?view=${view === 'list' ? 'grid' : 'list'}`}
-            >
-              <Tooltip label={view === 'list' ? 'Список' : 'Таблица'} position="top" />
-            </Button>
           </div>
         </header>
 
-        <UsersList className="h-[calc(100%-80px)]" users={users} />
+        {users
+          ? <UsersTable className="h-[calc(100%-80px)] md:h-[calc(100%-88px)]" users={users} />
+          : <Spinner className="w-8 h-8" />}
       </main>
     </PageLayout>
   );

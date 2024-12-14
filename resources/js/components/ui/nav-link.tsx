@@ -52,7 +52,7 @@ export default function NavLink({
       {...props}
       className={classNames(
         className,
-        'flex items-center h-9 rounded-r-md group w-full overflow-hidden transition-all duration-300 md:rounded-md xl:hover:bg-gray-100 text-gray-500 ',
+        'flex items-center h-9 rounded-r-md group w-full transition-all duration-300 md:rounded-md xl:hover:bg-gray-100 text-gray-500 ',
         isActive && 'bg-blue-50 active',
       )}
       variant="default"

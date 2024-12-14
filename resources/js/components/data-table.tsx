@@ -41,6 +41,9 @@ export default function DataTable({
   const paginatedData = records.slice(from, to);
 
   const onPerPageChange = (evt: BaseSyntheticEvent) => {
+    if (+evt.target.value > 50) {
+      evt.target.value = 50;
+    }
     setPerPage(evt.target.value);
     setPage(1);
   };
@@ -50,18 +53,16 @@ export default function DataTable({
       <p className="mb-2 leading-none">Отображение {from || 1} - {to} из {records.length}</p>
 
       <div className="relative overflow-hidden rounded shadow bg-white border">
-        <table className="flex flex-col h-[calc(100%-49px)] overflow-scroll scrollbar">
+        <table className="flex flex-col h-[calc(100%-49px)] overflow-scroll scrollbar text-sm leading-[1.2]">
           <thead className="sticky top-0 z-10 flex min-w-max border-b">
-            <tr className="flex font-semibold text-left min-w-max">
-              <th
-                className="flex items-center p-2 bg-gray-100 w-9"
-              >
+            <tr className="flex font-semibold text-left bg-gray-100 p-2 gap-1 w-full">
+              <th className="flex items-center w-8 font-semibold">
                 №
               </th>
               {columns.map((column) => (
                 <th
                   key={nanoid()}
-                  className="flex items-center p-2 bg-gray-100"
+                  className="flex items-center font-semibold"
                   style={{
                     minWidth: column.width || DEFAULT_COLUMN_WIDTH,
                     maxWidth: column.width || DEFAULT_COLUMN_WIDTH,
@@ -75,16 +76,14 @@ export default function DataTable({
 
           <tbody className="flex flex-col">
             {paginatedData.map((record, index) => (
-              <tr key={nanoid()} className="flex min-w-max">
-                <td
-                  className={classNames('flex items-center p-2 text-left w-9', (index % 2 === 1) && 'bg-gray-50')}
-                >
-                  {from + index + 1}.
+              <tr key={nanoid()} className={classNames('flex gap-1 min-w-max px-2 py-1', (index % 2 === 1) && 'bg-gray-50')}>
+                <td className="flex items-center text-left w-8">
+                  {from + index + 1}
                 </td>
                 {columns.map((column) => (
                   <td
                     key={nanoid()}
-                    className={classNames('flex items-center p-2 text-left', (index % 2 === 1) && 'bg-gray-50')}
+                    className="flex items-center text-left break-word"
                     style={{
                       minWidth: column.width || DEFAULT_COLUMN_WIDTH,
                       maxWidth: column.width || DEFAULT_COLUMN_WIDTH,

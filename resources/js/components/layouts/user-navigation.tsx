@@ -25,10 +25,10 @@ export default function UserNavigation({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="relative z-0 flex w-9 h-9 rounded-full bg-gray-100 overflow-hidden">
+        <span className="relative z-0 flex w-9 h-9 rounded-full bg-gray-100">
           <img
             className="absolute z-10 top-0 left-0 w-full h-full object-cover"
-            src={user.avatar || 'undefined'}
+            src={user.avatarThumb || 'undefined'}
             width={200}
             height={200}
             alt={user.name}

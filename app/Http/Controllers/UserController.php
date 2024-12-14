@@ -54,6 +54,14 @@ class UserController extends Controller
             'name',
           );
         },
+        'phones' => function ($query) {
+          $query->select(
+            'id',
+            'user_id',
+            'numbers',
+            'dial_code as dialCode',
+          );
+        },
       ])->get();
 
     foreach ($users as $user) {
@@ -81,6 +89,12 @@ class UserController extends Controller
       if (!$user->role) unset($user->role);
       if (!$user->grade) unset($user->grade);
       if (!$user->nationality) unset($user->nationality);
+
+      if (count($user->phones) < 1) {
+        unset($user->phones);
+      } else {
+        foreach ($user->phones as $key => $value) unset($user->phones[$key]->user_id);
+      };
     }
 
     return response()->json($users, 200);

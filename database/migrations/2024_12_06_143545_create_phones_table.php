@@ -10,8 +10,9 @@ return new class extends Migration
   {
     Schema::create('phones', function (Blueprint $table) {
       $table->id();
-      $table->integer('numbers');
       $table->integer('user_id');
+      $table->integer('numbers');
+      $table->integer('dial_code');
       $table->timestamps();
     });
   }

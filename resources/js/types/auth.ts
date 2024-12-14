@@ -5,5 +5,5 @@ export type AuthUser = {
   name: string;
   login: string;
   avatar?: string;
-  avatar_thumb?: string;
+  avatarThumb?: string;
 };

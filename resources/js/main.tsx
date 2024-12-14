@@ -1,5 +1,6 @@
 import './main.css';
 
+import 'dayjs/locale/ru';
 import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './components/app';
