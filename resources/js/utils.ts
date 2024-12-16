@@ -1,4 +1,4 @@
-import { Users } from './types/users';
+import { Users, UsersFilter } from './types/users';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const debounce = <F extends (...args: any) => any>(
@@ -27,11 +27,19 @@ export const generateRandomPassword = (length: number = 8): string => {
   return password;
 };
 
-export const filterUsers = (users: Users, searchKeyword: string): Users => {
-  return users.filter((user) => (
+export const filterUsers = (users: Users, searchKeyword: string, filter: UsersFilter): Users => {
+  users = users.filter((user) => (
     user.name.toLowerCase().includes(searchKeyword)
     || user.login.toLowerCase().includes(searchKeyword)
     || user.email?.toLowerCase().includes(searchKeyword)
     || user.phones?.map((phone) => `+${phone.dialCode} ${phone.numbers}`).join(', ').includes(searchKeyword)
   ));
+
+  users = users.filter((user) => (
+    user.name.toLowerCase().includes(filter.name.query?.toLowerCase() || '')
+    && (filter.gender.query ? (user.gender?.id === filter.gender.query) : true)
+    && (filter.roles.query.length ? filter.roles.query.includes(user.role.id) : true)
+  ));
+
+  return users;
 };

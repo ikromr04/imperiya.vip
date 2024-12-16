@@ -1,13 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SliceName } from '../../const';
-import { getAppSettings, saveAppSettings } from '../../services/app-settings';
+import { defaultUsersFilter, getAppSettings, saveAppSettings } from '../../services/app-settings';
+import { UsersFilter } from '../../types/users';
 
 export type AppSlice = {
-  isNavigationCollapsed: boolean,
+  isNavigationCollapsed: boolean;
+  usersFilter: UsersFilter;
 }
 
 const initialState: AppSlice = {
   isNavigationCollapsed: getAppSettings().isNavigationCollapsed,
+  usersFilter: getAppSettings().usersFilter,
 };
 
 export const appSlice = createSlice({
@@ -16,24 +19,30 @@ export const appSlice = createSlice({
   reducers: {
     toggleNavigationAction: (state) => {
       const settings = getAppSettings();
-      saveAppSettings({
-        ...settings,
-        isNavigationCollapsed: !settings.isNavigationCollapsed,
-      });
+      saveAppSettings({ ...settings, isNavigationCollapsed: !settings.isNavigationCollapsed });
       state.isNavigationCollapsed = !settings.isNavigationCollapsed;
     },
     collapseNavigationAction: (state) => {
       const settings = getAppSettings();
-      saveAppSettings({
-        ...settings,
-        isNavigationCollapsed: true,
-      });
+      saveAppSettings({ ...settings, isNavigationCollapsed: true });
       state.isNavigationCollapsed = true;
+    },
+    setUsersFilterAction: (state, action) => {
+      const settings = getAppSettings();
+      saveAppSettings({ ...settings, usersFilter: action.payload });
+      state.usersFilter = action.payload;
+    },
+    resetUsersFilterAction: (state) => {
+      const settings = getAppSettings();
+      saveAppSettings({ ...settings, usersFilter: defaultUsersFilter });
+      state.usersFilter = defaultUsersFilter;
     },
   },
 });
 
 export const {
   toggleNavigationAction,
-  collapseNavigationAction
+  collapseNavigationAction,
+  setUsersFilterAction,
+  resetUsersFilterAction,
 } = appSlice.actions;

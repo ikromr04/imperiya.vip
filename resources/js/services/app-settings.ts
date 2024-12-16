@@ -1,11 +1,30 @@
+import { UsersFilter } from '../types/users';
+
 const SETTINGS_KEY_NAME = 'imperiya-vip-settings';
+
+export const defaultUsersFilter = {
+  name: {
+    query: '',
+    visibility: true,
+  },
+  gender: {
+    query: 0,
+    visibility: true,
+  },
+  roles: {
+    query: [],
+    visibility: true,
+  },
+};
 
 export type AppSettings = {
   isNavigationCollapsed: boolean,
+  usersFilter: UsersFilter,
 }
 
 export const initialSettings: AppSettings = {
   isNavigationCollapsed: true,
+  usersFilter: defaultUsersFilter,
 };
 
 export const getAppSettings = (): AppSettings => {

@@ -19,7 +19,7 @@ export default function UserNavigation({
   if (!user) return null;
 
   return (
-    <div ref={ref} className={classNames(className, 'relative z-10')}>
+    <div ref={ref} className={classNames(className, 'relative z-20')}>
       <button
         className="flex items-center gap-2 text-gray-900"
         type="button"

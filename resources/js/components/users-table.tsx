@@ -7,6 +7,8 @@ import Button from './ui/button';
 import { AppRoute } from '../const';
 import { Icons } from './icons';
 import { Link } from 'react-router-dom';
+import { useAppSelector } from '../hooks';
+import { getUsersFilter } from '../store/app-slice/app-selector';
 
 export type AccessorProps = {
   user: User;
@@ -20,21 +22,24 @@ export default function UsersTable({
   className,
   users,
 }: UsersTableProps): JSX.Element {
+  const filter = useAppSelector(getUsersFilter);
   const columns: DataTableColumns = [
     {
       accessor: 'name',
       header: 'ФИО',
-      width: 240,
+      width: filter.name.visibility ? 240 : 48,
     },
     {
       accessor: 'gender',
       header: <span className="flex w-full justify-center">Пол</span>,
       width: 56,
+      hidden: !filter.gender.visibility,
     },
     {
       accessor: 'role',
       header: 'Позиция',
       width: 120,
+      hidden: !filter.roles.visibility,
     },
     {
       accessor: 'grade',
@@ -90,13 +95,12 @@ export default function UsersTable({
             />}
           <Icons.user className="text-gray-300" width={48} height={48} />
         </span>
-        {user.name}
+        {filter.name.visibility && user.name}
       </Button>,
-    gender: user.gender?.id === 1
-      ? <Icons.male className="flex mx-auto text-blue-600" width={16} height={16} />
-      : <Icons.female className="flex mx-auto text-pink-600" width={16} height={16} />,
+    gender: user.gender?.id === 1 ? <Icons.male className="flex mx-auto text-blue-600" width={16} height={16} />
+      : (user.gender?.id === 2 ? <Icons.female className="flex mx-auto text-pink-600" width={16} height={16} /> : ''),
     role:
-      <span className="flex max-w-max bg-blue-200 text-primary rounded-full text-sm py-1 px-2 leading-none">
+      <span className="flex max-w-max text-center bg-blue-200 text-primary rounded-full text-sm py-1 px-2 leading-none">
         {user.role.name}
       </span>,
     grade: user.grade && <b className="flex w-full justify-center text-lg">{user.grade?.level} {user.grade?.group}</b>,

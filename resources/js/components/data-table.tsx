@@ -18,6 +18,7 @@ export type DataTableColumn = {
   accessor: string;
   header: ReactNode;
   width?: number;
+  hidden?: boolean;
 };
 
 export type DataTableColumns = DataTableColumn[]
@@ -59,18 +60,23 @@ export default function DataTable({
               <th className="flex items-center w-8 font-semibold">
                 №
               </th>
-              {columns.map((column) => (
-                <th
-                  key={nanoid()}
-                  className="flex items-center font-semibold"
-                  style={{
-                    minWidth: column.width || DEFAULT_COLUMN_WIDTH,
-                    maxWidth: column.width || DEFAULT_COLUMN_WIDTH,
-                  }}
-                >
-                  {column.header}
-                </th>
-              ))}
+              {columns.map((column) => {
+                if (!column.hidden) {
+                  return (
+                    <th
+                      key={nanoid()}
+                      className="flex items-center font-semibold"
+                      style={{
+                        minWidth: column.width || DEFAULT_COLUMN_WIDTH,
+                        maxWidth: column.width || DEFAULT_COLUMN_WIDTH,
+                      }}
+                    >
+                      {column.header}
+                    </th>
+                  );
+                }
+                return null;
+              })}
             </tr>
           </thead>
 
@@ -80,18 +86,23 @@ export default function DataTable({
                 <td className="flex items-center text-left w-8">
                   {from + index + 1}
                 </td>
-                {columns.map((column) => (
-                  <td
-                    key={nanoid()}
-                    className="flex items-center text-left break-word"
-                    style={{
-                      minWidth: column.width || DEFAULT_COLUMN_WIDTH,
-                      maxWidth: column.width || DEFAULT_COLUMN_WIDTH,
-                    }}
-                  >
-                    {record[column.accessor]}
-                  </td>
-                ))}
+                {columns.map((column) => {
+                  if (!column.hidden) {
+                    return (
+                      <td
+                        key={nanoid()}
+                        className="flex items-center text-left break-word"
+                        style={{
+                          minWidth: column.width || DEFAULT_COLUMN_WIDTH,
+                          maxWidth: column.width || DEFAULT_COLUMN_WIDTH,
+                        }}
+                      >
+                        {record[column.accessor]}
+                      </td>
+                    );
+                  }
+                  return null;
+                })}
               </tr>
             ))}
           </tbody>

@@ -12,7 +12,7 @@ export default function PageSidebar({
   const dispatch = useAppDispatch();
 
   return (
-    <aside className={classNames(className, 'bg-white shadow rounded-r-md max-h-[calc(100vh-68px)]  transition-all duration-300 md:h-max md:rounded-md')}>
+    <aside className={classNames(className, 'static z-10 bg-white shadow rounded-r-md max-h-[calc(100vh-68px)]  transition-all duration-300 md:h-max md:rounded-md')}>
       <nav className="flex flex-col h-[calc(100vh-68px)] no-scrollbar md:max-h-[calc(100vh-84px)] md:h-auto">
         <NavList links={[
           { label: 'Журнал', icon: 'journal', href: AppRoute.Journal },

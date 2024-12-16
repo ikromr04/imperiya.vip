@@ -5,3 +5,7 @@ export type ResponseMessage = {
 }
 
 export type PropsWithClassname<T = unknown> = T & { className?: string };
+
+export type Option = { value: string | number, label: string };
+
+export type Options = Option[];

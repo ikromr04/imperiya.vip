@@ -35,16 +35,24 @@ export const APIRoute = {
   Users: {
     Index: '/users',
   },
-};
-
-export enum SliceName {
-  App = 'App',
-  Auth = 'Auth',
-  Users = 'Users',
+  Genders: {
+    Index: '/genders',
+  },
+  Roles: {
+    Index: '/roles',
+  },
 };
 
 export enum AuthorizationStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',
   Unknown = 'UNKNOWN',
+};
+
+export enum SliceName {
+  App = 'App',
+  Auth = 'Auth',
+  Users = 'Users',
+  Genders = 'Genders',
+  Roles = 'Roles',
 };
