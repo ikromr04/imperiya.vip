@@ -1,11 +1,11 @@
 import React from 'react';
-import { PropsWithClassname } from '../../types';
-import { User, Users } from '../../types/users';
-import DataTable, { DataTableColumns } from '../data-table';
+import { PropsWithClassname } from '../types';
+import { User, Users } from '../types/users';
+import DataTable, { DataTableColumns } from './data-table';
 import dayjs from 'dayjs';
-import Button from '../ui/button';
-import { AppRoute } from '../../const';
-import { Icons } from '../icons';
+import Button from './ui/button';
+import { AppRoute } from '../const';
+import { Icons } from './icons';
 import { Link } from 'react-router-dom';
 
 export type AccessorProps = {

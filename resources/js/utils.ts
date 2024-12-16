@@ -1,3 +1,5 @@
+import { Users } from './types/users';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const debounce = <F extends (...args: any) => any>(
   func: F,
@@ -23,4 +25,13 @@ export const generateRandomPassword = (length: number = 8): string => {
   }
 
   return password;
+};
+
+export const filterUsers = (users: Users, searchKeyword: string): Users => {
+  return users.filter((user) => (
+    user.name.toLowerCase().includes(searchKeyword)
+    || user.login.toLowerCase().includes(searchKeyword)
+    || user.email?.toLowerCase().includes(searchKeyword)
+    || user.phones?.map((phone) => `+${phone.dialCode} ${phone.numbers}`).join(', ').includes(searchKeyword)
+  ));
 };

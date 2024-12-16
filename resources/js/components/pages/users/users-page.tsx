@@ -1,16 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import PageLayout from '../../layouts/page-layout';
 import Button from '../../ui/button';
-import { UsersSearchForm } from '../../forms/users-search-form';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { getUsers } from '../../../store/users-slice/users-selector';
 import { fetchUsersAction } from '../../../store/users-slice/users-api-actions';
-import UsersTable from '../../users-table/users-table';
+import UsersTable from '../../users-table';
 import Spinner from '../../ui/spinner';
+import { Icons } from '../../icons';
+import { filterUsers } from '../../../utils';
 
 export default function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
 
   useEffect(() => {
     if (!users) dispatch(fetchUsersAction());
@@ -44,7 +46,18 @@ export default function UsersPage(): JSX.Element {
           </div>
 
           <div className="flex bg-white rounded-md">
-            <UsersSearchForm className="grow" />
+            <div className="relative flex grow">
+              <div className="absolute left-[1px] top-[1px] rounded-r-[3px] transform w-[30px] h-[30px] flex justify-center items-center">
+                <Icons.usersSearch width={14} />
+              </div>
+              <input
+                className="flex grow bg-white min-w-0 border border-gray-200 rounded-l h-8 pl-8 pr-4 leading-none text-base focus:outline-none focus:border-primary"
+                type="search"
+                value={searchKeyword}
+                onInput={(evt: BaseSyntheticEvent) => setSearchKeyword(evt.target.value.toLowerCase())}
+                placeholder="Поиск по имени, логину, электронной почте или номеру телефона"
+              />
+            </div>
 
             <Button
               className="border border-l-0 rounded-none"
@@ -58,7 +71,7 @@ export default function UsersPage(): JSX.Element {
         </header>
 
         {users
-          ? <UsersTable className="h-[calc(100%-80px)] md:h-[calc(100%-88px)]" users={users} />
+          ? <UsersTable className="h-[calc(100%-80px)] md:h-[calc(100%-88px)]" users={filterUsers(users, searchKeyword)} />
           : <Spinner className="w-8 h-8" />}
       </main>
     </PageLayout>
