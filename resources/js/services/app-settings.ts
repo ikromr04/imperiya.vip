@@ -19,6 +19,18 @@ export const defaultUsersFilter = {
     query: [],
     visibility: true,
   },
+  phone: {
+    query: '',
+    visibility: true,
+  },
+  email: {
+    query: '',
+    visibility: true,
+  },
+  login: {
+    query: '',
+    visibility: true,
+  },
 };
 
 export type AppSettings = {

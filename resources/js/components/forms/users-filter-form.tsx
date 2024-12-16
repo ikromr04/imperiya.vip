@@ -86,7 +86,7 @@ export default function UsersFilterForm({
                     handleSubmit();
                   }}
                 >
-                  {!values.gender.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
+                  {values.gender.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
                 </button>
               }
               options={genders.map((gender) => ({ value: gender.id, label: gender.name }))}
@@ -112,7 +112,7 @@ export default function UsersFilterForm({
                     handleSubmit();
                   }}
                 >
-                  {!values.roles.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
+                  {values.roles.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
                 </button>
               }
               options={roles.map((role) => ({ value: role.id, label: role.name }))}
@@ -139,11 +139,80 @@ export default function UsersFilterForm({
                     handleSubmit();
                   }}
                 >
-                  {!values.grades.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
+                  {values.grades.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
                 </button>
               }
               options={grades.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
             />}
+
+          <TextField
+            name="phone.query"
+            label="Телефон"
+            cleanable
+            onClean={() => {
+              setFieldValue('phone.query', '');
+              handleSubmit();
+            }}
+            onInput={() => handleSubmit()}
+            after={
+              <button
+                className="flex items-center justify-center w-full h-full hover:bg-gray-200 transition-all duration-300 border-l"
+                type="button"
+                onClick={() => {
+                  setFieldValue('phone.visibility', !values.phone.visibility);
+                  handleSubmit();
+                }}
+              >
+                {values.phone.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
+              </button>
+            }
+          />
+
+          <TextField
+            name="email.query"
+            label="Электронная почта"
+            cleanable
+            onClean={() => {
+              setFieldValue('email.query', '');
+              handleSubmit();
+            }}
+            onInput={() => handleSubmit()}
+            after={
+              <button
+                className="flex items-center justify-center w-full h-full hover:bg-gray-200 transition-all duration-300 border-l"
+                type="button"
+                onClick={() => {
+                  setFieldValue('email.visibility', !values.email.visibility);
+                  handleSubmit();
+                }}
+              >
+                {values.email.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
+              </button>
+            }
+          />
+
+          <TextField
+            name="login.query"
+            label="Логин"
+            cleanable
+            onClean={() => {
+              setFieldValue('login.query', '');
+              handleSubmit();
+            }}
+            onInput={() => handleSubmit()}
+            after={
+              <button
+                className="flex items-center justify-center w-full h-full hover:bg-gray-200 transition-all duration-300 border-l"
+                type="button"
+                onClick={() => {
+                  setFieldValue('login.visibility', !values.login.visibility);
+                  handleSubmit();
+                }}
+              >
+                {values.login.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
+              </button>
+            }
+          />
         </Form>
       )}
     </Formik>

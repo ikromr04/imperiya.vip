@@ -48,4 +48,16 @@ export type UsersFilter = {
     query: GradeId[];
     visibility: boolean;
   },
+  phone: {
+    query: string;
+    visibility: boolean;
+  },
+  email: {
+    query: string;
+    visibility: boolean;
+  },
+  login: {
+    query: string;
+    visibility: boolean;
+  },
 };

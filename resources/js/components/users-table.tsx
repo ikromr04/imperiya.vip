@@ -51,15 +51,18 @@ export default function UsersTable({
       accessor: 'phones',
       header: 'Телефоны',
       width: 120,
+      hidden: !filter.phone.visibility,
     },
     {
       accessor: 'email',
       header: 'Электронная почта',
+      hidden: !filter.email.visibility,
     },
     {
       accessor: 'login',
       header: 'Логин',
       width: 160,
+      hidden: !filter.login.visibility,
     },
     {
       accessor: 'birthDate',

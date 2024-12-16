@@ -40,6 +40,9 @@ export const filterUsers = (users: Users, searchKeyword: string, filter: UsersFi
     && (filter.gender.query ? (user.gender?.id === filter.gender.query) : true)
     && (filter.roles.query.length ? filter.roles.query.includes(user.role.id) : true)
     && (filter.grades.query.length ? filter.grades.query.includes(user.grade?.id || 0) : true)
+    && (filter.phone.query ? user.phones?.some((phone) => (`+${phone.dialCode}${phone.numbers}`).includes(filter.phone.query)) : true)
+    && (filter.email ? user.email?.includes(filter.email.query) : true)
+    && (filter.login ? user.login?.includes(filter.login.query) : true)
   ));
 
   return users;
