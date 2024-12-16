@@ -62,7 +62,7 @@ export default function UsersFilterForm({
                   handleSubmit();
                 }}
               >
-                {!values.name.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
+                {values.name.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
               </button>
             }
           />

@@ -15,7 +15,8 @@ const ButtonVariant = {
 type ButtonProps = PropsWithClassname<PropsWithChildren<{
   href?: string;
   variant?: keyof typeof ButtonVariant;
-  icon?: keyof typeof Icons
+  icon?: keyof typeof Icons;
+  iconClassname?: string;
 } & (LinkProps | ButtonHTMLAttributes<HTMLButtonElement>)>>;
 
 export default function Button({
@@ -24,12 +25,13 @@ export default function Button({
   children,
   variant = 'primary',
   icon,
+  iconClassname,
   ...props
 }: ButtonProps): JSX.Element {
   const Icon = icon ? Icons[icon] : null;
 
   const childComponent = <>
-    {Icon && <Icon width={14} height={14} />} {children}
+    {Icon && <Icon className={iconClassname} width={14} height={14} />} {children}
   </>;
 
   if (href) {

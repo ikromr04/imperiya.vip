@@ -10,12 +10,14 @@ import { Icons } from '../../icons';
 import { filterUsers } from '../../../utils';
 import UsersFilterForm from '../../forms/users-filter-form';
 import { getUsersFilter } from '../../../store/app-slice/app-selector';
+import classNames from 'classnames';
 
 export default function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
   const usersFilter = useAppSelector(getUsersFilter);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
     if (!users) dispatch(fetchUsersAction());
@@ -23,8 +25,11 @@ export default function UsersPage(): JSX.Element {
 
   return (
     <PageLayout>
-      <main className="relative mr-[264px] flex flex-col h-full">
-        <header className="top flex flex-col gap-2 mb-2 md:mb-3 md:gap-3">
+      <main className={classNames(
+        'relative flex flex-col h-full transition-all duration-300',
+        isFilterOpen ? 'mr-[264px] md:mr-[272px]' : 'mr-0',
+      )}>
+        <header className="top flex flex-col gap-2 mb-2 md:mb-3 md:gap-3 min-w-64">
           <div className="flex items-end justify-between gap-2">
             <h1 className="relative flex mr-auto title overflow-scroll no-scrollbar whitespace-nowrap pr-6">
               Справочник пользователей
@@ -75,6 +80,11 @@ export default function UsersPage(): JSX.Element {
               type="button"
               icon="filter"
               variant="text"
+              iconClassname={classNames(
+                'transition-all duration-300 transform',
+                isFilterOpen && '-scale-x-[1]'
+              )}
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
             >
               <span className="sr-only md:not-sr-only">Фильтр</span>
             </Button>
@@ -82,11 +92,23 @@ export default function UsersPage(): JSX.Element {
         </header>
 
         {users
-          ? <UsersTable className="h-[calc(100%-80px)] md:h-[calc(100%-88px)]" users={filterUsers(users, searchKeyword, usersFilter)} />
+          ? <UsersTable className="h-[calc(100%-80px)] md:h-[calc(100%-88px)] min-w-64" users={filterUsers(users, searchKeyword, usersFilter)} />
           : <Spinner className="w-8 h-8" />}
 
-        <section className="absolute top-0 left-full z-10 flex flex-col w-64 h-full py-2 p-4 rounded bg-white shadow">
-          <h2 className="title mb-2">Фильтр</h2>
+        <section className={classNames(
+          'absolute top-0 left-[calc(100%+8px)] z-10 flex flex-col w-64 h-full py-2 p-4 rounded bg-white border transition-all duration-300 md:left-[calc(100%+16px)]',
+          !isFilterOpen ? 'invisible opacity-0' : 'visible opacity-100',
+        )}>
+          <h2 className="flex items-center justify-between title mb-2">
+            Фильтр
+
+            <Button
+              variant="text"
+              onClick={() => setIsFilterOpen(false)}
+            >
+              <Icons.filter className="transform scale-x-[-1]" width={16} />
+            </Button>
+          </h2>
 
           <UsersFilterForm />
         </section>

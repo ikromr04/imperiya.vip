@@ -51,7 +51,7 @@ export default function DataTable({
 
   return (
     <div className={classNames(className, 'relative z-0 flex flex-col')}>
-      <p className="mb-2 leading-none">Отображение {from || 1} - {to} из {records.length}</p>
+      <p className="mb-2 leading-none min-w-max">Отображение {from || 1} - {to} из {records.length}</p>
 
       <div className="relative overflow-hidden rounded shadow bg-white border">
         <table className="flex flex-col h-[calc(100%-49px)] overflow-scroll scrollbar text-sm leading-[1.2]">
