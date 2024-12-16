@@ -1,4 +1,4 @@
-import React, { ReactNode, useId, useState } from 'react';
+import React, { BaseSyntheticEvent, ReactNode, useId, useState } from 'react';
 import classNames from 'classnames';
 import Label from './partials/label';
 import After from './partials/after';
@@ -9,10 +9,10 @@ import { useField } from 'formik';
 import { useDropdown } from '../../../hooks/use-dropdown';
 import { Options } from '../../../types';
 import { Option } from '../../../types/index';
-import { Icons } from '../../icons';
 
 type SelectFieldProps = {
   name: string;
+  searchable?: boolean;
   cleanable?: boolean;
   multiple?: boolean;
   onClean?: () => void;
@@ -27,6 +27,7 @@ type SelectFieldProps = {
 export default function SelectField(props: SelectFieldProps): JSX.Element {
   const {
     name,
+    searchable,
     cleanable,
     multiple,
     onClean,
@@ -39,7 +40,7 @@ export default function SelectField(props: SelectFieldProps): JSX.Element {
   const uniqueId = useId();
   const [field, meta, helpers] = useField(name);
   const [options, setOptions] = useState(props.options);
-  const { ref, isOpen, setIsOpen } = useDropdown<HTMLDivElement>();
+  const { ref, menuRef, isOpen, setIsOpen } = useDropdown<HTMLDivElement>();
 
   const onOptionClick = (option: Option) => () => {
     if (multiple) {
@@ -105,12 +106,22 @@ export default function SelectField(props: SelectFieldProps): JSX.Element {
       <ErrorMessage name={name} />
 
       <div
+        ref={menuRef}
         className={classNames(
-          'absolute top-[calc(100%+4px)] right-0 z-10 border rounded-md py-1 bg-white shadow-sm text-sm w-full transition-all duration-300 text-gray-500',
+          'absolute top-[calc(100%+4px)] right-0 z-10 border rounded-md pb-1 bg-white shadow-sm text-sm w-full transition-all duration-300 text-gray-500',
           isOpen ? 'visible opacity-100' : 'invisible opacity-0',
+          searchable ? 'pt-0' : 'pt-1'
         )}
       >
-        <ul>
+        {searchable &&
+          <input
+            className="flex items-center grow bg-gray-50 min-w-0 rounded-t h-8 px-4 leading-none text-sm w-full focus:outline-none hover:bg-gray-50  focus:bg-gray-50"
+            type="search"
+            placeholder="Поиск"
+            onInput={(evt: BaseSyntheticEvent) => setOptions(props.options.filter((option) => option.label.toLowerCase().includes(evt.target.value)))}
+          />}
+
+        <ul className="max-h-56 overflow-y-scroll scrollbar-y">
           {options.map((option) => (
             <li key={option.value}>
               <button

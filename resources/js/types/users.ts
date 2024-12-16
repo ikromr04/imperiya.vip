@@ -1,7 +1,7 @@
 import { ID } from '.';
 import { Gender, GenderId } from './genders';
 import { Role, RoleId } from './roles';
-import { Grade } from './grades';
+import { Grade, GradeId } from './grades';
 import { Nationality } from './nationalities';
 import { Phones } from './phones';
 
@@ -42,6 +42,10 @@ export type UsersFilter = {
   },
   roles: {
     query: RoleId[];
+    visibility: boolean;
+  },
+  grades: {
+    query: GradeId[];
     visibility: boolean;
   },
 };

@@ -13,6 +13,8 @@ import { getGenders } from '../../store/genders-slice/genders-selector';
 import { fetchGendersAction } from '../../store/genders-slice/genders-api-actions';
 import { getRoles } from '../../store/roles-slice/roles-selector';
 import { fetchRolesAction } from '../../store/roles-slice/roles-api-actions';
+import { getGrades } from '../../store/grades-slice/grades-selector';
+import { fetchGradesAction } from '../../store/grades-slice/grades-api-actions';
 
 type UsersFilterFormProps = PropsWithClassname;
 
@@ -23,11 +25,13 @@ export default function UsersFilterForm({
   const dispatch = useAppDispatch();
   const genders = useAppSelector(getGenders);
   const roles = useAppSelector(getRoles);
+  const grades = useAppSelector(getGrades);
 
   useEffect(() => {
     if (!genders) dispatch(fetchGendersAction());
     if (!roles) dispatch(fetchRolesAction());
-  }, [dispatch, genders, roles]);
+    if (!grades) dispatch(fetchGradesAction());
+  }, [dispatch, genders, roles, grades]);
 
   const onSubmit = async (values: UsersFilter) => {
     dispatch(setUsersFilterAction(values));
@@ -112,6 +116,33 @@ export default function UsersFilterForm({
                 </button>
               }
               options={roles.map((role) => ({ value: role.id, label: role.name }))}
+            />}
+
+          {grades &&
+            <SelectField
+              name="grades.query"
+              label="Классы"
+              multiple
+              cleanable
+              searchable
+              onClean={() => {
+                setFieldValue('grades.query', []);
+                handleSubmit();
+              }}
+              onChange={() => handleSubmit()}
+              after={
+                <button
+                  className="flex items-center justify-center w-full h-full hover:bg-gray-200 transition-all duration-300 border-l"
+                  type="button"
+                  onClick={() => {
+                    setFieldValue('grades.visibility', !values.grades.visibility);
+                    handleSubmit();
+                  }}
+                >
+                  {!values.grades.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
+                </button>
+              }
+              options={grades.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
             />}
         </Form>
       )}

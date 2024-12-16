@@ -39,6 +39,7 @@ export const filterUsers = (users: Users, searchKeyword: string, filter: UsersFi
     user.name.toLowerCase().includes(filter.name.query?.toLowerCase() || '')
     && (filter.gender.query ? (user.gender?.id === filter.gender.query) : true)
     && (filter.roles.query.length ? filter.roles.query.includes(user.role.id) : true)
+    && (filter.grades.query.length ? filter.grades.query.includes(user.grade?.id || 0) : true)
   ));
 
   return users;

@@ -41,6 +41,9 @@ export const APIRoute = {
   Roles: {
     Index: '/roles',
   },
+  Grades: {
+    Index: '/grades',
+  },
 };
 
 export enum AuthorizationStatus {
@@ -55,4 +58,5 @@ export enum SliceName {
   Users = 'Users',
   Genders = 'Genders',
   Roles = 'Roles',
+  Grades = 'Grades',
 };

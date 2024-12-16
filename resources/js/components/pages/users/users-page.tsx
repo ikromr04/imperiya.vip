@@ -85,8 +85,8 @@ export default function UsersPage(): JSX.Element {
           ? <UsersTable className="h-[calc(100%-80px)] md:h-[calc(100%-88px)]" users={filterUsers(users, searchKeyword, usersFilter)} />
           : <Spinner className="w-8 h-8" />}
 
-        <section className="absolute top-0 left-full z-10 flex flex-col w-64 h-full py-1 p-2 rounded bg-white shadow">
-          <h2 className="title !text-lg">Фильтр пользователей</h2>
+        <section className="absolute top-0 left-full z-10 flex flex-col w-64 h-full py-2 p-4 rounded bg-white shadow">
+          <h2 className="title mb-2">Фильтр</h2>
 
           <UsersFilterForm />
         </section>

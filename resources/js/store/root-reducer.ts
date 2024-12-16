@@ -5,6 +5,7 @@ import { appSlice } from './app-slice/app-slice';
 import { usersSlice } from './users-slice/users-slice';
 import { gendersSlice } from './genders-slice/genders-slice';
 import { rolesSlice } from './roles-slice/roles-slice';
+import { gradesSlice } from './grades-slice/grades-slice';
 
 export const rootReducer = combineReducers({
   [SliceName.App]: appSlice.reducer,
@@ -12,4 +13,5 @@ export const rootReducer = combineReducers({
   [SliceName.Users]: usersSlice.reducer,
   [SliceName.Genders]: gendersSlice.reducer,
   [SliceName.Roles]: rolesSlice.reducer,
+  [SliceName.Grades]: gradesSlice.reducer,
 });

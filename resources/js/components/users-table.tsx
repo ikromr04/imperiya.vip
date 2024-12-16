@@ -45,6 +45,7 @@ export default function UsersTable({
       accessor: 'grade',
       header: <span className="flex w-full justify-center">Класс</span>,
       width: 64,
+      hidden: !filter.grades.visibility,
     },
     {
       accessor: 'phones',

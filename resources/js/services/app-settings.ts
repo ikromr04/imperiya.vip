@@ -15,6 +15,10 @@ export const defaultUsersFilter = {
     query: [],
     visibility: true,
   },
+  grades: {
+    query: [],
+    visibility: true,
+  },
 };
 
 export type AppSettings = {
