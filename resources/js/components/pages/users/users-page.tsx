@@ -12,6 +12,7 @@ import { getUsersFilter } from '../../../store/app-slice/app-selector';
 import classNames from 'classnames';
 import { setUsersFilterAction } from '../../../store/app-slice/app-slice';
 import UsersFilterForm from '../../forms/users-filter-form/users-filter-form';
+import { defaultUsersFilter } from '../../../services/app-settings';
 
 export default function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -76,7 +77,7 @@ export default function UsersPage(): JSX.Element {
             </div>
 
             <Button
-              className="border border-l-0 rounded-l-none"
+              className="relative border border-l-0 rounded-l-none"
               type="button"
               icon="filter"
               variant="text"
@@ -87,6 +88,10 @@ export default function UsersPage(): JSX.Element {
               onClick={() => setIsFilterOpen(!isFilterOpen)}
             >
               <span className="sr-only md:not-sr-only">Фильтр</span>
+              {JSON.stringify(usersFilter) !== JSON.stringify(defaultUsersFilter) &&
+                <sup className="absolute top-1 right-2">
+                  <Icons.info className="text-error" height={8} />
+                </sup>}
             </Button>
           </div>
         </header>
