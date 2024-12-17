@@ -4,7 +4,6 @@ import Button from '../../ui/button';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { getUsers } from '../../../store/users-slice/users-selector';
 import { fetchUsersAction } from '../../../store/users-slice/users-api-actions';
-import UsersTable from '../../users-table';
 import Spinner from '../../ui/spinner';
 import { Icons } from '../../icons';
 import { filterUsers } from '../../../utils';
@@ -13,12 +12,39 @@ import classNames from 'classnames';
 import { setUsersFilterAction } from '../../../store/app-slice/app-slice';
 import UsersFilterForm from '../../forms/users-filter-form/users-filter-form';
 import { defaultUsersFilter } from '../../../services/app-settings';
+import UsersTable from '../../blocks/users-table';
+import * as XLSX from 'xlsx';
+import dayjs from 'dayjs';
 
 export default function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
   const usersFilter = useAppSelector(getUsersFilter);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  const handleExport = () => {
+    const sheetData = filterUsers(users || [], usersFilter).map((user) => {
+      const obj = {};
+
+      if (usersFilter.name.visibility) Object.assign(obj, { 'ФИО': user.name });
+      if (usersFilter.gender.visibility) Object.assign(obj, { 'Пол': user.gender?.name });
+      if (usersFilter.roles.visibility) Object.assign(obj, { 'Позиция': user.role.name });
+      if (usersFilter.grades.visibility) Object.assign(obj, { 'Класс': `${user.grade?.level || ''} ${user.grade?.group || ''}` });
+      if (usersFilter.phone.visibility) Object.assign(obj, { 'Телефоны': user.phones?.map((phone) => `+${phone.dialCode} ${phone.numbers}`).join(', ') });
+      if (usersFilter.email.visibility) Object.assign(obj, { 'Электронная почта': user.email || '' });
+      if (usersFilter.login.visibility) Object.assign(obj, { 'Логин': user.login });
+      if (usersFilter.birthDate.visibility) Object.assign(obj, { 'Дата рождения': dayjs(user.birthDate).format('DD MMMM YYYY') || '' });
+      if (usersFilter.address.visibility) Object.assign(obj, { 'Адрес': user.address || '' });
+      if (usersFilter.nationalities.visibility) Object.assign(obj, { 'Национальность': user.nationality?.name || '' });
+
+      return obj;
+    });
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(sheetData);
+
+    XLSX.utils.book_append_sheet(wb, ws, 'users');
+    XLSX.writeFile(wb, 'imperiya.vip_users_sheet.xlsx');
+  };
 
   useEffect(() => {
     if (!users) dispatch(fetchUsersAction());
@@ -41,6 +67,7 @@ export default function UsersPage(): JSX.Element {
               type="button"
               icon="fileExport"
               variant="light"
+              onClick={handleExport}
             >
               <span className="sr-only md:not-sr-only">Экспорт</span>
             </Button>

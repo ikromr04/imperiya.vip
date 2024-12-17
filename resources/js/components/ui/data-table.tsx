@@ -1,9 +1,9 @@
 import React, { BaseSyntheticEvent, ReactNode, useState } from 'react';
-import { PropsWithClassname } from '../types';
+import { PropsWithClassname } from '../../types';
 import classNames from 'classnames';
 import { nanoid } from 'nanoid';
-import Button from './ui/button';
-import { Icons } from './icons';
+import Button from './button';
+import { Icons } from '../icons';
 
 const DEFAULT_COLUMN_WIDTH = 200;
 

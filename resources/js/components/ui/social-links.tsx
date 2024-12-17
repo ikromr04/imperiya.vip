@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, LinkProps } from 'react-router-dom';
-import { Icons } from './icons';
-import Tooltip from './ui/tooltip';
-import { PropsWithClassname } from '../types';
+import { Icons } from '../icons';
+import Tooltip from './tooltip';
+import { PropsWithClassname } from '../../types';
 import classNames from 'classnames';
 
 const Social = {

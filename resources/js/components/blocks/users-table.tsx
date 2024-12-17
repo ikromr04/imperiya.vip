@@ -1,14 +1,14 @@
 import React from 'react';
-import { PropsWithClassname } from '../types';
-import { User, Users } from '../types/users';
-import DataTable, { DataTableColumns } from './data-table';
+import { PropsWithClassname } from '../../types';
+import { User, Users } from '../../types/users';
+import DataTable, { DataTableColumns } from '../ui/data-table';
 import dayjs from 'dayjs';
-import Button from './ui/button';
-import { AppRoute } from '../const';
-import { Icons } from './icons';
+import Button from '../ui/button';
+import { AppRoute } from '../../const';
+import { Icons } from '../icons';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../hooks';
-import { getUsersFilter } from '../store/app-slice/app-selector';
+import { useAppSelector } from '../../hooks';
+import { getUsersFilter } from '../../store/app-slice/app-selector';
 
 export type AccessorProps = {
   user: User;
@@ -126,8 +126,8 @@ export default function UsersTable({
       </Button>,
     login: user.login,
     birthDate: dayjs(user.birthDate).format('DD MMMM YYYY'),
-    nationality: <span className="flex mx-auto">{user.nationality?.name}</span>,
     address: user.address,
+    nationality: <span className="flex mx-auto">{user.nationality?.name}</span>,
     socials:
       <div className="flex flex-wrap gap-2">
         {user.facebook &&
