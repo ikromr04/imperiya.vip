@@ -30,7 +30,7 @@ export default function BirthdateField({
         )}
       >
         <SelectField
-          inputClassname="border-transparent bg-transparent px-1 hover:bg-transparent focus:bg-transparent w-10 justify-center"
+          inputClassname="border-transparent bg-transparent !px-1 hover:bg-transparent focus:bg-transparent w-10 justify-center"
           optionClassname="px-1"
           name="birthDate.day"
           options={[...DAYS.map((day) => ({ value: day, label: day }))]}
@@ -39,7 +39,7 @@ export default function BirthdateField({
         />
 
         <SelectField
-          inputClassname="border-transparent bg-transparent px-1 hover:bg-transparent focus:bg-transparent justify-center"
+          inputClassname="border-transparent bg-transparent !px-1 hover:bg-transparent focus:bg-transparent justify-center"
           optionClassname="px-1 w-16"
           name="birthDate.month"
           options={MONTHS}
@@ -48,7 +48,7 @@ export default function BirthdateField({
         />
 
         <SelectField
-          inputClassname="border-transparent bg-transparent px-1 hover:bg-transparent focus:bg-transparent justify-center"
+          inputClassname="border-transparent bg-transparent !px-1 hover:bg-transparent focus:bg-transparent justify-center"
           optionClassname="px-1 w-10"
           name="birthDate.year"
           options={Array.from({ length: 100 }, (_, i) => ({ value: currentYear - i, label: String(currentYear - i) }))}
