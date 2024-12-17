@@ -8,15 +8,15 @@ import UsersTable from '../../users-table';
 import Spinner from '../../ui/spinner';
 import { Icons } from '../../icons';
 import { filterUsers } from '../../../utils';
-import UsersFilterForm from '../../forms/users-filter-form';
 import { getUsersFilter } from '../../../store/app-slice/app-selector';
 import classNames from 'classnames';
+import { setUsersFilterAction } from '../../../store/app-slice/app-slice';
+import UsersFilterForm from '../../forms/users-filter-form/users-filter-form';
 
 export default function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
   const usersFilter = useAppSelector(getUsersFilter);
-  const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
@@ -61,15 +61,15 @@ export default function UsersPage(): JSX.Element {
               <input
                 className="flex grow bg-white min-w-0 w-4 border border-gray-200 rounded-l h-8 pl-8 pr-4 leading-none text-base focus:outline-none focus:border-primary"
                 type="search"
-                value={searchKeyword}
-                onInput={(evt: BaseSyntheticEvent) => setSearchKeyword(evt.target.value.toLowerCase())}
+                value={usersFilter.searchKeyword}
+                onInput={(evt: BaseSyntheticEvent) => dispatch(setUsersFilterAction({ ...usersFilter, searchKeyword: evt.target.value.toLowerCase() }))}
                 placeholder="Поиск по имени, логину, электронной почте или номеру телефона"
               />
-              {searchKeyword &&
+              {usersFilter.searchKeyword &&
                 <button
                   className="absolute top-1/2 right-0 flex items-center justify-center h-full w-8 transform -translate-y-1/2"
                   type="button"
-                  onClick={() => setSearchKeyword('')}
+                  onClick={() => dispatch(setUsersFilterAction({ ...usersFilter, searchKeyword: '' }))}
                 >
                   <Icons.close width={12} />
                 </button>}
@@ -92,7 +92,7 @@ export default function UsersPage(): JSX.Element {
         </header>
 
         {users
-          ? <UsersTable className="h-[calc(100%-80px)] md:h-[calc(100%-88px)] min-w-64" users={filterUsers(users, searchKeyword, usersFilter)} />
+          ? <UsersTable className="h-[calc(100%-80px)] md:h-[calc(100%-88px)] min-w-64" users={filterUsers(users, usersFilter)} />
           : <Spinner className="w-8 h-8" />}
 
         <section className={classNames(
@@ -106,11 +106,11 @@ export default function UsersPage(): JSX.Element {
               variant="text"
               onClick={() => setIsFilterOpen(false)}
             >
-              <Icons.filter className="transform scale-x-[-1]" width={16} />
+              <Icons.west className="transform scale-x-[-1]" width={16} />
             </Button>
           </h2>
 
-          <UsersFilterForm />
+          <UsersFilterForm className="grow max-h-[calc(100%-48px)]" />
         </section>
       </main>
     </PageLayout>

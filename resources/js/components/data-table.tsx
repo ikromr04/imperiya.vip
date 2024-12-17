@@ -54,7 +54,7 @@ export default function DataTable({
       <p className="mb-2 leading-none min-w-max">Отображение {from || 1} - {to} из {records.length}</p>
 
       <div className="relative overflow-hidden rounded shadow bg-white border">
-        <table className="flex flex-col h-[calc(100%-49px)] overflow-scroll scrollbar text-sm leading-[1.2]">
+        <table className="flex flex-col h-[calc(100%-49px)] overflow-auto scrollbar text-sm leading-[1.2]">
           <thead className="sticky top-0 z-10 flex min-w-max border-b">
             <tr className="flex font-semibold text-left bg-gray-100 p-2 gap-1 w-full">
               <th className="flex items-center w-8 font-semibold">

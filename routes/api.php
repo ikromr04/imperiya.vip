@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\GradeController;
+use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -24,5 +25,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
   Route::prefix('grades')->group(function () {
     Route::get('/', [GradeController::class, 'index']);
+  });
+
+  Route::prefix('nationalities')->group(function () {
+    Route::get('/', [NationalityController::class, 'index']);
   });
 });

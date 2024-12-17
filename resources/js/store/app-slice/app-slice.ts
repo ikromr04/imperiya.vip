@@ -27,7 +27,7 @@ export const appSlice = createSlice({
       saveAppSettings({ ...settings, isNavigationCollapsed: true });
       state.isNavigationCollapsed = true;
     },
-    setUsersFilterAction: (state, action) => {
+    setUsersFilterAction: (state, action: { payload: UsersFilter }) => {
       const settings = getAppSettings();
       saveAppSettings({ ...settings, usersFilter: action.payload });
       state.usersFilter = action.payload;

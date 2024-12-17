@@ -44,6 +44,9 @@ export const APIRoute = {
   Grades: {
     Index: '/grades',
   },
+  Nationalities: {
+    Index: '/nationalities',
+  }
 };
 
 export enum AuthorizationStatus {
@@ -59,4 +62,21 @@ export enum SliceName {
   Genders = 'Genders',
   Roles = 'Roles',
   Grades = 'Grades',
+  Nationalities = 'Nationalities'
 };
+
+export const DAYS = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+export const MONTHS = [
+  {value: '01', label: 'Январь'},
+  {value: '02', label: 'Февраль'},
+  {value: '03', label: 'Март'},
+  {value: '04', label: 'Апрель'},
+  {value: '05', label: 'Май'},
+  {value: '06', label: 'Июнь'},
+  {value: '07', label: 'Июль'},
+  {value: '08', label: 'Август'},
+  {value: '09', label: 'Сентябрь'},
+  {value: '10', label: 'Октябрь'},
+  {value: '11', label: 'Ноябрь'},
+  {value: '12', label: 'Декабрь'},
+];

@@ -19,7 +19,10 @@ type SelectFieldProps = {
   onChange?: (value: Option | Options) => void;
   options: Options;
   className?: string;
+  inputClassname?: string;
+  optionClassname?: string;
   label?: string;
+  placeholder?: string;
   before?: JSX.Element;
   after?: JSX.Element;
 };
@@ -33,9 +36,12 @@ export default function SelectField(props: SelectFieldProps): JSX.Element {
     onClean,
     onChange,
     className,
+    placeholder,
     label,
     before,
     after,
+    inputClassname,
+    optionClassname,
   } = props;
   const uniqueId = useId();
   const [field, meta, helpers] = useField(name);
@@ -57,6 +63,14 @@ export default function SelectField(props: SelectFieldProps): JSX.Element {
   };
 
   const renderSelectedOptions = (): ReactNode => {
+    if (!field.value) {
+      return (
+        <span className="text-[#a8a3b7]">
+          {placeholder}
+        </span>
+      );
+    }
+
     if (multiple) {
       return (
         <span className="flex items-center gap-1 overflow-scroll no-scrollbar">
@@ -79,6 +93,7 @@ export default function SelectField(props: SelectFieldProps): JSX.Element {
 
         <button
           className={classNames(
+            inputClassname,
             'flex items-center grow bg-gray-50 min-w-0 border border-gray-200 rounded h-8 px-4 leading-none text-base focus:outline-none hover:bg-gray-100 focus:border-primary focus:bg-gray-100',
             (after || cleanable) && 'pr-8',
             (after && cleanable) && '!pr-16',
@@ -108,7 +123,7 @@ export default function SelectField(props: SelectFieldProps): JSX.Element {
       <div
         ref={menuRef}
         className={classNames(
-          'absolute top-[calc(100%+4px)] right-0 z-10 border rounded-md pb-1 bg-white shadow-sm text-sm w-full transition-all duration-300 text-gray-500',
+          'absolute top-[calc(100%+4px)] right-0 z-10 border rounded-md pb-1 bg-white shadow-sm text-sm min-w-max w-full transition-all duration-300 text-gray-500',
           isOpen ? 'visible opacity-100' : 'invisible opacity-0',
           searchable ? 'pt-0' : 'pt-1'
         )}
@@ -121,11 +136,12 @@ export default function SelectField(props: SelectFieldProps): JSX.Element {
             onInput={(evt: BaseSyntheticEvent) => setOptions(props.options.filter((option) => option.label.toLowerCase().includes(evt.target.value)))}
           />}
 
-        <ul className="max-h-56 overflow-y-scroll scrollbar-y">
+        <ul className="max-h-56 overflow-y-auto scrollbar-y">
           {options.map((option) => (
             <li key={option.value}>
               <button
                 className={classNames(
+                  optionClassname,
                   'flex w-full items-center h-8 transition-all duration-300 hover:bg-gray-100 px-3',
                   multiple && field.value.includes(option.value) && 'bg-gray-100',
                   !multiple && (field.value === option.value) && 'bg-gray-100',

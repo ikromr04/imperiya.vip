@@ -2,7 +2,7 @@ import { ID } from '.';
 import { Gender, GenderId } from './genders';
 import { Role, RoleId } from './roles';
 import { Grade, GradeId } from './grades';
-import { Nationality } from './nationalities';
+import { Nationality, NationalityId } from './nationalities';
 import { Phones } from './phones';
 
 export type UserId = ID
@@ -32,6 +32,7 @@ export type Users = User[];
 export type UsersView = 'list' | 'grid';
 
 export type UsersFilter = {
+  searchKeyword: string;
   name: {
     query: string;
     visibility: boolean;
@@ -58,6 +59,24 @@ export type UsersFilter = {
   },
   login: {
     query: string;
+    visibility: boolean;
+  },
+  birthDate: {
+    day: string;
+    month: string;
+    year: string;
+    visibility: boolean;
+  },
+  address: {
+    query: string;
+    visibility: boolean;
+  },
+  nationalities: {
+    query: NationalityId[];
+    visibility: boolean;
+  },
+  socials: {
+    query: string[];
     visibility: boolean;
   },
 };

@@ -68,20 +68,24 @@ export default function UsersTable({
       accessor: 'birthDate',
       header: 'Дата рождения',
       width: 140,
+      hidden: !filter.birthDate.visibility,
     },
     {
       accessor: 'address',
       header: 'Адрес',
+      hidden: !filter.address.visibility,
     },
     {
       accessor: 'nationality',
       header: <span className="flex w-full justify-center">Национальность</span>,
       width: 136,
+      hidden: !filter.nationalities.visibility,
     },
     {
       accessor: 'socials',
       header: 'Социальные сети',
       width: 128,
+      hidden: !filter.socials.visibility,
     },
   ];
 

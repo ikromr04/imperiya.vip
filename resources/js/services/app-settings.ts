@@ -2,7 +2,8 @@ import { UsersFilter } from '../types/users';
 
 const SETTINGS_KEY_NAME = 'imperiya-vip-settings';
 
-export const defaultUsersFilter = {
+export const defaultUsersFilter: UsersFilter = {
+  searchKeyword: '',
   name: {
     query: '',
     visibility: true,
@@ -29,6 +30,24 @@ export const defaultUsersFilter = {
   },
   login: {
     query: '',
+    visibility: true,
+  },
+  birthDate: {
+    day: '',
+    month: '',
+    year: '',
+    visibility: true,
+  },
+  address: {
+    query: '',
+    visibility: true,
+  },
+  nationalities: {
+    query: [],
+    visibility: true,
+  },
+  socials: {
+    query: [],
     visibility: true,
   },
 };
