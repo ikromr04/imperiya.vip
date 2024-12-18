@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchUsersAction } from './users-api-actions';
 import { SliceName } from '../../const';
-import { Users } from '../../types/users';
+import { User, Users } from '../../types/users';
 
 export type UsersSlice = {
   users: Users | null;
@@ -14,7 +14,11 @@ const initialState: UsersSlice = {
 export const usersSlice = createSlice({
   name: SliceName.Auth,
   initialState,
-  reducers: {},
+  reducers: {
+    addUserAction: (state, action: { payload: User }) => {
+      state.users = [action.payload, ...(state.users || [])];
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchUsersAction.fulfilled, (state, action) => {
@@ -22,3 +26,7 @@ export const usersSlice = createSlice({
       });
   },
 });
+
+export const {
+  addUserAction,
+} = usersSlice.actions;

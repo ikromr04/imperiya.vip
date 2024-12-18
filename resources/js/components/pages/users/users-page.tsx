@@ -15,12 +15,15 @@ import { defaultUsersFilter } from '../../../services/app-settings';
 import UsersTable from '../../blocks/users-table';
 import * as XLSX from 'xlsx';
 import dayjs from 'dayjs';
+import Modal from '../../ui/modal';
+import CreateUserForm from '../../forms/user-create-form';
 
 export default function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
   const usersFilter = useAppSelector(getUsersFilter);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isUserCreateModalOpen, setIsUserCreateModalOpen] = useState(false);
 
   const handleExport = () => {
     const sheetData = filterUsers(users || [], usersFilter).map((user) => {
@@ -76,6 +79,7 @@ export default function UsersPage(): JSX.Element {
               type="button"
               icon="add"
               variant="success"
+              onClick={() => setIsUserCreateModalOpen(true)}
             >
               <span className="sr-only md:not-sr-only">Добавить пользователя</span>
             </Button>
@@ -141,9 +145,12 @@ export default function UsersPage(): JSX.Element {
               <Icons.west className="transform scale-x-[-1]" width={16} />
             </Button>
           </h2>
-
           <UsersFilterForm className="grow max-h-[calc(100%-48px)]" />
         </section>
+
+        <Modal isOpen={isUserCreateModalOpen}>
+          <CreateUserForm setIsOpen={setIsUserCreateModalOpen} />
+        </Modal>
       </main>
     </PageLayout>
   );

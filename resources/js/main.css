@@ -52,3 +52,19 @@ input[type="number"]::-webkit-outer-spin-button {
     @apply hidden lg:block bg-transparent w-2 h-2 md:bg-gray-300 rounded-sm;
   }
 }
+
+.shake {
+  animation: shake 150ms 2 linear;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(4px, 0);
+  }
+  50% {
+    transform: translate(-4px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}

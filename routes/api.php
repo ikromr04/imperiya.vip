@@ -13,6 +13,7 @@ require base_path('routes/auth.php');
 Route::middleware('auth:sanctum')->group(function () {
   Route::prefix('users')->group(function () {
     Route::get('/', [UserController::class, 'index']);
+    Route::post('/', [UserController::class, 'store']);
   });
 
   Route::prefix('genders')->group(function () {

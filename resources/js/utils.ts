@@ -41,7 +41,7 @@ export const filterUsers = (users: Users, filter: UsersFilter): Users => {
     && (filter.roles.query.length ? filter.roles.query.includes(user.role.id) : true)
     && (filter.grades.query.length ? filter.grades.query.includes(user.grade?.id || 0) : true)
     && (filter.phone.query ? user.phones?.some((phone) => (`+${phone.dialCode} ${phone.numbers}`).includes(filter.phone.query)) : true)
-    && (filter.email ? user.email?.includes(filter.email.query) : true)
+    && (filter.email.query ? user.email?.includes(filter.email.query) : true)
     && (filter.login ? user.login?.includes(filter.login.query) : true)
     && (filter.address.query ? user.address?.toLowerCase().includes(filter.address.query.toLowerCase()) : true)
     && (filter.nationalities.query.length ? filter.nationalities.query.includes(user.nationality?.id || 0) : true)

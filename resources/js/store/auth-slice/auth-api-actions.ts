@@ -62,8 +62,8 @@ export const sendResetPasswordLinkAction = createAsyncThunk<void, {
   'auth/forgot-password',
   async ({ dto, onSuccess, onValidationError, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const response = await api.post<ResponseMessage>(APIRoute.Auth.ForgotPassword, dto);
-      if (onSuccess) onSuccess(response.data.message);
+      const { data } = await api.post<ResponseMessage>(APIRoute.Auth.ForgotPassword, dto);
+      if (onSuccess) onSuccess(data.message);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;

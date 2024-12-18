@@ -7,6 +7,7 @@ import { Icons } from '../icons';
 const ButtonVariant = {
   primary: 'flex items-center gap-x-2 font-medium h-8 rounded-md px-4 transition-all duration-300 bg-primary text-white text-sm shadow lg:hover:bg-blue-600 lg:hover:shadow-none',
   success: 'flex items-center gap-x-2 font-medium h-8 rounded-md px-4 transition-all duration-300 bg-green-500 text-white text-sm shadow lg:hover:bg-green-600 lg:hover:shadow-none',
+  error: 'flex items-center gap-x-2 font-medium h-8 rounded-md px-4 transition-all duration-300 bg-red-500 text-white text-sm shadow lg:hover:bg-red-600 lg:hover:shadow-none',
   text: 'flex items-center gap-x-2 font-medium h-8 rounded-md px-4 transition-all duration-300 max-w-max text-sm',
   light: 'flex items-center gap-x-2 font-medium h-8 rounded-md px-4 transition-all duration-300 bg-white w-max text-sm shadow lg:hover:bg-gray-50 lg:hover:shadow-none',
   default: '',

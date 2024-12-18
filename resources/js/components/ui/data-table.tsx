@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, ReactNode, useState } from 'react';
+import React, { BaseSyntheticEvent, ReactNode, useEffect, useState } from 'react';
 import { PropsWithClassname } from '../../types';
 import classNames from 'classnames';
 import { nanoid } from 'nanoid';
@@ -40,6 +40,10 @@ export default function DataTable({
   const from = (page - 1) * perPage;
   const to = (page * perPage) > records.length ? records.length : (page * perPage);
   const paginatedData = records.slice(from, to);
+
+  useEffect(() => {
+    setPage(1);
+  }, [records]);
 
   const onPerPageChange = (evt: BaseSyntheticEvent) => {
     if (+evt.target.value > 50) {

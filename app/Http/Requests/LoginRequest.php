@@ -18,7 +18,7 @@ class LoginRequest extends FormRequest
     return [
       'login' => 'required|exists:users,login',
       'password' => ['required', function ($attribute, $value, $fail) {
-        $user = User::where('email', $this->email)->first();
+        $user = User::where('login', $this->login)->first();
 
         if ($user && !Hash::check($value, $user->password)) {
           $fail('Неверный пароль.');

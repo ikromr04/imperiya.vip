@@ -23,6 +23,7 @@ export default function UsersTable({
   users,
 }: UsersTableProps): JSX.Element {
   const filter = useAppSelector(getUsersFilter);
+
   const columns: DataTableColumns = [
     {
       accessor: 'name',
