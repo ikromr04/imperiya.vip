@@ -6,7 +6,6 @@ import { getUsers } from '../../../store/users-slice/users-selector';
 import { fetchUsersAction } from '../../../store/users-slice/users-api-actions';
 import Spinner from '../../ui/spinner';
 import { Icons } from '../../icons';
-import { filterUsers } from '../../../utils';
 import { getUsersFilter } from '../../../store/app-slice/app-selector';
 import classNames from 'classnames';
 import { setUsersFilterAction } from '../../../store/app-slice/app-slice';
@@ -16,9 +15,10 @@ import UsersTable from '../../blocks/users-table';
 import * as XLSX from 'xlsx';
 import dayjs from 'dayjs';
 import Modal from '../../ui/modal';
-import CreateUserForm from '../../forms/user-create-form';
+import CreateUserForm from '../../forms/user-create-form/user-create-form';
+import { filterUsers } from '@/utils/users';
 
-export default function UsersPage(): JSX.Element {
+function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
   const usersFilter = useAppSelector(getUsersFilter);
@@ -155,3 +155,5 @@ export default function UsersPage(): JSX.Element {
     </PageLayout>
   );
 }
+
+export default UsersPage;

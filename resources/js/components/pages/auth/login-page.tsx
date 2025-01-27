@@ -6,7 +6,7 @@ import { useAppSelector } from '../../../hooks';
 import { getAuthStatus } from '../../../store/auth-slice/auth-selector';
 import { AppRoute, AuthorizationStatus } from '../../../const';
 
-export default function LoginPage(): JSX.Element {
+function LoginPage(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthStatus);
 
   if (authorizationStatus === AuthorizationStatus.Auth) return <Navigate to={AppRoute.Journal} />;
@@ -27,3 +27,5 @@ export default function LoginPage(): JSX.Element {
     </main>
   );
 }
+
+export default LoginPage;

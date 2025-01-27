@@ -14,6 +14,9 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::prefix('users')->group(function () {
     Route::get('/', [UserController::class, 'index']);
     Route::post('/', [UserController::class, 'store']);
+    Route::get('/{userId}', [UserController::class, 'show']);
+    Route::put('/{userId}/avatar', [UserController::class, 'updateAvatar']);
+    Route::delete('/{userId}/avatar', [UserController::class, 'deleteAvatar']);
   });
 
   Route::prefix('genders')->group(function () {

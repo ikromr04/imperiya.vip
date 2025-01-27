@@ -5,6 +5,7 @@ export const AppRoute = {
   },
   Users: {
     Index: '/users',
+    Show: '/users/:userId',
   },
   Class: {
     Index: '/classes',
@@ -34,6 +35,8 @@ export const APIRoute = {
   },
   Users: {
     Index: '/users',
+    Show: '/users/:userId',
+    Avatar: '/users/:userId/avatar',
   },
   Genders: {
     Index: '/genders',

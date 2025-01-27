@@ -16,7 +16,7 @@ type PasswordFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   onGenerate?: (password: string) => void;
 };
 
-export default function PasswordField({
+function PasswordField({
   name,
   className,
   label,
@@ -79,3 +79,5 @@ export default function PasswordField({
     </div>
   );
 }
+
+export default PasswordField;

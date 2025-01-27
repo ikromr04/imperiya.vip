@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { toggleNavigationAction } from '../../store/app-slice/app-slice';
 import { PropsWithClassname } from '../../types';
 
-export default function PageSidebar({
+function PageSidebar({
   className,
 }: PropsWithClassname): JSX.Element {
   const dispatch = useAppDispatch();
@@ -40,3 +40,5 @@ export default function PageSidebar({
     </aside>
   );
 }
+
+export default PageSidebar;

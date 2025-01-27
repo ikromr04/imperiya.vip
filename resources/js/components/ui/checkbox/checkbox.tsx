@@ -10,7 +10,7 @@ type CheckboxProps = PropsWithClassname<InputHTMLAttributes<HTMLInputElement> & 
   label?: string;
 }>;
 
-export default function Checkbox({
+function Checkbox({
   name,
   className,
   label,
@@ -39,3 +39,5 @@ export default function Checkbox({
     </label>
   );
 }
+
+export default Checkbox;

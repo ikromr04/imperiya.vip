@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import Button from '../ui/button';
 import { AppRoute } from '../../const';
 import { Icons } from '../icons';
-import { Link } from 'react-router-dom';
+import { generatePath, Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import { getUsersFilter } from '../../store/app-slice/app-selector';
 
@@ -18,7 +18,7 @@ type UsersTableProps = PropsWithClassname<{
   users: Users;
 }>;
 
-export default function UsersTable({
+function UsersTable({
   className,
   users,
 }: UsersTableProps): JSX.Element {
@@ -92,7 +92,7 @@ export default function UsersTable({
 
   const records = users.map((user) => ({
     name:
-      <Button className="min-h-max !px-0 leading-[1.2]" href={AppRoute.Users.Index} variant="text">
+      <Button className="min-h-max !px-0 leading-[1.2]" href={generatePath(AppRoute.Users.Show, { userId: user.id })} variant="text">
         <span className="relative z-0 flex min-w-12 min-h-12 rounded-full bg-gray-100">
           {user.avatarThumb &&
             <img
@@ -106,8 +106,8 @@ export default function UsersTable({
         </span>
         {filter.name.visibility && user.name}
       </Button>,
-    gender: user.gender?.id === 1 ? <Icons.male className="flex mx-auto text-blue-600" width={16} height={16} />
-      : (user.gender?.id === 2 ? <Icons.female className="flex mx-auto text-pink-600" width={16} height={16} /> : ''),
+    gender: user.gender?.id === 1 ? <Icons.male className="flex mx-auto text-blue-600" width={20} height={20} />
+      : (user.gender?.id === 2 ? <Icons.female className="flex mx-auto text-pink-600" width={20} height={20} /> : ''),
     role:
       <span className="flex max-w-max text-center bg-blue-200 text-primary rounded-full text-sm py-1 px-2 leading-none">
         {user.role.name}
@@ -122,9 +122,9 @@ export default function UsersTable({
         ))}
       </div>,
     email:
-      <Button className="text-blue-500 font-normal" href={`mailto:${user.email}`} variant="text">
+      <Link className="text-blue-500 font-normal" to={`mailto:${user.email}`}>
         {user.email}
-      </Button>,
+      </Link>,
     login: user.login,
     birthDate: dayjs(user.birthDate).format('DD MMMM YYYY'),
     address: user.address,
@@ -158,3 +158,5 @@ export default function UsersTable({
     />
   );
 }
+
+export default UsersTable;

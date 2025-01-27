@@ -6,7 +6,7 @@ type MainLogoProps = PropsWithClassname<{
   imgClass?: string;
 }>;
 
-export default function MainLogo({
+function MainLogo({
   className,
   imgClass,
 }: MainLogoProps): JSX.Element {
@@ -20,3 +20,5 @@ export default function MainLogo({
     </a>
   );
 }
+
+export default MainLogo;

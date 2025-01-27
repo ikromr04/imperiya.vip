@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../ui/button';
 import { AppRoute } from '../../const';
 
-export default function NotFoundPage(): JSX.Element {
+function NotFoundPage(): JSX.Element {
   return (
     <main className="flex items-center min-h-screen">
       <div className="container flex flex-col items-center my-8">
@@ -29,3 +29,5 @@ export default function NotFoundPage(): JSX.Element {
     </main>
   );
 }
+
+export default NotFoundPage;

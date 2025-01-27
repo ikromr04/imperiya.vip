@@ -11,7 +11,7 @@ type BirthdateFieldProps = {
   onClean: () => void;
 };
 
-export default function BirthdateField({
+function BirthdateField({
   handleSubmit,
   onClean,
 }: BirthdateFieldProps): JSX.Element {
@@ -82,3 +82,5 @@ export default function BirthdateField({
     </div>
   );
 }
+
+export default BirthdateField;

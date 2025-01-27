@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -178,5 +179,166 @@ class UserController extends Controller
 
 
     return response()->json($user, 200);
+  }
+
+  public function show(int $userId): JsonResponse
+  {
+    $user = User::select(
+      'id',
+      'name',
+      'login',
+      'email',
+      'avatar',
+      'avatar_thumb as avatarThumb',
+      'birth_date as birthDate',
+      'address',
+      'facebook',
+      'instagram',
+      'telegram',
+      'odnoklassniki',
+      'role_id',
+      'gender_id',
+      'grade_id',
+      'nationality_id',
+    )->with([
+      'role' => function ($query) {
+        $query->select(
+          'id',
+          'name',
+          'slug'
+        );
+      },
+      'gender' => function ($query) {
+        $query->select(
+          'id',
+          'name',
+        );
+      },
+      'grade' => function ($query) {
+        $query->select(
+          'id',
+          'level',
+          'group',
+        );
+      },
+      'nationality' => function ($query) {
+        $query->select(
+          'id',
+          'name',
+        );
+      },
+      'phones' => function ($query) {
+        $query->select(
+          'id',
+          'user_id',
+          'numbers',
+          'dial_code as dialCode',
+        );
+      },
+    ])->find($userId);
+
+    return response()->json($user, 200);
+  }
+
+  public function updateAvatar(int $userId)
+  {
+    $user = User::find($userId);
+
+    if ($user->avatar && file_exists(public_path($user->avatar))) {
+      unlink(public_path($user->avatar));
+    }
+    if ($user->avatar_thumb && file_exists(public_path($user->avatar_thumb))) {
+      unlink(public_path($user->avatar_thumb));
+    }
+
+    $avatar = request()->file('avatar');
+    $avatarThumb = Image::make($avatar);
+    $avatarThumb->resize(144, 144, function ($constraint) {
+      $constraint->aspectRatio();
+    });
+    $avatarName = uniqid() . '.' . $avatar->extension();
+    $avatarPath = '/images/users/' . $avatarName;
+    $avatarThumbPath = '/images/users/thumbs/' . $avatarName;
+    $avatarThumb->save(public_path('/images/users/thumbs/' . $avatarName));
+    $avatar->move(public_path('/images/users'), $avatarName);
+
+    $user->avatar = $avatarPath;
+    $user->avatar_thumb = $avatarThumbPath;
+
+    $user->update();
+
+    $user = User::select(
+      'id',
+      'name',
+      'login',
+      'email',
+      'avatar',
+      'avatar_thumb as avatarThumb',
+      'birth_date as birthDate',
+      'address',
+      'facebook',
+      'instagram',
+      'telegram',
+      'odnoklassniki',
+      'role_id',
+      'gender_id',
+      'grade_id',
+      'nationality_id',
+    )->with([
+      'role' => function ($query) {
+        $query->select(
+          'id',
+          'name',
+          'slug'
+        );
+      },
+      'gender' => function ($query) {
+        $query->select(
+          'id',
+          'name',
+        );
+      },
+      'grade' => function ($query) {
+        $query->select(
+          'id',
+          'level',
+          'group',
+        );
+      },
+      'nationality' => function ($query) {
+        $query->select(
+          'id',
+          'name',
+        );
+      },
+      'phones' => function ($query) {
+        $query->select(
+          'id',
+          'user_id',
+          'numbers',
+          'dial_code as dialCode',
+        );
+      },
+    ])->find($userId);
+
+    return response($user, 200);
+  }
+
+  public function deleteAvatar($id)
+  {
+    $user = User::find($id);
+
+    if ($user->avatar && file_exists(public_path($user->avatar))) {
+      unlink(public_path($user->avatar));
+      $user->avatar = '';
+    }
+    if ($user->avatar_thumb && file_exists(public_path($user->avatar_thumb))) {
+      unlink(public_path($user->avatar_thumb));
+      $user->avatar_thumb = '';
+    }
+
+    $user->update();
+
+    return response()->noContent();
   }
 }

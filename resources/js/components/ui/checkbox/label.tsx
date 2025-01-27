@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-export default function Label({
+function Label({
   label,
 }: {
   label?: string;
@@ -13,3 +13,5 @@ export default function Label({
     </span>
   );
 }
+
+export default Label;

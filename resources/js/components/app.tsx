@@ -11,8 +11,9 @@ import ResetPasswordPage from './pages/auth/reset-password-page';
 import ProfilePage from './pages/auth/profile-page';
 import NotFoundPage from './pages/not-found-page';
 import UsersPage from './pages/users/users-page';
+import UsersShowPage from './pages/users/users-show-page';
 
-export default function App(): JSX.Element {
+function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
 
   if (authStatus === AuthorizationStatus.Unknown)
@@ -37,6 +38,7 @@ export default function App(): JSX.Element {
 
         <Route path={AppRoute.Journal} element={<JournalPage />} />
         <Route path={AppRoute.Users.Index} element={<UsersPage />} />
+        <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
         <Route path={AppRoute.Schedule.Index} element={<JournalPage />} />
         <Route path={AppRoute.Class.Index} element={<JournalPage />} />
         <Route path={AppRoute.Monitoring.Index} element={<JournalPage />} />
@@ -47,3 +49,5 @@ export default function App(): JSX.Element {
     </BrowserRouter>
   );
 }
+
+export default App;

@@ -22,12 +22,13 @@ type SelectFieldProps = {
   inputClassname?: string;
   optionClassname?: string;
   label?: string;
+  required?: boolean;
   placeholder?: string;
   before?: JSX.Element;
   after?: JSX.Element;
 };
 
-export default function SelectField(props: SelectFieldProps): JSX.Element {
+function SelectField(props: SelectFieldProps): JSX.Element {
   const {
     name,
     searchable,
@@ -38,6 +39,7 @@ export default function SelectField(props: SelectFieldProps): JSX.Element {
     className,
     placeholder,
     label,
+    required,
     before,
     after,
     inputClassname,
@@ -86,7 +88,7 @@ export default function SelectField(props: SelectFieldProps): JSX.Element {
 
   return (
     <div ref={ref} className={classNames(className, 'relative flex flex-col')}>
-      <Label label={label} htmlFor={uniqueId} />
+      <Label required={required} label={label} htmlFor={uniqueId} />
 
       <div className="relative flex">
         <Before element={before} />
@@ -158,3 +160,5 @@ export default function SelectField(props: SelectFieldProps): JSX.Element {
     </div>
   );
 }
+
+export default SelectField;

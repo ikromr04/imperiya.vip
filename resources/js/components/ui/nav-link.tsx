@@ -39,7 +39,7 @@ export default function NavLink({
       />
     </span>
     <span className={classNames(
-      'flex items-center min-w-max transition-all duration-300 font-medium',
+      'flex items-center min-w-max transition-all duration-300',
       isNavigationCollapsed && 'opacity-0'
     )}>
       {label}

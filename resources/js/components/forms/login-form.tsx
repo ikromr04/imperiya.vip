@@ -6,19 +6,19 @@ import Button from '../ui/button';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppDispatch } from '../../hooks/index';
-import { LoginCredentials } from '../../dto/auth-dto';
 import { loginAction } from '../../store/auth-slice/auth-api-actions';
 import Spinner from '../ui/spinner';
 import TextField from '../ui/fields/text-field';
 import PasswordField from '../ui/fields/password-field';
 import { PropsWithClassname } from '../../types';
+import { LoginCredentials } from '@/dto/auth-dto';
 
 const validationSchema = Yup.object().shape({
   login: Yup.string().required('Введите Ваш логин.'),
   password: Yup.string().required('Введите Ваш пароль.'),
 });
 
-export default function LoginForm({
+function LoginForm({
   className,
 }: PropsWithClassname): JSX.Element {
   const dispatch = useAppDispatch();
@@ -70,3 +70,5 @@ export default function LoginForm({
     </Formik>
   );
 }
+
+export default LoginForm;

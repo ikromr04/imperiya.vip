@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
     .email('Неверный адрес электронной почты.'),
 });
 
-export default function ForgotPasswordForm({
+function ForgotPasswordForm({
   className,
 }: PropsWithClassname): JSX.Element {
   const dispatch = useAppDispatch();
@@ -69,3 +69,5 @@ export default function ForgotPasswordForm({
     </Formik>
   );
 }
+
+export default ForgotPasswordForm;

@@ -23,7 +23,7 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref('password')], 'Подтверждение пароля не совпадает.'),
 });
 
-export default function ResetPasswordForm({
+function ResetPasswordForm({
   className,
 }: PropsWithClassname): JSX.Element {
   const dispatch = useAppDispatch();
@@ -104,3 +104,5 @@ export default function ResetPasswordForm({
     </Formik>
   );
 }
+
+export default ResetPasswordForm;

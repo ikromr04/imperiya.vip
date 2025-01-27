@@ -1,25 +1,27 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import TextField from '../ui/fields/text-field';
-import Button from '../ui/button';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import TextField from '../../ui/fields/text-field';
+import Button from '../../ui/button';
 import classNames from 'classnames';
-import Spinner from '../ui/spinner';
-import { UserStoreDTO } from '../../dto/users';
-import SelectField from '../ui/fields/select-field';
-import { getRoles } from '../../store/roles-slice/roles-selector';
-import { fetchRolesAction } from '../../store/roles-slice/roles-api-actions';
-import { getGenders } from '../../store/genders-slice/genders-selector';
-import { fetchGendersAction } from '../../store/genders-slice/genders-api-actions';
-import { getGrades } from '../../store/grades-slice/grades-selector';
-import { fetchGradesAction } from '../../store/grades-slice/grades-api-actions';
-import { getNationalities } from '../../store/nationality-slice/grades-selector';
-import { fetchNationalitiesAction } from '../../store/nationality-slice/nationality-api-actions';
+import Spinner from '../../ui/spinner';
+import { UserStoreDTO } from '../../../dto/users';
+import SelectField from '../../ui/fields/select-field';
+import { getRoles } from '../../../store/roles-slice/roles-selector';
+import { fetchRolesAction } from '../../../store/roles-slice/roles-api-actions';
+import { getGenders } from '../../../store/genders-slice/genders-selector';
+import { fetchGendersAction } from '../../../store/genders-slice/genders-api-actions';
+import { getGrades } from '../../../store/grades-slice/grades-selector';
+import { fetchGradesAction } from '../../../store/grades-slice/grades-api-actions';
+import { getNationalities } from '../../../store/nationality-slice/grades-selector';
+import { fetchNationalitiesAction } from '../../../store/nationality-slice/nationality-api-actions';
 import * as Yup from 'yup';
-import { storeUserAction } from '../../store/users-slice/users-api-actions';
-import Message, { MessageProps } from '../ui/message';
-import { addUserAction } from '../../store/users-slice/users-slice';
-import { Nationality } from '../../types/nationalities';
+import { storeUserAction } from '../../../store/users-slice/users-api-actions';
+import Message, { MessageProps } from '../../ui/message';
+import { addUserAction } from '../../../store/users-slice/users-slice';
+import { Nationality } from '../../../types/nationalities';
+import StepFirst from './steps/step-first';
+import StepSecond from './steps/step-second';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Введите ФИО пользователя.'),
@@ -38,6 +40,7 @@ export default function UserCreateForm({
   setIsOpen,
 }: UserCreateFormProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const [step, setStep] = useState<1 | 2>(1);
   const initialValues: UserStoreDTO = {
     name: '',
     login: '',
@@ -52,6 +55,11 @@ export default function UserCreateForm({
     gender_id: 0,
     grade_id: 0,
     nationality_id: 0,
+  };
+
+  const Step = {
+    1: <StepFirst />,
+    2: <StepSecond />
   };
 
   const roles = useAppSelector(getRoles);
@@ -101,27 +109,16 @@ export default function UserCreateForm({
         <Form className="grid gap-y-2 gap-x-4 sm:grid-cols-2">
           <Message className="mb-4 sm:col-span-2" message={message} />
 
-          <TextField name="name" label="ФИО" />
+          {Step[step]}
 
-          <TextField name="login" label="Логин" />
+          <TextField name="email" label="Электронная почта" type="email" />
 
-          {roles &&
-            <SelectField
-              name="role_id"
-              label="Позиция"
-              cleanable
-              onClean={() => setFieldValue('role', 0)}
-              options={roles.map((role) => ({ value: role.id, label: role.name }))}
-            />}
-
-          <TextField name="email" label="Электронная почта (необязательное)" type="email" />
-
-          <TextField name="birth_date" label="Дата рождения (необязательное)" type="date" />
+          <TextField name="birth_date" label="Дата рождения" type="date" />
 
           {genders &&
             <SelectField
               name="gender_id"
-              label="Пол (необязательное)"
+              label="Пол"
               cleanable
               onClean={() => setFieldValue('gender', 0)}
               options={genders.map((gender) => ({ value: gender.id, label: gender.name }))}
@@ -130,7 +127,7 @@ export default function UserCreateForm({
           {grades &&
             <SelectField
               name="grade_id"
-              label="Класс (необязательное)"
+              label="Класс"
               cleanable
               onClean={() => setFieldValue('grade', 0)}
               options={grades.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
@@ -139,21 +136,21 @@ export default function UserCreateForm({
           {nationalities &&
             <SelectField
               name="nationality_id"
-              label="Национальность (необязательное)"
+              label="Национальность"
               cleanable
               onClean={() => setFieldValue('nationality', 0)}
               options={nationalities.map((nationality: Nationality) => ({ value: nationality.id, label: nationality.name }))}
             />}
 
-          <TextField className="sm:col-span-2" name="address" label="Адрес (необязательное)" />
+          {/* <TextField className="sm:col-span-2" name="address" label="Адрес" /> */}
 
-          <TextField name="facebook" label="Фейсбук (необязательное)" />
+          {/* <TextField name="facebook" label="Фейсбук" /> */}
 
-          <TextField name="instagram" label="Инстаграм (необязательное)" />
+          {/* <TextField name="instagram" label="Инстаграм" /> */}
 
-          <TextField name="telegram" label="Телеграм (необязательное)" />
+          {/* <TextField name="telegram" label="Телеграм" /> */}
 
-          <TextField name="odnoklassniki" label="Одноклассники (необязательное)" />
+          {/* <TextField name="odnoklassniki" label="Одноклассники" /> */}
 
           <div className="flex items-center justify-end gap-2 mt-2 sm:col-span-2">
             <Button

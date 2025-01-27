@@ -8,7 +8,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   id: string;
 };
 
-export default function Input({
+function Input({
   name,
   id,
   className,
@@ -29,3 +29,5 @@ export default function Input({
     />
   );
 }
+
+export default Input;

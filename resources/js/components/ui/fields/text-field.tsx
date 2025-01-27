@@ -14,11 +14,12 @@ type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   className?: string;
   inputClassname?: string;
   label?: string;
+  required?: boolean;
   before?: JSX.Element;
   after?: JSX.Element;
 };
 
-export default function TextField({
+ function TextField({
   name,
   cleanable = false,
   onClean,
@@ -26,6 +27,7 @@ export default function TextField({
   inputClassname,
   label,
   before,
+  required,
   after,
   ...props
 }: TextFieldProps): JSX.Element {
@@ -33,7 +35,7 @@ export default function TextField({
 
   return (
     <div className={classNames(className, 'flex flex-col')}>
-      <Label label={label} htmlFor={uniqueId} />
+      <Label required={required} label={label} htmlFor={uniqueId} />
 
       <div className="relative flex">
         <Before element={before} />
@@ -64,3 +66,5 @@ export default function TextField({
     </div>
   );
 }
+
+export default TextField;

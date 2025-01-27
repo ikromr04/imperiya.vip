@@ -1,11 +1,13 @@
 import { useField } from 'formik';
 import React, { ReactNode } from 'react';
 
-export default function ErrorMessage({
-  name,
-}: {
+type ErrorMessageProps = {
   name: string;
-}): ReactNode {
+}
+
+function ErrorMessage({
+  name,
+}: ErrorMessageProps): ReactNode {
   const [, meta] = useField(name);
 
   if (!meta.error || !meta.touched) return null;
@@ -16,3 +18,5 @@ export default function ErrorMessage({
     </p>
   );
 }
+
+export default ErrorMessage;

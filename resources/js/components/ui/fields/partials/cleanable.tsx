@@ -11,7 +11,7 @@ type CleanableProps = PropsWithClassname<{
   onClean?: () => void;
 }>;
 
-export default function Cleanable({
+function Cleanable({
   name,
   className,
   cleanable,
@@ -36,3 +36,5 @@ export default function Cleanable({
     </button>
   );
 }
+
+export default Cleanable;

@@ -6,7 +6,7 @@ import { useAppSelector } from '../../hooks';
 import { getNavigationCollapsedState } from '../../store/app-slice/app-selector';
 import classNames from 'classnames';
 
-export default function PageLayout({
+function PageLayout({
   children,
 }: PropsWithChildren): JSX.Element {
   const isNavigationCollapsed = useAppSelector(getNavigationCollapsedState);
@@ -30,3 +30,5 @@ export default function PageLayout({
     </PrivateRoute>
   );
 }
+
+export default PageLayout;

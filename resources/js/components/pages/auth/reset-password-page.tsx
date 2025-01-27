@@ -5,7 +5,7 @@ import { AppRoute } from '../../../const';
 import ResetPasswordForm from '../../forms/reset-password-form';
 import Button from '../../ui/button';
 
-export default function ResetPasswordPage(): JSX.Element {
+function ResetPasswordPage(): JSX.Element {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-illustrations bg-white bg-bottom bg-contain bg-no-repeat md:bg-transparent">
       <MainLogo className="mt-8 mb-4 md:mt-12 md:mb-6 xl:mt-0" />
@@ -26,3 +26,5 @@ export default function ResetPasswordPage(): JSX.Element {
     </main>
   );
 }
+
+export default ResetPasswordPage;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PageLayout from '../layouts/page-layout';
 
-export default function JournalPage(): JSX.Element {
+function JournalPage(): JSX.Element {
   return (
     <PageLayout>
       <main>
@@ -10,3 +10,5 @@ export default function JournalPage(): JSX.Element {
     </PageLayout>
   );
 }
+
+export default JournalPage;

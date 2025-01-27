@@ -5,7 +5,7 @@ import { Icons } from '../../icons';
 import ForgotPasswordForm from '../../forms/forgot-password-form';
 import Button from '../../ui/button';
 
-export default function ForgotPasswordPage(): JSX.Element {
+function ForgotPasswordPage(): JSX.Element {
   const navigate = useNavigate();
 
   return (
@@ -33,3 +33,5 @@ export default function ForgotPasswordPage(): JSX.Element {
     </main>
   );
 }
+
+export default ForgotPasswordPage;

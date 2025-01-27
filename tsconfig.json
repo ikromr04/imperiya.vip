@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2020",                      // Modern ES features
+    "module": "esnext",                      // Use modern ES modules
+    "jsx": "react",                          // Enable JSX syntax for React
+    "moduleResolution": "node",             // Resolve Node.js-style modules
+    "baseUrl": ".",                          // Set the base directory for imports
+    "paths": {
+      "@/*": ["resources/js/*"]             // Alias for cleaner imports
+    },
+    "strict": true,                          // Enable all strict type-checking
+    "esModuleInterop": true,                 // Support CommonJS imports
+    "skipLibCheck": true,                    // Skip type checking of dependencies
+    "forceConsistentCasingInFileNames": true // Enforce consistent casing in imports
+  },
+  "include": ["resources/js/**/*"],          // Include source files in resources/js
+  "exclude": ["node_modules", "vendor"]      // Exclude unnecessary directories
+}

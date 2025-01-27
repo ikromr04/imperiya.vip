@@ -4,7 +4,7 @@ import UserNavigation from './user-navigation';
 import classNames from 'classnames';
 import { PropsWithClassname } from '../../types';
 
-export default function PageHeader({
+function PageHeader({
   className,
 }: PropsWithClassname): JSX.Element {
   return (
@@ -17,3 +17,5 @@ export default function PageHeader({
     </header>
   );
 }
+
+export default PageHeader;

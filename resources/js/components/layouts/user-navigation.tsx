@@ -9,7 +9,7 @@ import { logoutAction } from '../../store/auth-slice/auth-api-actions';
 import { Icons } from '../icons';
 import { PropsWithClassname } from '../../types';
 
-export default function UserNavigation({
+function UserNavigation({
   className,
 }: PropsWithClassname): ReactNode {
   const dispatch = useAppDispatch();
@@ -67,3 +67,5 @@ export default function UserNavigation({
     </div>
   );
 }
+
+export default UserNavigation;

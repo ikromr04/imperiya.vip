@@ -22,7 +22,7 @@ import BirthdateField from './birthdate-field';
 
 type UsersFilterFormProps = PropsWithClassname;
 
-export default function UsersFilterForm({
+function UsersFilterForm({
   className,
 }: UsersFilterFormProps): JSX.Element {
   const usersFilter = useAppSelector(getUsersFilter);
@@ -324,3 +324,5 @@ export default function UsersFilterForm({
     </Formik>
   );
 }
+
+export default UsersFilterForm;

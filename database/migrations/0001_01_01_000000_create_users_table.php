@@ -16,8 +16,9 @@ return new class extends Migration
       $table->id();
       $table->string('name');
       $table->string('login')->unique();
-      $table->string('email')->unique()->nullable();
+      $table->integer('role_id');
       $table->string('password');
+      $table->string('email')->unique()->nullable();
       $table->string('avatar')->nullable();
       $table->string('avatar_thumb')->nullable();
       $table->date('birth_date')->nullable();
@@ -26,7 +27,6 @@ return new class extends Migration
       $table->string('instagram')->nullable();
       $table->string('telegram')->nullable();
       $table->string('odnoklassniki')->nullable();
-      $table->integer('role_id');
       $table->integer('gender_id')->nullable();
       $table->integer('grade_id')->nullable();
       $table->integer('nationality_id')->nullable();

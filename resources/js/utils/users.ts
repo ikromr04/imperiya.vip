@@ -1,32 +1,5 @@
 import dayjs from 'dayjs';
-import { Users, UsersFilter } from './types/users';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const debounce = <F extends (...args: any) => any>(
-  func: F,
-  delay = 500,
-) => {
-  let timeout: ReturnType<typeof setTimeout> | number = 0;
-
-  const debounced = (...args: any) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), delay);
-  };
-
-  return debounced as (...args: Parameters<F>) => ReturnType<F>;
-};
-
-export const generateRandomPassword = (length: number = 8): string => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
-  let password = '';
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    password += characters[randomIndex];
-  }
-
-  return password;
-};
+import { UserId, Users, UsersFilter } from '../types/users';
 
 export const filterUsers = (users: Users, filter: UsersFilter): Users => {
   users = users.filter((user) => (
@@ -57,4 +30,30 @@ export const filterUsers = (users: Users, filter: UsersFilter): Users => {
   ));
 
   return users;
+};
+
+export const getNextUserId = (users: Users, currentUserId: UserId): UserId => {
+  const userIds = users.map(user => user.id);
+
+  const currentIndex = userIds.indexOf(currentUserId);
+
+  if (currentIndex === -1) {
+    throw new Error('Current user ID not found in the list of users');
+  }
+
+  const nextIndex = (currentIndex + 1) % userIds.length;
+
+  return userIds[nextIndex];
+};
+
+export const getPreviousUserId = (users: Users, currentUserId: UserId): UserId => {
+  const userIds = users.map(user => user.id);
+  const currentIndex = userIds.indexOf(currentUserId);
+
+  if (currentIndex === -1) {
+    throw new Error('Current user ID not found in the list of users');
+  }
+
+  const previousIndex = (currentIndex - 1 + userIds.length) % userIds.length;
+  return userIds[previousIndex];
 };

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-export default function After({
+function After({
   element,
 }: {
   element?: ReactNode;
@@ -13,3 +13,5 @@ export default function After({
     </div>
   );
 }
+
+export default After;

@@ -1,10 +1,12 @@
 import React, { ReactNode } from 'react';
 
-export default function Before({
-  element,
-}: {
+type BeforeProps = {
   element?: ReactNode;
-}): ReactNode {
+};
+
+function Before({
+  element,
+}: BeforeProps): ReactNode {
   if (!element) return null;
 
   return (
@@ -13,3 +15,5 @@ export default function Before({
     </div>
   );
 }
+
+export default Before;
