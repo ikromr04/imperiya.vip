@@ -1,22 +1,18 @@
 import React from 'react';
-import { PropsWithClassname } from '../../types';
-import { User, Users } from '../../types/users';
-import DataTable, { DataTableColumns } from '../ui/data-table';
 import dayjs from 'dayjs';
-import Button from '../ui/button';
-import { AppRoute } from '../../const';
-import { Icons } from '../icons';
 import { generatePath, Link } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
-import { getUsersFilter } from '../../store/app-slice/app-selector';
+import { Users } from '@/types/users';
+import { useAppSelector } from '@/hooks';
+import { getUsersFilter } from '@/store/app-slice/app-selector';
+import DataTable, { DataTableColumns } from '../ui/data-table';
+import Button from '../ui/button';
+import { AppRoute } from '@/const';
+import { Icons } from '../icons';
 
-export type AccessorProps = {
-  user: User;
-};
-
-type UsersTableProps = PropsWithClassname<{
+type UsersTableProps = {
+  className?: string;
   users: Users;
-}>;
+};
 
 function UsersTable({
   className,
@@ -49,10 +45,10 @@ function UsersTable({
       hidden: !filter.grades.visibility,
     },
     {
-      accessor: 'phones',
+      accessor: 'phoneNumbers',
       header: 'Телефоны',
       width: 120,
-      hidden: !filter.phone.visibility,
+      hidden: !filter.phoneNumber.visibility,
     },
     {
       accessor: 'email',
@@ -83,14 +79,15 @@ function UsersTable({
       hidden: !filter.nationalities.visibility,
     },
     {
-      accessor: 'socials',
+      accessor: 'socialLinks',
       header: 'Социальные сети',
       width: 128,
-      hidden: !filter.socials.visibility,
+      hidden: !filter.socialLink.visibility,
     },
   ];
 
   const records = users.map((user) => ({
+    id: user.id,
     name:
       <Button className="min-h-max !px-0 leading-[1.2]" href={generatePath(AppRoute.Users.Show, { userId: user.id })} variant="text">
         <span className="relative z-0 flex min-w-12 min-h-12 rounded-full bg-gray-100">
@@ -112,12 +109,12 @@ function UsersTable({
       <span className="flex max-w-max text-center bg-blue-200 text-primary rounded-full text-sm py-1 px-2 leading-none">
         {user.role.name}
       </span>,
-    grade: user.grade && <b className="flex w-full justify-center text-lg">{user.grade?.level} {user.grade?.group}</b>,
-    phones:
+    grade: user.role.grade && <b className="flex w-full justify-center text-lg">{user.role.grade?.level} {user.role.grade?.group}</b>,
+    phoneNumbers:
       <div className="flex flex-col gap-1">
-        {user.phones?.map((phone) => (
-          <Link key={user.id} className="font-medium" to={`tel:+${phone.dialCode}${phone.numbers}`}>
-            +{`${phone.dialCode} ${phone.numbers}`}
+        {user.phoneNumbers?.map((phone) => (
+          <Link key={phone.numbers} className="font-medium" to={`tel:+${phone.code}${phone.numbers}`}>
+            +{`${phone.code} ${phone.numbers}`}
           </Link>
         ))}
       </div>,
@@ -129,22 +126,22 @@ function UsersTable({
     birthDate: dayjs(user.birthDate).format('DD MMMM YYYY'),
     address: user.address,
     nationality: <span className="flex mx-auto">{user.nationality?.name}</span>,
-    socials:
+    socialLinks:
       <div className="flex flex-wrap gap-2">
-        {user.facebook &&
-          <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.facebook} target="_blank">
+        {user.socialLink?.facebook &&
+          <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.socialLink.facebook} target="_blank">
             <Icons.facebook width={24} height={24} />
           </Link>}
-        {user.instagram &&
-          <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.instagram} target="_blank">
+        {user.socialLink?.instagram &&
+          <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.socialLink?.instagram} target="_blank">
             <Icons.instagram width={24} height={24} />
           </Link>}
-        {user.telegram &&
-          <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.telegram} target="_blank">
+        {user.socialLink?.telegram &&
+          <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.socialLink?.telegram} target="_blank">
             <Icons.telegram width={24} height={24} />
           </Link>}
-        {user.odnoklassniki &&
-          <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.odnoklassniki} target="_blank">
+        {user.socialLink?.odnoklassniki &&
+          <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.socialLink?.odnoklassniki} target="_blank">
             <Icons.odnoklassniki width={24} height={24} />
           </Link>}
       </div>,

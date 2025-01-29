@@ -1,13 +1,13 @@
 import React, { BaseSyntheticEvent, ReactNode, useEffect, useState } from 'react';
 import { PropsWithClassname } from '../../types';
 import classNames from 'classnames';
-import { nanoid } from 'nanoid';
 import Button from './button';
 import { Icons } from '../icons';
 
 const DEFAULT_COLUMN_WIDTH = 200;
 
 export type DataTableRow = {
+  id: string | number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 };
@@ -68,7 +68,7 @@ export default function DataTable({
                 if (!column.hidden) {
                   return (
                     <th
-                      key={nanoid()}
+                      key={column.accessor}
                       className="flex items-center font-semibold"
                       style={{
                         minWidth: column.width || DEFAULT_COLUMN_WIDTH,
@@ -86,7 +86,7 @@ export default function DataTable({
 
           <tbody className="flex flex-col">
             {paginatedData.map((record, index) => (
-              <tr key={nanoid()} className={classNames('flex gap-1 min-w-max px-2 py-1', (index % 2 === 1) && 'bg-gray-50')}>
+              <tr key={record.id} className={classNames('flex gap-1 min-w-max px-2 py-1', (index % 2 === 1) && 'bg-gray-50')}>
                 <td className="flex items-center text-left w-8">
                   {from + index + 1}
                 </td>
@@ -94,7 +94,7 @@ export default function DataTable({
                   if (!column.hidden) {
                     return (
                       <td
-                        key={nanoid()}
+                        key={column.accessor}
                         className="flex items-center text-left break-word"
                         style={{
                           minWidth: column.width || DEFAULT_COLUMN_WIDTH,

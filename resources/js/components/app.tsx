@@ -37,8 +37,10 @@ function App(): JSX.Element {
         <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
 
         <Route path={AppRoute.Journal} element={<JournalPage />} />
+
         <Route path={AppRoute.Users.Index} element={<UsersPage />} />
         <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
+
         <Route path={AppRoute.Schedule.Index} element={<JournalPage />} />
         <Route path={AppRoute.Class.Index} element={<JournalPage />} />
         <Route path={AppRoute.Monitoring.Index} element={<JournalPage />} />

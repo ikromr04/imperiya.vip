@@ -11,4 +11,9 @@ class Nationality extends Model
   {
     return $this->hasMany(User::class, 'nationality_id');
   }
+
+  public function scopeSelectBasic($query)
+  {
+    return $query->select('id', 'name');
+  }
 }

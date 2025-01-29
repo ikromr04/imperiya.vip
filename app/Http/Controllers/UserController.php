@@ -13,93 +13,7 @@ class UserController extends Controller
 {
   public function index(): JsonResponse
   {
-    $users = User::orderBy('name')
-      ->select(
-        'id',
-        'name',
-        'login',
-        'email',
-        'avatar',
-        'avatar_thumb as avatarThumb',
-        'birth_date as birthDate',
-        'address',
-        'facebook',
-        'instagram',
-        'telegram',
-        'odnoklassniki',
-        'role_id',
-        'gender_id',
-        'grade_id',
-        'nationality_id',
-      )->with([
-        'role' => function ($query) {
-          $query->select(
-            'id',
-            'name',
-            'slug'
-          );
-        },
-        'gender' => function ($query) {
-          $query->select(
-            'id',
-            'name',
-          );
-        },
-        'grade' => function ($query) {
-          $query->select(
-            'id',
-            'level',
-            'group',
-          );
-        },
-        'nationality' => function ($query) {
-          $query->select(
-            'id',
-            'name',
-          );
-        },
-        'phones' => function ($query) {
-          $query->select(
-            'id',
-            'user_id',
-            'numbers',
-            'dial_code as dialCode',
-          );
-        },
-      ])->get();
-
-    foreach ($users as $user) {
-      $user->avatar && $user->avatar = asset($user->avatar);
-      $user->avatarThumb && $user->avatarThumb = asset($user->avatarThumb);
-
-      if (!$user->avatar) {
-        unset($user->avatar);
-        unset($user->avatarThumb);
-      }
-
-      unset($user->role_id);
-      unset($user->gender_id);
-      unset($user->grade_id);
-      unset($user->nationality_id);
-
-      if (!$user->email) unset($user->email);
-      if (!$user->birthDate) unset($user->birthDate);
-      if (!$user->address) unset($user->address);
-      if (!$user->facebook) unset($user->facebook);
-      if (!$user->instagram) unset($user->instagram);
-      if (!$user->telegram) unset($user->telegram);
-      if (!$user->odnoklassniki) unset($user->odnoklassniki);
-      if (!$user->gender) unset($user->gender);
-      if (!$user->role) unset($user->role);
-      if (!$user->grade) unset($user->grade);
-      if (!$user->nationality) unset($user->nationality);
-
-      if (count($user->phones) < 1) {
-        unset($user->phones);
-      } else {
-        foreach ($user->phones as $key => $value) unset($user->phones[$key]->user_id);
-      };
-    }
+    $users = User::orderBy('name')->selectBasic()->get();
 
     return response()->json($users, 200);
   }
@@ -122,60 +36,7 @@ class UserController extends Controller
       'nationality_id' => $request->nationality_id ? $request->nationality_id : null,
     ]);
 
-    $user = User::orderBy('name')
-      ->select(
-        'id',
-        'name',
-        'login',
-        'email',
-        'avatar',
-        'avatar_thumb as avatarThumb',
-        'birth_date as birthDate',
-        'address',
-        'facebook',
-        'instagram',
-        'telegram',
-        'odnoklassniki',
-        'role_id',
-        'gender_id',
-        'grade_id',
-        'nationality_id',
-      )->with([
-        'role' => function ($query) {
-          $query->select(
-            'id',
-            'name',
-            'slug'
-          );
-        },
-        'gender' => function ($query) {
-          $query->select(
-            'id',
-            'name',
-          );
-        },
-        'grade' => function ($query) {
-          $query->select(
-            'id',
-            'level',
-            'group',
-          );
-        },
-        'nationality' => function ($query) {
-          $query->select(
-            'id',
-            'name',
-          );
-        },
-        'phones' => function ($query) {
-          $query->select(
-            'id',
-            'user_id',
-            'numbers',
-            'dial_code as dialCode',
-          );
-        },
-      ])->find($user->id);
+    $user = User::orderBy('name')->selectBasic()->find($user->id);
 
 
     return response()->json($user, 200);
@@ -183,59 +44,7 @@ class UserController extends Controller
 
   public function show(int $userId): JsonResponse
   {
-    $user = User::select(
-      'id',
-      'name',
-      'login',
-      'email',
-      'avatar',
-      'avatar_thumb as avatarThumb',
-      'birth_date as birthDate',
-      'address',
-      'facebook',
-      'instagram',
-      'telegram',
-      'odnoklassniki',
-      'role_id',
-      'gender_id',
-      'grade_id',
-      'nationality_id',
-    )->with([
-      'role' => function ($query) {
-        $query->select(
-          'id',
-          'name',
-          'slug'
-        );
-      },
-      'gender' => function ($query) {
-        $query->select(
-          'id',
-          'name',
-        );
-      },
-      'grade' => function ($query) {
-        $query->select(
-          'id',
-          'level',
-          'group',
-        );
-      },
-      'nationality' => function ($query) {
-        $query->select(
-          'id',
-          'name',
-        );
-      },
-      'phones' => function ($query) {
-        $query->select(
-          'id',
-          'user_id',
-          'numbers',
-          'dial_code as dialCode',
-        );
-      },
-    ])->find($userId);
+    $user = User::selectBasic()->find($userId);
 
     return response()->json($user, 200);
   }
@@ -267,59 +76,7 @@ class UserController extends Controller
 
     $user->update();
 
-    $user = User::select(
-      'id',
-      'name',
-      'login',
-      'email',
-      'avatar',
-      'avatar_thumb as avatarThumb',
-      'birth_date as birthDate',
-      'address',
-      'facebook',
-      'instagram',
-      'telegram',
-      'odnoklassniki',
-      'role_id',
-      'gender_id',
-      'grade_id',
-      'nationality_id',
-    )->with([
-      'role' => function ($query) {
-        $query->select(
-          'id',
-          'name',
-          'slug'
-        );
-      },
-      'gender' => function ($query) {
-        $query->select(
-          'id',
-          'name',
-        );
-      },
-      'grade' => function ($query) {
-        $query->select(
-          'id',
-          'level',
-          'group',
-        );
-      },
-      'nationality' => function ($query) {
-        $query->select(
-          'id',
-          'name',
-        );
-      },
-      'phones' => function ($query) {
-        $query->select(
-          'id',
-          'user_id',
-          'numbers',
-          'dial_code as dialCode',
-        );
-      },
-    ])->find($userId);
+    $user = User::selectBasic()->find($userId);
 
     return response($user, 200);
   }

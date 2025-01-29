@@ -8,27 +8,15 @@ export const defaultUsersFilter: UsersFilter = {
     query: '',
     visibility: true,
   },
-  gender: {
-    query: 0,
+  login: {
+    query: '',
     visibility: true,
   },
   roles: {
     query: [],
     visibility: true,
   },
-  grades: {
-    query: [],
-    visibility: true,
-  },
-  phone: {
-    query: '',
-    visibility: true,
-  },
   email: {
-    query: '',
-    visibility: true,
-  },
-  login: {
     query: '',
     visibility: true,
   },
@@ -42,11 +30,23 @@ export const defaultUsersFilter: UsersFilter = {
     query: '',
     visibility: true,
   },
+  gender: {
+    query: 0,
+    visibility: true,
+  },
   nationalities: {
     query: [],
     visibility: true,
   },
-  socials: {
+  socialLink: {
+    query: '',
+    visibility: true,
+  },
+  phoneNumber: {
+    query: '',
+    visibility: true,
+  },
+  grades: {
     query: [],
     visibility: true,
   },

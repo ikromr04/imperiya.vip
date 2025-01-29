@@ -11,4 +11,9 @@ class Gender extends Model
   {
     return $this->hasMany(User::class, 'gender_id');
   }
+
+  public function scopeSelectBasic($query)
+  {
+    return $query->select('id', 'name');
+  }
 }

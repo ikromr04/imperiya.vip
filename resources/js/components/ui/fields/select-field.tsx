@@ -6,9 +6,8 @@ import ErrorMessage from './partials/error-message';
 import Before from './partials/before';
 import Cleanable from './partials/cleanable';
 import { useField } from 'formik';
-import { useDropdown } from '../../../hooks/use-dropdown';
-import { Options } from '../../../types';
-import { Option } from '../../../types/index';
+import { Option, Options } from '@/types';
+import { useDropdown } from '@/hooks/use-dropdown';
 
 type SelectFieldProps = {
   name: string;

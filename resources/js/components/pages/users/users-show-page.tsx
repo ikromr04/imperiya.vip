@@ -1,5 +1,6 @@
 import { Icons } from '@/components/icons';
 import PageLayout from '@/components/layouts/page-layout';
+import UserProfileNavigation from '@/components/layouts/users/user-profile-navigation';
 import Button from '@/components/ui/button';
 import Spinner from '@/components/ui/spinner';
 import UserAvatar from '@/components/ui/user-avatar';
@@ -40,7 +41,7 @@ function UsersShowPage(): JSX.Element {
             user={user}
           />
 
-          <div className="lg:grow mt-20">
+          <div className="lg:grow lg:mt-20">
             <h1 className="title mb-1">{user.name}</h1>
             <span className="flex max-w-max text-center bg-blue-200 text-primary rounded-full text-sm py-1 px-2 leading-none">
               {user.role.name}
@@ -64,6 +65,24 @@ function UsersShowPage(): JSX.Element {
             </Button>
           </div>
         </header>
+
+        <UserProfileNavigation user={user} />
+
+        <div>
+          <div>
+            <section>
+              <h2>{user.role.name}</h2>
+
+              <dl>
+                <div>
+                  <dt></dt>
+                  <dd></dd>
+                </div>
+              </dl>
+            </section>
+          </div>
+          <div></div>
+        </div>
       </main>
     </PageLayout>
   );

@@ -23,10 +23,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/', [GenderController::class, 'index']);
   });
 
-  Route::prefix('roles')->group(function () {
-    Route::get('/', [RoleController::class, 'index']);
-  });
-
   Route::prefix('grades')->group(function () {
     Route::get('/', [GradeController::class, 'index']);
   });
