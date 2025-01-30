@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { deleteUserAvatarAction, fetchUsersAction } from './users-api-actions';
-import { SliceName } from '../../const';
-import { User, Users } from '../../types/users';
+import { deleteUserAvatarAction, fetchUsersAction, storeUserAction, updateUserAction, updateUserAvatarAction } from './users-api-actions';
+import { Users } from '@/types/users';
+import { SliceName } from '@/const';
 
 export type UsersSlice = {
   users: Users | null;
@@ -14,22 +14,21 @@ const initialState: UsersSlice = {
 export const usersSlice = createSlice({
   name: SliceName.Auth,
   initialState,
-  reducers: {
-    addUserAction: (state, action: { payload: User }) => {
-      state.users = [action.payload, ...(state.users || [])];
-    },
-    updateUserAction: (state, action: { payload: User }) => {
-      if (state.users) {
-        state.users = state.users.map((user) =>
-          user.id === action.payload.id ? { ...user, ...action.payload } : user
-        );
-      }
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(fetchUsersAction.fulfilled, (state, action) => {
         state.users = action.payload;
+      })
+      .addCase(storeUserAction.fulfilled, (state, action) => {
+        state.users = [action.payload, ...(state.users || [])];
+      })
+      .addCase(updateUserAvatarAction.fulfilled, (state, action) => {
+        if (state.users) {
+          state.users = state.users.map((user) =>
+            user.id === action.payload.id ? { ...user, ...action.payload } : user
+          );
+        }
       })
       .addCase(deleteUserAvatarAction.fulfilled, (state, action) => {
         if (state.users) {
@@ -37,11 +36,13 @@ export const usersSlice = createSlice({
             user.id === action.payload ? { ...user, avatar: '', avatarThumb: '' } : user
           );
         }
+      })
+      .addCase(updateUserAction.fulfilled, (state, action) => {
+        if (state.users) {
+          state.users = state.users.map((user) =>
+            user.id === action.payload.id ? { ...action.payload } : user
+          );
+        }
       });
   },
 });
-
-export const {
-  addUserAction,
-  updateUserAction,
-} = usersSlice.actions;

@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -38,6 +40,32 @@ class UserController extends Controller
 
     $user = User::orderBy('name')->selectBasic()->find($user->id);
 
+
+    return response()->json($user, 200);
+  }
+
+  public function update(Request $request): JsonResponse
+  {
+
+    $user = User::find($request->id);
+    if ($user->login != $request->login) {
+      if (User::where('login', $request->login)) {
+        throw ValidationException::withMessages(['login' => ['Пользователь с таким логином уже существует.']]);
+      } else {
+        $user->login = $request->login;
+      }
+    }
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->birth_date = $request->birth_date;
+    $user->address = $request->address;
+    $user->gender_id = $request->gender_id;
+    $user->nationality_id = $request->nationality_id;
+    $user->social_link = $request->social_link;
+    $user->phone_numbers = $request->phone_numbers;
+    $user->isDirty() && $user->update();
+
+    $user = User::selectBasic()->find($request->id);
 
     return response()->json($user, 200);
   }

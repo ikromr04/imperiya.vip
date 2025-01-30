@@ -7,19 +7,19 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="robots" content="noindex, nofollow">
 
-  <link rel="icon" href="{{ asset('favicon.ico') }}">
-  <link rel="icon" href="{{ asset('favicons/icon.svg') }}" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="{{ asset('favicons/180x180.png') }}">
-  <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="{{ asset('favicon.ico') }}" rel="icon">
+  <link href="{{ asset('favicons/icon.svg') }}" rel="icon" type="image/svg+xml">
+  <link href="{{ asset('favicons/180x180.png') }}" rel="apple-touch-icon">
+  <link href="{{ asset('manifest.webmanifest') }}" rel="manifest">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 
   <title>{{ env('APP_NAME') }}</title>
 </head>
 
 <body>
-  <div class="w-screen h-screen bg-gray-100 text-base" id="root"></div>
+  <div class="min-w-screen min-h-screen bg-gray-100 text-base" id="root"></div>
 
   @viteReactRefresh
   @vite('resources/js/main.tsx')

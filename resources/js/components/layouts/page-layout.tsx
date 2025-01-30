@@ -1,10 +1,10 @@
 import React, { PropsWithChildren } from 'react';
 import PageHeader from './page-header';
-import PrivateRoute from '../private-route';
 import PageSidebar from './page-sidebar';
-import { useAppSelector } from '../../hooks';
-import { getNavigationCollapsedState } from '../../store/app-slice/app-selector';
 import classNames from 'classnames';
+import { useAppSelector } from '@/hooks';
+import { getNavigationCollapsedState } from '@/store/app-slice/app-selector';
+import PrivateRoute from '../private-route';
 
 function PageLayout({
   children,

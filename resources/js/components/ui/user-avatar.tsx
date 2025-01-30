@@ -8,7 +8,6 @@ import { useAppDispatch } from '@/hooks';
 import { deleteUserAvatarAction, updateUserAvatarAction } from '@/store/users-slice/users-api-actions';
 import Spinner from './spinner';
 import { toast } from 'react-toastify';
-import { updateUserAction } from '@/store/users-slice/users-slice';
 import { Link } from 'react-router-dom';
 
 type UserAvatarProps = {
@@ -34,7 +33,7 @@ function UserAvatar({
       userId: user.id,
       onValidationError: (error) => toast.error(error.message),
       onFail: (message) => toast.error(message),
-      onSuccess: (user) => dispatch(updateUserAction(user)),
+      onSuccess: () => setIsOpen(false),
     }));
 
     setIsLoading(false);
@@ -77,7 +76,7 @@ function UserAvatar({
               <input
                 className="sr-only"
                 type="file"
-                accept=".png, .jpg, .jpeg, .svg"
+                accept=".png, .jpg, .jpeg"
                 onChange={handleUpdateInputChange}
               />
               {user.avatarThumb ? <>

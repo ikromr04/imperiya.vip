@@ -141,6 +141,7 @@ class User extends Authenticatable
       'nationality_id',
       'social_link as socialLink',
       'phone_numbers as phoneNumbers',
+      'created_at as createdAt',
     )->with([
       'gender' => fn($query) => $query->selectBasic(),
       'nationality' => fn($query) => $query->selectBasic(),

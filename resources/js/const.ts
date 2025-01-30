@@ -6,6 +6,10 @@ export const AppRoute = {
   Users: {
     Index: '/users',
     Show: '/users/:userId',
+    Education: '/users/:userId/education',
+    Work: '/users/:userId/work-experience',
+    Schedule: '/users/:userId/schedule',
+    Evaluations: '/users/:userId/evaluations',
   },
   Class: {
     Index: '/classes',
@@ -85,10 +89,10 @@ export const MONTHS = [
 ];
 
 export const Role = {
-   'super-admin': 'Супер-администратор',
-   'admin': 'Администратор',
-   'director': 'Директор',
-   'teacher': 'Педагог',
-   'student': 'Родитель',
-   'parent': 'Ученик',
+  'super-admin': 'Супер-администратор',
+  'admin': 'Администратор',
+  'director': 'Директор',
+  'teacher': 'Педагог',
+  'student': 'Родитель',
+  'parent': 'Ученик',
 };

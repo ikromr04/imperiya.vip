@@ -18,7 +18,6 @@ import { fetchNationalitiesAction } from '../../../store/nationality-slice/natio
 import * as Yup from 'yup';
 import { storeUserAction } from '../../../store/users-slice/users-api-actions';
 import Message, { MessageProps } from '../../ui/message';
-import { addUserAction } from '../../../store/users-slice/users-slice';
 import { Nationality } from '../../../types/nationalities';
 import StepFirst from './steps/step-first';
 import StepSecond from './steps/step-second';
@@ -76,8 +75,7 @@ export default function UserCreateForm({
 
     await dispatch(storeUserAction({
       dto: values,
-      onSuccess: (createdUser) => {
-        dispatch(addUserAction(createdUser));
+      onSuccess: () => {
         helpers.resetForm();
         setMessage(['Новый пользователь успешно добавлен.', 'success']);
         setTimeout(() => setMessage(undefined), 5000);

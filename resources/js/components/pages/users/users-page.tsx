@@ -14,8 +14,8 @@ import { setUsersFilterAction } from '@/store/app-slice/app-slice';
 import { defaultUsersFilter } from '@/services/app-settings';
 import UsersTable from '@/components/blocks/users-table';
 import Spinner from '@/components/ui/spinner';
-import UsersFilterForm from '@/components/forms/users-filter-form/users-filter-form';
 import Modal from '@/components/ui/modal';
+import UsersFilterForm from '@/components/forms/users/users-filter-form/users-filter-form';
 
 function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();

@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import React from 'react';
-import SelectField from '../../ui/fields/select-field';
-import { DAYS, MONTHS } from '../../../const';
 import dayjs from 'dayjs';
 import { useField } from 'formik';
-import { Icons } from '../../icons';
+import SelectField from '@/components/ui/fields/select-field';
+import { DAYS, MONTHS } from '@/const';
+import { Icons } from '@/components/icons';
 
 type BirthdateFieldProps = {
   handleSubmit: () => void;

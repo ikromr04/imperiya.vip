@@ -53,6 +53,18 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 
+.box {
+  @apply rounded-md shadow bg-white;
+}
+
+.box__header {
+  @apply flex items-center justify-between gap-2 rounded-t-md bg-gray-50 border-b py-2 px-4;
+}
+
+.box__body {
+  @apply px-4 pt-2 pb-5 overflow-x-auto rounded-b-md no-scrollbar bg-white;
+}
+
 .shake {
   animation: shake 150ms 2 linear;
 }

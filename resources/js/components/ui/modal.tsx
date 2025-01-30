@@ -27,7 +27,7 @@ export default function Modal({
       onClick={handleModalClick}
     >
       <div className={classNames(
-        'bg-white min-h-max h-max my-8 mx-[5vw] transition-all duration-300 md:mx-0 md:my-16 md:py-4 md:px-8 md:rounded-md md:shadow-md max-w-[620px]',
+        'bg-white min-h-max h-max my-8 mx-[5vw] w-full md:max-w-[620px] transition-all duration-300 md:mx-0 md:my-16 md:py-4 md:px-8 md:rounded-md md:shadow-md',
         isOpen ? 'translate-y-0' : '-translate-y-[100vh]',
       )}>
         {children}

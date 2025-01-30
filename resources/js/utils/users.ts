@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import { UserId, Users, UsersFilter } from '../types/users';
+import { User, UserId, Users, UsersFilter } from '../types/users';
+import { Role } from '@/const';
 
 export const filterUsers = (users: Users, filter: UsersFilter): Users => {
   users = users.filter((user) => (
@@ -56,4 +57,17 @@ export const getPreviousUserId = (users: Users, currentUserId: UserId): UserId =
 
   const previousIndex = (currentIndex - 1 + userIds.length) % userIds.length;
   return userIds[previousIndex];
+};
+
+export const getCreatedAtText = (user: User): string => {
+  switch (user.role.id) {
+    case 'student':
+      return 'Дата поступления';
+
+    case 'parent':
+      return 'Дата добавления';
+
+    default:
+      return 'Дата найма';
+  }
 };

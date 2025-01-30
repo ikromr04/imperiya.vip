@@ -90,7 +90,7 @@ function UsersTable({
     id: user.id,
     name:
       <Button className="min-h-max !px-0 leading-[1.2]" href={generatePath(AppRoute.Users.Show, { userId: user.id })} variant="text">
-        <span className="relative z-0 flex min-w-12 min-h-12 rounded-full bg-gray-100">
+        <span className="relative z-0 flex min-w-12 min-h-12 rounded-full bg-gray-100 overflow-hidden">
           {user.avatarThumb &&
             <img
               className="absolute z-10 top-0 left-0 w-full h-full object-cover"
@@ -123,7 +123,7 @@ function UsersTable({
         {user.email}
       </Link>,
     login: user.login,
-    birthDate: dayjs(user.birthDate).format('DD MMMM YYYY'),
+    birthDate: user.birthDate ? dayjs(user.birthDate).format('DD MMMM YYYY') : '',
     address: user.address,
     nationality: <span className="flex mx-auto">{user.nationality?.name}</span>,
     socialLinks:

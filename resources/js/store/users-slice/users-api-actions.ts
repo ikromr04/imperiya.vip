@@ -1,9 +1,9 @@
+import { APIRoute } from '@/const';
+import { UserStoreDTO, UserUpdateDTO } from '@/dto/users';
+import { User, UserId, Users } from '@/types/users';
+import { ValidationError } from '@/types/validation-error';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
-import { APIRoute } from '../../const';
-import { User, UserId, Users } from '../../types/users';
-import { UserStoreDTO } from '../../dto/users';
-import { ValidationError } from '../../types/validation-error';
 import { generatePath } from 'react-router-dom';
 
 export const fetchUsersAction = createAsyncThunk<Users, undefined, {
@@ -17,7 +17,33 @@ export const fetchUsersAction = createAsyncThunk<Users, undefined, {
   },
 );
 
-export const storeUserAction = createAsyncThunk<void, {
+export const updateUserAction = createAsyncThunk<User, {
+  dto: UserUpdateDTO,
+  onSuccess?: (user: User) => void,
+  onValidationError?: (error: ValidationError) => void,
+  onFail?: (message: string) => void,
+}, {
+  extra: AxiosInstance,
+  rejectWithValue: ValidationError,
+}>(
+  'users/update',
+  async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      const { data } = await api.put<User>(APIRoute.Users.Index, dto);
+      if (onSuccess) onSuccess(data);
+      return data;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const error: AxiosError<ValidationError> = err;
+      if (!error.response) throw err;
+      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const storeUserAction = createAsyncThunk<User, {
   dto: UserStoreDTO,
   onSuccess?: (user: User) => void,
   onValidationError?: (error: ValidationError) => void,
@@ -31,6 +57,7 @@ export const storeUserAction = createAsyncThunk<void, {
     try {
       const { data } = await api.post<User>(APIRoute.Users.Index, dto);
       if (onSuccess) onSuccess(data);
+      return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;
@@ -67,7 +94,7 @@ export const fetchUserByIdAction = createAsyncThunk<void, {
   },
 );
 
-export const updateUserAvatarAction = createAsyncThunk<void, {
+export const updateUserAvatarAction = createAsyncThunk<User, {
   userId: UserId,
   formData: FormData,
   onSuccess?: (user: User) => void,
@@ -84,6 +111,7 @@ export const updateUserAvatarAction = createAsyncThunk<void, {
     try {
       const { data } = await api.post<User>(generatePath(APIRoute.Users.Avatar, { userId }), formData);
       if (onSuccess) onSuccess(data);
+      return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;

@@ -28,6 +28,7 @@ export type User = {
     numbers: number;
     code: number;
   }[];
+  createdAt: Date;
 };
 
 export type Users = User[];
