@@ -83,7 +83,7 @@ function UsersPhoneEditForm({
                       <span className="absolute top-6 left-4 transform">+</span>
                     </div>
                     <TextField
-                      className="w-full"
+                      className="w-[120px] grow"
                       type="number"
                       name={`phone_numbers.${index}.numbers`}
                       label="Номер телефона"
