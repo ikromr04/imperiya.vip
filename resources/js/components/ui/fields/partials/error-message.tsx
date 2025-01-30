@@ -10,7 +10,7 @@ function ErrorMessage({
 }: ErrorMessageProps): ReactNode {
   const [, meta] = useField(name);
 
-  if (!meta.error || !meta.touched) return null;
+  if (!meta.error?.trim() || !meta.touched) return null;
 
   return (
     <p className="flex text-error pt-1 text-sm pl-2 leading-none">

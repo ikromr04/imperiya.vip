@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import Button from '../ui/button';
 import { useAppDispatch } from '../../hooks/index';
 import { sendResetPasswordLinkAction } from '../../store/auth-slice/auth-api-actions';
-import Spinner from '../ui/spinner';
 import TextField from '../ui/fields/text-field';
 import { ResetPasswordEmailDTO } from '../../dto/auth-dto';
 import { PropsWithClassname } from '../../types';
@@ -61,8 +60,9 @@ function ForgotPasswordForm({
             className={classNames('justify-center', isSubmitting && 'opacity-60')}
             type="submit"
             disabled={isSubmitting}
+            loading={isSubmitting}
           >
-            {isSubmitting ? <Spinner className="w-6 h-6 m-auto" /> : 'Отправить'}
+            Отправить
           </Button>
         </Form>
       )}

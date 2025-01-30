@@ -1,7 +1,6 @@
 import Button from '@/components/ui/button';
 import SelectField from '@/components/ui/fields/select-field';
 import TextField from '@/components/ui/fields/text-field';
-import Spinner from '@/components/ui/spinner';
 import { UserUpdateDTO } from '@/dto/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGendersAction } from '@/store/genders-slice/genders-api-actions';
@@ -16,16 +15,16 @@ import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
-type UsersEditFormProps = {
-  user: User;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-};
-
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Обязательное поле.'),
   login: Yup.string().required('Обязательное поле.'),
   email: Yup.string().email('Неверный адрес электронной почты.'),
 });
+
+type UsersEditFormProps = {
+  user: User;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+};
 
 function UsersEditForm({
   user,
@@ -77,7 +76,7 @@ function UsersEditForm({
       key={user.id}
     >
       {({ isSubmitting, setFieldValue }) => (
-        <Form className="flex flex-col gap-2">
+        <Form className="flex flex-col gap-3">
           <TextField type="hidden" name="id" />
 
           <TextField name="name" label="ФИО" required />

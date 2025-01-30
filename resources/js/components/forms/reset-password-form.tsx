@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import Button from '../ui/button';
 import { useAppDispatch } from '../../hooks/index';
 import { resetPasswordAction } from '../../store/auth-slice/auth-api-actions';
-import Spinner from '../ui/spinner';
 import { useParams } from 'react-router-dom';
 import { ResetPasswordDTO } from '../../dto/auth-dto';
 import Checkbox from '../ui/checkbox/checkbox';
@@ -96,8 +95,9 @@ function ResetPasswordForm({
             className={classNames('justify-center', isSubmitting && 'opacity-60')}
             type="submit"
             disabled={isSubmitting}
+            loading={isSubmitting}
           >
-            {isSubmitting ? <Spinner className="w-6 h-6 m-auto" /> : 'Сбросить пароль'}
+            Сбросить пароль
           </Button>
         </Form>
       )}

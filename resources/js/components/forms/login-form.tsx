@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppDispatch } from '../../hooks/index';
 import { loginAction } from '../../store/auth-slice/auth-api-actions';
-import Spinner from '../ui/spinner';
 import TextField from '../ui/fields/text-field';
 import PasswordField from '../ui/fields/password-field';
 import { PropsWithClassname } from '../../types';
@@ -62,8 +61,9 @@ function LoginForm({
             className={classNames('justify-center', isSubmitting && 'opacity-60')}
             type="submit"
             disabled={isSubmitting}
+            loading={isSubmitting}
           >
-            {isSubmitting ? <Spinner className="w-6 h-6 m-auto" /> : 'Войти'}
+            Войти
           </Button>
         </Form>
       )}

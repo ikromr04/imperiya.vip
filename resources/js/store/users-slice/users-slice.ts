@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { deleteUserAvatarAction, fetchUsersAction, storeUserAction, updateUserAction, updateUserAvatarAction } from './users-api-actions';
+import {
+  deleteUserAvatarAction,
+  fetchUsersAction,
+  storeUserAction,
+  updateUserAction,
+  updateUserAvatarAction,
+} from './users-api-actions';
 import { Users } from '@/types/users';
 import { SliceName } from '@/const';
 

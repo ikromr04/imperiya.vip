@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from '../../../hooks';
 import TextField from '../../ui/fields/text-field';
 import Button from '../../ui/button';
 import classNames from 'classnames';
-import Spinner from '../../ui/spinner';
 import { UserStoreDTO } from '../../../dto/users';
 import SelectField from '../../ui/fields/select-field';
 import { getRoles } from '../../../store/roles-slice/roles-selector';
@@ -165,9 +164,10 @@ export default function UserCreateForm({
               className={classNames('justify-center min-w-[92px]', isSubmitting && 'opacity-60')}
               type="submit"
               disabled={isSubmitting}
+              loading={isSubmitting}
               variant="success"
             >
-              {isSubmitting ? <Spinner className="w-6 h-6 m-auto" /> : 'Добавить'}
+              Добавить
             </Button>
           </div>
         </Form>
