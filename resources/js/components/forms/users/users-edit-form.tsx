@@ -9,7 +9,6 @@ import { getNationalities } from '@/store/nationality-slice/grades-selector';
 import { fetchNationalitiesAction } from '@/store/nationality-slice/nationality-api-actions';
 import { updateUserAction } from '@/store/users-slice/users-api-actions';
 import { User } from '@/types/users';
-import classNames from 'classnames';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -77,8 +76,6 @@ function UsersEditForm({
     >
       {({ isSubmitting, setFieldValue }) => (
         <Form className="flex flex-col gap-3">
-          <TextField type="hidden" name="id" />
-
           <TextField name="name" label="ФИО" required />
 
           <div className="grid gap-y-2 gap-x-4 md:grid-cols-2">
@@ -113,7 +110,7 @@ function UsersEditForm({
 
           <div className="flex items-center justify-end gap-2 mt-2 sm:col-span-2">
             <Button
-              className={classNames('justify-center min-w-[92px]', isSubmitting && 'opacity-60')}
+              className="justify-center min-w-[92px]"
               type="submit"
               disabled={isSubmitting}
               loading={isSubmitting}

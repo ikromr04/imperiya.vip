@@ -58,7 +58,7 @@ export default function Button({
     <button
       type="button"
       {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}
-      className={classNames(className, ButtonVariant[variant], loading && 'text-transparent')}
+      className={classNames(className, ButtonVariant[variant], loading && '!text-transparent opacity-60')}
     >
       {childComponent}
     </button>

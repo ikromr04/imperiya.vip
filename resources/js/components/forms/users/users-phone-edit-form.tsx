@@ -5,7 +5,6 @@ import { UserUpdateDTO } from '@/dto/users';
 import { useAppDispatch } from '@/hooks';
 import { updateUserAction } from '@/store/users-slice/users-api-actions';
 import { User } from '@/types/users';
-import classNames from 'classnames';
 import { FieldArray, Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
@@ -69,7 +68,7 @@ function UsersPhoneEditForm({
           <FieldArray name="phone_numbers">
             {({ push, remove }) => (
               <>
-                {values.phone_numbers?.map((phone, index) => (
+                {values.phone_numbers?.map((_, index) => (
                   <div className="flex items-end gap-2" key={index}>
                     <div className="relative">
                       <TextField
@@ -108,7 +107,7 @@ function UsersPhoneEditForm({
 
           <div className="flex items-center justify-end gap-2 mt-6 sm:col-span-2">
             <Button
-              className={classNames('justify-center min-w-[92px]', isSubmitting && 'opacity-60')}
+              className="justify-center min-w-[92px]"
               type="submit"
               disabled={isSubmitting}
               loading={isSubmitting}
