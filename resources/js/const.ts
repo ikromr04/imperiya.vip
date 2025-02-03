@@ -11,8 +11,9 @@ export const AppRoute = {
     Schedule: '/users/:userId/schedule',
     Evaluations: '/users/:userId/evaluations',
   },
-  Class: {
+  Classes: {
     Index: '/classes',
+    Show: '/classes/:classId',
   },
   Monitoring: {
     Index: '/monitoring',
@@ -93,6 +94,6 @@ export const Role = {
   'admin': 'Администратор',
   'director': 'Директор',
   'teacher': 'Педагог',
-  'student': 'Родитель',
-  'parent': 'Ученик',
+  'student': 'Ученик',
+  'parent': 'Родитель',
 };

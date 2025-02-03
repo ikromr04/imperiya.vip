@@ -27,7 +27,7 @@ function UserHeader({
         </span>
       </div>
 
-      <div className="absolute top-28 right-0 flex items-center gap-1 lg:static lg:top-0 lg:items-start lg:mt-20">
+      <div className="absolute top-28 right-0 z-10 flex items-center gap-1 lg:static lg:top-0 lg:items-start lg:mt-20">
         <Button
           variant="light"
           href={generatePath(AppRoute.Users.Show, { userId: getPreviousUserId(users, user.id) })}

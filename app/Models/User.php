@@ -20,9 +20,15 @@ class User extends Authenticatable
   protected $hidden = [
     'password',
     'remember_token',
-    'role_id',
+    'role_type',
     'gender_id',
     'nationality_id',
+    'super_admin',
+    'admin',
+    'director',
+    'teacher',
+    'parent',
+    'student',
   ];
 
   protected function casts(): array
@@ -85,40 +91,40 @@ class User extends Authenticatable
 
   public function getRoleAttribute()
   {
-    switch ($this->role_id) {
+    switch ($this->role_type) {
       case 'super-admin':
         return [
-          'id' => 'super-admin',
+          'type' => 'super-admin',
           'name' => 'Супер-администратор',
           ...($this->superAdmin ? $this->superAdmin->toArray() : []),
         ];
       case 'admin':
         return [
-          'id' => 'admin',
+          'type' => 'admin',
           'name' => 'Администратор',
           ...($this->admin ? $this->admin->toArray() : []),
         ];
       case 'director':
         return [
-          'id' => 'director',
+          'type' => 'director',
           'name' => 'Директор',
           ...($this->director ? $this->director->toArray() : []),
         ];
       case 'teacher':
         return [
-          'id' => 'teacher',
+          'type' => 'teacher',
           'name' => 'Педагог',
           ...($this->teacher ? $this->teacher->toArray() : []),
         ];
       case 'parent':
         return [
-          'id' => 'parent',
+          'type' => 'parent',
           'name' => 'Родитель',
           ...($this->parent ? $this->parent->toArray() : []),
         ];
       case 'student':
         return [
-          'id' => 'student',
+          'type' => 'student',
           'name' => 'Ученик',
           ...($this->student ? $this->student->toArray() : []),
         ];
@@ -131,7 +137,7 @@ class User extends Authenticatable
       'id',
       'name',
       'login',
-      'role_id',
+      'role_type',
       'email',
       'avatar',
       'avatar_thumb as avatarThumb',
@@ -145,12 +151,12 @@ class User extends Authenticatable
     )->with([
       'gender' => fn($query) => $query->selectBasic(),
       'nationality' => fn($query) => $query->selectBasic(),
-      'superAdmin',
-      'admin',
-      'director',
-      'teacher',
-      'student',
-      'parent',
+      'superAdmin' => fn($query) => $query->selectBasic(),
+      'admin' => fn($query) => $query->selectBasic(),
+      'director' => fn($query) => $query->selectBasic(),
+      'teacher' => fn($query) => $query->selectBasic(),
+      'student' => fn($query) => $query->selectBasic(),
+      'parent' => fn($query) => $query->selectBasic(),
     ]);
   }
 }

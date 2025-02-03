@@ -24,7 +24,7 @@ function Breadcrumbs({
           <li key={label} className="flex gap-1 items-center min-w-max">
             {url ? <>
               <Link className="text-gray-900" to={url}>
-                Справочник пользователей
+                {label}
               </Link>
               <Icons.next className="text-gray-900" width={8} height={8} />
             </> : label}

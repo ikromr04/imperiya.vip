@@ -17,7 +17,7 @@ return new class extends Migration
       $table->string('name');
       $table->string('login')->unique();
       $table->string('password');
-      $table->enum('role_id', ['super-admin', 'admin', 'director', 'teacher', 'parent', 'student']);
+      $table->enum('role_type', ['super-admin', 'admin', 'director', 'teacher', 'parent', 'student']);
       $table->string('email')->nullable();
       $table->string('avatar')->nullable();
       $table->string('avatar_thumb')->nullable();

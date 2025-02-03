@@ -13,7 +13,7 @@ function PrivateComponent({
   user,
   roles,
 }: PrivateComponentProps): ReactNode {
-  if (!roles.includes(user.role.id)) return null;
+  if (!roles.includes(user.role.type)) return null;
 
   return children;
 }

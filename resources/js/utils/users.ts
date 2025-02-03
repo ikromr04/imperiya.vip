@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import { User, UserId, Users, UsersFilter } from '../types/users';
-import { Role } from '@/const';
 
 export const filterUsers = (users: Users, filter: UsersFilter): Users => {
   users = users.filter((user) => (
@@ -12,7 +11,7 @@ export const filterUsers = (users: Users, filter: UsersFilter): Users => {
   users = users.filter((user) => (
     user.name.toLowerCase().includes(filter.name.query?.toLowerCase() || '')
     && (filter.gender.query ? (user.gender?.id === filter.gender.query) : true)
-    && (filter.roles.query.length ? filter.roles.query.includes(user.role.id) : true)
+    && (filter.roles.query.length ? filter.roles.query.includes(user.role.type) : true)
     && (filter.grades.query.length ? filter.grades.query.includes(user.role.grade?.id || 0) : true)
     && (filter.phoneNumber.query ? user.phoneNumbers?.some((phone) => (`+${phone.code} ${phone.numbers}`).includes(filter.phoneNumber.query)) : true)
     && (filter.email.query ? user.email?.includes(filter.email.query) : true)
@@ -60,7 +59,7 @@ export const getPreviousUserId = (users: Users, currentUserId: UserId): UserId =
 };
 
 export const getCreatedAtText = (user: User): string => {
-  switch (user.role.id) {
+  switch (user.role.type) {
     case 'student':
       return 'Дата поступления';
 

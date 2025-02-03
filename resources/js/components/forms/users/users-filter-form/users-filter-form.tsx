@@ -45,6 +45,7 @@ function UsersFilterForm({
     <Formik
       initialValues={usersFilter}
       onSubmit={onSubmit}
+      key={JSON.stringify(usersFilter)}
     >
       {({ values, setFieldValue, handleSubmit }) => (
         <Form className={classNames(className, 'flex flex-col gap-2')}>

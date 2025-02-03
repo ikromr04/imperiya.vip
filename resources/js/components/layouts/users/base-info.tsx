@@ -47,7 +47,7 @@ function BaseInfo({
               'Национальность': user.nationality?.name ?? '-',
             }}
           />
-          <div className="absolute top-0 right-0 rounded-br-md z-10 min-w-6 h-full pointer-events-none bg-gradient-to-l from-white to-transparent"></div>
+          <div className="absolute top-[1px] right-0 rounded-br-md z-10 min-w-6 h-[calc(100%-1px)] pointer-events-none bg-gradient-to-l from-white to-transparent"></div>
         </div>
       </section>
 

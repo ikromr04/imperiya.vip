@@ -1,5 +1,5 @@
 import { APIRoute } from '@/const';
-import { UserStoreDTO, UserUpdateDTO } from '@/dto/users';
+import { UserDeleteDTO, UserStoreDTO, UserUpdateDTO } from '@/dto/users';
 import { User, UserId, Users } from '@/types/users';
 import { ValidationError } from '@/types/validation-error';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -37,6 +37,30 @@ export const updateUserAction = createAsyncThunk<User, {
       const error: AxiosError<ValidationError> = err;
       if (!error.response) throw err;
       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const deleteUserAction = createAsyncThunk<UserId, {
+  dto: UserDeleteDTO,
+  onSuccess?: () => void,
+  onFail?: (message: string) => void,
+}, {
+  extra: AxiosInstance,
+  rejectWithValue: ValidationError,
+}>(
+  'users/delete',
+  async ({ dto, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      await api.delete<User>(`${generatePath(APIRoute.Users.Show, { userId: dto.user_id })}?parents_deletion=${dto.parents_deletion ? 'true' : ''}`);
+      if (onSuccess) onSuccess();
+      return dto.user_id;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const error: AxiosError<ValidationError> = err;
+      if (!error.response) throw err;
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
       return rejectWithValue(error.response.data);
     }

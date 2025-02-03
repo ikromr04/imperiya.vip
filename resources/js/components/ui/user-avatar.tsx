@@ -102,7 +102,7 @@ function UserAvatar({
                 type="button"
                 onClick={handleDeleteButtonClick}
               >
-                <Icons.delete width={14} height={14} /> Удалить
+                <Icons.delete width={14} height={14} /> Удалить фото
               </button>
             </li>
           </>}

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
+  deleteUserAction,
   deleteUserAvatarAction,
   fetchUsersAction,
   storeUserAction,
@@ -48,6 +49,11 @@ export const usersSlice = createSlice({
           state.users = state.users.map((user) =>
             user.id === action.payload.id ? { ...action.payload } : user
           );
+        }
+      })
+      .addCase(deleteUserAction.fulfilled, (state, action) => {
+        if (state.users) {
+          state.users = state.users.filter(({ id }) => id !== action.payload);
         }
       });
   },

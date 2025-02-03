@@ -2,7 +2,7 @@ import { UserId } from '@/types/users';
 import { GenderId } from '../types/genders';
 import { GradeId } from '../types/grades';
 import { NationalityId } from '../types/nationalities';
-import { RoleId } from '../types/roles';
+import { RoleType } from '../types/roles';
 
 export type UserFilterDTO = {
   query?: string;
@@ -11,7 +11,7 @@ export type UserFilterDTO = {
 export type UserStoreDTO = {
   name: string;
   login: string;
-  role_id: RoleId;
+  role_type: RoleType;
   email: string;
   birth_date: string;
   address: string;
@@ -44,3 +44,17 @@ export type UserUpdateDTO = {
     code: number;
   }[];
 }
+
+export type UserDeleteDTO = {
+  user_id: UserId;
+  parents_deletion?: boolean;
+};
+
+export type EducationStoreDTO = {
+  institution: string;
+  faculty: string;
+  speciality: string;
+  form: string;
+  startedAt: string;
+  graduatedAt: string;
+};

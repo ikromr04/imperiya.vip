@@ -1,4 +1,10 @@
 import PageLayout from '@/components/layouts/page-layout';
+import BaseInfo from '@/components/layouts/users/base-info';
+import Deletion from '@/components/layouts/users/deletion';
+import Details from '@/components/layouts/users/details';
+import PhoneNumbers from '@/components/layouts/users/phone-numbers';
+import RoleInfo from '@/components/layouts/users/role-info';
+import SocialLinks from '@/components/layouts/users/social-links';
 import UserHeader from '@/components/layouts/users/user-header';
 import UserProfileNavigation from '@/components/layouts/users/user-profile-navigation';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
@@ -9,11 +15,6 @@ import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import BaseInfo from './base-info';
-import RoleInfo from './role-info';
-import Details from './details';
-import PhoneNumbers from './phone-numbers';
-import SocialLinks from './social-links';
 
 function UsersShowPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -58,6 +59,9 @@ function UsersShowPage(): JSX.Element {
             <Details user={user} />
             <PhoneNumbers user={user} />
             <SocialLinks user={user} />
+            <div className="ml-auto">
+              <Deletion user={user} />
+            </div>
           </div>
         </div>
       </main>

@@ -17,7 +17,7 @@ function StepFirst(): JSX.Element {
 
       {roles &&
         <SelectField
-          name="role_id"
+          name="role_type"
           label="Позиция"
           cleanable
           required

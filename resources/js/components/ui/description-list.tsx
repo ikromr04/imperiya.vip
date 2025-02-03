@@ -6,7 +6,7 @@ type DescriptionListProps = {
   variant?: 'default' | 'detailed';
   list: {
     [term: string]: ReactNode;
-  }
+  };
 };
 
 export default function DescriptionList({

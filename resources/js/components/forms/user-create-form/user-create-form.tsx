@@ -24,7 +24,7 @@ import StepSecond from './steps/step-second';
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Введите ФИО пользователя.'),
   login: Yup.string().required('Введите уникальный логин пользователя.'),
-  role_id: Yup.number()
+  role_type: Yup.number()
     .notOneOf([0], 'Выберите позицию.')
     .required('Выберите позицию.'),
   email: Yup.string().email('Неверный адрес электронной почты.'),
@@ -42,7 +42,7 @@ export default function UserCreateForm({
   const initialValues: UserStoreDTO = {
     name: '',
     login: '',
-    role_id: 0,
+    role_type: 0,
     email: '',
     birth_date: '',
     address: '',

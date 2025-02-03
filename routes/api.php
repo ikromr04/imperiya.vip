@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/', [UserController::class, 'store']);
     Route::put('/', [UserController::class, 'update']);
     Route::get('/{userId}', [UserController::class, 'show']);
+    Route::delete('/{userId}', [UserController::class, 'delete']);
     Route::put('/{userId}/avatar', [UserController::class, 'updateAvatar']);
     Route::delete('/{userId}/avatar', [UserController::class, 'deleteAvatar']);
   });

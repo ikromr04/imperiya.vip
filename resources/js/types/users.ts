@@ -82,3 +82,14 @@ export type UsersFilter = {
     visibility: boolean;
   },
 };
+
+export type Education = {
+  institution: string;
+  faculty: string;
+  speciality: string;
+  form: string;
+  startedAt: string;
+  graduatedAt: string;
+};
+
+export type Educations = Education[];

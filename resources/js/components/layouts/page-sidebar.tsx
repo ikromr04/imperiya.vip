@@ -25,7 +25,7 @@ function PageSidebar({
           links={[
             { label: 'Пользователи', icon: 'users', href: AppRoute.Users.Index },
             { label: 'Расписание', icon: 'schedule', href: AppRoute.Schedule.Index },
-            { label: 'Классы', icon: 'class', href: AppRoute.Class.Index },
+            { label: 'Классы', icon: 'class', href: AppRoute.Classes.Index },
             { label: 'Отчет', icon: 'monitoring', href: AppRoute.Monitoring.Index },
           ]}
         />

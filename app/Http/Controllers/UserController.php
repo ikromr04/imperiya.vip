@@ -32,7 +32,7 @@ class UserController extends Controller
       'facebook' => $request->facebook,
       'instagram' => $request->instagram,
       'odnoklassniki' => $request->odnoklassniki,
-      'role_id' => $request->role_id,
+      'role_type' => $request->role_type,
       'gender_id' => $request->gender_id ? $request->gender_id : null,
       'grade_id' => $request->grade_id ? $request->grade_id : null,
       'nationality_id' => $request->nationality_id ? $request->nationality_id : null,
@@ -75,6 +75,26 @@ class UserController extends Controller
     $user = User::selectBasic()->find($userId);
 
     return response()->json($user, 200);
+  }
+
+  public function delete(Request $request)
+  {
+    $user = User::selectBasic()->find($request->userId);
+
+    if (!$user) {
+      return response()->json(['message' => 'Пользователь не найден.'], 404);
+    }
+
+    if ($request->parents_deletion && $user->student) {
+      $mother = $user->student->mother;
+      $father = $user->student->father;
+      if ($mother) $mother->delete();
+      if ($father) $father->delete();
+    }
+
+    $user->delete();
+
+    return response()->noContent();
   }
 
   public function updateAvatar(int $userId)
