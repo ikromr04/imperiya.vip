@@ -159,4 +159,17 @@ class User extends Authenticatable
       'parent' => fn($query) => $query->selectBasic(),
     ]);
   }
+
+  protected static function boot()
+  {
+    parent::boot();
+
+    static::deleting(function ($user) {
+      $user->admin && $user->admin->update(['deleted_at' => now()]);
+      $user->director && $user->director->update(['deleted_at' => now()]);
+      $user->teacher && $user->teacher->update(['deleted_at' => now()]);
+      $user->parent && $user->parent->update(['deleted_at' => now()]);
+      $user->student && $user->student->update(['deleted_at' => now()]);
+    });
+  }
 }
