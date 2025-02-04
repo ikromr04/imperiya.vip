@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
   Route::prefix('grades')->group(function () {
     Route::get('/', [GradeController::class, 'index']);
+    Route::post('/', [GradeController::class, 'store']);
   });
 
   Route::prefix('nationalities')->group(function () {

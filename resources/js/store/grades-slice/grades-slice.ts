@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SliceName } from '../../const';
-import { Grades } from '../../types/grades';
-import { fetchGradesAction } from './grades-api-actions';
+import { fetchGradesAction, storeGradeAction } from './grades-api-actions';
+import { Grades } from '@/types/grades';
+import { SliceName } from '@/const';
 
 export type GradesSlice = {
   grades: Grades | null;
@@ -19,6 +19,9 @@ export const gradesSlice = createSlice({
     builder
       .addCase(fetchGradesAction.fulfilled, (state, action) => {
         state.grades = action.payload;
+      })
+      .addCase(storeGradeAction.fulfilled, (state, action) => {
+        state.grades = [action.payload, ...(state.grades || [])];
       });
   },
 });

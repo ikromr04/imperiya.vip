@@ -1,6 +1,6 @@
 import { ID } from '.';
 import { Gender, GenderId } from './genders';
-import { Role, RoleId } from './roles';
+import { Role, RoleType } from './roles';
 import { GradeId } from './grades';
 import { Nationality, NationalityId } from './nationalities';
 
@@ -44,7 +44,7 @@ export type UsersFilter = {
     visibility: boolean;
   },
   roles: {
-    query: RoleId[];
+    query: RoleType[];
     visibility: boolean;
   },
   email: {
