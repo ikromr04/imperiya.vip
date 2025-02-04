@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Grade;
+use App\Models\Student;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -12,13 +13,7 @@ class GradeController extends Controller
   {
     $grades = Grade::orderBy('level')
       ->selectBasic()
-      ->with([
-        'students' => fn($query) => $query->select(
-          'id',
-          'user_id',
-          'grade_id',
-        )->with(['user' => fn($query) => $query->select('id', 'name')]),
-      ])->get();
+      ->get();
 
     return response()->json($grades, 200);
   }
@@ -32,14 +27,31 @@ class GradeController extends Controller
 
     $grade = Grade::orderBy('level')
       ->selectBasic()
-      ->with([
-        'students' => fn($query) => $query->select(
-          'id',
-          'user_id',
-          'grade_id',
-        )->with(['user' => fn($query) => $query->select('id', 'name')]),
-      ])->find($grade->id);
+      ->find($grade->id);
 
-      return response()->json($grade, 200);
+    return response()->json($grade, 200);
+  }
+
+  public function update(Request $request): JsonResponse
+  {
+    $grade = Grade::selectBasic()->findOrFail($request->id);
+
+    $grade->update([
+      'level' => $request->level,
+      'group' => $request->group,
+    ]);
+
+    $newStudentIds = collect($request->students);
+
+    $grade->students()
+      ->whereNotIn('id', $newStudentIds)
+      ->update(['grade_id' => null]);
+
+    Student::whereIn('id', $newStudentIds)
+      ->update(['grade_id' => $grade->id]);
+
+    $updatedGrade = Grade::selectBasic()->find($grade->id);
+
+    return response()->json($updatedGrade);
   }
 }

@@ -33,6 +33,16 @@ export type User = {
 
 export type Users = User[];
 
+export type Student = {
+  id: ID;
+  user: {
+    id: UserId;
+    name: string
+  };
+};
+
+export type Students = Student[];
+
 export type UsersFilter = {
   searchKeyword: string;
   name: {

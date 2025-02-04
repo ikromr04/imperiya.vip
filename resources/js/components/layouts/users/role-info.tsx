@@ -31,10 +31,10 @@ function RoleInfo({
       break;
     case 'student':
       list = {
-        'Класс':
+        'Класс': user.role.grade ?
           <Link className="text-blue-600" to={generatePath(AppRoute.Classes.Show, { classId: user.role.grade?.id })}>
             {user.role.grade?.level} {user.role.grade?.group}
-          </Link>,
+          </Link> : '-',
         'Мать': user.role.mother ?
           <Link className="text-blue-600" to={generatePath(AppRoute.Users.Show, { userId: user.role.mother.id })}>
             {user.role.mother.name}

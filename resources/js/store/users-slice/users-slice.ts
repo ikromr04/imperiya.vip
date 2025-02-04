@@ -7,15 +7,18 @@ import {
   updateUserAction,
   updateUserAvatarAction,
 } from './users-api-actions';
-import { Users } from '@/types/users';
+import { Students, Users } from '@/types/users';
 import { SliceName } from '@/const';
+import { updateGradeAction } from '../grades-slice/grades-api-actions';
 
 export type UsersSlice = {
   users: Users | null;
+  students: Students | null;
 }
 
 const initialState: UsersSlice = {
   users: null,
+  students: null,
 };
 
 export const usersSlice = createSlice({
@@ -26,6 +29,18 @@ export const usersSlice = createSlice({
     builder
       .addCase(fetchUsersAction.fulfilled, (state, action) => {
         state.users = action.payload;
+        state.students = action.payload
+          .filter((user) => user.role.type === 'student')
+          .map((user) => ({
+            id: user.role.id,
+            user: {
+              id: user.id,
+              name: user.name,
+            }
+        }));
+      })
+      .addCase(updateGradeAction.fulfilled, (state) => {
+        state.users = null;
       })
       .addCase(storeUserAction.fulfilled, (state, action) => {
         state.users = [action.payload, ...(state.users || [])];

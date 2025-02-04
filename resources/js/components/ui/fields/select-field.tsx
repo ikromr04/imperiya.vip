@@ -8,6 +8,7 @@ import Cleanable from './partials/cleanable';
 import { useField } from 'formik';
 import { Option, Options } from '@/types';
 import { useDropdown } from '@/hooks/use-dropdown';
+import { Icons } from '@/components/icons';
 
 type SelectFieldProps = {
   name: string;
@@ -63,6 +64,10 @@ function SelectField(props: SelectFieldProps): JSX.Element {
     if (onChange) onChange(option);
   };
 
+  const removeSelection = (removeValue: string | number) => () => {
+    helpers.setValue([...field.value.filter((value: string | number) => value !== removeValue)]);
+  };
+
   const renderSelectedOptions = (): ReactNode => {
     if (!field.value) {
       return (
@@ -74,10 +79,23 @@ function SelectField(props: SelectFieldProps): JSX.Element {
 
     if (multiple) {
       return (
-        <span className="flex items-center gap-1 overflow-scroll no-scrollbar">
-          <span className="flex min-w-max">
-            {field.value?.map((value: string | number) => props.options.find((option) => option.value === value)?.label).join(', ')}
-          </span>
+        <span className="flex flex-wrap py-[2px] items-center gap-1">
+          {field.value?.map((value: string | number) => {
+            const currentValue = props.options.find((option) => option.value === value);
+
+            return (
+              <span key={value} className="flex items-center gap-2 border h-6 pr-2 rounded bg-white text-sm min-w-max">
+                <span
+                  className="remove-selection flex items-center justify-center rounded-l h-[22px] w-[22px] hover:text-error hover:bg-red-50"
+                  onClick={removeSelection(currentValue?.value || '')}
+                >
+                  <Icons.close className="pointer-events-none" width={10} height={10} />
+                </span>
+                {currentValue?.label}
+              </span>
+            );
+          })}
+
         </span>
       );
     }
@@ -95,7 +113,8 @@ function SelectField(props: SelectFieldProps): JSX.Element {
         <button
           className={classNames(
             inputClassname,
-            'flex items-center grow bg-gray-50 min-w-0 border border-gray-200 rounded h-8 px-4 leading-none text-base focus:outline-none hover:bg-gray-100 focus:border-primary focus:bg-gray-100',
+            'flex items-center grow bg-gray-50 min-w-0 border border-gray-200 rounded px-4 leading-none text-base focus:outline-none hover:bg-gray-100 focus:border-primary focus:bg-gray-100',
+            multiple ? 'min-h-8 px-[3px]' : 'h-8',
             (after || cleanable) && 'pr-8',
             (after && cleanable) && '!pr-16',
             before && 'pl-8',
@@ -103,7 +122,7 @@ function SelectField(props: SelectFieldProps): JSX.Element {
           )}
           id={uniqueId}
           type="button"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={(evt: BaseSyntheticEvent) => !evt.target.classList.contains('remove-selection') && setIsOpen(!isOpen)}
         >
           {renderSelectedOptions()}
         </button>
@@ -143,9 +162,9 @@ function SelectField(props: SelectFieldProps): JSX.Element {
               <button
                 className={classNames(
                   optionClassname,
-                  'flex w-full items-center h-8 transition-all duration-300 hover:bg-gray-100 px-3',
-                  multiple && field.value.includes(option.value) && 'bg-gray-100',
-                  !multiple && (field.value === option.value) && 'bg-gray-100',
+                  'flex w-full items-center h-8 transition-all duration-300 hover:bg-green-50 px-3',
+                  multiple && field.value.includes(option.value) && 'bg-blue-50 hover:bg-red-50',
+                  !multiple && (field.value === option.value) && 'bg-blue-50 hover:bg-red-50',
                 )}
                 type="button"
                 onClick={onOptionClick(option)}

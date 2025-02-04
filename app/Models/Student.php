@@ -54,7 +54,11 @@ class Student extends Model
       'mother_id',
       'father_id',
     )->with([
-      'grade' => fn($query) => $query->selectBasic(),
+      'grade' => fn($query) => $query->select(
+        'id',
+        'level',
+        'group',
+      ),
       'mother' => fn($query) => $query->select('id', 'name'),
       'father' => fn($query) => $query->select('id', 'name'),
     ]);

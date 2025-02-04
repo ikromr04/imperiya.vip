@@ -1,11 +1,13 @@
 import Button from '@/components/ui/button';
 import SelectField from '@/components/ui/fields/select-field';
-import { GradeStoreDTO } from '@/dto/grades';
-import { useAppDispatch } from '@/hooks';
-import { storeGradeAction } from '@/store/grades-slice/grades-api-actions';
-import { Grades } from '@/types/grades';
+import { GradeUpdateDTO } from '@/dto/grades';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { updateGradeAction } from '@/store/grades-slice/grades-api-actions';
+import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
+import { getStudents } from '@/store/users-slice/users-selector';
+import { Grade, Grades } from '@/types/grades';
 import { Form, Formik, FormikHelpers } from 'formik';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -14,27 +16,36 @@ const validationSchema = Yup.object().shape({
   group: Yup.string().required('Обязательное поле.'),
 });
 
-type GradesCreateFormProps = {
+type GradesEditFormProps = {
+  grade: Grade;
   grades: Grades;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-function GradesCreateForm({
+function GradesEditForm({
+  grade,
   grades,
   setIsOpen,
-}: GradesCreateFormProps): JSX.Element {
+}: GradesEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const initialValues: GradeStoreDTO = {
-    level: 1,
-    group: 'А',
+  const students = useAppSelector(getStudents);
+  const initialValues: GradeUpdateDTO = {
+    id: grade.id,
+    level: grade.level,
+    group: grade.group,
+    students: grade.students ? grade.students.map(({ id }) => id) : [],
   };
 
+  useEffect(() => {
+    if (!students) dispatch(fetchUsersAction());
+  }, [dispatch, students]);
+
   const onSubmit = async (
-    values: GradeStoreDTO,
-    helpers: FormikHelpers<GradeStoreDTO>
+    values: GradeUpdateDTO,
+    helpers: FormikHelpers<GradeUpdateDTO>
   ) => {
     helpers.setSubmitting(true);
-    const gradeExists = grades.some((grade) => grade.level === values.level && grade.group === values.group);
+    const gradeExists = grades.some((grade) => grade.id !== values.id && grade.level === values.level && grade.group === values.group);
     if (gradeExists) {
       helpers.setErrors({
         level: 'Выбранный класс уже существует.',
@@ -44,10 +55,10 @@ function GradesCreateForm({
       return;
     }
 
-    await dispatch(storeGradeAction({
+    await dispatch(updateGradeAction({
       dto: values,
       onSuccess: () => {
-        toast.success('Класс успешно добавлен.');
+        toast.success('Данные успешно сохранены.');
         setIsOpen(false);
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
@@ -63,8 +74,8 @@ function GradesCreateForm({
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {({ isSubmitting }) => (
-        <Form>
+      {({ isSubmitting, values }) => (
+        <Form className="flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-2">
             <SelectField
               name="level"
@@ -79,6 +90,15 @@ function GradesCreateForm({
             />
           </div>
 
+          {students &&
+            <SelectField
+              name="students"
+              multiple
+              searchable
+              label={`Ученики (${values.students.length})`}
+              options={(students || []).map((student) => ({ value: student.id, label: student.user.name }))}
+            />}
+
           <div className="flex items-center justify-end gap-2 mt-2 sm:col-span-2">
             <Button
               className="justify-center min-w-[92px]"
@@ -87,7 +107,7 @@ function GradesCreateForm({
               loading={isSubmitting}
               variant="success"
             >
-              Добавить
+              Сохранить
             </Button>
             <Button
               type="reset"
@@ -103,4 +123,4 @@ function GradesCreateForm({
   );
 }
 
-export default GradesCreateForm;
+export default GradesEditForm;

@@ -1,3 +1,4 @@
+import { ID } from '.';
 import { Grade } from './grades';
 import { Educations, UserId } from './users';
 
@@ -9,6 +10,7 @@ export type Parent = {
 }
 
 export type Role = {
+  id: ID;
   type: RoleType;
   name: string;
   grade?: Grade;

@@ -1,5 +1,4 @@
-import { ID } from '.';
-import { UserId } from './users';
+import { Students } from './users';
 
 export type GradeId = number;
 
@@ -7,13 +6,7 @@ export type Grade = {
   id: GradeId;
   level: number;
   group: string;
-  students?: {
-    id: ID;
-    user: {
-      id: UserId;
-      name: string
-    };
-  }[];
+  students?: Students;
 };
 
 export type Grades = Grade[];

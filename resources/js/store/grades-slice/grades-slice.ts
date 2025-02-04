@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchGradesAction, storeGradeAction } from './grades-api-actions';
+import { fetchGradesAction, storeGradeAction, updateGradeAction } from './grades-api-actions';
 import { Grades } from '@/types/grades';
 import { SliceName } from '@/const';
 
@@ -22,6 +22,13 @@ export const gradesSlice = createSlice({
       })
       .addCase(storeGradeAction.fulfilled, (state, action) => {
         state.grades = [action.payload, ...(state.grades || [])];
+      })
+      .addCase(updateGradeAction.fulfilled, (state, action) => {
+        if (state.grades) {
+          state.grades = state.grades.map((grade) =>
+            grade.id === action.payload.id ? { ...action.payload } : grade
+          );
+        }
       });
   },
 });
