@@ -41,7 +41,7 @@ function GradesPage(): JSX.Element {
         </header>
 
         {grades
-          ? <GradesTable className="h-[calc(100%-80px)] md:h-[calc(100%-88px)] min-w-64" grades={grades} />
+          ? <GradesTable className="h-[calc(100%-40px)] md:h-[calc(100%-44px)] min-w-64" grades={grades} />
           : <Spinner className="w-8 h-8" />}
 
         <Modal isOpen={isOpen} key={isOpen.toString()}>

@@ -1,5 +1,4 @@
 import React, { BaseSyntheticEvent, ReactNode, useEffect, useState } from 'react';
-import { PropsWithClassname } from '../../types';
 import classNames from 'classnames';
 import Button from './button';
 import { Icons } from '../icons';
@@ -15,6 +14,7 @@ export type DataTableRow = {
 export type DataTableRows = DataTableRow[];
 
 export type DataTableColumn = {
+  className?: string;
   accessor: string;
   header: ReactNode;
   width?: number;
@@ -23,11 +23,12 @@ export type DataTableColumn = {
 
 export type DataTableColumns = DataTableColumn[]
 
-type DataTableProps = PropsWithClassname<{
+type DataTableProps = {
+  className?: string;
   records: DataTableRows;
   columns: DataTableColumns;
   recordsPerPage?: number;
-}>;
+};
 
 export default function DataTable({
   className,
@@ -61,7 +62,7 @@ export default function DataTable({
         <table className="flex flex-col h-[calc(100%-49px)] overflow-auto scrollbar text-sm leading-[1.2]">
           <thead className="sticky top-0 z-10 flex min-w-max border-b">
             <tr className="flex font-semibold text-left bg-gray-100 p-2 gap-1 w-full">
-              <th className="flex items-center w-8 font-semibold">
+              <th className="flex items-center min-w-8 font-semibold">
                 №
               </th>
               {columns.map((column) => {
@@ -69,7 +70,10 @@ export default function DataTable({
                   return (
                     <th
                       key={column.accessor}
-                      className="flex items-center font-semibold"
+                      className={classNames(
+                        'flex items-center font-semibold',
+                        column.className,
+                      )}
                       style={{
                         minWidth: column.width || DEFAULT_COLUMN_WIDTH,
                         maxWidth: column.width || DEFAULT_COLUMN_WIDTH,
@@ -86,8 +90,8 @@ export default function DataTable({
 
           <tbody className="flex flex-col">
             {paginatedData.map((record, index) => (
-              <tr key={record.id} className={classNames('flex gap-1 min-w-max px-2 py-1', (index % 2 === 1) && 'bg-gray-50')}>
-                <td className="flex items-center text-left w-8">
+              <tr key={record.id} className={classNames('flex gap-1 px-2 py-1', (index % 2 === 1) && 'bg-gray-50')}>
+                <td className="flex items-center text-left min-w-8">
                   {from + index + 1}
                 </td>
                 {columns.map((column) => {
@@ -95,7 +99,10 @@ export default function DataTable({
                     return (
                       <td
                         key={column.accessor}
-                        className="flex items-center text-left break-word"
+                        className={classNames(
+                          'flex items-center text-left break-word',
+                          column.className,
+                        )}
                         style={{
                           minWidth: column.width || DEFAULT_COLUMN_WIDTH,
                           maxWidth: column.width || DEFAULT_COLUMN_WIDTH,

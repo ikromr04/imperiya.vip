@@ -54,7 +54,7 @@ export const deleteUserAction = createAsyncThunk<UserId, {
   'users/delete',
   async ({ dto, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      await api.delete<User>(`${generatePath(APIRoute.Users.Show, { userId: dto.user_id })}?parents_deletion=${dto.parents_deletion ? 'true' : ''}`);
+      await api.delete(`${generatePath(APIRoute.Users.Show, { userId: dto.user_id })}?parents_deletion=${dto.parents_deletion ? 'true' : ''}`);
       if (onSuccess) onSuccess();
       return dto.user_id;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

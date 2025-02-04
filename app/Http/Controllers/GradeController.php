@@ -54,4 +54,23 @@ class GradeController extends Controller
 
     return response()->json($updatedGrade);
   }
+
+  public function delete(Request $request)
+  {
+    $grade = Grade::selectBasic()->find($request->gradeId);
+
+    if (!$grade) {
+      return response()->json(['message' => 'Класс не найден.'], 404);
+    }
+
+    if ($request->students_deletion && $grade->students) {
+      foreach ($grade->students as $student) {
+        $student->user->delete();
+      }
+    }
+
+    $grade->delete();
+
+    return response()->noContent();
+  }
 }

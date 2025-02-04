@@ -51,6 +51,7 @@ export const APIRoute = {
   },
   Grades: {
     Index: '/grades',
+    Show: '/grades/:gradeId',
   },
   Nationalities: {
     Index: '/nationalities',

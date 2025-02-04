@@ -9,7 +9,7 @@ import {
 } from './users-api-actions';
 import { Students, Users } from '@/types/users';
 import { SliceName } from '@/const';
-import { updateGradeAction } from '../grades-slice/grades-api-actions';
+import { deleteGradeAction, updateGradeAction } from '../grades-slice/grades-api-actions';
 
 export type UsersSlice = {
   users: Users | null;
@@ -37,10 +37,15 @@ export const usersSlice = createSlice({
               id: user.id,
               name: user.name,
             }
-        }));
+          }));
       })
       .addCase(updateGradeAction.fulfilled, (state) => {
         state.users = null;
+        state.students = null;
+      })
+      .addCase(deleteGradeAction.fulfilled, (state) => {
+        state.users = null;
+        state.students = null;
       })
       .addCase(storeUserAction.fulfilled, (state, action) => {
         state.users = [action.payload, ...(state.users || [])];

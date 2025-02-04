@@ -1,3 +1,4 @@
+import GradesDeleteForm from '@/components/forms/grades/grades-delete-form';
 import GradesEditForm from '@/components/forms/grades/grades-edit-form';
 import { Icons } from '@/components/icons';
 import PageLayout from '@/components/layouts/page-layout';
@@ -19,7 +20,8 @@ function GradesShowPage(): JSX.Element {
   const params = useParams();
   const grades = useAppSelector(getGrades);
   const grade = grades?.find(({ id }) => id === +(params.classId || 0)) || null;
-  const [isOpen, setIsOpen] = useState(false);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [isDeleteFormOpen, setIsDeleteFormOpen] = useState(false);
 
   useEffect(() => {
     if (!grade && params.classId) dispatch(fetchGradesAction());
@@ -70,7 +72,7 @@ function GradesShowPage(): JSX.Element {
         <section className="box">
           <div className="box__header">
             <h2 className="title !text-lg">Ученики ({grade.students?.length})</h2>
-            <Button variant="light" onClick={() => setIsOpen(true)}>
+            <Button variant="light" onClick={() => setIsEditFormOpen(true)}>
               <Icons.edit width={14} height={14} />
               <Tooltip label="Редактировать" position="left" />
             </Button>
@@ -84,12 +86,29 @@ function GradesShowPage(): JSX.Element {
             ))}
           </ul>
         </section>
+
+        <Button
+          className="ml-auto mt-2 md:mt-4"
+          variant="error"
+          onClick={() => setIsDeleteFormOpen(true)}
+        >
+          <Icons.delete width={14} height={14} />
+          Удалить класс
+        </Button>
       </main>
-      <Modal isOpen={isOpen}>
+
+      <Modal isOpen={isDeleteFormOpen}>
+        <GradesDeleteForm
+          grades={grades}
+          grade={grade}
+          setIsOpen={setIsDeleteFormOpen}
+        />
+      </Modal>
+      <Modal isOpen={isEditFormOpen}>
         <GradesEditForm
           grade={grade}
           grades={grades}
-          setIsOpen={setIsOpen}
+          setIsOpen={setIsEditFormOpen}
         />
       </Modal>
     </PageLayout>

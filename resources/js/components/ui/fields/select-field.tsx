@@ -95,7 +95,6 @@ function SelectField(props: SelectFieldProps): JSX.Element {
               </span>
             );
           })}
-
         </span>
       );
     }
