@@ -1,9 +1,9 @@
+import ResetPasswordForm from '@/components/forms/reset-password-form';
+import { Icons } from '@/components/icons';
+import MainLogo from '@/components/layouts/main-logo';
+import Button from '@/components/ui/button';
+import { AppRoute } from '@/const/routes';
 import React from 'react';
-import MainLogo from '../../layouts/main-logo';
-import { Icons } from '../../icons';
-import { AppRoute } from '../../../const';
-import ResetPasswordForm from '../../forms/reset-password-form';
-import Button from '../../ui/button';
 
 function ResetPasswordPage(): JSX.Element {
   return (

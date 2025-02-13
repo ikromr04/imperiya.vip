@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserStoreRequest;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -25,6 +26,7 @@ class UserController extends Controller
     $user = User::create([
       'name' => $request->name,
       'login' => $request->login,
+      'sex' => $request->sex,
       'email' => $request->email,
       'password' => Hash::make(Str::random(8)),
       'birth_date' => $request->birth_date,
@@ -32,40 +34,12 @@ class UserController extends Controller
       'facebook' => $request->facebook,
       'instagram' => $request->instagram,
       'odnoklassniki' => $request->odnoklassniki,
-      'role_type' => $request->role_type,
-      'gender_id' => $request->gender_id ? $request->gender_id : null,
-      'grade_id' => $request->grade_id ? $request->grade_id : null,
-      'nationality_id' => $request->nationality_id ? $request->nationality_id : null,
+      'role' => $request->role,
+      'grade_id' => $request->grade_id ?? null,
+      'nationality_id' => $request->nationality_id ?? null,
     ]);
 
-    $user = User::orderBy('name')->selectBasic()->find($user->id);
-
-
-    return response()->json($user, 200);
-  }
-
-  public function update(Request $request): JsonResponse
-  {
-
-    $user = User::find($request->id);
-    if ($user->login != $request->login) {
-      if (User::where('login', $request->login)) {
-        throw ValidationException::withMessages(['login' => ['Пользователь с таким логином уже существует.']]);
-      } else {
-        $user->login = $request->login;
-      }
-    }
-    $user->name = $request->name;
-    $user->email = $request->email;
-    $user->birth_date = $request->birth_date;
-    $user->address = $request->address;
-    $user->gender_id = $request->gender_id;
-    $user->nationality_id = $request->nationality_id;
-    $user->social_link = $request->social_link;
-    $user->phone_numbers = $request->phone_numbers;
-    $user->isDirty() && $user->update();
-
-    $user = User::selectBasic()->find($request->id);
+    $user = $user->selectBasic()->first();
 
     return response()->json($user, 200);
   }
@@ -77,19 +51,67 @@ class UserController extends Controller
     return response()->json($user, 200);
   }
 
-  public function delete(Request $request)
+  public function update(Request $request): JsonResponse
   {
-    $user = User::selectBasic()->find($request->userId);
 
-    if (!$user) {
-      return response()->json(['message' => 'Пользователь не найден.'], 404);
+    $user = User::findOrFail($request->id);
+
+    if ($user->login !== $request->login && User::where('login', $request->login)->exists()) {
+      throw ValidationException::withMessages(['login' => ['Пользователь с таким логином уже существует.']]);
     }
 
-    if ($request->parents_deletion && $user->student) {
-      $mother = $user->student->mother;
-      $father = $user->student->father;
-      if ($mother) $mother->delete();
-      if ($father) $father->delete();
+    $user->update($request->only([
+      'name',
+      'login',
+      'email',
+      'birth_date',
+      'address',
+      'sex',
+      'nationality_id',
+      'social_link',
+      'phone_numbers',
+    ]));
+
+    return response()->json(User::selectBasic()->find($user->id), 200);
+  }
+
+  public function updateRole(Request $request, int $userId)
+  {
+    $user = User::findOrFail($userId);
+
+    switch ($user->role) {
+      case 'parent':
+        $childrenIds = array_map(fn($item) => $item['id'], $user->parent->children);
+        $newChildrenIds = collect($request->children);
+
+        $male = Student::select('father_id')->where('father_id', $user->id)->first();
+        $female = Student::select('father_id')->where('father_id', $user->id)->first();
+
+        if ($male) {
+          Student::whereIn('father_id', $childrenIds)
+            ->whereNotIn('father_id', $newChildrenIds)
+            ->update(['father_id' => null]);
+        } else {
+          Student::whereIn('mother_id', $childrenIds)
+            ->whereNotIn('mother_id', $newChildrenIds)
+            ->update(['mother_id' => null]);
+        }
+        $newChildIds = collect($request->children);
+        $user->parent()
+          ->whereNotIn('id', $newStudentIds)
+          ->update(['grade_id' => null]);
+
+        break;
+    }
+  }
+
+  public function delete(Request $request)
+  {
+    $user = User::selectBasic()->findOrFail($request->userId);
+
+    if ($request->parents_deletion && optional($user->student)->exists()) {
+      optional($user->student->mother)->delete();
+      optional($user->student->father)->delete();
     }
 
     $user->delete();
@@ -99,50 +121,47 @@ class UserController extends Controller
 
   public function updateAvatar(int $userId)
   {
-    $user = User::find($userId);
+    $user = User::findOrFail($userId);
 
-    if ($user->avatar && file_exists(public_path($user->avatar))) {
-      unlink(public_path($user->avatar));
-    }
-    if ($user->avatar_thumb && file_exists(public_path($user->avatar_thumb))) {
-      unlink(public_path($user->avatar_thumb));
+    foreach (['avatar', 'avatar_thumb'] as $field) {
+      if ($user->$field && file_exists(public_path($user->$field))) {
+        unlink(public_path($user->$field));
+      }
     }
 
     $avatar = request()->file('avatar');
-    $avatarThumb = Image::make($avatar);
-    $avatarThumb->resize(144, 144, function ($constraint) {
-      $constraint->aspectRatio();
-    });
     $avatarName = uniqid() . '.' . $avatar->extension();
-    $avatarPath = '/images/users/' . $avatarName;
-    $avatarThumbPath = '/images/users/thumbs/' . $avatarName;
-    $avatarThumb->save(public_path('/images/users/thumbs/' . $avatarName));
+    $avatarThumbPath = "/images/users/thumbs/$avatarName";
+    $avatarPath = "/images/users/$avatarName";
+
+    Image::make($avatar)
+      ->resize(144, 144, function ($constraint) {
+        $constraint->aspectRatio();
+      })
+      ->save(public_path($avatarThumbPath));
+
     $avatar->move(public_path('/images/users'), $avatarName);
 
-    $user->avatar = $avatarPath;
-    $user->avatar_thumb = $avatarThumbPath;
+    $user->update([
+      'avatar' => $avatarPath,
+      'avatar_thumb' => $avatarThumbPath,
+    ]);
 
-    $user->update();
-
-    $user = User::selectBasic()->find($userId);
-
-    return response($user, 200);
+    return response(User::selectBasic()->find($userId), 200);
   }
 
   public function deleteAvatar($id)
   {
-    $user = User::find($id);
+    $user = User::findOrFail($id);
 
-    if ($user->avatar && file_exists(public_path($user->avatar))) {
-      unlink(public_path($user->avatar));
-      $user->avatar = '';
-    }
-    if ($user->avatar_thumb && file_exists(public_path($user->avatar_thumb))) {
-      unlink(public_path($user->avatar_thumb));
-      $user->avatar_thumb = '';
+    foreach (['avatar', 'avatar_thumb'] as $field) {
+      if ($user->$field && file_exists(public_path($user->$field))) {
+        unlink(public_path($user->$field));
+        $user->$field = '';
+      }
     }
 
-    $user->update();
+    $user->save();
 
     return response()->noContent();
   }

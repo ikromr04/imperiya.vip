@@ -66,6 +66,7 @@ function SelectField(props: SelectFieldProps): JSX.Element {
 
   const removeSelection = (removeValue: string | number) => () => {
     helpers.setValue([...field.value.filter((value: string | number) => value !== removeValue)]);
+    if (onChange) onChange(options.find((option) => option.value.toString() === removeValue.toString()) || []);
   };
 
   const renderSelectedOptions = (): ReactNode => {

@@ -4,6 +4,7 @@ import Button from '@/components/ui/button';
 import DescriptionList from '@/components/ui/description-list';
 import Modal from '@/components/ui/modal';
 import Tooltip from '@/components/ui/tooltip';
+import { RoleName, SexName } from '@/const/users';
 import { User } from '@/types/users';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -35,7 +36,8 @@ function BaseInfo({
             list={{
               'ФИО': user.name,
               'Логин': user.login,
-              'Позиция': user.role.name,
+              'Позиция': RoleName[user.role],
+              'Пол': SexName[user.sex],
               'Электронная почта':
                 user.email ?
                   <Link className="text-blue-600" to={`mailto:${user.email}`}>
@@ -43,7 +45,6 @@ function BaseInfo({
                   </Link> : '-',
               'Дата рождения': user.birthDate ?? '-',
               'Адрес': user.address ?? '-',
-              'Пол': user.gender?.name ?? '-',
               'Национальность': user.nationality?.name ?? '-',
             }}
           />

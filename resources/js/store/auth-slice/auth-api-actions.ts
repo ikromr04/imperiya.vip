@@ -1,11 +1,11 @@
+import { APIRoute } from '@/const/routes';
+import { LoginCredentials, ResetPasswordDTO } from '@/dto/auth-dto';
+import { dropToken, saveToken, Token } from '@/services/token';
+import { ResponseMessage } from '@/types';
+import { AuthUser } from '@/types/auth';
+import { ValidationError } from '@/types/validation-error';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
-import { APIRoute } from '../../const';
-import { AuthUser } from '../../types/auth';
-import { ValidationError } from '../../types/validation-error';
-import { LoginCredentials, ResetPasswordDTO } from '../../dto/auth-dto';
-import { dropToken, saveToken, Token } from '../../services/token';
-import { ResponseMessage } from '../../types';
 
 export const checkAuthAction = createAsyncThunk<AuthUser, undefined, {
   extra: AxiosInstance

@@ -7,7 +7,7 @@ import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 import Tooltip from '@/components/ui/tooltip';
-import { AppRoute } from '@/const';
+import { AppRoute } from '@/const/routes';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { getGrades } from '@/store/grades-slice/grades-selector';

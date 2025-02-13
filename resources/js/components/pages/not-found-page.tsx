@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../ui/button';
-import { AppRoute } from '../../const';
+import { AppRoute } from '@/const/routes';
 
 function NotFoundPage(): JSX.Element {
   return (
@@ -20,11 +20,9 @@ function NotFoundPage(): JSX.Element {
           К сожалению, страница, которую вы ищете, не существует. Если вы уверены, что произошла ошибка, то сообщите своему администратору или дайте нам знать.
         </p>
 
-        <Button
-          href={AppRoute.Journal}
-        >
+        <Button href={AppRoute.Journal}>
           Вернуться на главную страницу
-        </Button>
+        </Button>вода песок камень алюминруда
       </div>
     </main>
   );

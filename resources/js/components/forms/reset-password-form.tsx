@@ -10,7 +10,6 @@ import { ResetPasswordDTO } from '../../dto/auth-dto';
 import Checkbox from '../ui/checkbox/checkbox';
 import TextField from '../ui/fields/text-field';
 import PasswordField from '../ui/fields/password-field';
-import { PropsWithClassname } from '../../types';
 import Message, { MessageProps } from '../ui/message';
 
 const validationSchema = Yup.object().shape({
@@ -22,9 +21,13 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref('password')], 'Подтверждение пароля не совпадает.'),
 });
 
+type ResetPasswordFormProps = {
+  className?: string;
+};
+
 function ResetPasswordForm({
   className,
-}: PropsWithClassname): JSX.Element {
+}: ResetPasswordFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const { token } = useParams();
   const [message, setMessage] = useState<MessageProps['message']>(undefined);

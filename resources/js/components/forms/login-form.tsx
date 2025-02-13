@@ -4,22 +4,25 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import classNames from 'classnames';
 import Button from '../ui/button';
 import { Link } from 'react-router-dom';
-import { AppRoute } from '../../const';
-import { useAppDispatch } from '../../hooks/index';
-import { loginAction } from '../../store/auth-slice/auth-api-actions';
 import TextField from '../ui/fields/text-field';
 import PasswordField from '../ui/fields/password-field';
-import { PropsWithClassname } from '../../types';
 import { LoginCredentials } from '@/dto/auth-dto';
+import { useAppDispatch } from '@/hooks';
+import { loginAction } from '@/store/auth-slice/auth-api-actions';
+import { AppRoute } from '@/const/routes';
 
 const validationSchema = Yup.object().shape({
   login: Yup.string().required('Введите Ваш логин.'),
   password: Yup.string().required('Введите Ваш пароль.'),
 });
 
+type LoginFormProps = {
+  className?: string;
+}
+
 function LoginForm({
   className,
-}: PropsWithClassname): JSX.Element {
+}: LoginFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const initialValues: LoginCredentials = { login: '', password: '' };
 

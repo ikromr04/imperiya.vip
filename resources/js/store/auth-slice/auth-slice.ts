@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { checkAuthAction, loginAction, logoutAction } from './auth-api-actions';
-import { AuthorizationStatus, SliceName } from '../../const';
-import { AuthUser } from '../../types/auth';
+import { AuthorizationStatus, SliceName } from '@/const/store';
+import { AuthUser } from '@/types/auth';
 
 export type AuthSlice = {
   authStatus: AuthorizationStatus;

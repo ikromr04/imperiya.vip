@@ -6,10 +6,12 @@ import {
   storeUserAction,
   updateUserAction,
   updateUserAvatarAction,
+  updateUserRoleAction,
 } from './users-api-actions';
-import { Students, Users } from '@/types/users';
-import { SliceName } from '@/const';
+import { Users } from '@/types/users';
+import { SliceName } from '@/const/store';
 import { deleteGradeAction, updateGradeAction } from '../grades-slice/grades-api-actions';
+import { Student, Students } from '@/types/roles';
 
 export type UsersSlice = {
   users: Users | null;
@@ -30,14 +32,8 @@ export const usersSlice = createSlice({
       .addCase(fetchUsersAction.fulfilled, (state, action) => {
         state.users = action.payload;
         state.students = action.payload
-          .filter((user) => user.role.type === 'student')
-          .map((user) => ({
-            id: user.role.id,
-            user: {
-              id: user.id,
-              name: user.name,
-            }
-          }));
+          .filter((user) => user.student)
+          .map((user) => user.student as Student);
       })
       .addCase(updateGradeAction.fulfilled, (state) => {
         state.users = null;
@@ -65,6 +61,13 @@ export const usersSlice = createSlice({
         }
       })
       .addCase(updateUserAction.fulfilled, (state, action) => {
+        if (state.users) {
+          state.users = state.users.map((user) =>
+            user.id === action.payload.id ? { ...action.payload } : user
+          );
+        }
+      })
+      .addCase(updateUserRoleAction.fulfilled, (state, action) => {
         if (state.users) {
           state.users = state.users.map((user) =>
             user.id === action.payload.id ? { ...action.payload } : user

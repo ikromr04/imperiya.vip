@@ -2,13 +2,13 @@ import classNames from 'classnames';
 import { useField } from 'formik';
 import React, { InputHTMLAttributes } from 'react';
 import Label from './label';
-import { Icons } from '../../icons';
-import { PropsWithClassname } from '../../../types';
+import { Icons } from '@/components/icons';
 
-type CheckboxProps = PropsWithClassname<InputHTMLAttributes<HTMLInputElement> & {
+type CheckboxProps = InputHTMLAttributes<HTMLInputElement> & {
+  className?: string;
   name: string;
   label?: string;
-}>;
+};
 
 function Checkbox({
   name,

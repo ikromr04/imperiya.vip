@@ -3,16 +3,16 @@ import { Icons } from '../icons';
 import { LinkProps, useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 import Button from './button';
-import { PropsWithClassname } from '../../types';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getNavigationCollapsedState } from '../../store/app-slice/app-selector';
-import { collapseNavigationAction } from '../../store/app-slice/app-slice';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { getNavigationCollapsedState } from '@/store/app-slice/app-selector';
+import { collapseNavigationAction } from '@/store/app-slice/app-slice';
 
-export type NavLinkProps = PropsWithClassname<{
+export type NavLinkProps = {
+  className?: string;
   label: string;
   href?: string;
   icon: keyof typeof Icons;
-} & (LinkProps | ButtonHTMLAttributes<HTMLButtonElement>)>;
+} & (LinkProps | ButtonHTMLAttributes<HTMLButtonElement>);
 
 export default function NavLink({
   className,

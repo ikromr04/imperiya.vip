@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SuperAdmin extends Model
+class Superadmin extends Model
 {
   use HasFactory, SoftDeletes;
 
@@ -21,6 +21,9 @@ class SuperAdmin extends Model
 
   public function scopeSelectBasic($query)
   {
-    return $query->select('id', 'user_id');
+    return $query->select(
+      'id',
+      'user_id',
+    )->with(['user:id,name']);
   }
 }

@@ -1,15 +1,15 @@
 import React, { ReactNode } from 'react';
-import { PropsWithClassname } from '../../../../types';
-import { Icons } from '../../../icons';
 import classNames from 'classnames';
 import { useField } from 'formik';
+import { Icons } from '@/components/icons';
 
-type CleanableProps = PropsWithClassname<{
+type CleanableProps = {
+  className?: string;
   name: string;
   cleanable?: boolean;
   multiple?: boolean;
   onClean?: () => void;
-}>;
+};
 
 function Cleanable({
   name,

@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
-import { APIRoute } from '../../const';
-import { Grade, GradeId, Grades } from '../../types/grades';
 import { GradeDeleteDTO, GradeStoreDTO, GradeUpdateDTO } from '@/dto/grades';
 import { ValidationError } from '@/types/validation-error';
 import { generatePath } from 'react-router-dom';
+import { Grade, GradeId, Grades } from '@/types/grades';
+import { APIRoute } from '@/const/routes';
 
 export const fetchGradesAction = createAsyncThunk<Grades, undefined, {
   extra: AxiosInstance

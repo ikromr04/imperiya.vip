@@ -1,6 +1,6 @@
 import Button from '@/components/ui/button';
 import Checkbox from '@/components/ui/checkbox/checkbox';
-import { AppRoute } from '@/const';
+import { AppRoute } from '@/const/routes';
 import { GradeDeleteDTO } from '@/dto/grades';
 import { useAppDispatch } from '@/hooks';
 import { deleteGradeAction } from '@/store/grades-slice/grades-api-actions';

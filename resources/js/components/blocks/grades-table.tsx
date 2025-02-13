@@ -2,7 +2,7 @@ import React from 'react';
 import DataTable, { DataTableColumns } from '../ui/data-table';
 import { Grades } from '@/types/grades';
 import { generatePath, Link } from 'react-router-dom';
-import { AppRoute } from '@/const';
+import { AppRoute } from '@/const/routes';
 
 type GradesTableProps = {
   className?: string;

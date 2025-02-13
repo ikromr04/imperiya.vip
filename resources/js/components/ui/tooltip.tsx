@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import React, { useEffect, useRef } from 'react';
 import { Icons } from '../icons';
-import { PropsWithClassname } from '../../types';
 
-type TooltipProps = PropsWithClassname<{
+type TooltipProps = {
+  className?: string;
   label: string;
   position?: 'top' | 'right' | 'bottom' | 'left'
-}>;
+};
 
 export default function Tooltip({
   className,

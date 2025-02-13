@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SliceName } from '../../const';
 import { fetchNationalitiesAction } from './nationality-api-actions';
-import { Nationalities } from '../../types/nationalities';
+import { Nationalities } from '@/types/nationalities';
+import { SliceName } from '@/const/store';
 
 export type NationalitiesSlice = {
   nationalities: Nationalities | null;
@@ -12,7 +12,7 @@ const initialState: NationalitiesSlice = {
 };
 
 export const nationalitiesSlice = createSlice({
-  name: SliceName.Roles,
+  name: SliceName.Nationalities,
   initialState,
   reducers: {},
   extraReducers(builder) {

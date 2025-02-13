@@ -1,17 +1,20 @@
 import React, { BaseSyntheticEvent, ReactNode } from 'react';
-import { useDropdown } from '../../hooks/use-dropdown';
 import classNames from 'classnames';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getAuthUser } from '../../store/auth-slice/auth-selector';
-import { AppRoute } from '../../const';
 import { Link } from 'react-router-dom';
-import { logoutAction } from '../../store/auth-slice/auth-api-actions';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
+import { useDropdown } from '@/hooks/use-dropdown';
 import { Icons } from '../icons';
-import { PropsWithClassname } from '../../types';
+import { AppRoute } from '@/const/routes';
+import { logoutAction } from '@/store/auth-slice/auth-api-actions';
+
+type UserNavigationProps = {
+  className?: string;
+};
 
 function UserNavigation({
   className,
-}: PropsWithClassname): ReactNode {
+}: UserNavigationProps): ReactNode {
   const dispatch = useAppDispatch();
   const user = useAppSelector(getAuthUser);
   const { ref, isOpen, setIsOpen } = useDropdown<HTMLDivElement>();

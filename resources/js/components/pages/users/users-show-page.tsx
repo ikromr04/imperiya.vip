@@ -9,7 +9,7 @@ import UserHeader from '@/components/layouts/users/user-header';
 import UserProfileNavigation from '@/components/layouts/users/user-profile-navigation';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import Spinner from '@/components/ui/spinner';
-import { AppRoute } from '@/const';
+import { AppRoute } from '@/const/routes';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';

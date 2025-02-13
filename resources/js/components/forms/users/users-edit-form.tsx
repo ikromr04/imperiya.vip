@@ -3,16 +3,15 @@ import SelectField from '@/components/ui/fields/select-field';
 import TextField from '@/components/ui/fields/text-field';
 import { UserUpdateDTO } from '@/dto/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { fetchGendersAction } from '@/store/genders-slice/genders-api-actions';
-import { getGenders } from '@/store/genders-slice/genders-selector';
-import { getNationalities } from '@/store/nationality-slice/grades-selector';
+import { getNationalities } from '@/store/nationality-slice/nationality-selector';
 import { fetchNationalitiesAction } from '@/store/nationality-slice/nationality-api-actions';
 import { updateUserAction } from '@/store/users-slice/users-api-actions';
-import { User } from '@/types/users';
+import { Sex, User } from '@/types/users';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
+import { SexName } from '@/const/users';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Обязательное поле.'),
@@ -30,7 +29,6 @@ function UsersEditForm({
   setIsOpen,
 }: UsersEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const genders = useAppSelector(getGenders);
   const nationalities = useAppSelector(getNationalities);
   const initialValues: UserUpdateDTO = {
     id: user.id,
@@ -39,8 +37,9 @@ function UsersEditForm({
     email: user.email,
     birth_date: user.birthDate,
     address: user.address,
-    gender_id: user.gender?.id,
+    sex: user.sex,
     nationality_id: user.nationality?.id,
+    phone_numbers: user.phoneNumbers,
   };
 
   const onSubmit = async (
@@ -63,9 +62,8 @@ function UsersEditForm({
   };
 
   useEffect(() => {
-    if (!genders) dispatch(fetchGendersAction());
     if (!nationalities) dispatch(fetchNationalitiesAction());
-  }, [dispatch, genders, nationalities]);
+  }, [dispatch, nationalities]);
 
   return (
     <Formik
@@ -87,14 +85,13 @@ function UsersEditForm({
           <div className="grid gap-y-2 gap-x-4 md:grid-cols-3">
             <TextField name="birth_date" type="date" label="Дата рождения" />
 
-            {genders &&
-              <SelectField
-                name="gender_id"
-                label="Пол"
-                cleanable
-                onClean={() => setFieldValue('gender_id', '')}
-                options={genders.map((gender) => ({ value: gender.id, label: gender.name }))}
-              />}
+            <SelectField
+              name="sex"
+              label="Пол"
+              cleanable
+              onClean={() => setFieldValue('sex', '')}
+              options={['male', 'female'].map((sex) => ({ value: sex, label: SexName[sex as Sex] }))}
+            />
 
             {nationalities &&
               <SelectField

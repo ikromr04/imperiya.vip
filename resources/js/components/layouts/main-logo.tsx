@@ -1,10 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
-import { PropsWithClassname } from '../../types';
 
-type MainLogoProps = PropsWithClassname<{
+type MainLogoProps = {
+  className?: string;
   imgClass?: string;
-}>;
+};
 
 function MainLogo({
   className,

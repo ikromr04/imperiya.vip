@@ -1,5 +1,5 @@
 import PrivateComponent from '@/components/ui/private-component';
-import { AppRoute } from '@/const';
+import { AppRoute } from '@/const/routes';
 import { User } from '@/types/users';
 import classNames from 'classnames';
 import React from 'react';

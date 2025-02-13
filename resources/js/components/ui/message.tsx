@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { PropsWithClassname } from '../../types';
 import classNames from 'classnames';
 
 const MessageVariant = {
@@ -8,12 +7,13 @@ const MessageVariant = {
   'warn': 'text-warn',
 };
 
-export type MessageProps = PropsWithClassname<{
+export type MessageProps = {
+  className?: string;
   message?: [
     message: string,
     type: keyof typeof MessageVariant,
   ];
-}>;
+};
 
 export default function Message({
   className,

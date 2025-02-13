@@ -49,7 +49,7 @@ function SocialLinks({
       </section>
 
       <Modal isOpen={isOpen}>
-        <UsersSocialLinksEditForm user={user} setIsOpen={setIsOpen} />
+        <UsersSocialLinksEditForm key={JSON.stringify(user)} user={user} setIsOpen={setIsOpen} />
       </Modal>
     </>
   );

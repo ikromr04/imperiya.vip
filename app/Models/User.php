@@ -15,21 +15,8 @@ class User extends Authenticatable
   use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
   protected $guarded = ['id'];
-  protected $appends = ['role'];
 
-  protected $hidden = [
-    'password',
-    'remember_token',
-    'role_type',
-    'gender_id',
-    'nationality_id',
-    'super_admin',
-    'admin',
-    'director',
-    'teacher',
-    'parent',
-    'student',
-  ];
+  protected $hidden = ['nationality_id'];
 
   protected function casts(): array
   {
@@ -43,9 +30,9 @@ class User extends Authenticatable
     ];
   }
 
-  public function superAdmin(): HasOne
+  public function superadmin(): HasOne
   {
-    return $this->hasOne(SuperAdmin::class);
+    return $this->hasOne(Superadmin::class);
   }
 
   public function admin(): HasOne
@@ -73,11 +60,6 @@ class User extends Authenticatable
     return $this->hasOne(Guardian::class);
   }
 
-  public function gender(): BelongsTo
-  {
-    return $this->belongsTo(Gender::class, 'gender_id');
-  }
-
   public function nationality(): BelongsTo
   {
     return $this->belongsTo(Nationality::class, 'nationality_id');
@@ -89,87 +71,31 @@ class User extends Authenticatable
     return array_filter($array, fn($value) => $value);
   }
 
-  public function getRoleAttribute()
-  {
-    switch ($this->role_type) {
-      case 'super-admin':
-        return [
-          'type' => 'super-admin',
-          'name' => 'Супер-администратор',
-          ...($this->superAdmin ? $this->superAdmin->toArray() : []),
-        ];
-      case 'admin':
-        return [
-          'type' => 'admin',
-          'name' => 'Администратор',
-          ...($this->admin ? $this->admin->toArray() : []),
-        ];
-      case 'director':
-        return [
-          'type' => 'director',
-          'name' => 'Директор',
-          ...($this->director ? $this->director->toArray() : []),
-        ];
-      case 'teacher':
-        return [
-          'type' => 'teacher',
-          'name' => 'Педагог',
-          ...($this->teacher ? $this->teacher->toArray() : []),
-        ];
-      case 'parent':
-        return [
-          'type' => 'parent',
-          'name' => 'Родитель',
-          ...($this->parent ? $this->parent->toArray() : []),
-        ];
-      case 'student':
-        return [
-          'type' => 'student',
-          'name' => 'Ученик',
-          ...($this->student ? $this->student->toArray() : []),
-        ];
-    }
-  }
-
   public function scopeSelectBasic($query)
   {
     return $query->select(
       'id',
       'name',
       'login',
-      'role_type',
+      'role',
+      'sex',
       'email',
       'avatar',
       'avatar_thumb as avatarThumb',
       'birth_date as birthDate',
       'address',
-      'gender_id',
       'nationality_id',
       'social_link as socialLink',
       'phone_numbers as phoneNumbers',
       'created_at as createdAt',
     )->with([
-      'gender' => fn($query) => $query->selectBasic(),
       'nationality' => fn($query) => $query->selectBasic(),
-      'superAdmin' => fn($query) => $query->selectBasic(),
+      'superadmin' => fn($query) => $query->selectBasic(),
       'admin' => fn($query) => $query->selectBasic(),
       'director' => fn($query) => $query->selectBasic(),
       'teacher' => fn($query) => $query->selectBasic(),
       'student' => fn($query) => $query->selectBasic(),
       'parent' => fn($query) => $query->selectBasic(),
     ]);
-  }
-
-  protected static function boot()
-  {
-    parent::boot();
-
-    static::deleting(function ($user) {
-      $user->admin && $user->admin->update(['deleted_at' => now()]);
-      $user->director && $user->director->update(['deleted_at' => now()]);
-      $user->teacher && $user->teacher->update(['deleted_at' => now()]);
-      $user->parent && $user->parent->update(['deleted_at' => now()]);
-      $user->student && $user->student->update(['deleted_at' => now()]);
-    });
   }
 }

@@ -1,6 +1,6 @@
-import { SliceName } from '../../const';
-import { State } from '../../types/state';
-import { UsersFilter } from '../../types/users';
+import { SliceName } from '@/const/store';
+import { State } from '@/types/state';
+import { UsersFilter } from '@/types/users';
 
 export const getNavigationCollapsedState = (state: State): boolean =>
   state[SliceName.App].isNavigationCollapsed;

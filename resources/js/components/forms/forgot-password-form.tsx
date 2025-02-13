@@ -7,7 +7,6 @@ import { useAppDispatch } from '../../hooks/index';
 import { sendResetPasswordLinkAction } from '../../store/auth-slice/auth-api-actions';
 import TextField from '../ui/fields/text-field';
 import { ResetPasswordEmailDTO } from '../../dto/auth-dto';
-import { PropsWithClassname } from '../../types';
 import Message, { MessageProps } from '../ui/message';
 
 const validationSchema = Yup.object().shape({
@@ -16,9 +15,13 @@ const validationSchema = Yup.object().shape({
     .email('Неверный адрес электронной почты.'),
 });
 
+type ForgotPasswordFormProps = {
+  className?: string;
+};
+
 function ForgotPasswordForm({
   className,
-}: PropsWithClassname): JSX.Element {
+}: ForgotPasswordFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const initialValues = { email: '' };
   const [message, setMessage] = useState<MessageProps['message']>(undefined);

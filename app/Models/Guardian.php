@@ -28,7 +28,12 @@ class Guardian extends Model
 
   public function scopeSelectBasic($query)
   {
-    return $query->select('id', 'user_id');
+    return $query->select(
+      'id',
+      'user_id',
+    )->with([
+      'user:id,name',
+    ]);
   }
 
   public function getChildrenAttribute()
@@ -40,9 +45,7 @@ class Guardian extends Model
       'father_id',
     )->where('mother_id', $this->user_id)
       ->orWhere('father_id', $this->user_id)
-      ->with([
-        'user' => fn($query) => $query->select('id', 'name'),
-      ])
+      ->with(['user:id,name'])
       ->get();
 
     $children = [];

@@ -6,8 +6,9 @@ import { useAppSelector } from '@/hooks';
 import { getUsersFilter } from '@/store/app-slice/app-selector';
 import DataTable, { DataTableColumns } from '../ui/data-table';
 import Button from '../ui/button';
-import { AppRoute } from '@/const';
 import { Icons } from '../icons';
+import { AppRoute } from '@/const/routes';
+import { RoleName } from '@/const/users';
 
 type UsersTableProps = {
   className?: string;
@@ -27,10 +28,10 @@ function UsersTable({
       width: filter.name.visibility ? 240 : 48,
     },
     {
-      accessor: 'gender',
+      accessor: 'sex',
       header: <span className="flex w-full justify-center">Пол</span>,
       width: 56,
-      hidden: !filter.gender.visibility,
+      hidden: !filter.sex.visibility,
     },
     {
       accessor: 'role',
@@ -103,13 +104,13 @@ function UsersTable({
         </span>
         {filter.name.visibility && user.name}
       </Button>,
-    gender: user.gender?.id === 1 ? <Icons.male className="flex mx-auto text-blue-600" width={20} height={20} />
-      : (user.gender?.id === 2 ? <Icons.female className="flex mx-auto text-pink-600" width={20} height={20} /> : ''),
+    sex: user.sex === 'male' ? <Icons.male className="flex mx-auto text-blue-600" width={20} height={20} />
+      : (user.sex === 'female' ? <Icons.female className="flex mx-auto text-pink-600" width={20} height={20} /> : ''),
     role:
       <span className="flex max-w-max text-center bg-blue-200 text-primary rounded-full text-sm py-1 px-2 leading-none">
-        {user.role.name}
+        {RoleName[user.role]}
       </span>,
-    grade: user.role.grade && <b className="flex w-full justify-center text-lg">{user.role.grade?.level} {user.role.grade?.group}</b>,
+    grade: user.student?.grade && <b className="flex w-full justify-center text-lg">{user.student.grade.level} {user.student.grade.group}</b>,
     phoneNumbers:
       <div className="flex flex-col gap-1">
         {user.phoneNumbers?.map((phone) => (

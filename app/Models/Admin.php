@@ -21,6 +21,9 @@ class Admin extends Model
 
   public function scopeSelectBasic($query)
   {
-    return $query->select('id', 'user_id');
+    return $query->select(
+      'id',
+      'user_id',
+    )->with(['user:id,name']);
   }
 }

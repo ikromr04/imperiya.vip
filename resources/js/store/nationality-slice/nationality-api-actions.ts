@@ -1,7 +1,7 @@
+import { APIRoute } from '@/const/routes';
+import { Nationalities } from '@/types/nationalities';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
-import { APIRoute } from '../../const';
-import { Nationalities } from '../../types/nationalities';
 
 export const fetchNationalitiesAction = createAsyncThunk<Nationalities, undefined, {
   extra: AxiosInstance

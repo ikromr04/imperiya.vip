@@ -1,6 +1,6 @@
 import Button from '@/components/ui/button';
 import Checkbox from '@/components/ui/checkbox/checkbox';
-import { AppRoute } from '@/const';
+import { AppRoute } from '@/const/routes';
 import { UserDeleteDTO } from '@/dto/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { deleteUserAction } from '@/store/users-slice/users-api-actions';
@@ -57,7 +57,7 @@ function UsersDeleteForm({
       {({ isSubmitting }) => (
         <Form className="flex flex-col gap-3">
           <p>Вы уверены что хотите удалить этого пользователья? Все данные связанные с этим пользователем будут удалены.</p>
-          {user.role.type === 'student' &&
+          {user.student &&
             <Checkbox name="parents_deletion" label="Также удалить родителей ученика" />}
 
           <div className="flex items-center justify-end gap-2 mt-2 sm:col-span-2">

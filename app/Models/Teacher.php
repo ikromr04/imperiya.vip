@@ -31,6 +31,7 @@ class Teacher extends Model
       'id',
       'user_id',
     )->with([
+      'user:id,name',
       'educations' => fn($query) =>$query->selectBasic(),
     ]);
   }

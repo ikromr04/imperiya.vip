@@ -1,15 +1,18 @@
+import LoginForm from '@/components/forms/login-form';
+import MainLogo from '@/components/layouts/main-logo';
+import { AppRoute } from '@/const/routes';
+import { AuthorizationStatus } from '@/const/store';
+import { useAppSelector } from '@/hooks';
+import { getAuthStatus } from '@/store/auth-slice/auth-selector';
 import React from 'react';
-import LoginForm from '../../forms/login-form';
-import MainLogo from '../../layouts/main-logo';
 import { Link, Navigate } from 'react-router-dom';
-import { useAppSelector } from '../../../hooks';
-import { getAuthStatus } from '../../../store/auth-slice/auth-selector';
-import { AppRoute, AuthorizationStatus } from '../../../const';
 
 function LoginPage(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthStatus);
 
-  if (authorizationStatus === AuthorizationStatus.Auth) return <Navigate to={AppRoute.Journal} />;
+  if (authorizationStatus === AuthorizationStatus.Auth) {
+    return <Navigate to={AppRoute.Journal} />;
+  };
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-white bg-illustrations bg-bottom bg-contain bg-no-repeat md:bg-transparent">

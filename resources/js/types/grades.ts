@@ -1,4 +1,4 @@
-import { Students } from './users';
+import { Students } from './roles';
 
 export type GradeId = number;
 

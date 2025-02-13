@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import React from 'react';
-import { AppRoute, AuthorizationStatus } from '../const';
 import LoginPage from './pages/auth/login-page';
 import JournalPage from './pages/journal-page';
 import { useAppSelector } from '../hooks';
@@ -15,16 +14,19 @@ import UsersShowPage from './pages/users/users-show-page';
 import UsersEducationPage from './pages/users/users-education-page';
 import GradesPage from './pages/grades/grades-page';
 import GradesShowPage from './pages/grades/grades-show-page';
+import { AuthorizationStatus } from '@/const/store';
+import { AppRoute } from '@/const/routes';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
 
-  if (authStatus === AuthorizationStatus.Unknown)
+  if (authStatus === AuthorizationStatus.Unknown) {
     return (
-      <div className="flex w-full h-full justify-center items-center">
-        <Spinner className="w-12 h-12" />
+      <div className="flex w-screen h-screen justify-center items-center">
+        <Spinner className="w-16 h-16" />
       </div>
     );
+  }
 
   return (
     <BrowserRouter

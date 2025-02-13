@@ -1,7 +1,8 @@
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
 import UserAvatar from '@/components/ui/user-avatar';
-import { AppRoute } from '@/const';
+import { AppRoute } from '@/const/routes';
+import { RoleName } from '@/const/users';
 import { User, Users } from '@/types/users';
 import { getNextUserId, getPreviousUserId } from '@/utils/users';
 import React from 'react';
@@ -17,13 +18,13 @@ function UserHeader({
   user,
 }: UserHeaderProps): JSX.Element {
   return (
-    <header className="relative z-10 mb-4 lg:flex lg:items-top lg:gap-4">
+    <header className="relative z-10 lg:flex lg:items-top lg:gap-4">
       <UserAvatar className="mb-2 lg:mb-0" user={user} />
 
       <div className="lg:grow lg:mt-20">
         <h1 className="title mb-1">{user.name}</h1>
         <span className="flex max-w-max text-center bg-blue-200 text-primary rounded-full text-sm py-1 px-2 leading-none">
-          {user.role.name} {user.role.grade && `${user.role.grade.level} ${user.role.grade.group}`}
+          {RoleName[user.role]} {user.student?.grade && `${user.student.grade.level} ${user.student.grade.group}`}
         </span>
       </div>
 

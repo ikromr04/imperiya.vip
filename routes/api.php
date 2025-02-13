@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\GenderController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\NationalityController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,10 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/{userId}', [UserController::class, 'delete']);
     Route::put('/{userId}/avatar', [UserController::class, 'updateAvatar']);
     Route::delete('/{userId}/avatar', [UserController::class, 'deleteAvatar']);
-  });
-
-  Route::prefix('genders')->group(function () {
-    Route::get('/', [GenderController::class, 'index']);
+    Route::put('/{userId}/role', [UserController::class, 'updateRole']);
   });
 
   Route::prefix('grades')->group(function () {

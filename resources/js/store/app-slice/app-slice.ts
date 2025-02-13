@@ -1,7 +1,7 @@
+import { SliceName } from '@/const/store';
+import { defaultUsersFilter, getAppSettings, saveAppSettings } from '@/services/app-settings';
+import { UsersFilter } from '@/types/users';
 import { createSlice } from '@reduxjs/toolkit';
-import { SliceName } from '../../const';
-import { defaultUsersFilter, getAppSettings, saveAppSettings } from '../../services/app-settings';
-import { UsersFilter } from '../../types/users';
 
 export type AppSlice = {
   isNavigationCollapsed: boolean;

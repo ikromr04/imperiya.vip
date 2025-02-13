@@ -1,6 +1,7 @@
-import { SliceName } from '@/const';
+import { SliceName } from '@/const/store';
+import { Students } from '@/types/roles';
 import { State } from '@/types/state';
-import { Students, Users } from '@/types/users';
+import { Users } from '@/types/users';
 
 export const getUsers = (state: State): Users | null =>
   state[SliceName.Users].users;

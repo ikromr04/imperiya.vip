@@ -1,11 +1,11 @@
 import React from 'react';
-import { PropsWithClassname } from '../../types/index';
 import NavLink, { NavLinkProps } from './nav-link';
 import classNames from 'classnames';
 
-type NavListProps = PropsWithClassname<{
+type NavListProps = {
+  className?: string;
   links: NavLinkProps[];
-}>;
+};
 
 export default function NavList({
   className,

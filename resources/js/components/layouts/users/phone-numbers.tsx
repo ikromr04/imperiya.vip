@@ -42,7 +42,7 @@ function PhoneNumbers({
       </section>
 
       <Modal isOpen={isOpen}>
-        <UsersPhoneEditForm user={user} setIsOpen={setIsOpen} />
+        <UsersPhoneEditForm key={JSON.stringify(user)} user={user} setIsOpen={setIsOpen} />
       </Modal>
     </>
   );

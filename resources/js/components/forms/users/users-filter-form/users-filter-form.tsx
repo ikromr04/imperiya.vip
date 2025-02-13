@@ -4,19 +4,17 @@ import classNames from 'classnames';
 import BirthdateField from './birthdate-field';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { getUsersFilter } from '@/store/app-slice/app-selector';
-import { getGenders } from '@/store/genders-slice/genders-selector';
 import { getGrades } from '@/store/grades-slice/grades-selector';
-import { getNationalities } from '@/store/nationality-slice/grades-selector';
-import { fetchGendersAction } from '@/store/genders-slice/genders-api-actions';
+import { getNationalities } from '@/store/nationality-slice/nationality-selector';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { fetchNationalitiesAction } from '@/store/nationality-slice/nationality-api-actions';
-import { UsersFilter } from '@/types/users';
+import { Sex, UsersFilter } from '@/types/users';
 import { resetUsersFilterAction, setUsersFilterAction } from '@/store/app-slice/app-slice';
 import TextField from '@/components/ui/fields/text-field';
 import SelectField from '@/components/ui/fields/select-field';
-import { Role } from '@/const';
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
+import { RoleName, SexName } from '@/const/users';
 
 type UsersFilterFormProps = {
   className?: string;
@@ -27,15 +25,13 @@ function UsersFilterForm({
 }: UsersFilterFormProps): JSX.Element {
   const usersFilter = useAppSelector(getUsersFilter);
   const dispatch = useAppDispatch();
-  const genders = useAppSelector(getGenders);
   const grades = useAppSelector(getGrades);
   const nationalities = useAppSelector(getNationalities);
 
   useEffect(() => {
-    if (!genders) dispatch(fetchGendersAction());
     if (!grades) dispatch(fetchGradesAction());
     if (!nationalities) dispatch(fetchNationalitiesAction());
-  }, [dispatch, genders, grades, nationalities]);
+  }, [dispatch, grades, nationalities]);
 
   const onSubmit = async (values: UsersFilter) => {
     dispatch(setUsersFilterAction(values));
@@ -73,13 +69,12 @@ function UsersFilterForm({
               }
             />
 
-            {genders &&
               <SelectField
-                name="gender.query"
+                name="sex.query"
                 label="Пол"
                 cleanable
                 onClean={() => {
-                  setFieldValue('gender.query', 0);
+                  setFieldValue('sex.query', '');
                   handleSubmit();
                 }}
                 onChange={() => handleSubmit()}
@@ -88,15 +83,15 @@ function UsersFilterForm({
                     className="flex items-center justify-center w-full h-full hover:bg-gray-200 transition-all duration-300 border-l"
                     type="button"
                     onClick={() => {
-                      setFieldValue('gender.visibility', !values.gender.visibility);
+                      setFieldValue('sex.visibility', !values.sex.visibility);
                       handleSubmit();
                     }}
                   >
-                    {values.gender.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
+                    {values.sex.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
                   </button>
                 }
-                options={genders.map((gender) => ({ value: gender.id, label: gender.name }))}
-              />}
+                options={['male', 'female'].map((sex) => ({ value: sex, label: SexName[sex as Sex] }))}
+              />
 
             <SelectField
               name="roles.query"
@@ -120,7 +115,7 @@ function UsersFilterForm({
                   {values.roles.visibility ? <Icons.visibility width={20} /> : <Icons.visibilityOff width={20} />}
                 </button>
               }
-              options={Object.entries(Role).map((values) => ({ value: values[0], label: values[1] }))}
+              options={Object.entries(RoleName).map((values) => ({ value: values[0], label: values[1] }))}
             />
 
             {grades &&

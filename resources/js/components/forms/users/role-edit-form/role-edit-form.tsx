@@ -1,43 +1,38 @@
 import Button from '@/components/ui/button';
-import TextField from '@/components/ui/fields/text-field';
-import { UserUpdateDTO } from '@/dto/users';
+import { RoleUpdateDTO } from '@/dto/users';
 import { useAppDispatch } from '@/hooks';
-import { updateUserAction } from '@/store/users-slice/users-api-actions';
 import { User } from '@/types/users';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction } from 'react';
+import RoleFields from './role-fields';
+import { updateUserRoleAction } from '@/store/users-slice/users-api-actions';
 import { toast } from 'react-toastify';
 
-type UsersSocialLinksEditFormProps = {
+type RoleEditFormProps = {
   user: User;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-function UsersSocialLinksEditForm({
+function RoleEditForm({
   user,
   setIsOpen,
-}: UsersSocialLinksEditFormProps): JSX.Element {
+}: RoleEditFormProps) {
   const dispatch = useAppDispatch();
-  const initialValues: UserUpdateDTO = {
-    id: user.id,
-    name: user.name,
-    login: user.login,
-    social_link: {
-      facebook: user.socialLink?.facebook || '',
-      instagram: user.socialLink?.instagram || '',
-      telegram: user.socialLink?.telegram || '',
-      odnoklassniki: user.socialLink?.odnoklassniki || '',
-    },
-    phone_numbers: user.phoneNumbers,
+  const initialValues: RoleUpdateDTO = {
+    userId: user.id,
+    grade_id: user.student?.grade?.id ?? 0,
+    mother_id: user.student?.mother?.id ?? 0,
+    father_id: user.student?.father?.id ?? 0,
+    children: user.parent?.children?.map(({ id }) => id) ?? [],
   };
 
   const onSubmit = async (
-    values: UserUpdateDTO,
-    helpers: FormikHelpers<UserUpdateDTO>
+    values: RoleUpdateDTO,
+    helpers: FormikHelpers<RoleUpdateDTO>
   ) => {
     helpers.setSubmitting(true);
 
-    await dispatch(updateUserAction({
+    await dispatch(updateUserRoleAction({
       dto: values,
       onSuccess: () => {
         toast.success('Данные успешно сохранены.');
@@ -54,15 +49,13 @@ function UsersSocialLinksEditForm({
     <Formik
       initialValues={initialValues}
       onSubmit={onSubmit}
+      key={JSON.stringify(user[user.role])}
     >
-      {({ isSubmitting }) => (
-        <Form>
-          <TextField name="social_link.facebook" label="Фейсбук" />
-          <TextField name="social_link.instagram" label="Инстаграм" />
-          <TextField name="social_link.telegram" label="Телеграм" />
-          <TextField name="social_link.odnoklassniki" label="Одноклассники" />
+      {({ isSubmitting, setFieldValue }) => (
+        <Form className="flex flex-col gap-3">
+          <RoleFields user={user} setFieldValue={setFieldValue} />
 
-          <div className="flex items-center justify-end gap-2 mt-6 sm:col-span-2">
+          <div className="flex items-center justify-end gap-2 mt-2 sm:col-span-2">
             <Button
               className="justify-center min-w-[92px]"
               type="submit"
@@ -86,4 +79,4 @@ function UsersSocialLinksEditForm({
   );
 }
 
-export default UsersSocialLinksEditForm;
+export default RoleEditForm;

@@ -3,7 +3,6 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { useField } from 'formik';
 import SelectField from '@/components/ui/fields/select-field';
-import { DAYS, MONTHS } from '@/const';
 import { Icons } from '@/components/icons';
 
 type BirthdateFieldProps = {
@@ -33,7 +32,39 @@ function BirthdateField({
           inputClassname="border-transparent bg-transparent !px-1 hover:bg-transparent focus:bg-transparent w-10 justify-center"
           optionClassname="px-1"
           name="birthDate.day"
-          options={[...DAYS.map((day) => ({ value: day, label: day }))]}
+          options={[
+            { value: '01', label: '01' },
+            { value: '02', label: '02' },
+            { value: '03', label: '03' },
+            { value: '04', label: '04' },
+            { value: '05', label: '05' },
+            { value: '06', label: '06' },
+            { value: '07', label: '07' },
+            { value: '08', label: '08' },
+            { value: '09', label: '09' },
+            { value: '10', label: '10' },
+            { value: '11', label: '11' },
+            { value: '12', label: '12' },
+            { value: '13', label: '13' },
+            { value: '14', label: '14' },
+            { value: '15', label: '15' },
+            { value: '16', label: '16' },
+            { value: '17', label: '17' },
+            { value: '18', label: '18' },
+            { value: '19', label: '19' },
+            { value: '20', label: '20' },
+            { value: '21', label: '21' },
+            { value: '22', label: '22' },
+            { value: '23', label: '23' },
+            { value: '24', label: '24' },
+            { value: '25', label: '25' },
+            { value: '26', label: '26' },
+            { value: '27', label: '27' },
+            { value: '28', label: '28' },
+            { value: '29', label: '29' },
+            { value: '30', label: '30' },
+            { value: '31', label: '31' },
+          ]}
           onChange={() => handleSubmit()}
           placeholder="День"
         />
@@ -42,7 +73,20 @@ function BirthdateField({
           inputClassname="border-transparent bg-transparent !px-1 hover:bg-transparent focus:bg-transparent justify-center"
           optionClassname="px-1 w-16"
           name="birthDate.month"
-          options={MONTHS}
+          options={[
+            { value: '01', label: 'Январь' },
+            { value: '02', label: 'Февраль' },
+            { value: '03', label: 'Март' },
+            { value: '04', label: 'Апрель' },
+            { value: '05', label: 'Май' },
+            { value: '06', label: 'Июнь' },
+            { value: '07', label: 'Июль' },
+            { value: '08', label: 'Август' },
+            { value: '09', label: 'Сентябрь' },
+            { value: '10', label: 'Октябрь' },
+            { value: '11', label: 'Ноябрь' },
+            { value: '12', label: 'Декабрь' },
+          ]}
           onChange={() => handleSubmit()}
           placeholder="Месяц"
         />

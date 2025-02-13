@@ -1,8 +1,7 @@
-import { UserId } from '@/types/users';
-import { GenderId } from '../types/genders';
+import { Sex, UserId } from '@/types/users';
 import { GradeId } from '../types/grades';
 import { NationalityId } from '../types/nationalities';
-import { RoleType } from '../types/roles';
+import { Role } from '../types/roles';
 
 export type UserFilterDTO = {
   query?: string;
@@ -11,7 +10,7 @@ export type UserFilterDTO = {
 export type UserStoreDTO = {
   name: string;
   login: string;
-  role_type: RoleType;
+  role: Role;
   email: string;
   birth_date: string;
   address: string;
@@ -19,7 +18,7 @@ export type UserStoreDTO = {
   instagram: string;
   telegram: string;
   odnoklassniki: string;
-  gender_id: GenderId;
+  sex: Sex;
   grade_id: GradeId;
   nationality_id: NationalityId;
 }
@@ -31,13 +30,13 @@ export type UserUpdateDTO = {
   email?: string;
   birth_date?: string;
   address?: string;
-  gender_id?: GenderId;
+  sex?: Sex;
   nationality_id?: NationalityId;
   social_link?: {
-    facebook?: string;
-    instagram?: string;
-    telegram?: string;
-    odnoklassniki?: string;
+    facebook: string;
+    instagram: string;
+    telegram: string;
+    odnoklassniki: string;
   };
   phone_numbers?: {
     numbers: number;
@@ -48,6 +47,14 @@ export type UserUpdateDTO = {
 export type UserDeleteDTO = {
   user_id: UserId;
   parents_deletion?: boolean;
+};
+
+export type RoleUpdateDTO = {
+  userId: UserId;
+  grade_id?: GradeId;
+  mother_id?: UserId;
+  father_id?: UserId;
+  children?: UserId[];
 };
 
 export type EducationStoreDTO = {

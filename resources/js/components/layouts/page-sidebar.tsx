@@ -1,14 +1,17 @@
 import React from 'react';
 import NavList from '../ui/nav-list';
-import { AppRoute } from '../../const';
 import { useAppDispatch } from '../../hooks/index';
 import classNames from 'classnames';
 import { toggleNavigationAction } from '../../store/app-slice/app-slice';
-import { PropsWithClassname } from '../../types';
+import { AppRoute } from '@/const/routes';
+
+type PageSidebarProps = {
+  className?: string;
+};
 
 function PageSidebar({
   className,
-}: PropsWithClassname): JSX.Element {
+}: PageSidebarProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   return (

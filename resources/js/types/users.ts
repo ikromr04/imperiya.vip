@@ -1,22 +1,32 @@
 import { ID } from '.';
-import { Gender, GenderId } from './genders';
-import { Role, RoleType } from './roles';
 import { GradeId } from './grades';
 import { Nationality, NationalityId } from './nationalities';
+import { Admin, Director, Parent, Role, Student, Superadmin, Teacher } from './roles';
 
-export type UserId = ID
+export type UserId = ID;
+
+export type Sex = 'male' | 'female';
 
 export type User = {
   id: UserId;
   name: string;
   login: string;
+  createdAt: Date;
   role: Role;
+  sex: Sex;
+
+  superadmin?: Superadmin;
+  admin?: Admin;
+  director?: Director;
+  teacher?: Teacher;
+  student?: Student;
+  parent?: Parent;
+
   email?: string;
   avatar?: string;
   avatarThumb?: string;
   birthDate?: string;
   address?: string;
-  gender?: Gender;
   nationality?: Nationality;
   socialLink?: {
     facebook?: string;
@@ -28,20 +38,9 @@ export type User = {
     numbers: number;
     code: number;
   }[];
-  createdAt: Date;
 };
 
 export type Users = User[];
-
-export type Student = {
-  id: ID;
-  user: {
-    id: UserId;
-    name: string
-  };
-};
-
-export type Students = Student[];
 
 export type UsersFilter = {
   searchKeyword: string;
@@ -54,7 +53,7 @@ export type UsersFilter = {
     visibility: boolean;
   },
   roles: {
-    query: RoleType[];
+    query: Role[];
     visibility: boolean;
   },
   email: {
@@ -71,8 +70,8 @@ export type UsersFilter = {
     query: string;
     visibility: boolean;
   },
-  gender: {
-    query: GenderId;
+  sex: {
+    query: Sex | '';
     visibility: boolean;
   },
   nationalities: {
@@ -92,14 +91,3 @@ export type UsersFilter = {
     visibility: boolean;
   },
 };
-
-export type Education = {
-  institution: string;
-  faculty: string;
-  speciality: string;
-  form: string;
-  startedAt: string;
-  graduatedAt: string;
-};
-
-export type Educations = Education[];

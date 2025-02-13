@@ -30,8 +30,8 @@ export const defaultUsersFilter: UsersFilter = {
     query: '',
     visibility: true,
   },
-  gender: {
-    query: 0,
+  sex: {
+    query: '',
     visibility: true,
   },
   nationalities: {

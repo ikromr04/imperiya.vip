@@ -2,11 +2,14 @@ import React from 'react';
 import MainLogo from './main-logo';
 import UserNavigation from './user-navigation';
 import classNames from 'classnames';
-import { PropsWithClassname } from '../../types';
+
+type PageHeaderProps = {
+  className?: string;
+}
 
 function PageHeader({
   className,
-}: PropsWithClassname): JSX.Element {
+}: PageHeaderProps): JSX.Element {
   return (
     <header className={classNames(className, 'sticky z-20 bg-white shadow py-2')}>
       <div className="container flex justify-between">

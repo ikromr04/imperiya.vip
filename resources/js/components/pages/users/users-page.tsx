@@ -16,6 +16,7 @@ import UsersTable from '@/components/blocks/users-table';
 import Spinner from '@/components/ui/spinner';
 import Modal from '@/components/ui/modal';
 import UsersFilterForm from '@/components/forms/users/users-filter-form/users-filter-form';
+import { RoleName, SexName } from '@/const/users';
 
 function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -29,9 +30,9 @@ function UsersPage(): JSX.Element {
       const obj = {};
 
       if (usersFilter.name.visibility) Object.assign(obj, { 'ФИО': user.name });
-      if (usersFilter.gender.visibility) Object.assign(obj, { 'Пол': user.gender?.name });
-      if (usersFilter.roles.visibility) Object.assign(obj, { 'Позиция': user.role.name });
-      if (usersFilter.grades.visibility) Object.assign(obj, { 'Класс': `${user.role.grade?.level || ''} ${user.role.grade?.group || ''}` });
+      if (usersFilter.sex.visibility) Object.assign(obj, { 'Пол': SexName[user.sex] });
+      if (usersFilter.roles.visibility) Object.assign(obj, { 'Позиция': RoleName[user.role] });
+      if (usersFilter.grades.visibility) Object.assign(obj, { 'Класс': `${user.student?.grade?.level || ''} ${user.student?.grade?.group || ''}` });
       if (usersFilter.phoneNumber.visibility) Object.assign(obj, { 'Телефоны': user.phoneNumbers?.map((phone) => `+${phone.code} ${phone.numbers}`).join(', ') });
       if (usersFilter.email.visibility) Object.assign(obj, { 'Электронная почта': user.email || '' });
       if (usersFilter.login.visibility) Object.assign(obj, { 'Логин': user.login });
