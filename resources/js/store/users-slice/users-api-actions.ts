@@ -1,5 +1,6 @@
 import { APIRoute } from '@/const/routes';
 import { RoleUpdateDTO, UserDeleteDTO, UserStoreDTO, UserUpdateDTO } from '@/dto/users';
+import { ResponseMessage } from '@/types';
 import { User, UserId, Users } from '@/types/users';
 import { ValidationError } from '@/types/validation-error';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -33,6 +34,31 @@ export const updateUserAction = createAsyncThunk<User, {
       if (onSuccess) onSuccess(data);
 
       return data;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const error: AxiosError<ValidationError> = err;
+      if (!error.response) throw err;
+      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const checkUserLoginAction = createAsyncThunk<undefined, {
+  login: string,
+  onSuccess?: () => void,
+  onValidationError?: (error: ValidationError) => void,
+  onFail?: (message: string) => void,
+}, {
+  extra: AxiosInstance,
+  rejectWithValue: ValidationError,
+}>(
+  'users/checkLogin',
+  async ({ login, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      await api.get<ResponseMessage>(generatePath(APIRoute.Users.Login, { login }));
+      if (onSuccess) onSuccess();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;

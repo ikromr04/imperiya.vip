@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -97,5 +99,16 @@ class User extends Authenticatable
       'student' => fn($query) => $query->selectBasic(),
       'parent' => fn($query) => $query->selectBasic(),
     ]);
+  }
+
+  protected static function boot()
+  {
+    parent::boot();
+
+    static::creating(function ($user) {
+      if (empty($user->password)) {
+        $user->password = Hash::make(Str::random(8));
+      }
+    });
   }
 }

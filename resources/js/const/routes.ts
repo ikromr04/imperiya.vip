@@ -43,6 +43,7 @@ export const APIRoute = {
     Show: '/users/:userId',
     Avatar: '/users/:userId/avatar',
     Role: '/users/:userId/role',
+    Login: '/users/login/:login',
   },
   Grades: {
     Index: '/grades',

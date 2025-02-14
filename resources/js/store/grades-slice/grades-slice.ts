@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { deleteGradeAction, fetchGradesAction, storeGradeAction, updateGradeAction } from './grades-api-actions';
 import { Grades } from '@/types/grades';
 import { SliceName } from '@/const/store';
-import { deleteUserAction, updateUserAction, updateUserRoleAction } from '../users-slice/users-api-actions';
+import { deleteUserAction, storeUserAction, updateUserAction, updateUserRoleAction } from '../users-slice/users-api-actions';
 
 export type GradesSlice = {
   grades: Grades | null;
@@ -23,6 +23,9 @@ export const gradesSlice = createSlice({
       })
       .addCase(storeGradeAction.fulfilled, (state, action) => {
         state.grades = [action.payload, ...(state.grades || [])];
+      })
+      .addCase(storeUserAction.fulfilled, (state) => {
+        state.grades = null;
       })
       .addCase(deleteUserAction.fulfilled, (state) => {
         state.grades = null;

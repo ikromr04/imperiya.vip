@@ -45,6 +45,9 @@ export const usersSlice = createSlice({
       })
       .addCase(storeUserAction.fulfilled, (state, action) => {
         state.users = [action.payload, ...(state.users || [])];
+        state.students = state.users
+          .filter((user) => user.student)
+          .map((user) => user.student as Student);
       })
       .addCase(updateUserAvatarAction.fulfilled, (state, action) => {
         if (state.users) {

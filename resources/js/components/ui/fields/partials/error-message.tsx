@@ -13,7 +13,7 @@ function ErrorMessage({
   if (!meta.error || !meta.touched) return null;
 
   return (
-    <p className="flex text-error pt-1 text-sm pl-2 leading-none empty:hidden">
+    <p className="flex text-error pt-1 text-sm pl-2 leading-none">
       {meta.error}
     </p>
   );

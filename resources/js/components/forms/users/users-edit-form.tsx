@@ -17,6 +17,7 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required('Обязательное поле.'),
   login: Yup.string().required('Обязательное поле.'),
   email: Yup.string().email('Неверный адрес электронной почты.'),
+  sex: Yup.string().required('Обязательное поле.'),
 });
 
 type UsersEditFormProps = {

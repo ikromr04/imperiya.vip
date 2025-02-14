@@ -10,17 +10,26 @@ export type UserFilterDTO = {
 export type UserStoreDTO = {
   name: string;
   login: string;
-  role: Role;
-  email: string;
-  birth_date: string;
-  address: string;
-  facebook: string;
-  instagram: string;
-  telegram: string;
-  odnoklassniki: string;
-  sex: Sex;
-  grade_id: GradeId;
-  nationality_id: NationalityId;
+  role: Role | '';
+  sex: Sex | '';
+  email?: string;
+  birth_date?: string;
+  address?: string;
+  nationality_id?: NationalityId;
+  social_link?: {
+    facebook: string;
+    instagram: string;
+    telegram: string;
+    odnoklassniki: string;
+  };
+  phone_numbers: {
+    numbers: number;
+    code: number;
+  }[];
+  grade_id?: GradeId;
+  mother_id?: UserId;
+  father_id?: UserId;
+  children?: UserId[];
 }
 
 export type UserUpdateDTO = {

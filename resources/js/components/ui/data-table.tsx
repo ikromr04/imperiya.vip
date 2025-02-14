@@ -90,7 +90,7 @@ export default function DataTable({
 
           <tbody className="flex flex-col">
             {paginatedData.map((record, index) => (
-              <tr key={record.id} className={classNames('flex gap-1 px-2 py-1', (index % 2 === 1) && 'bg-gray-50')}>
+              <tr key={record.id} className={classNames('flex gap-1 px-2 py-1 min-w-max', (index % 2 === 1) && 'bg-gray-50')}>
                 <td className="flex items-center text-left min-w-8">
                   {from + index + 1}
                 </td>

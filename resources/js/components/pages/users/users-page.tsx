@@ -17,6 +17,7 @@ import Spinner from '@/components/ui/spinner';
 import Modal from '@/components/ui/modal';
 import UsersFilterForm from '@/components/forms/users/users-filter-form/users-filter-form';
 import { RoleName, SexName } from '@/const/users';
+import UsersCreateForm from '@/components/forms/users/users-create-form/users-create-form';
 
 function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -149,7 +150,7 @@ function UsersPage(): JSX.Element {
         </section>
 
         <Modal isOpen={isUserCreateModalOpen}>
-          {/* <CreateUserForm setIsOpen={setIsUserCreateModalOpen} /> */}
+          <UsersCreateForm key={isFilterOpen.toString()} setIsOpen={setIsUserCreateModalOpen} />
         </Modal>
       </main>
     </PageLayout>
