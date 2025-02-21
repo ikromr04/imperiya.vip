@@ -10,7 +10,7 @@ import {
 } from './users-api-actions';
 import { Users } from '@/types/users';
 import { SliceName } from '@/const/store';
-import { deleteGradeAction, updateGradeAction } from '../grades-slice/grades-api-actions';
+import { deleteGradeAction, storeGradeAction, updateGradeAction } from '../grades-slice/grades-api-actions';
 import { Student, Students } from '@/types/roles';
 
 export type UsersSlice = {
@@ -34,6 +34,10 @@ export const usersSlice = createSlice({
         state.students = action.payload
           .filter((user) => user.student)
           .map((user) => user.student as Student);
+      })
+      .addCase(storeGradeAction.fulfilled, (state) => {
+        state.users = null;
+        state.students = null;
       })
       .addCase(updateGradeAction.fulfilled, (state) => {
         state.users = null;
@@ -78,9 +82,7 @@ export const usersSlice = createSlice({
         }
       })
       .addCase(deleteUserAction.fulfilled, (state, action) => {
-        if (state.users) {
-          state.users = state.users.filter(({ id }) => id !== action.payload);
-        }
+        state.users = action.payload;
       });
   },
 });

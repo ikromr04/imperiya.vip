@@ -1,4 +1,3 @@
-import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
 import SelectField from '@/components/ui/fields/select-field';
 import { UserStoreDTO } from '@/dto/users';
@@ -46,67 +45,70 @@ function RoleFields({
           className="ml-auto"
           type="reset"
           variant="error"
+          icon="close"
           onClick={() => {
             setIsOpen(false);
             setStep('required');
             resetForm();
           }}
         >
-          <Icons.close width={10} />
+          <span className="sr-only">Отмена</span>
         </Button>
       </div>
 
       {values.role === 'student' && grades && users ?
-      <div className="flex flex-col gap-2 mb-4">
+        <div className="flex flex-col gap-2 mb-4">
+          <SelectField
+            name="grade_id"
+            label="Класс"
+            cleanable
+            onClean={() => setFieldValue('grade_id', 0)}
+            options={grades.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
+          />
+          <SelectField
+            name="mother_id"
+            label="Мать"
+            cleanable
+            onClean={() => setFieldValue('mother_id', 0)}
+            options={users.filter(({ sex, role }) => sex === 'female' && role !== 'student').map((user) => ({ value: user.id, label: user.name }))}
+          />
+          <SelectField
+            name="father_id"
+            label="Отец"
+            cleanable
+            onClean={() => setFieldValue('father_id', 0)}
+            options={users.filter(({ sex, role }) => sex === 'male' && role !== 'student').map((user) => ({ value: user.id, label: user.name }))}
+          />
+        </div> : users &&
         <SelectField
-          name="grade_id"
-          label="Класс"
+          className="mb-4"
+          name="children"
+          label="Дети"
+          multiple
           cleanable
-          onClean={() => setFieldValue('grade_id', 0)}
-          options={grades.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
-        />
-        <SelectField
-          name="mother_id"
-          label="Мать"
-          cleanable
-          onClean={() => setFieldValue('mother_id', 0)}
-          options={users.filter(({ sex, role }) => sex === 'female' && role !== 'student').map((user) => ({ value: user.id, label: user.name }))}
-        />
-        <SelectField
-          name="father_id"
-          label="Отец"
-          cleanable
-          onClean={() => setFieldValue('father_id', 0)}
-          options={users.filter(({ sex, role }) => sex === 'male' && role !== 'student').map((user) => ({ value: user.id, label: user.name }))}
-        />
-      </div> : users &&
-      <SelectField
-      className="mb-4"
-        name="children"
-        label="Дети"
-        multiple
-        cleanable
-        onClean={() => setFieldValue('children', [])}
-        options={users.filter((user) => user.student).map((user) => ({ value: user.id, label: user.name }))}
-      />}
+          onClean={() => setFieldValue('children', [])}
+          options={users.filter((user) => user.student).map((user) => ({ value: user.id, label: user.name }))}
+        />}
 
       <div className="flex items-center justify-end gap-2 sm:col-span-2">
         <Button
           className="text-sm mr-auto text-blue-600 hover:text-blue-400"
           variant="text"
           type="button"
+          icon="west"
           onClick={() => setStep('base')}
         >
-          <Icons.west height={8} /> Назад
+          Назад
         </Button>
 
         <Button
           variant="success"
           type="submit"
+          icon="add"
           disabled={isSubmitting}
           loading={isSubmitting}
         >
-          Сохранить
+          Добавить
         </Button>
       </div>
     </>

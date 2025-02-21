@@ -54,13 +54,14 @@ function BaseFields({
           className="ml-auto"
           type="reset"
           variant="error"
+          icon="close"
           onClick={() => {
             setIsOpen(false);
             setStep('required');
             resetForm();
           }}
         >
-          <Icons.close width={10} />
+          <span className="sr-only">Отмена</span>
         </Button>
       </div>
 
@@ -114,7 +115,7 @@ function BaseFields({
             ))}
 
             <button
-              className="flex justify-center items-center gap-2 rounded border border-dashed h-8 border-gray-300 bg-gray-50 mt-2"
+              className="flex text-sm justify-center items-center gap-2 rounded border border-dashed h-8 border-gray-300 bg-gray-50 mt-2"
               type="button"
               onClick={() => push({ code: '', numbers: '' })}
             >
@@ -139,11 +140,12 @@ function BaseFields({
           <Button
             className="justify-center"
             type="submit"
+            icon="add"
             disabled={isSubmitting}
             loading={isSubmitting}
             variant="success"
           >
-            Сохранить
+            Добавить
           </Button>
           :
           <Button

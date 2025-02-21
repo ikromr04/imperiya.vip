@@ -110,5 +110,13 @@ class User extends Authenticatable
         $user->password = Hash::make(Str::random(8));
       }
     });
+
+    static::deleting(function ($user) {
+      $user->admin?->delete();
+      $user->director?->delete();
+      $user->teacher?->delete();
+      $user->parent?->delete();
+      $user->student?->delete();
+    });
   }
 }

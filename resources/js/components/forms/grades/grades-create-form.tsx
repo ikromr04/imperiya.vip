@@ -65,7 +65,21 @@ function GradesCreateForm({
     >
       {({ isSubmitting }) => (
         <Form>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="flex items-center justify-between gap-2 mb-4">
+            <h3 className="title">Добавления класса</h3>
+
+            <Button
+              className="ml-auto"
+              type="reset"
+              variant="error"
+              icon="close"
+              onClick={() => setIsOpen(false)}
+            >
+              <span className="sr-only">Отмена</span>
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-x-4 mb-4">
             <SelectField
               name="level"
               label="Уровень"
@@ -79,22 +93,16 @@ function GradesCreateForm({
             />
           </div>
 
-          <div className="flex items-center justify-end gap-2 mt-2 sm:col-span-2">
+          <div className="flex items-center justify-end gap-2 sm:col-span-2">
             <Button
               className="justify-center min-w-[92px]"
               type="submit"
+              icon="add"
               disabled={isSubmitting}
               loading={isSubmitting}
               variant="success"
             >
               Добавить
-            </Button>
-            <Button
-              type="reset"
-              onClick={() => setIsOpen(false)}
-              variant="error"
-            >
-              Отмена
             </Button>
           </div>
         </Form>

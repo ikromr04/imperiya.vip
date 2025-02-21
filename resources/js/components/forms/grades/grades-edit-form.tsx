@@ -75,8 +75,22 @@ function GradesEditForm({
       onSubmit={onSubmit}
     >
       {({ isSubmitting, values }) => (
-        <Form className="flex flex-col gap-4">
-          <div className="grid grid-cols-2 gap-2">
+        <Form>
+          <div className="flex items-center justify-between gap-2 mb-4">
+            <h3 className="title">Редактирование класса</h3>
+
+            <Button
+              className="ml-auto"
+              type="reset"
+              icon="close"
+              variant="error"
+              onClick={() => setIsOpen(false)}
+            >
+              <span className="sr-only">Отмена</span>
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-x-4 mb-2">
             <SelectField
               name="level"
               label="Уровень"
@@ -92,6 +106,7 @@ function GradesEditForm({
 
           {students &&
             <SelectField
+              className="mb-4"
               name="students"
               multiple
               searchable
@@ -99,22 +114,16 @@ function GradesEditForm({
               options={(students || []).map((student) => ({ value: student.id, label: student.user.name }))}
             />}
 
-          <div className="flex items-center justify-end gap-2 mt-2 sm:col-span-2">
+          <div className="flex items-center justify-end gap-2 sm:col-span-2">
             <Button
               className="justify-center min-w-[92px]"
               type="submit"
+              icon="update"
               disabled={isSubmitting}
               loading={isSubmitting}
               variant="success"
             >
               Сохранить
-            </Button>
-            <Button
-              type="reset"
-              onClick={() => setIsOpen(false)}
-              variant="error"
-            >
-              Отмена
             </Button>
           </div>
         </Form>

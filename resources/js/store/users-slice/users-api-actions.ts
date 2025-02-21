@@ -70,7 +70,7 @@ export const checkUserLoginAction = createAsyncThunk<undefined, {
   },
 );
 
-export const deleteUserAction = createAsyncThunk<UserId, {
+export const deleteUserAction = createAsyncThunk<Users, {
   dto: UserDeleteDTO,
   onSuccess?: () => void,
   onFail?: (message: string) => void,
@@ -81,9 +81,9 @@ export const deleteUserAction = createAsyncThunk<UserId, {
   'users/delete',
   async ({ dto, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      await api.delete(`${generatePath(APIRoute.Users.Show, { userId: dto.user_id })}?parents_deletion=${dto.parents_deletion ? 'true' : ''}`);
+      const { data } = await api.delete<Users>(generatePath(APIRoute.Users.Show, { userId: dto.user_id }));
       if (onSuccess) onSuccess();
-      return dto.user_id;
+      return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;

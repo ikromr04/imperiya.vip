@@ -11,30 +11,21 @@ class GradeController extends Controller
 {
   public function index(): JsonResponse
   {
-    $grades = Grade::orderBy('level')
-      ->selectBasic()
-      ->get();
+    $grades = Grade::orderBy('level')->selectBasic()->get();
 
     return response()->json($grades, 200);
   }
 
   public function store(Request $request): JsonResponse
   {
-    $grade = Grade::create([
-      'level' => $request->level,
-      'group' => $request->group,
-    ]);
+    Grade::create($request->only(['level', 'group']));
 
-    $grade = Grade::orderBy('level')
-      ->selectBasic()
-      ->find($grade->id);
-
-    return response()->json($grade, 200);
+    return response()->json(Grade::orderBy('level')->selectBasic()->get(), 200);
   }
 
   public function update(Request $request): JsonResponse
   {
-    $grade = Grade::selectBasic()->findOrFail($request->id);
+    $grade = Grade::findOrFail($request->id);
 
     $grade->update([
       'level' => $request->level,
@@ -50,27 +41,23 @@ class GradeController extends Controller
     Student::whereIn('id', $newStudentIds)
       ->update(['grade_id' => $grade->id]);
 
-    $updatedGrade = Grade::selectBasic()->find($grade->id);
-
-    return response()->json($updatedGrade);
+    return response()->json(Grade::orderBy('level')->selectBasic()->get(), 200);
   }
 
   public function delete(Request $request)
   {
-    $grade = Grade::selectBasic()->find($request->gradeId);
+    $grade = Grade::find($request->gradeId);
 
     if (!$grade) {
       return response()->json(['message' => 'Класс не найден.'], 404);
     }
 
-    if ($request->students_deletion && $grade->students) {
-      foreach ($grade->students as $student) {
-        $student->user->delete();
-      }
+    foreach ($grade->students as $student) {
+      $student->update(['grade_id' => null]);
     }
 
     $grade->delete();
 
-    return response()->noContent();
+    return response()->json(Grade::orderBy('level')->selectBasic()->get(), 200);
   }
 }

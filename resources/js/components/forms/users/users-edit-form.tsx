@@ -84,15 +84,16 @@ function UsersEditForm({
           </div>
 
           <div className="grid gap-y-2 gap-x-4 md:grid-cols-3">
-            <TextField name="birth_date" type="date" label="Дата рождения" />
-
             <SelectField
               name="sex"
               label="Пол"
               cleanable
               onClean={() => setFieldValue('sex', '')}
               options={['male', 'female'].map((sex) => ({ value: sex, label: SexName[sex as Sex] }))}
+              required
             />
+
+            <TextField name="birth_date" type="date" label="Дата рождения" />
 
             {nationalities &&
               <SelectField

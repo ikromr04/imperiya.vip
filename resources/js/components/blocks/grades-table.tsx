@@ -23,7 +23,6 @@ function GradesTable({
       accessor: 'students',
       header: 'Ученики',
       width: 1200,
-      className: '!min-w-none !max-w-none'
     },
   ];
 

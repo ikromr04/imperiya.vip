@@ -153,7 +153,7 @@ function SelectField(props: SelectFieldProps): JSX.Element {
             className="flex items-center grow bg-gray-50 min-w-0 rounded-t h-8 px-4 leading-none text-sm w-full focus:outline-none hover:bg-gray-50  focus:bg-gray-50"
             type="search"
             placeholder="Поиск"
-            onInput={(evt: BaseSyntheticEvent) => setOptions(props.options.filter((option) => option.label.toLowerCase().includes(evt.target.value)))}
+            onInput={(evt: BaseSyntheticEvent) => setOptions(props.options.filter((option) => option.label.toLowerCase().includes(evt.target.value.toLowerCase())))}
           />}
 
         <ul className="max-h-56 overflow-y-auto scrollbar-y">

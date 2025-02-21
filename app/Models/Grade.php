@@ -28,7 +28,7 @@ class Grade extends Model
         'id',
         'user_id',
         'grade_id',
-      )->with(['user' => fn($query) => $query->select('id', 'name')]),
+      )->with(['user:id,name']),
     ]);
   }
 }

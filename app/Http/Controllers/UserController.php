@@ -12,8 +12,6 @@ use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Illuminate\Validation\ValidationException;
 
@@ -149,16 +147,11 @@ class UserController extends Controller
 
   public function delete(Request $request)
   {
-    $user = User::selectBasic()->findOrFail($request->userId);
-
-    if ($request->parents_deletion && optional($user->student)->exists()) {
-      optional($user->student->mother)->delete();
-      optional($user->student->father)->delete();
-    }
+    $user = User::findOrFail($request->userId);
 
     $user->delete();
 
-    return response()->noContent();
+    return response()->json(User::orderBy('name')->selectBasic()->get(), 200);
   }
 
   public function updateAvatar(int $userId)

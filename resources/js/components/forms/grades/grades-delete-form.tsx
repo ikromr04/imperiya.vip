@@ -1,5 +1,4 @@
 import Button from '@/components/ui/button';
-import Checkbox from '@/components/ui/checkbox/checkbox';
 import { AppRoute } from '@/const/routes';
 import { GradeDeleteDTO } from '@/dto/grades';
 import { useAppDispatch } from '@/hooks';
@@ -55,26 +54,35 @@ function GradesDeleteForm({
       key={grade.id}
     >
       {({ isSubmitting }) => (
-        <Form className="flex flex-col gap-3">
-          <p>Вы уверены что хотите удалить данный класс? Все данные связанные с этим классом будут удалены.</p>
-          <Checkbox name="students_deletion" label="Также удалить всех учеников этого класса" />
+        <Form>
+          <div className="flex items-center justify-between gap-2 mb-4">
+            <h3 className="title">Удаление класса</h3>
 
-          <div className="flex items-center justify-end gap-2 mt-2 sm:col-span-2">
+            <Button
+              className="ml-auto"
+              type="reset"
+              icon="close"
+              variant="error"
+              onClick={() => setIsOpen(false)}
+            >
+              <span className="sr-only">Отмена</span>
+            </Button>
+          </div>
+
+          <div className="mb-4">
+            <p className="mb-2">Вы уверены что хотите удалить данный класс? Все данные связанные с этим классом будут удалены.</p>
+          </div>
+
+          <div className="flex items-center justify-end gap-2 sm:col-span-2">
             <Button
               className="justify-center min-w-[92px]"
               type="submit"
               disabled={isSubmitting}
               loading={isSubmitting}
               variant="success"
+              icon="delete"
             >
               Удалить
-            </Button>
-            <Button
-              type="reset"
-              onClick={() => setIsOpen(false)}
-              variant="error"
-            >
-              Отмена
             </Button>
           </div>
         </Form>

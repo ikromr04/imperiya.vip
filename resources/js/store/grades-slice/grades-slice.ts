@@ -22,12 +22,15 @@ export const gradesSlice = createSlice({
         state.grades = action.payload;
       })
       .addCase(storeGradeAction.fulfilled, (state, action) => {
-        state.grades = [action.payload, ...(state.grades || [])];
+        state.grades = action.payload;
       })
-      .addCase(storeUserAction.fulfilled, (state) => {
-        state.grades = null;
+      .addCase(updateGradeAction.fulfilled, (state, action) => {
+        state.grades = action.payload;
       })
       .addCase(deleteUserAction.fulfilled, (state) => {
+        state.grades = null;
+      })
+      .addCase(storeUserAction.fulfilled, (state) => {
         state.grades = null;
       })
       .addCase(updateUserAction.fulfilled, (state) => {
@@ -36,13 +39,8 @@ export const gradesSlice = createSlice({
       .addCase(updateUserRoleAction.fulfilled, (state) => {
         state.grades = null;
       })
-      .addCase(updateGradeAction.fulfilled, (state) => {
-        state.grades = null;
-      })
       .addCase(deleteGradeAction.fulfilled, (state, action) => {
-        if (state.grades) {
-          state.grades = state.grades.filter(({ id }) => id !== action.payload);
-        }
+        state.grades = action.payload;
       });
   },
 });

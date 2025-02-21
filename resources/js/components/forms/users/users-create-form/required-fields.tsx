@@ -59,13 +59,14 @@ function RequiredFields({
           className="ml-auto"
           type="reset"
           variant="error"
+          icon="close"
           onClick={() => {
             setIsOpen(false);
             setStep('required');
             resetForm();
           }}
         >
-          <Icons.close width={10} />
+          <span className="sr-only">Отмена</span>
         </Button>
       </div>
 

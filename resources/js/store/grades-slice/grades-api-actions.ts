@@ -3,7 +3,7 @@ import { AxiosError, AxiosInstance } from 'axios';
 import { GradeDeleteDTO, GradeStoreDTO, GradeUpdateDTO } from '@/dto/grades';
 import { ValidationError } from '@/types/validation-error';
 import { generatePath } from 'react-router-dom';
-import { Grade, GradeId, Grades } from '@/types/grades';
+import { Grades } from '@/types/grades';
 import { APIRoute } from '@/const/routes';
 
 export const fetchGradesAction = createAsyncThunk<Grades, undefined, {
@@ -17,9 +17,9 @@ export const fetchGradesAction = createAsyncThunk<Grades, undefined, {
   },
 );
 
-export const storeGradeAction = createAsyncThunk<Grade, {
+export const storeGradeAction = createAsyncThunk<Grades, {
   dto: GradeStoreDTO,
-  onSuccess?: (grade: Grade) => void,
+  onSuccess?: () => void,
   onValidationError?: (error: ValidationError) => void,
   onFail?: (message: string) => void,
 }, {
@@ -29,8 +29,8 @@ export const storeGradeAction = createAsyncThunk<Grade, {
   'grades/store',
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.post<Grade>(APIRoute.Grades.Index, dto);
-      if (onSuccess) onSuccess(data);
+      const { data } = await api.post<Grades>(APIRoute.Grades.Index, dto);
+      if (onSuccess) onSuccess();
       return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -43,9 +43,9 @@ export const storeGradeAction = createAsyncThunk<Grade, {
   },
 );
 
-export const updateGradeAction = createAsyncThunk<Grade, {
+export const updateGradeAction = createAsyncThunk<Grades, {
   dto: GradeUpdateDTO,
-  onSuccess?: (grade: Grade) => void,
+  onSuccess?: () => void,
   onValidationError?: (error: ValidationError) => void,
   onFail?: (message: string) => void,
 }, {
@@ -55,8 +55,8 @@ export const updateGradeAction = createAsyncThunk<Grade, {
   'grades/update',
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.put<Grade>(APIRoute.Grades.Index, dto);
-      if (onSuccess) onSuccess(data);
+      const { data } = await api.put<Grades>(APIRoute.Grades.Index, dto);
+      if (onSuccess) onSuccess();
       return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -69,7 +69,7 @@ export const updateGradeAction = createAsyncThunk<Grade, {
   },
 );
 
-export const deleteGradeAction = createAsyncThunk<GradeId, {
+export const deleteGradeAction = createAsyncThunk<Grades, {
   dto: GradeDeleteDTO,
   onSuccess?: () => void,
   onFail?: (message: string) => void,
@@ -80,9 +80,9 @@ export const deleteGradeAction = createAsyncThunk<GradeId, {
   'grades/delete',
   async ({ dto, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      await api.delete(`${generatePath(APIRoute.Grades.Show, { gradeId: dto.grade_id })}?students_deletion=${dto.students_deletion ? 'true' : ''}`);
+      const { data } = await api.delete<Grades>(`${generatePath(APIRoute.Grades.Show, { gradeId: dto.grade_id })}?students_deletion=${dto.students_deletion ? 'true' : ''}`);
       if (onSuccess) onSuccess();
-      return dto.grade_id;
+      return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;
