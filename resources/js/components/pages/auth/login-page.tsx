@@ -10,9 +10,8 @@ import { Link, Navigate } from 'react-router-dom';
 function LoginPage(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthStatus);
 
-  if (authorizationStatus === AuthorizationStatus.Auth) {
+  if (authorizationStatus === AuthorizationStatus.Auth) 
     return <Navigate to={AppRoute.Journal} />;
-  };
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-white bg-illustrations bg-bottom bg-contain bg-no-repeat md:bg-transparent">
