@@ -24,7 +24,7 @@ return new class extends Migration
       $table->string('avatar_thumb')->nullable();
       $table->date('birth_date')->nullable();
       $table->text('address')->nullable();
-      $table->integer('nationality_id')->nullable();
+      $table->string('nationality')->nullable();
       $table->json('social_link')->nullable();
       $table->json('phone_numbers')->nullable();
       $table->timestamp('email_verified_at')->nullable();

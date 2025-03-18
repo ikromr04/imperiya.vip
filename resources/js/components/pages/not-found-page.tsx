@@ -22,7 +22,7 @@ function NotFoundPage(): JSX.Element {
 
         <Button href={AppRoute.Journal}>
           Вернуться на главную страницу
-        </Button>вода песок камень алюминруда
+        </Button>
       </div>
     </main>
   );

@@ -18,8 +18,8 @@
   <title>{{ env('APP_NAME') }}</title>
 </head>
 
-<body>
-  <div class="min-w-screen min-h-screen bg-gray-100 text-base" id="root"></div>
+<body class="styled-scrollbar">
+  <div id="root"></div>
 
   @viteReactRefresh
   @vite('resources/js/main.tsx')

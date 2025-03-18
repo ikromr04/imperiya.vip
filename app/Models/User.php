@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -17,8 +16,6 @@ class User extends Authenticatable
   use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
   protected $guarded = ['id'];
-
-  protected $hidden = ['nationality_id'];
 
   protected function casts(): array
   {
@@ -62,17 +59,6 @@ class User extends Authenticatable
     return $this->hasOne(Guardian::class);
   }
 
-  public function nationality(): BelongsTo
-  {
-    return $this->belongsTo(Nationality::class, 'nationality_id');
-  }
-
-  public function toArray()
-  {
-    $array = parent::toArray();
-    return array_filter($array, fn($value) => $value);
-  }
-
   public function scopeSelectBasic($query)
   {
     return $query->select(
@@ -86,12 +72,12 @@ class User extends Authenticatable
       'avatar_thumb as avatarThumb',
       'birth_date as birthDate',
       'address',
-      'nationality_id',
+      'nationality',
       'social_link as socialLink',
       'phone_numbers as phoneNumbers',
+      'updated_at as updatedAt',
       'created_at as createdAt',
     )->with([
-      'nationality' => fn($query) => $query->selectBasic(),
       'superadmin' => fn($query) => $query->selectBasic(),
       'admin' => fn($query) => $query->selectBasic(),
       'director' => fn($query) => $query->selectBasic(),
@@ -118,5 +104,11 @@ class User extends Authenticatable
       $user->parent?->delete();
       $user->student?->delete();
     });
+  }
+
+  public function toArray()
+  {
+    $array = parent::toArray();
+    return array_filter($array, fn($value) => $value);
   }
 }

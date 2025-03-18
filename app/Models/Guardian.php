@@ -13,7 +13,10 @@ class Guardian extends Model
   use HasFactory, SoftDeletes;
 
   protected $guarded = ['id'];
-  protected $hidden = ['user_id'];
+  protected $hidden = [
+    'id',
+    'user_id',
+  ];
   protected $appends = ['children'];
 
   public function user(): BelongsTo
@@ -32,30 +35,21 @@ class Guardian extends Model
       'id',
       'user_id',
     )->with([
-      'user:id,name',
+      'educations' => fn($query) => $query->selectBasic(),
     ]);
   }
 
   public function getChildrenAttribute()
   {
-    $students = Student::select(
-      'id',
-      'mother_id',
-      'user_id',
-      'father_id',
-    )->where('mother_id', $this->user_id)
+    return Student::where('mother_id', $this->user_id)
       ->orWhere('father_id', $this->user_id)
-      ->with(['user:id,name'])
-      ->get();
+      ->pluck('user_id')
+      ->toArray();
+  }
 
-    $children = [];
-    foreach ($students as $student) {
-      array_push($children, [
-        'id' => $student->user->id,
-        'name' => $student->user->name,
-      ]);
-    }
-
-    return $children;
+  public function toArray()
+  {
+    $array = parent::toArray();
+    return array_filter($array, fn($value) => $value);
   }
 }

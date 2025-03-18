@@ -5,15 +5,16 @@ export const AppRoute = {
   },
   Users: {
     Index: '/users',
-    Show: '/users/:userId',
-    Education: '/users/:userId/education',
-    Work: '/users/:userId/work-experience',
-    Schedule: '/users/:userId/schedule',
-    Evaluations: '/users/:userId/evaluations',
+    Create: '/users/create',
+    Show: '/users/:id',
+    Education: '/users/:id/education',
+    Work: '/users/:id/work-experience',
+    Schedule: '/users/:id/schedule',
+    Evaluations: '/users/:id/evaluations',
   },
   Classes: {
     Index: '/classes',
-    Show: '/classes/:classId',
+    Show: '/classes/:id',
   },
   Monitoring: {
     Index: '/monitoring',
@@ -40,14 +41,14 @@ export const APIRoute = {
   },
   Users: {
     Index: '/users',
-    Show: '/users/:userId',
-    Avatar: '/users/:userId/avatar',
-    Role: '/users/:userId/role',
+    Show: '/users/:id',
+    Avatar: '/users/:id/avatar',
+    Role: '/users/:id/role',
     Login: '/users/login/:login',
   },
   Grades: {
     Index: '/grades',
-    Show: '/grades/:gradeId',
+    Show: '/grades/:id',
   },
   Nationalities: {
     Index: '/nationalities',

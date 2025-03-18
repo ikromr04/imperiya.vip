@@ -19,7 +19,7 @@ type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   after?: JSX.Element;
 };
 
- function TextField({
+function TextField({
   name,
   cleanable = false,
   onClean,

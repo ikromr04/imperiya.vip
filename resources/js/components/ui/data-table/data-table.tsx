@@ -1,0 +1,303 @@
+import React, { BaseSyntheticEvent, ReactNode, useState } from 'react';
+import classNames from 'classnames';
+import { Icons } from '../../icons';
+import {
+  ColumnDef,
+  ColumnPinningState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortDirection,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from '@tanstack/react-table';
+import ColumnFilter from './column-filter';
+import ColumnVisibility from './column-visibility';
+
+const DEFAULT_PAGE_SIZE = 16;
+const DEFAULT_SORTING_STATE: SortingState = [];
+const DEFAULT_VISIBILITY_STATE: VisibilityState = {};
+const DEFAULT_COLUMN_PINNING_STATE: ColumnPinningState = {
+  left: [],
+  right: [],
+};
+
+type DataTableProps<T> = {
+  data: T[];
+  columns: ColumnDef<T>[];
+  className?: string;
+  pageSize?: number;
+  sortingState?: SortingState;
+  visibilityState?: VisibilityState;
+  columnPinningState?: ColumnPinningState;
+  actions?: ReactNode;
+};
+
+export default function DataTable<T>({
+  data,
+  columns,
+  className,
+  pageSize = DEFAULT_PAGE_SIZE,
+  sortingState = DEFAULT_SORTING_STATE,
+  visibilityState = DEFAULT_VISIBILITY_STATE,
+  columnPinningState = DEFAULT_COLUMN_PINNING_STATE,
+  actions,
+}: DataTableProps<T>): JSX.Element {
+  const [globalFilter, setGlobalFilter] = useState<string>('');
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize });
+  const [sorting, setSorting] = useState<SortingState>(sortingState);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(visibilityState);
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>(columnPinningState);
+
+  const table = useReactTable({
+    data,
+    columns,
+    defaultColumn: {
+      maxSize: Number.MAX_SAFE_INTEGER,
+      sortDescFirst: false,
+      enableSorting: true,
+      enableColumnFilter: false,
+    },
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    state: {
+      sorting,
+      globalFilter,
+      columnVisibility,
+      pagination,
+      columnPinning,
+    },
+    onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
+    onColumnVisibilityChange: setColumnVisibility,
+    onPaginationChange: setPagination,
+    onColumnPinningChange: setColumnPinning,
+  });
+
+  const totalPages = table.getPageCount();
+  const currentPage = table.getState().pagination.pageIndex + 1;
+
+  const getPaginationItems = (): (number | string)[] => {
+    const pages: (number | string)[] = [];
+    const delta = 2;
+
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (currentPage > delta + 2) pages.push('...');
+
+      const start = Math.max(2, currentPage - delta);
+      const end = Math.min(totalPages - 1, currentPage + delta);
+      for (let i = start; i <= end; i++) pages.push(i);
+
+      if (currentPage < totalPages - (delta + 1)) pages.push('...');
+      pages.push(totalPages);
+    }
+
+    return pages;
+  };
+
+  const renderSortingIcon = (sortingType: false | SortDirection): ReactNode => {
+    const Icon = Icons[sortingType === 'desc' ? 'arrowDownwardAlt' : 'arrowUpwardAlt'];
+    return (
+      <span
+        className={classNames(
+          'flex justify-center items-center min-w-6 min-h-6 rounded-full hover:bg-black/5',
+          !sortingType && 'hidden opacity-40 group-hover:flex'
+        )}
+      >
+        <Icon width={10} />
+      </span>
+    );
+  };
+
+  return (
+    <div
+      className={classNames(
+        'rounded-md shadow border bg-white',
+        className,
+      )}
+    >
+      <div className="flex gap-4 p-2 pl-4 border-b">
+        <ColumnVisibility
+          table={table}
+          columnVisibility={columnVisibility}
+          setColumnVisibility={setColumnVisibility}
+        />
+
+        <label className="flex grow items-center gap-2 h-8 cursor-pointer text-blue-700">
+          <Icons.search width={14} />
+          <input
+            className="flex cursor-pointer focus:cursor-auto grow min-w-none w-full focus:outline-none placeholder:text-inherit focus:placeholder:font-normal focus:placeholder:text-gray-400"
+            type="search"
+            placeholder="Искать"
+            value={globalFilter}
+            onInput={(evt: BaseSyntheticEvent) => setGlobalFilter(evt.target.value)}
+          />
+        </label>
+
+        {actions}
+      </div>
+
+      <table className="flex flex-col w-full">
+        <thead
+          className="sticky top-0 z-20 shadow overflow-x-auto no-scrollbar"
+          onScroll={(evt: BaseSyntheticEvent) => {
+            evt.target.nextElementSibling.scrollLeft = evt.target.scrollLeft;
+            evt.target.nextElementSibling.nextElementSibling.scrollLeft = evt.target.scrollLeft;
+          }}
+        >
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  className={classNames(
+                    'p-0 text-start bg-gray-100 cursor-pointer group',
+                    columnPinning.left?.includes(header.column.id) && 'sticky left-0 z-10',
+                    columnPinning.right?.includes(header.column.id) && 'sticky right-0 z-10',
+                  )}
+                  onClick={(evt: BaseSyntheticEvent) => !evt.target.closest('.column-filter') && header.column.toggleSorting()}
+                  style={{
+                    minWidth: `${header.getSize()}px`,
+                    width: `${header.getSize()}px`,
+                    maxWidth: `${header.getSize()}px`,
+                  }}
+                >
+                  <div
+                    className={classNames(
+                      'flex p-2 border-gray-200',
+                      columnPinning.left?.includes(header.column.id) && 'border-r',
+                      columnPinning.right?.includes(header.column.id) && 'border-l',
+                    )}
+                  >
+                    <span className="text-start truncate select-none">
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                    </span>
+                    {header.column.getCanSort() && renderSortingIcon(header.column.getIsSorted())}
+
+                    <ColumnFilter
+                      header={header}
+                      columnPinning={columnPinning}
+                      setColumnPinning={setColumnPinning}
+                      setColumnVisibility={setColumnVisibility}
+                    />
+                  </div>
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+
+        <tbody
+          className="overflow-x-auto no-scrollbar"
+          onScroll={(evt: BaseSyntheticEvent) => {
+            evt.target.nextElementSibling.scrollLeft = evt.target.scrollLeft;
+            evt.target.previousElementSibling.scrollLeft = evt.target.scrollLeft;
+          }}
+        >
+          {table.getRowModel().rows.map((row, index) => (
+            <tr
+              key={JSON.stringify(row.original)}
+              className={classNames(
+                (index % 2) ? 'bg-gray-50' : 'bg-white',
+              )}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={JSON.stringify(cell)}
+                  className={classNames(
+                    'relative p-0',
+                    (index % 2) ? 'bg-gray-50' : 'bg-white',
+                    columnPinning.left?.includes(cell.column.id) && 'sticky left-0 z-10',
+                    columnPinning.right?.includes(cell.column.id) && 'sticky right-0 z-10',
+                  )}
+                  style={{
+                    minWidth: `${cell.column.getSize()}px`,
+                    width: `${cell.column.getSize()}px`,
+                    maxWidth: `${cell.column.getSize()}px`,
+                  }}
+                >
+                  <div
+                    className={classNames(
+                      'p-2 h-full before:absolute before:top-0 before:w-[1px] before:h-full before:bg-transparent',
+                      columnPinning.left?.includes(cell.column.id) && 'before:right-0 before:!bg-gray-200',
+                      columnPinning.right?.includes(cell.column.id) && 'before:left-0 before:!bg-gray-200',
+                    )}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </div>
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+
+        <tfoot
+          className="sticky bottom-[48px] z-10 overflow-x-auto bg-white styled-scrollbar mb-[-1px]"
+          onScroll={(evt: BaseSyntheticEvent) => {
+            evt.target.previousElementSibling.scrollLeft = evt.target.scrollLeft;
+            evt.target.previousElementSibling.previousElementSibling.scrollLeft = evt.target.scrollLeft;
+          }}
+        >
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  className="border-t p-0"
+                  key={header.id}
+                  style={{
+                    minWidth: header.getSize() ? `${header.getSize()}px` : 'auto',
+                    width: header.getSize() ? `${header.getSize()}px` : 'auto',
+                    maxWidth: header.getSize() ? `${header.getSize()}px` : 'auto',
+                  }}
+                ></th>
+              ))}
+            </tr>
+          ))}
+        </tfoot>
+      </table>
+
+      <div className="sticky bottom-0 z-10 rounded-b-md p-2 border-t bg-gray-100">
+        <div className="flex w-max ml-auto">
+          <button
+            className="flex justify-center items-center h-8 w-8 border-transparent rounded-md border transform disabled:opacity-50 disabled:pointer-events-none"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            <Icons.previous width={7} />
+          </button>
+
+          {getPaginationItems().map((page, index) => (
+            <button
+              key={index}
+              className={classNames(
+                'flex justify-center items-center h-8 rounded-md border transform hover:font-bold',
+                currentPage === page ? 'w-10 bg-white border-gray-200 pointer-events-none' : 'w-8 border-transparent',
+                page === '...' ? 'pointer-events-none' : 'disabled:opacity-50 disabled:pointer-events-none',
+              )}
+              onClick={() => typeof page === 'number' && table.setPageIndex(page - 1)}
+              disabled={page === '...'}
+            >
+              {page}
+            </button>
+          ))}
+
+          <button
+            className="flex justify-center items-center h-8 w-8 border-transparent rounded-md border transform disabled:opacity-50 disabled:pointer-events-none"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            <Icons.next width={7} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

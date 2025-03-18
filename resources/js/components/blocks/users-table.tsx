@@ -1,10 +1,8 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import { generatePath, Link } from 'react-router-dom';
-import { Users } from '@/types/users';
-import { useAppSelector } from '@/hooks';
-import { getUsersFilter } from '@/store/app-slice/app-selector';
-import DataTable, { DataTableColumns } from '../ui/data-table';
+import { Users, UsersFilter } from '@/types/users';
+import DataTable, { DataTableColumns } from '../ui/data-table-old';
 import Button from '../ui/button';
 import { Icons } from '../icons';
 import { AppRoute } from '@/const/routes';
@@ -13,13 +11,14 @@ import { RoleName } from '@/const/users';
 type UsersTableProps = {
   className?: string;
   users: Users;
+  filter: UsersFilter;
 };
 
 function UsersTable({
   className,
   users,
+  filter,
 }: UsersTableProps): JSX.Element {
-  const filter = useAppSelector(getUsersFilter);
 
   const columns: DataTableColumns = [
     {
@@ -90,7 +89,7 @@ function UsersTable({
   const records = users.map((user) => ({
     id: user.id,
     name:
-      <Button className="min-h-max !px-0 leading-[1.2]" href={generatePath(AppRoute.Users.Show, { userId: user.id })} variant="text">
+      <Button className="min-h-max !px-0 leading-[1.2]" href={generatePath(AppRoute.Users.Show, { id: user.id })} variant="text">
         <span className="relative z-0 flex min-w-12 min-h-12 rounded-full bg-gray-100 overflow-hidden">
           {user.avatarThumb &&
             <img
@@ -110,7 +109,7 @@ function UsersTable({
       <span className="flex max-w-max text-center bg-blue-200 text-primary rounded-full text-sm py-1 px-2 leading-none">
         {RoleName[user.role]}
       </span>,
-    grade: user.student?.grade && <b className="flex w-full justify-center text-lg">{user.student.grade.level} {user.student.grade.group}</b>,
+    // grade: user.student?.gradeId && <b className="flex w-full justify-center text-lg">{user.student.grade.level} {user.student.grade.group}</b>,
     phoneNumbers:
       <div className="flex flex-col gap-1">
         {user.phoneNumbers?.map((phone) => (
@@ -126,7 +125,7 @@ function UsersTable({
     login: user.login,
     birthDate: user.birthDate ? dayjs(user.birthDate).format('DD MMMM YYYY') : '',
     address: user.address,
-    nationality: <span className="flex mx-auto">{user.nationality?.name}</span>,
+    nationality: <span className="flex mx-auto">{user.nationality}</span>,
     socialLinks:
       <div className="flex flex-wrap gap-2">
         {user.socialLink?.facebook &&

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserStoreRequest;
 use App\Models\Admin;
 use App\Models\Director;
 use App\Models\Guardian;
@@ -115,43 +114,13 @@ class UserController extends Controller
     return response()->json(User::selectBasic()->find($user->id), 200);
   }
 
-  public function updateRole(Request $request, int $userId)
-  {
-    $user = User::findOrFail($userId);
-
-    // switch ($user->role) {
-    //   case 'parent':
-    //     $childrenIds = array_map(fn($item) => $item['id'], $user->parent->children);
-    //     $newChildrenIds = collect($request->children);
-
-    //     $male = Student::select('father_id')->where('father_id', $user->id)->first();
-    //     $female = Student::select('father_id')->where('father_id', $user->id)->first();
-
-    //     if ($male) {
-    //       Student::whereIn('father_id', $childrenIds)
-    //         ->whereNotIn('father_id', $newChildrenIds)
-    //         ->update(['father_id' => null]);
-    //     } else {
-    //       Student::whereIn('mother_id', $childrenIds)
-    //         ->whereNotIn('mother_id', $newChildrenIds)
-    //         ->update(['mother_id' => null]);
-    //     }
-    //     $newChildIds = collect($request->children);
-    //     $user->parent()
-    //       ->whereNotIn('id', $newChildrenIds)
-    //       ->update(['grade_id' => null]);
-
-    //     break;
-    // }
-  }
-
   public function delete(Request $request)
   {
     $user = User::findOrFail($request->userId);
 
     $user->delete();
 
-    return response()->json(User::orderBy('name')->selectBasic()->get(), 200);
+    return response()->noContent();
   }
 
   public function updateAvatar(int $userId)

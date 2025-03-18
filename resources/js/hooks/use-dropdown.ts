@@ -10,6 +10,9 @@ export const useDropdown = <T extends HTMLElement,>() => {
   useEscapeKeydown(() => setIsOpen(false));
 
   useEffect(() => {
+    const handleScroll = () => setIsOpen(false);
+    window.addEventListener('scroll', handleScroll);
+
     if (menuRef.current && ref.current) {
       const rect = menuRef.current.getBoundingClientRect();
 
@@ -23,7 +26,6 @@ export const useDropdown = <T extends HTMLElement,>() => {
 
     const handleClickOutside = (evt: MouseEvent) => {
       if (ref.current && !ref.current.contains(evt.target as Node)) {
-
         setIsOpen(false);
       }
     };
@@ -32,6 +34,7 @@ export const useDropdown = <T extends HTMLElement,>() => {
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, [isOpen]);
 

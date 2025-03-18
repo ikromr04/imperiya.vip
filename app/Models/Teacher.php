@@ -13,7 +13,10 @@ class Teacher extends Model
   use HasFactory, SoftDeletes;
 
   protected $guarded = ['id'];
-  protected $hidden = ['user_id'];
+  protected $hidden = [
+    'id',
+    'user_id',
+  ];
 
   public function user(): BelongsTo
   {
@@ -31,8 +34,13 @@ class Teacher extends Model
       'id',
       'user_id',
     )->with([
-      'user:id,name',
-      'educations' => fn($query) =>$query->selectBasic(),
+      'educations' => fn($query) => $query->selectBasic(),
     ]);
+  }
+
+  public function toArray()
+  {
+    $array = parent::toArray();
+    return array_filter($array, fn($value) => $value);
   }
 }

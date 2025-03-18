@@ -1,5 +1,5 @@
 import Button from '@/components/ui/button';
-import SelectField from '@/components/ui/fields/select-field';
+import SelectField from '@/components/ui/form-controls/formik/select-field';
 import { UserStoreDTO } from '@/dto/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';

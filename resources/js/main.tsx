@@ -17,8 +17,8 @@ dayjs.locale('ru');
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
-      <ToastContainer position="bottom-right" />
       <App />
+      <ToastContainer position="bottom-right" />
     </Provider>
   </StrictMode>,
 );

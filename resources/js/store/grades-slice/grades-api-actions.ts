@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
-import { GradeDeleteDTO, GradeStoreDTO, GradeUpdateDTO } from '@/dto/grades';
+import { GradeStoreDTO, GradeUpdateDTO } from '@/dto/grades';
 import { ValidationError } from '@/types/validation-error';
 import { generatePath } from 'react-router-dom';
-import { Grades } from '@/types/grades';
+import { GradeId, Grades } from '@/types/grades';
 import { APIRoute } from '@/const/routes';
 
 export const fetchGradesAction = createAsyncThunk<Grades, undefined, {
@@ -69,8 +69,8 @@ export const updateGradeAction = createAsyncThunk<Grades, {
   },
 );
 
-export const deleteGradeAction = createAsyncThunk<Grades, {
-  dto: GradeDeleteDTO,
+export const deleteGradeAction = createAsyncThunk<GradeId, {
+  id: GradeId,
   onSuccess?: () => void,
   onFail?: (message: string) => void,
 }, {
@@ -78,11 +78,11 @@ export const deleteGradeAction = createAsyncThunk<Grades, {
   rejectWithValue: ValidationError,
 }>(
   'grades/delete',
-  async ({ dto, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+  async ({ id, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.delete<Grades>(`${generatePath(APIRoute.Grades.Show, { gradeId: dto.grade_id })}?students_deletion=${dto.students_deletion ? 'true' : ''}`);
+      await api.delete(generatePath(APIRoute.Grades.Show, { id }));
       if (onSuccess) onSuccess();
-      return data;
+      return id;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;

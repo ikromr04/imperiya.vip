@@ -1,5 +1,5 @@
 import { APIRoute } from '@/const/routes';
-import { RoleUpdateDTO, UserDeleteDTO, UserStoreDTO, UserUpdateDTO } from '@/dto/users';
+import { RoleUpdateDTO, UserStoreDTO, UserUpdateDTO } from '@/dto/users';
 import { ResponseMessage } from '@/types';
 import { User, UserId, Users } from '@/types/users';
 import { ValidationError } from '@/types/validation-error';
@@ -70,8 +70,8 @@ export const checkUserLoginAction = createAsyncThunk<undefined, {
   },
 );
 
-export const deleteUserAction = createAsyncThunk<Users, {
-  dto: UserDeleteDTO,
+export const deleteUserAction = createAsyncThunk<UserId, {
+  id: UserId,
   onSuccess?: () => void,
   onFail?: (message: string) => void,
 }, {
@@ -79,11 +79,11 @@ export const deleteUserAction = createAsyncThunk<Users, {
   rejectWithValue: ValidationError,
 }>(
   'users/delete',
-  async ({ dto, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+  async ({ id, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.delete<Users>(generatePath(APIRoute.Users.Show, { userId: dto.user_id }));
+      await api.delete(generatePath(APIRoute.Users.Show, { id }));
       if (onSuccess) onSuccess();
-      return data;
+      return id;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;

@@ -13,10 +13,8 @@ class Student extends Model
 
   protected $guarded = ['id'];
   protected $hidden = [
+    'id',
     'user_id',
-    'grade_id',
-    'mother_id',
-    'father_id',
   ];
 
   public function user(): BelongsTo
@@ -50,18 +48,9 @@ class Student extends Model
     return $query->select(
       'id',
       'user_id',
-      'grade_id',
-      'mother_id',
-      'father_id',
-    )->with([
-      'user:id,name',
-      'grade' => fn($query) => $query->select(
-        'id',
-        'level',
-        'group',
-      ),
-      'mother' => fn($query) => $query->select('id', 'name'),
-      'father' => fn($query) => $query->select('id', 'name'),
-    ]);
+      'grade_id as gradeId',
+      'mother_id as motherId',
+      'father_id as fatherId',
+    );
   }
 }

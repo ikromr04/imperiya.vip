@@ -46,18 +46,12 @@ class GradeController extends Controller
 
   public function delete(Request $request)
   {
-    $grade = Grade::find($request->gradeId);
+    $grade = Grade::findOrFail($request->gradeId);
 
-    if (!$grade) {
-      return response()->json(['message' => 'Класс не найден.'], 404);
-    }
-
-    foreach ($grade->students as $student) {
-      $student->update(['grade_id' => null]);
-    }
+    $grade->students()->update(['grade_id' => null]);
 
     $grade->delete();
 
-    return response()->json(Grade::orderBy('level')->selectBasic()->get(), 200);
+    return response()->noContent();
   }
 }

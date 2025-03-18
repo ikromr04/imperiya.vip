@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Button from '../ui/button';
 import { useAppDispatch } from '../../hooks/index';
 import { sendResetPasswordLinkAction } from '../../store/auth-slice/auth-api-actions';
-import TextField from '../ui/fields/text-field';
+import TextField from '../ui/form-controls/formik/text-field';
 import { ResetPasswordEmailDTO } from '../../dto/auth-dto';
 import Message, { MessageProps } from '../ui/message';
 

@@ -8,8 +8,8 @@ import { resetPasswordAction } from '../../store/auth-slice/auth-api-actions';
 import { useParams } from 'react-router-dom';
 import { ResetPasswordDTO } from '../../dto/auth-dto';
 import Checkbox from '../ui/checkbox/checkbox';
-import TextField from '../ui/fields/text-field';
-import PasswordField from '../ui/fields/password-field';
+import TextField from '../ui/form-controls/formik/text-field';
+import PasswordField from '../ui/form-controls/formik/password-field';
 import Message, { MessageProps } from '../ui/message';
 
 const validationSchema = Yup.object().shape({

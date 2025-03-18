@@ -1,7 +1,7 @@
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
-import SelectField from '@/components/ui/fields/select-field';
-import TextField from '@/components/ui/fields/text-field';
+import SelectField from '@/components/ui/form-controls/formik/select-field';
+import TextField from '@/components/ui/form-controls/formik/text-field';
 import { UserStoreDTO } from '@/dto/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchNationalitiesAction } from '@/store/nationality-slice/nationality-api-actions';

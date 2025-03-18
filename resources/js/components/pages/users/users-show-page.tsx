@@ -20,7 +20,7 @@ function UsersShowPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const params = useParams();
   const users = useAppSelector(getUsers);
-  const user = users?.find((user) => user.id === +(params.userId || 0)) || null;
+  const user = users.data?.find((user) => user.id === +(params.userId || 0)) || null;
 
   useEffect(() => {
     if (!user && params.userId) dispatch(fetchUsersAction());

@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Education extends Model
 {
-  use HasFactory;
+  use HasFactory, SoftDeletes;
 
   protected $guarded = ['id'];
   protected $hidden = [
     'teacher_id',
-    'parent_id',
+    'guardian_id',
   ];
 
   public function teacher(): BelongsTo
@@ -43,7 +44,7 @@ class Education extends Model
       'started_at as startedAt',
       'graduated_at as graduatedAt',
       'teacher_id',
-      'parent_id',
+      'guardian_id',
     );
   }
 }

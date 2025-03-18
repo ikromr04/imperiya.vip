@@ -1,6 +1,6 @@
 import Button from '@/components/ui/button';
-import SelectField from '@/components/ui/fields/select-field';
-import TextField from '@/components/ui/fields/text-field';
+import SelectField from '@/components/ui/form-controls/formik/select-field';
+import TextField from '@/components/ui/form-controls/formik/text-field';
 import { UserUpdateDTO } from '@/dto/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { getNationalities } from '@/store/nationality-slice/nationality-selector';

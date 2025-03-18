@@ -1,11 +1,11 @@
 import React, { InputHTMLAttributes, useId, useState } from 'react';
-import { Icons } from '../../icons';
+import { Icons } from '../../../icons';
 import classNames from 'classnames';
 import Label from './partials/label';
 import Input from './partials/input';
 import After from './partials/after';
 import ErrorMessage from './partials/error-message';
-import { generateRandomPassword } from '../../../utils';
+import { generateRandomPassword } from '../../../../utils';
 import { useField } from 'formik';
 
 type PasswordFieldProps = InputHTMLAttributes<HTMLInputElement> & {

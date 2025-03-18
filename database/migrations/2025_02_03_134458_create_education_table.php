@@ -20,8 +20,9 @@ return new class extends Migration
       $table->timestamp('started_at');
       $table->timestamp('graduated_at');
       $table->foreignId('teacher_id')->nullable()->constrained('teachers')->onDelete('cascade');
-      $table->foreignId('parent_id')->nullable()->constrained('teachers')->onDelete('cascade');
+      $table->foreignId('guardian_id')->nullable()->constrained('guardians')->onDelete('cascade');
       $table->timestamps();
+      $table->softDeletes();
     });
   }
 
@@ -30,6 +31,8 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('education');
+    Schema::table('education', function (Blueprint $table) {
+      $table->dropSoftDeletes();
+    });
   }
 };
