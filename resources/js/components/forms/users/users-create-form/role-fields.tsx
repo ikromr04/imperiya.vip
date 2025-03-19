@@ -10,7 +10,7 @@ import { useFormikContext } from 'formik';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { Step } from './users-create-form';
 import { RoleName } from '@/const/users';
-import { Role } from '@/types/roles';
+import { Role } from '@/types/users';
 
 type RoleFieldsProps = {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -32,9 +32,9 @@ function RoleFields({
   } = useFormikContext<UserStoreDTO>();
 
   useEffect(() => {
-    if (!grades) dispatch(fetchGradesAction());
-    if (!users) dispatch(fetchUsersAction());
-  }, [dispatch, grades, users]);
+    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
+    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
+  }, [dispatch, grades.data, grades.isFetching, users.data, users.isFetching]);
 
   return (
     <>
@@ -63,21 +63,21 @@ function RoleFields({
             label="Класс"
             cleanable
             onClean={() => setFieldValue('grade_id', 0)}
-            options={grades.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
+            options={(grades.data || []).map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
           />
           <SelectField
             name="mother_id"
             label="Мать"
             cleanable
             onClean={() => setFieldValue('mother_id', 0)}
-            options={users.filter(({ sex, role }) => sex === 'female' && role !== 'student').map((user) => ({ value: user.id, label: user.name }))}
+            options={(users.data || []).filter(({ sex, role }) => sex === 'female' && role !== 'student').map((user) => ({ value: user.id, label: user.name }))}
           />
           <SelectField
             name="father_id"
             label="Отец"
             cleanable
             onClean={() => setFieldValue('father_id', 0)}
-            options={users.filter(({ sex, role }) => sex === 'male' && role !== 'student').map((user) => ({ value: user.id, label: user.name }))}
+            options={(users.data || []).filter(({ sex, role }) => sex === 'male' && role !== 'student').map((user) => ({ value: user.id, label: user.name }))}
           />
         </div> : users &&
         <SelectField
@@ -87,7 +87,7 @@ function RoleFields({
           multiple
           cleanable
           onClean={() => setFieldValue('children', [])}
-          options={users.filter((user) => user.student).map((user) => ({ value: user.id, label: user.name }))}
+          options={(users.data || []).filter((user) => user.student).map((user) => ({ value: user.id, label: user.name }))}
         />}
 
       <div className="flex items-center justify-end gap-2 sm:col-span-2">

@@ -33,7 +33,7 @@ class UserController extends Controller
       'email',
       'birth_date',
       'address',
-      'nationality_id',
+      'nationality',
       'social_link',
       'phone_numbers',
     ]));

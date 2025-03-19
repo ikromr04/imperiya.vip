@@ -38,8 +38,8 @@ function UsersCreateForm({
   const initialValues: UserStoreDTO = {
     name: '',
     login: '',
-    role: '',
-    sex: '',
+    role: 'student',
+    sex: 'male',
     phone_numbers: [],
   };
 

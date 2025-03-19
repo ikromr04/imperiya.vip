@@ -2,7 +2,7 @@ import Button from '@/components/ui/button';
 import SelectField from '@/components/ui/form-controls/formik/select-field';
 import TextField from '@/components/ui/form-controls/formik/text-field';
 import { UserUpdateDTO } from '@/dto/users';
-import { useAppDispatch } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { updateUserAction } from '@/store/users-slice/users-api-actions';
 import { Sex, User } from '@/types/users';
 import { Form, Formik, FormikHelpers } from 'formik';
@@ -10,6 +10,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import { SexName } from '@/const/users';
+import { getNationalities } from '@/store/users-slice/users-selector';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Обязательное поле.'),
@@ -28,6 +29,7 @@ function UsersEditForm({
   setIsOpen,
 }: UsersEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const nationalities = useAppSelector(getNationalities);
   const initialValues: UserUpdateDTO = {
     id: user.id,
     name: user.name,
@@ -92,11 +94,7 @@ function UsersEditForm({
               label="Национальность"
               cleanable
               onClean={() => setFieldValue('nationality', '')}
-              options={[
-                { value: 'Таджик', label: 'Таджик' },
-                { value: 'Узбек', label: 'Узбек' },
-                { value: 'Русский', label: 'Русский' },
-              ]}
+              options={nationalities.map((nationality) => ({ value: nationality, label: nationality }))}
             />
           </div>
 

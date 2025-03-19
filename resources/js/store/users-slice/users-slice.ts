@@ -21,6 +21,7 @@ export type UsersSlice = {
     data: Users | null;
     isFetching: boolean;
   };
+  nationalities: string[];
 }
 
 const initialState: UsersSlice = {
@@ -28,6 +29,7 @@ const initialState: UsersSlice = {
     data: null,
     isFetching: false,
   },
+  nationalities: [],
 };
 
 export const usersSlice = createSlice({
@@ -41,6 +43,7 @@ export const usersSlice = createSlice({
       })
       .addCase(fetchUsersAction.fulfilled, (state, action) => {
         state.users.data = action.payload;
+        state.nationalities = [...new Set(action.payload.filter((user) => user.nationality).map(({ nationality }) => nationality as string))];
         state.users.isFetching = false;
       })
       .addCase(fetchUsersAction.rejected, (state) => {

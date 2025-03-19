@@ -1,6 +1,6 @@
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { getUsers } from '@/store/users-slice/users-selector';
+import { getNationalities, getUsers } from '@/store/users-slice/users-selector';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import PageLayout from '@/components/layouts/page-layout';
 import Spinner from '@/components/ui/spinner';
@@ -18,12 +18,16 @@ import TextField from '@/components/ui/form-controls/text-field';
 import { filterUsers } from '@/utils/users';
 import SelectField from '@/components/ui/form-controls/select-field';
 import Button from '@/components/ui/button';
+import Modal from '@/components/ui/modal';
+import UsersCreateForm from '@/components/forms/users/users-create-form/users-create-form';
 
 function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
+  const nationalities = useAppSelector(getNationalities);
   const grades = useAppSelector(getGrades);
   const [filter, setFilter] = useState<UsersFilter>({});
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
@@ -265,10 +269,7 @@ function UsersPage(): JSX.Element {
         renderFilter: () => (
           <SelectField
             placeholder="--Выбрать--"
-            options={
-              [...new Set((users.data || []).filter((user) => user.nationality).map((user) => user.nationality || ''))]
-                .map((nationality) => ({ value: nationality, label: nationality }))
-            }
+            options={nationalities.map((nationality) => ({ value: nationality, label: nationality }))}
             value={filter.nationality || ''}
             onChange={(value) => setFilter((prev) => ({ ...prev, nationality: value }))}
           />
@@ -340,7 +341,7 @@ function UsersPage(): JSX.Element {
               <Button
                 icon="add"
                 variant="success"
-                href={AppRoute.Users.Create}
+                onClick={() => setIsCreating(true)}
               >
                 <span className="sr-only md:not-sr-only">Добавить</span>
               </Button>
@@ -350,6 +351,9 @@ function UsersPage(): JSX.Element {
           <Spinner className="w-8 h-8" />
         )}
       </main>
+      <Modal isOpen={isCreating}>
+        <UsersCreateForm setIsOpen={setIsCreating} />
+      </Modal>
     </PageLayout>
   );
 }

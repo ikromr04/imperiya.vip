@@ -50,7 +50,4 @@ export const APIRoute = {
     Index: '/grades',
     Show: '/grades/:id',
   },
-  Nationalities: {
-    Index: '/nationalities',
-  }
 };

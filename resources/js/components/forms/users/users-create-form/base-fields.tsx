@@ -3,12 +3,11 @@ import Button from '@/components/ui/button';
 import SelectField from '@/components/ui/form-controls/formik/select-field';
 import TextField from '@/components/ui/form-controls/formik/text-field';
 import { UserStoreDTO } from '@/dto/users';
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import { fetchNationalitiesAction } from '@/store/nationality-slice/nationality-api-actions';
-import { getNationalities } from '@/store/nationality-slice/nationality-selector';
 import { FieldArray, useFormikContext } from 'formik';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Step } from './users-create-form';
+import { useAppSelector } from '@/hooks';
+import { getNationalities } from '@/store/users-slice/users-selector';
 
 type BaseFieldsProps = {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -20,7 +19,6 @@ function BaseFields({
   setStep,
 }: BaseFieldsProps): JSX.Element {
   const nationalities = useAppSelector(getNationalities);
-  const dispatch = useAppDispatch();
   const {
     setFieldValue,
     values,
@@ -29,10 +27,6 @@ function BaseFields({
     setTouched,
     isSubmitting,
   } = useFormikContext<UserStoreDTO>();
-
-  useEffect(() => {
-    if (!nationalities) dispatch(fetchNationalitiesAction());
-  }, [dispatch, nationalities]);
 
   const handleNextButtonClick = async () => {
     setTouched({
@@ -69,14 +63,13 @@ function BaseFields({
         <TextField name="birth_date" label="Дата рождения" type="date" />
         <TextField name="email" label="Электронная почта" />
 
-        {nationalities &&
           <SelectField
-            name="nationality_id"
+            name="nationality"
             label="Национальность"
             cleanable
-            onClean={() => setFieldValue('nationality_id', 0)}
-            options={nationalities.map(({ id, name }) => ({ value: id, label: name }))}
-          />}
+            onClean={() => setFieldValue('nationality', '')}
+            options={nationalities.map((nationality) => ({ value: nationality, label: nationality }))}
+          />
 
         <TextField name="address" label="Адрес" />
         <TextField name="social_link.facebook" label="Фейсбук" />
@@ -158,7 +151,7 @@ function BaseFields({
               values.address &&
               values.birth_date &&
               values.email &&
-              values.nationality_id &&
+              values.nationality &&
               values.social_link?.facebook &&
               values.social_link?.instagram &&
               values.social_link?.telegram &&
