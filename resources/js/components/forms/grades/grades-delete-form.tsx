@@ -1,6 +1,5 @@
 import Button from '@/components/ui/button';
 import { AppRoute } from '@/const/routes';
-import { GradeDeleteDTO } from '@/dto/grades';
 import { useAppDispatch } from '@/hooks';
 import { deleteGradeAction } from '@/store/grades-slice/grades-api-actions';
 import { Grade, Grades } from '@/types/grades';
@@ -23,23 +22,19 @@ function GradesDeleteForm({
 }: GradesDeleteFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const initialValues: GradeDeleteDTO = {
-    grade_id: grade.id,
-    students_deletion: false,
-  };
 
   const onSubmit = async (
-    values: GradeDeleteDTO,
-    helpers: FormikHelpers<GradeDeleteDTO>
+    values: object,
+    helpers: FormikHelpers<object>
   ) => {
     helpers.setSubmitting(true);
 
     await dispatch(deleteGradeAction({
-      dto: values,
+      id: grade.id,
       onSuccess: () => {
         toast.success('Класс успешно удален.');
         setIsOpen(false);
-        navigate(generatePath(AppRoute.Classes.Show, { classId: getNextGradeId(grades || [], grade.id) }));
+        navigate(generatePath(AppRoute.Classes.Show, { id: getNextGradeId(grades, grade.id) }));
       },
       onFail: (message) => toast.error(message),
     }));
@@ -49,7 +44,7 @@ function GradesDeleteForm({
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={{}}
       onSubmit={onSubmit}
       key={grade.id}
     >

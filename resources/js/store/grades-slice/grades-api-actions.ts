@@ -3,7 +3,7 @@ import { AxiosError, AxiosInstance } from 'axios';
 import { GradeStoreDTO, GradeUpdateDTO } from '@/dto/grades';
 import { ValidationError } from '@/types/validation-error';
 import { generatePath } from 'react-router-dom';
-import { GradeId, Grades } from '@/types/grades';
+import { Grade, GradeId, Grades } from '@/types/grades';
 import { APIRoute } from '@/const/routes';
 
 export const fetchGradesAction = createAsyncThunk<Grades, undefined, {
@@ -17,7 +17,7 @@ export const fetchGradesAction = createAsyncThunk<Grades, undefined, {
   },
 );
 
-export const storeGradeAction = createAsyncThunk<Grades, {
+export const storeGradeAction = createAsyncThunk<Grade, {
   dto: GradeStoreDTO,
   onSuccess?: () => void,
   onValidationError?: (error: ValidationError) => void,
@@ -29,7 +29,7 @@ export const storeGradeAction = createAsyncThunk<Grades, {
   'grades/store',
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.post<Grades>(APIRoute.Grades.Index, dto);
+      const { data } = await api.post<Grade>(APIRoute.Grades.Index, dto);
       if (onSuccess) onSuccess();
       return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,7 +43,7 @@ export const storeGradeAction = createAsyncThunk<Grades, {
   },
 );
 
-export const updateGradeAction = createAsyncThunk<Grades, {
+export const updateGradeAction = createAsyncThunk<Grade, {
   dto: GradeUpdateDTO,
   onSuccess?: () => void,
   onValidationError?: (error: ValidationError) => void,
@@ -55,7 +55,7 @@ export const updateGradeAction = createAsyncThunk<Grades, {
   'grades/update',
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.put<Grades>(APIRoute.Grades.Index, dto);
+      const { data } = await api.put<Grade>(APIRoute.Grades.Index, dto);
       if (onSuccess) onSuccess();
       return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

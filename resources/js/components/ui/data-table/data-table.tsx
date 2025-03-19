@@ -2,6 +2,7 @@ import React, { BaseSyntheticEvent, ReactNode, useState } from 'react';
 import classNames from 'classnames';
 import { Icons } from '../../icons';
 import {
+  Column,
   ColumnDef,
   ColumnPinningState,
   flexRender,
@@ -16,6 +17,13 @@ import {
 } from '@tanstack/react-table';
 import ColumnFilter from './column-filter';
 import ColumnVisibility from './column-visibility';
+
+declare module '@tanstack/react-table' {
+  interface ColumnMeta<TData, TValue> {
+    renderFilter?: (column: Column<TData, TValue>) => JSX.Element;
+    columnClass?: string;
+  }
+};
 
 const DEFAULT_PAGE_SIZE = 16;
 const DEFAULT_SORTING_STATE: SortingState = [];
@@ -162,6 +170,7 @@ export default function DataTable<T>({
                     'p-0 text-start bg-gray-100 cursor-pointer group',
                     columnPinning.left?.includes(header.column.id) && 'sticky left-0 z-10',
                     columnPinning.right?.includes(header.column.id) && 'sticky right-0 z-10',
+                    header.column.columnDef.meta?.columnClass,
                   )}
                   onClick={(evt: BaseSyntheticEvent) => !evt.target.closest('.column-filter') && header.column.toggleSorting()}
                   style={{
@@ -217,6 +226,7 @@ export default function DataTable<T>({
                     (index % 2) ? 'bg-gray-50' : 'bg-white',
                     columnPinning.left?.includes(cell.column.id) && 'sticky left-0 z-10',
                     columnPinning.right?.includes(cell.column.id) && 'sticky right-0 z-10',
+                    cell.column.columnDef.meta?.columnClass,
                   )}
                   style={{
                     minWidth: `${cell.column.getSize()}px`,

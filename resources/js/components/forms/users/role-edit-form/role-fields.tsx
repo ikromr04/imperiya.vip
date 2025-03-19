@@ -74,13 +74,13 @@ function RoleFields({
     case 'student':
       return (
         <>
-          {grades &&
+          {grades.data &&
             <SelectField
               name="grade_id"
               label="Класс"
               cleanable
               onClean={() => setFieldValue('grade_id', 0)}
-              options={(grades.data || []).map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
+              options={grades.data.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
             />}
           {users &&
             <SelectField

@@ -11,16 +11,20 @@ class GradeController extends Controller
 {
   public function index(): JsonResponse
   {
-    $grades = Grade::orderBy('level')->selectBasic()->get();
+    $grades = Grade::selectBasic()->get();
 
     return response()->json($grades, 200);
   }
 
   public function store(Request $request): JsonResponse
   {
-    Grade::create($request->only(['level', 'group']));
+    $grade = Grade::create($request->only(['level', 'group']));
 
-    return response()->json(Grade::orderBy('level')->selectBasic()->get(), 200);
+    return response()->json([
+      'id' => $grade->id,
+      'level' => $grade->level,
+      'group' => $grade->group,
+    ], 201);
   }
 
   public function update(Request $request): JsonResponse
@@ -35,13 +39,13 @@ class GradeController extends Controller
     $newStudentIds = collect($request->students);
 
     $grade->students()
-      ->whereNotIn('id', $newStudentIds)
+      ->whereNotIn('user_id', $newStudentIds)
       ->update(['grade_id' => null]);
 
-    Student::whereIn('id', $newStudentIds)
+    Student::whereIn('user_id', $newStudentIds)
       ->update(['grade_id' => $grade->id]);
 
-    return response()->json(Grade::orderBy('level')->selectBasic()->get(), 200);
+    return response()->json(Grade::selectBasic()->find($grade->id), 200);
   }
 
   public function delete(Request $request)

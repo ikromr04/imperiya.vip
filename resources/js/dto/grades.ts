@@ -12,8 +12,3 @@ export type GradeUpdateDTO = {
   group: string;
   students: ID[];
 };
-
-export type GradeDeleteDTO = {
-  grade_id: GradeId;
-  students_deletion?: boolean;
-};

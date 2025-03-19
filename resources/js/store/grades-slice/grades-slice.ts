@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { deleteGradeAction, fetchGradesAction, storeGradeAction, updateGradeAction } from './grades-api-actions';
 import { Grades } from '@/types/grades';
 import { SliceName } from '@/const/store';
-import { deleteUserAction, storeUserAction, updateUserAction, updateUserRoleAction } from '../users-slice/users-api-actions';
 
 export type GradesSlice = {
   grades: {
@@ -36,22 +35,16 @@ export const gradesSlice = createSlice({
       })
 
       .addCase(storeGradeAction.fulfilled, (state, action) => {
-        state.grades.data = action.payload;
+        state.grades.data = state.grades.data ? [action.payload, ...state.grades.data] : [action.payload];
       })
       .addCase(updateGradeAction.fulfilled, (state, action) => {
-        state.grades.data = action.payload;
-      })
-      .addCase(deleteUserAction.fulfilled, (state) => {
-        state.grades.data = null;
-      })
-      .addCase(storeUserAction.fulfilled, (state) => {
-        state.grades.data = null;
-      })
-      .addCase(updateUserAction.fulfilled, (state) => {
-        state.grades.data = null;
-      })
-      .addCase(updateUserRoleAction.fulfilled, (state) => {
-        state.grades.data = null;
+        if (state.grades.data) {
+          const gradeIndex = state.grades.data.findIndex(({ id }) => id === action.payload.id);
+
+          if (gradeIndex !== -1) {
+            state.grades.data[gradeIndex] = action.payload;
+          }
+        }
       })
       .addCase(deleteGradeAction.fulfilled, (state, action) => {
         if (state.grades.data) {

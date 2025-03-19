@@ -46,7 +46,6 @@ function RoleInfo({
 
       break;
     case user.student !== undefined:
-
       list = {
         'Класс': grade ?
           <Link className="text-blue-600" to={generatePath(AppRoute.Classes.Show, { id: grade.id })}>

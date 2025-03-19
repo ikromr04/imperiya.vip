@@ -3,13 +3,6 @@ import { useDropdown } from '@/hooks/use-dropdown';
 import { ColumnPinningState, flexRender, Header, VisibilityState } from '@tanstack/react-table';
 import classNames from 'classnames';
 import React, { BaseSyntheticEvent, Dispatch, SetStateAction } from 'react';
-import { Column } from '@tanstack/react-table';
-
-declare module '@tanstack/react-table' {
-  interface ColumnMeta<TData, TValue> {
-    renderFilter?: (column: Column<TData, TValue>) => JSX.Element;
-  }
-}
 
 type ColumnFilterProps<TData, TValue> = {
   header: Header<TData, TValue>;

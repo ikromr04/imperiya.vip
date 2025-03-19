@@ -4,10 +4,10 @@ import { GradeUpdateDTO } from '@/dto/grades';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { updateGradeAction } from '@/store/grades-slice/grades-api-actions';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
-import { getStudents } from '@/store/users-slice/users-selector';
+import { getUsers } from '@/store/users-slice/users-selector';
 import { Grade, Grades } from '@/types/grades';
 import { Form, Formik, FormikHelpers } from 'formik';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -26,19 +26,20 @@ function GradesEditForm({
   grade,
   grades,
   setIsOpen,
-}: GradesEditFormProps): JSX.Element {
+}: GradesEditFormProps): ReactNode {
   const dispatch = useAppDispatch();
-  const students = useAppSelector(getStudents);
+  const users = useAppSelector(getUsers);
+  const students = users.data?.filter((user) => user.student?.gradeId === grade.id);
   const initialValues: GradeUpdateDTO = {
     id: grade.id,
     level: grade.level,
     group: grade.group,
-    students: grade.students ? grade.students.map(({ id }) => id) : [],
+    students: students?.map(({ id }) => id) || [],
   };
 
   useEffect(() => {
-    if (!students) dispatch(fetchUsersAction());
-  }, [dispatch, students]);
+    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
+  }, [dispatch, users.data, users.isFetching]);
 
   const onSubmit = async (
     values: GradeUpdateDTO,
@@ -67,6 +68,8 @@ function GradesEditForm({
 
     helpers.setSubmitting(false);
   };
+
+  if (!users.data) return null;
 
   return (
     <Formik
@@ -104,15 +107,14 @@ function GradesEditForm({
             />
           </div>
 
-          {students &&
-            <SelectField
-              className="mb-4"
-              name="students"
-              multiple
-              searchable
-              label={`Ученики (${values.students.length})`}
-              options={(students || []).map((student) => ({ value: student.id, label: student.user.name }))}
-            />}
+          <SelectField
+            className="mb-4"
+            name="students"
+            multiple
+            searchable
+            label={`Ученики (${values.students.length})`}
+            options={users.data?.filter((user) => user.student).map((student) => ({ value: student.id, label: student.name })) || []}
+          />
 
           <div className="flex items-center justify-end gap-2 sm:col-span-2">
             <Button
