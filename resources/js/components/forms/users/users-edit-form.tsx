@@ -2,13 +2,11 @@ import Button from '@/components/ui/button';
 import SelectField from '@/components/ui/form-controls/formik/select-field';
 import TextField from '@/components/ui/form-controls/formik/text-field';
 import { UserUpdateDTO } from '@/dto/users';
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import { getNationalities } from '@/store/nationality-slice/nationality-selector';
-import { fetchNationalitiesAction } from '@/store/nationality-slice/nationality-api-actions';
+import { useAppDispatch } from '@/hooks';
 import { updateUserAction } from '@/store/users-slice/users-api-actions';
 import { Sex, User } from '@/types/users';
 import { Form, Formik, FormikHelpers } from 'formik';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import { SexName } from '@/const/users';
@@ -30,7 +28,6 @@ function UsersEditForm({
   setIsOpen,
 }: UsersEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const nationalities = useAppSelector(getNationalities);
   const initialValues: UserUpdateDTO = {
     id: user.id,
     name: user.name,
@@ -39,8 +36,7 @@ function UsersEditForm({
     birth_date: user.birthDate,
     address: user.address,
     sex: user.sex,
-    nationality_id: user.nationality?.id,
-    phone_numbers: user.phoneNumbers,
+    nationality: user.nationality,
   };
 
   const onSubmit = async (
@@ -61,10 +57,6 @@ function UsersEditForm({
 
     helpers.setSubmitting(false);
   };
-
-  useEffect(() => {
-    if (!nationalities) dispatch(fetchNationalitiesAction());
-  }, [dispatch, nationalities]);
 
   return (
     <Formik
@@ -95,14 +87,17 @@ function UsersEditForm({
 
             <TextField name="birth_date" type="date" label="Дата рождения" />
 
-            {nationalities &&
-              <SelectField
-                name="nationality_id"
-                label="Национальность"
-                cleanable
-                onClean={() => setFieldValue('nationality_id', 0)}
-                options={nationalities.map((nationality) => ({ value: nationality.id, label: nationality.name }))}
-              />}
+            <SelectField
+              name="nationality"
+              label="Национальность"
+              cleanable
+              onClean={() => setFieldValue('nationality', '')}
+              options={[
+                { value: 'Таджик', label: 'Таджик' },
+                { value: 'Узбек', label: 'Узбек' },
+                { value: 'Русский', label: 'Русский' },
+              ]}
+            />
           </div>
 
           <TextField name="address" label="Адрес" />

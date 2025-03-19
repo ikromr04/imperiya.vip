@@ -18,7 +18,7 @@ class UserController extends Controller
 {
   public function index(): JsonResponse
   {
-    $users = User::orderBy('name')->selectBasic()->get();
+    $users = User::selectBasic()->get();
 
     return response()->json($users, 200);
   }
@@ -74,6 +74,29 @@ class UserController extends Controller
     return response()->json(User::selectBasic()->find($user->id), 201);
   }
 
+  public function update(Request $request): JsonResponse
+  {
+    $user = User::findOrFail($request->id);
+
+    if ($user->login !== $request->login && User::where('login', $request->login)->exists()) {
+      throw ValidationException::withMessages(['login' => ['Пользователь с таким логином уже существует.']]);
+    }
+
+    $user->update($request->only([
+      'name',
+      'login',
+      'email',
+      'birth_date',
+      'address',
+      'sex',
+      'nationality',
+      'social_link',
+      'phone_numbers',
+    ]));
+
+    return response()->json(User::selectBasic()->find($user->id), 200);
+  }
+
   public function show(int $userId): JsonResponse
   {
     $user = User::selectBasic()->find($userId);
@@ -88,30 +111,6 @@ class UserController extends Controller
     } else {
       return response()->json(['message' => 'Валидный логин'], 200);
     }
-  }
-
-  public function update(Request $request): JsonResponse
-  {
-
-    $user = User::findOrFail($request->id);
-
-    if ($user->login !== $request->login && User::where('login', $request->login)->exists()) {
-      throw ValidationException::withMessages(['login' => ['Пользователь с таким логином уже существует.']]);
-    }
-
-    $user->update($request->only([
-      'name',
-      'login',
-      'sex',
-      'email',
-      'birth_date',
-      'address',
-      'nationality_id',
-      'social_link',
-      'phone_numbers',
-    ]));
-
-    return response()->json(User::selectBasic()->find($user->id), 200);
   }
 
   public function delete(Request $request)

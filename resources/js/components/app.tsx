@@ -16,6 +16,8 @@ import UsersPage from './pages/users/users-page';
 // import GradesShowPage from './pages/grades/grades-show-page';
 import { AuthorizationStatus } from '@/const/store';
 import { AppRoute } from '@/const/routes';
+import UsersShowPage from './pages/users/users-show-page';
+import UsersEducationPage from './pages/users/users-education-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -46,17 +48,17 @@ function App(): JSX.Element {
         <Route path={AppRoute.Schedule.Index} element={<JournalPage />} />
 
         <Route path={AppRoute.Users.Index} element={<UsersPage />} />
-        {/* <Route path={AppRoute.Users.Show} element={<UsersShowPage />} /> */}
-        {/* <Route path={AppRoute.Users.Education} element={<UsersEducationPage />} /> */}
-        {/* <Route path={AppRoute.Users.Work} element={<UsersShowPage />} /> */}
-        {/* <Route path={AppRoute.Users.Schedule} element={<UsersShowPage />} /> */}
-        {/* <Route path={AppRoute.Users.Evaluations} element={<UsersShowPage />} /> */}
+        <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
+        <Route path={AppRoute.Users.Education} element={<UsersEducationPage />} />
+        <Route path={AppRoute.Users.Work} element={<UsersShowPage />} />
+        <Route path={AppRoute.Users.Schedule} element={<UsersShowPage />} />
+        <Route path={AppRoute.Users.Evaluations} element={<UsersShowPage />} />
 
         {/* <Route path={AppRoute.Classes.Index} element={<GradesPage />} /> */}
         {/* <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} /> */}
 
-        {/* <Route path={AppRoute.Monitoring.Index} element={<JournalPage />} /> */}
-        {/* <Route path={AppRoute.Settings.Index} element={<JournalPage />} /> */}
+        <Route path={AppRoute.Monitoring.Index} element={<JournalPage />} />
+        <Route path={AppRoute.Settings.Index} element={<JournalPage />} />
 
         <Route path={AppRoute.NotFound} element={<NotFoundPage />} />
       </Routes>

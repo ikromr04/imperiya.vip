@@ -6,54 +6,67 @@ import Modal from '@/components/ui/modal';
 import Tooltip from '@/components/ui/tooltip';
 import { AppRoute } from '@/const/routes';
 import { RoleName } from '@/const/users';
-import { User } from '@/types/users';
-import React, { Fragment, ReactNode, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
+import { getGrades } from '@/store/grades-slice/grades-selector';
+import { User, Users } from '@/types/users';
+import React, { Fragment, ReactNode, useEffect, useState } from 'react';
 import { generatePath, Link } from 'react-router-dom';
 
 type RoleInfoProps = {
+  users: Users;
   user: User;
 };
 
 function RoleInfo({
+  users,
   user,
 }: RoleInfoProps): JSX.Element {
   let list: { [term: string]: ReactNode; } = {};
   const [isOpen, setIsOpen] = useState(false);
+  const grades = useAppSelector(getGrades);
+  const dispatch = useAppDispatch();
+  const grade = grades.data?.find(({ id }) => id === user.student?.gradeId);
+  const mother = users.find(({ id }) => id === user.student?.motherId);
+  const father = users.find(({ id }) => id === user.student?.fatherId);
+  const children = users.filter(({ id }) => user.parent?.children?.includes(id));
+
+  useEffect(() => {
+    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
+  }, [dispatch, grades.data, grades.isFetching]);
 
   switch (true) {
-    case user.superadmin !== undefined:
-
-      break;
-    case user.admin !== undefined:
-
-      break;
-    case user.director !== undefined:
-
-      break;
+    // case user.superadmin !== undefined:
+    //   break;
+    // case user.admin !== undefined:
+    //   break;
+    // case user.director !== undefined:
+    //   break;
     case user.teacher !== undefined:
 
       break;
     case user.student !== undefined:
+
       list = {
-        'Класс': user.student.grade ?
-          <Link className="text-blue-600" to={generatePath(AppRoute.Classes.Show, { classId: user.student.grade?.id })}>
-            {user.student.grade?.level} {user.student.grade?.group}
+        'Класс': grade ?
+          <Link className="text-blue-600" to={generatePath(AppRoute.Classes.Show, { id: grade.id })}>
+            {grade.level} {grade.group}
           </Link> : '-',
-        'Мать': user.student.mother ?
-          <Link className="text-blue-600" to={generatePath(AppRoute.Users.Show, { userId: user.student.mother.id })}>
-            {user.student.mother.name}
+        'Мать': mother ?
+          <Link className="text-blue-600" to={generatePath(AppRoute.Users.Show, { id: mother.id })}>
+            {mother.name}
           </Link> : '-',
-        'Отец': user.student.father ?
-          <Link className="text-blue-600" to={generatePath(AppRoute.Users.Show, { userId: user.student.father.id })}>
-            {user.student.father.name}
+        'Отец': father ?
+          <Link className="text-blue-600" to={generatePath(AppRoute.Users.Show, { id: father.id })}>
+            {father.name}
           </Link> : '-',
       };
       break;
     case user.parent !== undefined:
       list = {
-        'Дети': user.parent.children ? user.parent.children.map((child) => (
-          <Fragment key={child.toString()}>
-            <Link className="text-blue-600" to={generatePath(AppRoute.Users.Show, { userId: child.id })}>
+        'Дети': children ? children.map((child) => (
+          <Fragment key={child.id}>
+            <Link className="text-blue-600" to={generatePath(AppRoute.Users.Show, { id: child.id })}>
               {child.name}
             </Link>
             <br />
@@ -73,6 +86,7 @@ function RoleInfo({
             <Tooltip label="Редактировать" position="left" />
           </Button>
         </header>
+
         <div className="relative">
           <DescriptionList
             className="box__body"
@@ -83,7 +97,14 @@ function RoleInfo({
       </section>
 
       <Modal isOpen={isOpen}>
-        <RoleEditForm user={user} setIsOpen={setIsOpen} />
+        <RoleEditForm
+          grade={grade}
+          mother={mother}
+          father={father}
+          children={children}
+          user={user}
+          setIsOpen={setIsOpen}
+        />
       </Modal>
     </>
   );

@@ -21,10 +21,10 @@ function UserProfileNavigation({
           <Link
             className={classNames(
               'flex items-center h-7 px-2 transition-all duration-300 border border-transparent min-w-max',
-              (generatePath(AppRoute.Users.Show, { userId: user.id }) === pathname) &&
+              (generatePath(AppRoute.Users.Show, { id: user.id }) === pathname) &&
               'rounded shadow bg-white border-gray-200'
             )}
-            to={generatePath(AppRoute.Users.Show, { userId: user.id })}
+            to={generatePath(AppRoute.Users.Show, { id: user.id })}
           >
             Профиль
           </Link>
@@ -34,10 +34,10 @@ function UserProfileNavigation({
             <Link
               className={classNames(
                 'flex items-center h-7 px-2 transition-all duration-300 border border-transparent min-w-max',
-                (generatePath(AppRoute.Users.Education, { userId: user.id }) === pathname) &&
+                (generatePath(AppRoute.Users.Education, { id: user.id }) === pathname) &&
                 'rounded shadow bg-white border-gray-200'
               )}
-              to={generatePath(AppRoute.Users.Education, { userId: user.id })}
+              to={generatePath(AppRoute.Users.Education, { id: user.id })}
             >
               Образование
             </Link>
@@ -48,10 +48,10 @@ function UserProfileNavigation({
             <Link
               className={classNames(
                 'flex items-center h-7 px-2 transition-all duration-300 border border-transparent min-w-max',
-                (generatePath(AppRoute.Users.Work, { userId: user.id }) === pathname) &&
+                (generatePath(AppRoute.Users.Work, { id: user.id }) === pathname) &&
                 'rounded shadow bg-white border-gray-200'
               )}
-              to={generatePath(AppRoute.Users.Work, { userId: user.id })}
+              to={generatePath(AppRoute.Users.Work, { id: user.id })}
             >
               Трудовая деятельность
             </Link>
@@ -62,10 +62,10 @@ function UserProfileNavigation({
             <Link
               className={classNames(
                 'flex items-center h-7 px-2 transition-all duration-300 border border-transparent min-w-max',
-                (generatePath(AppRoute.Users.Schedule, { userId: user.id }) === pathname) &&
+                (generatePath(AppRoute.Users.Schedule, { id: user.id }) === pathname) &&
                 'rounded shadow bg-white border-gray-200'
               )}
-              to={generatePath(AppRoute.Users.Schedule, { userId: user.id })}
+              to={generatePath(AppRoute.Users.Schedule, { id: user.id })}
             >
               Расписание
             </Link>
@@ -76,10 +76,10 @@ function UserProfileNavigation({
             <Link
               className={classNames(
                 'flex items-center h-7 px-2 transition-all duration-300 border border-transparent min-w-max',
-                (generatePath(AppRoute.Users.Evaluations, { userId: user.id }) === pathname) &&
+                (generatePath(AppRoute.Users.Evaluations, { id: user.id }) === pathname) &&
                 'rounded shadow bg-white border-gray-200'
               )}
-              to={generatePath(AppRoute.Users.Evaluations, { userId: user.id })}
+              to={generatePath(AppRoute.Users.Evaluations, { id: user.id })}
             >
               Оценки
             </Link>

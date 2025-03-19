@@ -332,6 +332,10 @@ function UsersPage(): JSX.Element {
           <DataTable
             data={filterUsers(users.data, filter)}
             columns={columns}
+            sortingState={[{
+              id: 'name',
+              desc: false,
+            }]}
             actions={(
               <Button
                 icon="add"

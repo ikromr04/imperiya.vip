@@ -3,6 +3,7 @@ import { RoleUpdateDTO } from '@/dto/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { getGrades } from '@/store/grades-slice/grades-selector';
+import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import { User } from '@/types/users';
 import { FormikHelpers } from 'formik';
@@ -22,8 +23,9 @@ function RoleFields({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!grades) dispatch(fetchGradesAction());
-  }, [dispatch, grades]);
+    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
+    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
+  }, [dispatch, grades.data, grades.isFetching, users.data, users.isFetching]);
 
   switch (user.role) {
     case 'superadmin':
@@ -64,7 +66,7 @@ function RoleFields({
               multiple
               cleanable
               onClean={() => setFieldValue('children', [])}
-              options={users.filter((user) => user.student).map((user) => ({ value: user.id, label: user.name }))}
+              options={(users.data || []).filter((user) => user.student).map((user) => ({ value: user.id, label: user.name }))}
             />}
         </>
       );
@@ -78,7 +80,7 @@ function RoleFields({
               label="Класс"
               cleanable
               onClean={() => setFieldValue('grade_id', 0)}
-              options={grades.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
+              options={(grades.data || []).map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
             />}
           {users &&
             <SelectField
@@ -86,7 +88,7 @@ function RoleFields({
               label="Мать"
               cleanable
               onClean={() => setFieldValue('mother_id', 0)}
-              options={users.filter((user) => !user.student).map((user) => ({ value: user.id, label: user.name }))}
+              options={(users.data || []).filter((user) => !user.student).map((user) => ({ value: user.id, label: user.name }))}
             />}
           {users &&
             <SelectField
@@ -94,7 +96,7 @@ function RoleFields({
               label="Отец"
               cleanable
               onClean={() => setFieldValue('father_id', 0)}
-              options={users.filter((user) => !user.student).map((user) => ({ value: user.id, label: user.name }))}
+              options={(users.data || []).filter((user) => !user.student).map((user) => ({ value: user.id, label: user.name }))}
             />}
         </>
       );

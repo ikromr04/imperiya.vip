@@ -1,29 +1,38 @@
 import Button from '@/components/ui/button';
 import { RoleUpdateDTO } from '@/dto/users';
 import { useAppDispatch } from '@/hooks';
-import { User } from '@/types/users';
+import { User, Users } from '@/types/users';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction } from 'react';
 import RoleFields from './role-fields';
 import { updateUserRoleAction } from '@/store/users-slice/users-api-actions';
 import { toast } from 'react-toastify';
+import { Grade } from '@/types/grades';
 
 type RoleEditFormProps = {
   user: User;
+  grade: Grade | undefined;
+  mother: User | undefined;
+  father: User | undefined;
+  children: Users;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 function RoleEditForm({
   user,
+  grade,
+  mother,
+  father,
+  children,
   setIsOpen,
 }: RoleEditFormProps) {
   const dispatch = useAppDispatch();
   const initialValues: RoleUpdateDTO = {
-    userId: user.id,
-    grade_id: user.student?.grade?.id ?? 0,
-    mother_id: user.student?.mother?.id ?? 0,
-    father_id: user.student?.father?.id ?? 0,
-    children: user.parent?.children?.map(({ id }) => id) ?? [],
+    user_id: user.id,
+    grade_id: grade?.id,
+    mother_id: mother?.id,
+    father_id: father?.id,
+    children: children.map(({ id }) => id),
   };
 
   const onSubmit = async (
@@ -49,7 +58,7 @@ function RoleEditForm({
     <Formik
       initialValues={initialValues}
       onSubmit={onSubmit}
-      key={JSON.stringify(user[user.role])}
+      key={JSON.stringify(user[user.role as keyof typeof user])}
     >
       {({ isSubmitting, setFieldValue }) => (
         <Form className="flex flex-col gap-3">

@@ -1,13 +1,12 @@
 import Button from '@/components/ui/button';
 import { AppRoute } from '@/const/routes';
-import { UserDeleteDTO } from '@/dto/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { deleteUserAction } from '@/store/users-slice/users-api-actions';
+import { deleteUserAction, fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import { User } from '@/types/users';
 import { getNextUserId } from '@/utils/users';
 import { Form, Formik, FormikHelpers } from 'formik';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -23,23 +22,23 @@ function UsersDeleteForm({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const users = useAppSelector(getUsers);
-  const initialValues: UserDeleteDTO = {
-    user_id: user.id,
-    parents_deletion: false,
-  };
+
+  useEffect(() => {
+    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
+  }, [dispatch, users.data, users.isFetching]);
 
   const onSubmit = async (
-    values: UserDeleteDTO,
-    helpers: FormikHelpers<UserDeleteDTO>
+    values: object,
+    helpers: FormikHelpers<object>
   ) => {
     helpers.setSubmitting(true);
 
     await dispatch(deleteUserAction({
-      dto: values,
+      id: user.id,
       onSuccess: () => {
         toast.success('Пользователь успешно удален.');
         setIsOpen(false);
-        navigate(generatePath(AppRoute.Users.Show, { userId: getNextUserId(users || [], user.id) }));
+        navigate(generatePath(AppRoute.Users.Show, { id: getNextUserId(users.data || [], user.id) }));
       },
       onFail: (message) => toast.error(message),
     }));
@@ -49,7 +48,7 @@ function UsersDeleteForm({
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={{}}
       onSubmit={onSubmit}
       key={user.id}
     >

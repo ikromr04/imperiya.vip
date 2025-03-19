@@ -27,8 +27,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/', [GradeController::class, 'update']);
     Route::delete('/{gradeId}', [GradeController::class, 'delete']);
   });
-
-  Route::prefix('nationalities')->group(function () {
-    Route::get('/', [NationalityController::class, 'index']);
-  });
 });

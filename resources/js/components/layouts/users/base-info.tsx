@@ -6,6 +6,7 @@ import Modal from '@/components/ui/modal';
 import Tooltip from '@/components/ui/tooltip';
 import { RoleName, SexName } from '@/const/users';
 import { User } from '@/types/users';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -43,9 +44,9 @@ function BaseInfo({
                   <Link className="text-blue-600" to={`mailto:${user.email}`}>
                     {user.email}
                   </Link> : '-',
-              'Дата рождения': user.birthDate ?? '-',
+              'Дата рождения': dayjs(user.birthDate).format('DD MMMM YYYY') ?? '-',
               'Адрес': user.address ?? '-',
-              'Национальность': user.nationality?.name ?? '-',
+              'Национальность': user.nationality ?? '-',
             }}
           />
           <div className="absolute top-[1px] right-0 rounded-br-md z-10 min-w-6 h-[calc(100%-1px)] pointer-events-none bg-gradient-to-l from-white to-transparent"></div>

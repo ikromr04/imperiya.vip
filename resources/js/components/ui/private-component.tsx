@@ -1,11 +1,10 @@
-import { Role } from '@/const';
-import { User } from '@/types/users';
+import { Role, User } from '@/types/users';
 import { ReactNode } from 'react';
 
 type PrivateComponentProps = {
   children: ReactNode;
   user: User;
-  roles: (keyof typeof Role)[];
+  roles: Role[];
 };
 
 function PrivateComponent({
@@ -13,7 +12,7 @@ function PrivateComponent({
   user,
   roles,
 }: PrivateComponentProps): ReactNode {
-  if (!roles.includes(user.role.type)) return null;
+  if (!roles.includes(user.role)) return null;
 
   return children;
 }

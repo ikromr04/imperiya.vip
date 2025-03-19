@@ -200,7 +200,7 @@ export const updateUserRoleAction = createAsyncThunk<User, {
   'users/roleUpdate',
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.put<User>(generatePath(APIRoute.Users.Role, { userId: dto.userId }), dto);
+      const { data } = await api.put<User>(generatePath(APIRoute.Users.Role, { userId: dto.user_id }), dto);
       if (onSuccess) onSuccess(data);
 
       return data;
