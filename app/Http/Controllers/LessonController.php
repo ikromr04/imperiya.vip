@@ -36,11 +36,4 @@ class LessonController extends Controller
       'name' => $lesson->name,
     ], 200);
   }
-
-  public function delete(Request $request)
-  {
-    Lesson::findOrFail($request->id)->delete();
-
-    return response()->noContent();
-  }
 }

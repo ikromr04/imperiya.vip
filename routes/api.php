@@ -33,7 +33,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/', [LessonController::class, 'index']);
     Route::post('/', [LessonController::class, 'store']);
     Route::put('/', [LessonController::class, 'update']);
-    Route::delete('/{id}', [LessonController::class, 'delete']);
   });
 
   Route::prefix('schedules')->group(function () {
