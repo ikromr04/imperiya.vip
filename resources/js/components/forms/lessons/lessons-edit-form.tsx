@@ -27,7 +27,6 @@ function LessonsEditForm({
     id: lesson.id,
     name: lesson.name,
   };
-  console.log(lesson);
 
   const onSubmit = async (
     values: LessonUpdateDTO,
