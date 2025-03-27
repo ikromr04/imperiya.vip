@@ -16,6 +16,9 @@ export const AppRoute = {
     Index: '/classes',
     Show: '/classes/:id',
   },
+  Lessons: {
+    Index: '/lessons',
+  },
   Monitoring: {
     Index: '/monitoring',
   },

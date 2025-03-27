@@ -90,6 +90,7 @@ function ScheduleCreateForm({
               <SelectField
                 name="lesson_id"
                 label="Урок"
+                searchable
                 options={lessons.data.map((lesson) => ({ value: lesson.id, label: lesson.name }))}
               />
             )}

@@ -29,7 +29,7 @@ class LessonController extends Controller
   {
     $lesson = Lesson::findOrFail($request->id);
 
-    $lesson->update($request()->only('name'));
+    $lesson->update($request->only('name'));
 
     return response()->json([
       'id' => $lesson->id,
