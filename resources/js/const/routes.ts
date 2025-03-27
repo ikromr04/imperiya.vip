@@ -1,7 +1,7 @@
 export const AppRoute = {
   Journal: '/journal',
-  Schedule: {
-    Index: '/schedule',
+  Schedules: {
+    Index: '/schedules',
   },
   Users: {
     Index: '/users',
@@ -49,5 +49,13 @@ export const APIRoute = {
   Grades: {
     Index: '/grades',
     Show: '/grades/:id',
+  },
+  Lessons: {
+    Index: '/lessons',
+    Show: '/lessons/:id',
+  },
+  Schedules: {
+    Index: '/schedules',
+    Show: '/schedules/:id',
   },
 };

@@ -59,7 +59,7 @@ function ColumnVisibility<T>({
         {columns.map((column) => (
           <label
             key={column.id}
-            className="flex items-center gap-2 min-w-max pl-3 pr-5 h-8 transition-all duration-300 hover:bg-gray-100 cursor-pointer"
+            className="flex items-center gap-2 min-w-max pl-3 pr-5 h-8 transition-all duration-150 hover:bg-gray-100 cursor-pointer"
           >
             <input
               type="checkbox"

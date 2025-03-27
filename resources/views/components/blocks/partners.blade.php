@@ -38,7 +38,7 @@
       <div class="swiper-wrapper flex items-center">
         @foreach ($partners as $partner)
           <div class="swiper-slide flex justify-center items-center">
-            <a class="relative z-0 flex rounded-md overflow-hidden max-w-max max-h-max mx-auto transition-all duration-300 hover:opacity-80" href="{{ $partner['link'] }}" target="_blank">
+            <a class="relative z-0 flex rounded-md overflow-hidden max-w-max max-h-max mx-auto transition-all duration-150 hover:opacity-80" href="{{ $partner['link'] }}" target="_blank">
               <img class="min-w-24 min-h-24 h-auto object-contain" src="{{ asset('/images/partners/' . $partner['logo']) }}" width="96" height="96" alt="{{ $partner['title'] }}">
             </a>
           </div>

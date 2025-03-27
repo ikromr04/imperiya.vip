@@ -66,13 +66,13 @@ function UserAvatar({
 
       <div
         className={classNames(
-          'absolute top-full left-1/2 w-full border rounded-md py-1 bg-white shadow-sm text-sm min-w-max transform -translate-x-1/2 transition-all duration-300 text-gray-500',
+          'absolute top-full left-1/2 w-full border rounded-md py-1 bg-white shadow-sm text-sm min-w-max transform -translate-x-1/2 transition-all duration-150 text-gray-500',
           isOpen ? 'visible opacity-100' : 'invisible opacity-0',
         )}
       >
         <ul>
           <li>
-            <label className="flex items-center gap-2 w-full h-8 transition-all duration-300 hover:bg-gray-100 px-3 cursor-pointer">
+            <label className="flex items-center gap-2 w-full h-8 transition-all duration-150 hover:bg-gray-100 px-3 cursor-pointer">
               <input
                 className="sr-only"
                 type="file"
@@ -89,7 +89,7 @@ function UserAvatar({
           {user.avatarThumb && user.avatar && <>
             <li>
               <Link
-                className="flex w-full gap-2 items-center h-8 transition-all duration-300 hover:bg-gray-100 px-3"
+                className="flex w-full gap-2 items-center h-8 transition-all duration-150 hover:bg-gray-100 px-3"
                 to={user.avatar}
                 target="_blank"
               >
@@ -98,7 +98,7 @@ function UserAvatar({
             </li>
             <li>
               <button
-                className="flex w-full gap-2 items-center h-8 transition-all duration-300 hover:bg-gray-100 px-3"
+                className="flex w-full gap-2 items-center h-8 transition-all duration-150 hover:bg-gray-100 px-3"
                 type="button"
                 onClick={handleDeleteButtonClick}
               >

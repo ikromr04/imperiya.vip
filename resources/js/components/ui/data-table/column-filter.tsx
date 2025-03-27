@@ -65,7 +65,7 @@ function ColumnFilter<TData, TValue>({
 
         {!columnPinning.left?.includes(header.column.id) && (
           <button
-            className="flex items-center gap-2 pl-3 pr-4 py-1 transition-all duration-300 hover:bg-gray-100"
+            className="flex items-center gap-2 pl-3 pr-4 py-1 transition-all duration-150 hover:bg-gray-100"
             type="button"
             onClick={() =>
               setColumnPinning((prev) => ({
@@ -82,7 +82,7 @@ function ColumnFilter<TData, TValue>({
         )}
         {!columnPinning.right?.includes(header.column.id) && (
           <button
-            className="flex items-center gap-2 pl-3 pr-4 py-1 transition-all duration-300 hover:bg-gray-100"
+            className="flex items-center gap-2 pl-3 pr-4 py-1 transition-all duration-150 hover:bg-gray-100"
             type="button"
             onClick={() =>
               setColumnPinning((prev) => ({
@@ -99,7 +99,7 @@ function ColumnFilter<TData, TValue>({
         )}
         {(columnPinning.right?.includes(header.column.id) || columnPinning.left?.includes(header.column.id)) && (
           <button
-            className="flex items-center gap-2 pl-3 pr-4 py-1 transition-all duration-300 hover:bg-gray-100"
+            className="flex items-center gap-2 pl-3 pr-4 py-1 transition-all duration-150 hover:bg-gray-100"
             type="button"
             onClick={() =>
               setColumnPinning((prev) => ({
@@ -118,7 +118,7 @@ function ColumnFilter<TData, TValue>({
         <hr className="my-1" />
 
         <button
-          className="flex items-center gap-2 pl-3 pr-4 py-1 transition-all duration-300 hover:bg-gray-100"
+          className="flex items-center gap-2 pl-3 pr-4 py-1 transition-all duration-150 hover:bg-gray-100"
           type="button"
           onClick={() => setColumnVisibility((prev) => ({
             ...prev,

@@ -24,7 +24,7 @@ function Checkbox({
         {...field}
         {...props}
         className="sr-only"
-        checked={field.value}
+        checked={field.value ? true : false}
         type="checkbox"
       />
       <span

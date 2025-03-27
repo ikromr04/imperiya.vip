@@ -11,7 +11,7 @@
       </small>
     </h1>
 
-    <a class="flex items-center justify-center max-w-max max-h-max min-w-8 min-h-8 mx-auto mb-14 sm:mb-16 lg:mb-24 text-white bg-blue-500 shadow-md transition-all duration-300 hover:shadow-none hover:bg-blue-600 rounded-md px-3 sm:min-h-10 sm:px-5" href="#about">
+    <a class="flex items-center justify-center max-w-max max-h-max min-w-8 min-h-8 mx-auto mb-14 sm:mb-16 lg:mb-24 text-white bg-blue-500 shadow-md transition-all duration-150 hover:shadow-none hover:bg-blue-600 rounded-md px-3 sm:min-h-10 sm:px-5" href="#about">
       {{ __('Больше о нас') }}
     </a>
 
@@ -22,7 +22,7 @@
             <div class="swiper-slide">
               <a class="relative z-0 bg-blue-400 max-w-max max-h-max mx-auto flex rounded-md overflow-hidden" href="{{ asset("/images/certificates/$key.jpg") }}" target="_blank">
                 <img class="w-[90px] h-auto object-contain" src="{{ asset("/images/certificates/$key.jpg") }}" width="80" height="80" alt="Сертификат">
-                <div class="absolute top-0 left-0 w-full h-full bg-black opacity-0 hover:opacity-40 transition-all duration-300"></div>
+                <div class="absolute top-0 left-0 w-full h-full bg-black opacity-0 hover:opacity-40 transition-all duration-150"></div>
               </a>
             </div>
           @endforeach

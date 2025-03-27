@@ -72,7 +72,7 @@ function SelectField(props: SelectFieldProps): JSX.Element {
   const renderSelectedOptions = (): ReactNode => {
     if (!field.value) {
       return (
-        <span className="text-[#a8a3b7]">
+        <span className="text-[#a8a3b7] truncate">
           {placeholder}
         </span>
       );
@@ -162,7 +162,7 @@ function SelectField(props: SelectFieldProps): JSX.Element {
               <button
                 className={classNames(
                   optionClassname,
-                  'flex w-full items-center h-8 transition-all duration-300 hover:bg-green-50 px-3',
+                  'flex w-full items-center h-8 transition-all duration-150 hover:bg-green-50 px-3',
                   multiple && (field.value || []).includes(option.value) && 'bg-blue-50 hover:bg-red-50',
                   !multiple && (field.value === option.value) && 'bg-blue-50 hover:bg-red-50',
                 )}

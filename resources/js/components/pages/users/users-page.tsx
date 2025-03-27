@@ -285,7 +285,7 @@ function UsersPage(): JSX.Element {
         <div className="flex flex-wrap gap-2 items-center">
           {row.original.socialLink?.facebook &&
             <a
-              className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none"
+              className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none"
               href={row.original.socialLink.facebook}
               target="_blank"
             >
@@ -293,7 +293,7 @@ function UsersPage(): JSX.Element {
             </a>}
           {row.original.socialLink?.instagram &&
             <a
-              className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none"
+              className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none"
               href={row.original.socialLink?.instagram}
               target="_blank"
             >
@@ -301,7 +301,7 @@ function UsersPage(): JSX.Element {
             </a>}
           {row.original.socialLink?.telegram &&
             <a
-              className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none"
+              className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none"
               href={row.original.socialLink?.telegram}
               target="_blank"
             >
@@ -309,7 +309,7 @@ function UsersPage(): JSX.Element {
             </a>}
           {row.original.socialLink?.odnoklassniki &&
             <a
-              className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none"
+              className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none"
               href={row.original.socialLink?.odnoklassniki}
               target="_blank"
             >

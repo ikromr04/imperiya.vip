@@ -30,19 +30,19 @@ function SocialLinks({
 
         <div className="box__body flex flex-wrap gap-2">
           {user.socialLink?.facebook &&
-            <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.socialLink.facebook} target="_blank">
+            <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink.facebook} target="_blank">
               <Icons.facebook width={24} height={24} />
             </Link>}
           {user.socialLink?.instagram &&
-            <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.socialLink?.instagram} target="_blank">
+            <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink?.instagram} target="_blank">
               <Icons.instagram width={24} height={24} />
             </Link>}
           {user.socialLink?.telegram &&
-            <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.socialLink?.telegram} target="_blank">
+            <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink?.telegram} target="_blank">
               <Icons.telegram width={24} height={24} />
             </Link>}
           {user.socialLink?.odnoklassniki &&
-            <Link className="flex shadow-md rounded-full transition-all duration-300 hover:shadow-none" to={user.socialLink?.odnoklassniki} target="_blank">
+            <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink?.odnoklassniki} target="_blank">
               <Icons.odnoklassniki width={24} height={24} />
             </Link>}
         </div>

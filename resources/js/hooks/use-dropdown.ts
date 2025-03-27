@@ -2,10 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useEscapeKeydown } from './use-escape-keydown';
 
 export const useDropdown = <T extends HTMLElement,>() => {
-  const
-    ref = useRef<T>(null),
-    menuRef = useRef<HTMLDivElement | null>(null),
-    [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<T>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEscapeKeydown(() => setIsOpen(false));
 

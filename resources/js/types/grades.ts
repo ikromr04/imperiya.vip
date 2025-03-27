@@ -1,4 +1,6 @@
-export type GradeId = number;
+import { ID } from '.';
+
+export type GradeId = ID;
 
 export type Grade = {
   id: GradeId;

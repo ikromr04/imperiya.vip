@@ -46,7 +46,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .navlink {
-  @apply flex items-center w-full gap-2 px-3 h-9 min-w-max transition-all duration-300 hover:bg-gray-100 rounded;
+  @apply flex items-center w-full gap-2 px-3 h-9 min-w-max transition-all duration-150 hover:bg-gray-100 rounded;
 }
 
 .navlink--active {

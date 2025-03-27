@@ -9,4 +9,6 @@ export enum SliceName {
   Auth = 'Auth',
   Users = 'Users',
   Grades = 'Grades',
+  Lessons = 'Lessons',
+  Schedules = 'Schedules',
 };

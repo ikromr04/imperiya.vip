@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const debounce = <F extends (...args: any) => any>(
   func: F,
@@ -24,3 +26,11 @@ export const generateRandomPassword = (length: number = 8): string => {
 
   return password;
 };
+
+export const getCurrentWeekDates = (currentWeek = 0) => {
+  const startOfWeek = dayjs().startOf('week');
+  return Array.from({ length: 6 }, (_, i) => startOfWeek.add(i + (currentWeek * 7), 'day'));
+};
+
+export const capitalizeString = (str: string): string =>
+  str.charAt(0).toUpperCase() + str.slice(1);

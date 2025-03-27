@@ -36,11 +36,11 @@
   <h2 class="title mb-2">{{ __('О нас') }}</h2>
 
   <div class="relative group mb-8 rounded" data-sizable-wrapper>
-    <div class="max-h-24 overflow-hidden transition-all duration-300 md:!max-h-none" data-sizable="96">
+    <div class="max-h-24 overflow-hidden transition-all duration-150 md:!max-h-none" data-sizable="96">
       <p class="md:text-gray-700 xl:max-w-[80%]">
         {{ __('«ИМПЕРИЯ ЗНАНИЙ» - частное общеобразовательное учреждение качественного элитного современного образования, соответствующего международным стандартам. С нами Ваш ребенок не только учится, он формирует свое уникальное образованное будущее, воплощая свои таланты под заботой опытной и вдохновляющей команды высококвалифицированных педагогов.') }}
       </p>
-      <div class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-white to-transparent pointer-events-none transition-all duration-300 group-[.shown]:opacity-0 md:hidden"></div>
+      <div class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-white to-transparent pointer-events-none transition-all duration-150 group-[.shown]:opacity-0 md:hidden"></div>
     </div>
   </div>
 
@@ -50,7 +50,7 @@
         <div class="hidden md:block pointer-events-none absolute -top-[5px] -left-[.5px] h-10 rounded-[10px] bg-primary w-[240px] -z-10"></div>
         <div class="hidden md:block pointer-events-none absolute top-0 left-0 z-0 w-full h-10 bg-white rounded-[10px]"></div>
 
-        <div class="max-h-32 overflow-hidden transition-all duration-300 md:!max-h-none relative z-0" data-sizable="128">
+        <div class="max-h-32 overflow-hidden transition-all duration-150 md:!max-h-none relative z-0" data-sizable="128">
           <h3 class="font-semibold mb-1 text-lg md:flex md:items-center md:gap-x-3 md:mb-4">
             <span class="md:flex md:items-center md:justify-center md:min-w-10 md:min-h-10 md:max-w-10 md:max-h-10 md:rounded-full md:bg-primary md:text-white md:leading-none md:pt-[1px] md:pr-[1px]">
               {{ '0' . ++$key }}
@@ -58,7 +58,7 @@
             {{ $item['title'] }}
           </h3>
           <p class="md:text-gray-700">{{ $item['description'] }}</p>
-          <div class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-white to-transparent pointer-events-none transition-all duration-300 group-[.shown]:opacity-0 md:hidden"></div>
+          <div class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-white to-transparent pointer-events-none transition-all duration-150 group-[.shown]:opacity-0 md:hidden"></div>
         </div>
       </li>
     @endforeach

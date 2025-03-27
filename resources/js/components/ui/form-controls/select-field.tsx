@@ -69,7 +69,7 @@ function SelectField({
           {options.map((option) => (
             <li key={option.value}>
               <button
-                className="flex w-full items-center h-8 transition-all duration-300 hover:bg-green-50 px-3"
+                className="flex w-full items-center h-8 transition-all duration-150 hover:bg-green-50 px-3"
                 type="button"
                 onClick={() => {
                   onChange(option.value);

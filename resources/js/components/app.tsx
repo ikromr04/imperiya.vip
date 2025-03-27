@@ -15,6 +15,7 @@ import { AppRoute } from '@/const/routes';
 import UsersShowPage from './pages/users/users-show-page';
 import GradesPage from './pages/grades/grades-page';
 import GradesShowPage from './pages/grades/grades-show-page';
+import SchedulesPage from './pages/schedules-page/schedules-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -42,7 +43,7 @@ function App(): JSX.Element {
 
         <Route path={AppRoute.Journal} element={<JournalPage />} />
 
-        <Route path={AppRoute.Schedule.Index} element={<JournalPage />} />
+        <Route path={AppRoute.Schedules.Index} element={<SchedulesPage />} />
 
         <Route path={AppRoute.Users.Index} element={<UsersPage />} />
         <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />

@@ -21,7 +21,7 @@ function LoginPage(): JSX.Element {
         <h1 className="title">Вход в онлайн-дневник</h1>
 
         <p className="text-gray-600 mb-6">
-          Нет аккаунта? <Link className="text-blue-600 transition-all duration-300 hover:text-blue-400" to="mailto:info@imperiya.vip">Отправьте запрос</Link>
+          Нет аккаунта? <Link className="text-blue-600 transition-all duration-150 hover:text-blue-400" to="mailto:info@imperiya.vip">Отправьте запрос</Link>
         </p>
 
         <LoginForm />

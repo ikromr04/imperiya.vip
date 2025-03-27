@@ -64,7 +64,7 @@ function PasswordField({
 
         <After element={<>
           <button
-            className="flex items-center justify-center w-full h-full hover:bg-gray-200 transition-all duration-300"
+            className="flex items-center justify-center w-full h-full hover:bg-gray-200 transition-all duration-150"
             type="button"
             onClick={() => type === 'password' ? setType('text') : setType('password')}
           >

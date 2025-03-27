@@ -20,10 +20,10 @@
         @endforeach
       </div>
     </header>
-    <div class="relative max-h-[150px] overflow-hidden transition-all duration-300" data-sizable="150">
+    <div class="relative max-h-[150px] overflow-hidden transition-all duration-150" data-sizable="150">
       <h3>{{ $review['comment-title'] }}</h3>
       <p>{{ $review['comment'] }}</p>
-      <div class="absolute bottom-0 left-0 w-full h-[100px] bg-gradient-to-t from-white to-transparent pointer-events-none transition-all duration-300 group-[.shown]:opacity-0"></div>
+      <div class="absolute bottom-0 left-0 w-full h-[100px] bg-gradient-to-t from-white to-transparent pointer-events-none transition-all duration-150 group-[.shown]:opacity-0"></div>
     </div>
   </div>
 </article>

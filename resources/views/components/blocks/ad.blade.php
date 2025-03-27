@@ -12,7 +12,7 @@
     </p>
   </div>
 
-  <a class="flex items-center justify-center min-h-10 border-[2px] border-white rounded-lg max-w-max px-4 transition-all duration-300 hover:bg-white hover:text-primary min-w-max lg:min-h-12" href="mailto:info@imperiya.vip">
+  <a class="flex items-center justify-center min-h-10 border-[2px] border-white rounded-lg max-w-max px-4 transition-all duration-150 hover:bg-white hover:text-primary min-w-max lg:min-h-12" href="mailto:info@imperiya.vip">
     {{ __('Написать нам') }}
   </a>
 </div>

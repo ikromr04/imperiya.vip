@@ -15,7 +15,7 @@ function PageSidebar(): JSX.Element {
     <>
       <aside
         className={classNames(
-          'fixed left-0 top-0 z-40 flex flex-row-reverse h-screen transition-all duration-300 transform',
+          'fixed left-0 top-0 z-40 flex flex-row-reverse h-screen transition-all duration-150 transform',
           isShown ? 'translate-x-0' : 'translate-x-[calc(-100%+10px)]'
         )}
         onMouseEnter={() => setIsShown(true)}
@@ -23,7 +23,7 @@ function PageSidebar(): JSX.Element {
       >
         <button
           className={classNames(
-            'text-gray-500 cursor-context-menu transition-all duration-300',
+            'text-gray-500 cursor-context-menu transition-all duration-150',
             isShown && 'invisible opacity-0'
           )}
           type="button"
@@ -44,6 +44,15 @@ function PageSidebar(): JSX.Element {
               >
                 <Icons.accountCircle className="navlink__icon" width={16} height={16} />
                 Профиль
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Schedules.Index}
+              >
+                <Icons.schedule className="navlink__icon" width={16} height={16} />
+                Расписание
               </NavLink>
             </li>
             <li>
@@ -71,15 +80,6 @@ function PageSidebar(): JSX.Element {
               >
                 <Icons.journal className="navlink__icon" width={16} height={16} />
                 Журнал
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Schedule.Index}
-              >
-                <Icons.schedule className="navlink__icon" width={16} height={16} />
-                Расписание
               </NavLink>
             </li>
             <li>
@@ -121,7 +121,7 @@ function PageSidebar(): JSX.Element {
 
       <button
         className={classNames(
-          'fixed left-0 top-0 z-30 w-screen h-screen transition-all duration-300 bg-black/10 backdrop-blur-[2px]',
+          'fixed left-0 top-0 z-30 w-screen h-screen transition-all duration-150 bg-black/10 backdrop-blur-[2px]',
           isShown ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         )}
         type="button"

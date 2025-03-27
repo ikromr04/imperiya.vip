@@ -97,9 +97,9 @@ class UserController extends Controller
     return response()->json(User::selectBasic()->find($user->id), 200);
   }
 
-  public function show(int $userId): JsonResponse
+  public function show(int $id): JsonResponse
   {
-    $user = User::selectBasic()->find($userId);
+    $user = User::selectBasic()->find($id);
 
     return response()->json($user, 200);
   }
@@ -115,16 +115,16 @@ class UserController extends Controller
 
   public function delete(Request $request)
   {
-    $user = User::findOrFail($request->userId);
+    $user = User::findOrFail($request->id);
 
     $user->delete();
 
     return response()->noContent();
   }
 
-  public function updateAvatar(int $userId)
+  public function updateAvatar(int $id)
   {
-    $user = User::findOrFail($userId);
+    $user = User::findOrFail($id);
 
     foreach (['avatar', 'avatar_thumb'] as $field) {
       if ($user->$field && file_exists(public_path($user->$field))) {
@@ -150,7 +150,7 @@ class UserController extends Controller
       'avatar_thumb' => $avatarThumbPath,
     ]);
 
-    return response(User::selectBasic()->find($userId), 200);
+    return response(User::selectBasic()->find($id), 200);
   }
 
   public function deleteAvatar($id)

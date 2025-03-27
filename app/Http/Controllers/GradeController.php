@@ -11,7 +11,7 @@ class GradeController extends Controller
 {
   public function index(): JsonResponse
   {
-    $grades = Grade::selectBasic()->get();
+    $grades = Grade::selectBasic()->orderBy('level')->get();
 
     return response()->json($grades, 200);
   }
@@ -50,7 +50,7 @@ class GradeController extends Controller
 
   public function delete(Request $request)
   {
-    $grade = Grade::findOrFail($request->gradeId);
+    $grade = Grade::findOrFail($request->id);
 
     $grade->students()->update(['grade_id' => null]);
 
