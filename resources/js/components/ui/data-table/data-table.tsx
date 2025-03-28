@@ -111,6 +111,53 @@ export default function DataTable<T>({
     return pages;
   };
 
+  const columnSizes = table.getHeaderGroups()[0].headers.map((header) => ({
+    id: header.column.id,
+    size: header.getSize()
+  }));
+
+  const getColumnPinningLeft = (columnId: string): object => {
+    if (columnPinning.left) {
+      const columnIndex = columnPinning.left.findIndex((id) => id === columnId);
+      if (columnIndex && columnIndex < 0) return {};
+
+      const left = columnPinning.left.reduce((acc, id, index) => {
+        if (index < columnIndex) {
+          acc += columnSizes.find((column) => column.id === id)?.size || 0;
+        }
+
+        return acc;
+      }, 0);
+
+      return {
+        left: `${left}px`,
+      };
+    }
+
+    return {};
+  };
+
+  const getColumnPinningRight = (columnId: string): object => {
+    if (columnPinning.right) {
+      const columnIndex = columnPinning.right.findIndex((id) => id === columnId);
+      if (columnIndex && columnIndex < 0) return {};
+
+      const right = columnPinning.right.reduce((acc, id, index) => {
+        if (index < columnIndex) {
+          acc += columnSizes.find((column) => column.id === id)?.size || 0;
+        }
+
+        return acc;
+      }, 0);
+
+      return {
+        right: `${right}px`,
+      };
+    }
+
+    return {};
+  };
+
   const renderSortingIcon = (sortingType: false | SortDirection): ReactNode => {
     const Icon = Icons[sortingType === 'desc' ? 'arrowDownwardAlt' : 'arrowUpwardAlt'];
     return (
@@ -168,8 +215,8 @@ export default function DataTable<T>({
                   key={header.id}
                   className={classNames(
                     'p-0 text-start bg-gray-100 cursor-pointer group',
-                    columnPinning.left?.includes(header.column.id) && 'sticky left-0 z-10',
-                    columnPinning.right?.includes(header.column.id) && 'sticky right-0 z-10',
+                    columnPinning.left?.includes(header.column.id) && 'sticky z-10',
+                    columnPinning.right?.includes(header.column.id) && 'sticky z-10',
                     header.column.columnDef.meta?.columnClass,
                   )}
                   onClick={(evt: BaseSyntheticEvent) => !evt.target.closest('.column-filter') && header.column.toggleSorting()}
@@ -177,6 +224,8 @@ export default function DataTable<T>({
                     minWidth: `${header.getSize()}px`,
                     width: `${header.getSize()}px`,
                     maxWidth: `${header.getSize()}px`,
+                    ...getColumnPinningLeft(header.column.id),
+                    ...getColumnPinningRight(header.column.id),
                   }}
                 >
                   <div
@@ -232,6 +281,8 @@ export default function DataTable<T>({
                     minWidth: `${cell.column.getSize()}px`,
                     width: `${cell.column.getSize()}px`,
                     maxWidth: `${cell.column.getSize()}px`,
+                    ...getColumnPinningLeft(cell.column.id),
+                    ...getColumnPinningRight(cell.column.id),
                   }}
                 >
                   <div

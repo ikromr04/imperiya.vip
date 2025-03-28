@@ -69,7 +69,7 @@ function ColumnFilter<TData, TValue>({
             type="button"
             onClick={() =>
               setColumnPinning((prev) => ({
-                left: prev.left && (prev.left.includes(header.column.id) ? [] : [header.column.id]),
+                left: prev.left && (prev.left.includes(header.column.id) ? [...prev.left] : [...prev.left, header.column.id]),
                 right: prev.right?.filter((col) => col !== header.column.id),
               }))
             }
@@ -87,7 +87,7 @@ function ColumnFilter<TData, TValue>({
             onClick={() =>
               setColumnPinning((prev) => ({
                 left: prev.left?.filter((col) => col !== header.column.id),
-                right: prev.right && (prev.right.includes(header.column.id) ? [] : [header.column.id]),
+                right: prev.right && (prev.right.includes(header.column.id) ? [...prev.right] : [...prev.right, header.column.id]),
               }))
             }
           >

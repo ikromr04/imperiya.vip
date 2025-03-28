@@ -10,7 +10,7 @@ class LessonController extends Controller
 {
   public function index(): JsonResponse
   {
-    $lessons = Lesson::selectBasic()->get();
+    $lessons = Lesson::selectBasic()->orderBy('name')->get();
 
     return response()->json($lessons, 200);
   }
