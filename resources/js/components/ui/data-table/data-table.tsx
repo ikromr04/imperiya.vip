@@ -1,6 +1,7 @@
 import React, { BaseSyntheticEvent, ReactNode, useState } from 'react';
 import classNames from 'classnames';
-import { Icons } from '../../icons';
+import ColumnFilter from './column-filter';
+import ColumnVisibility from './column-visibility';
 import {
   Column,
   ColumnDef,
@@ -15,8 +16,7 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
-import ColumnFilter from './column-filter';
-import ColumnVisibility from './column-visibility';
+import { Icons } from '@/components/icons';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData, TValue> {
