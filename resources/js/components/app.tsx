@@ -1,22 +1,22 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import React from 'react';
-import LoginPage from './pages/auth/login-page';
-import JournalPage from './pages/journal-page';
+import LoginPage from '../pages/auth/login-page';
 import { useAppSelector } from '../hooks';
 import { getAuthStatus } from '../store/auth-slice/auth-selector';
 import Spinner from './ui/spinner';
-import ForgotPasswordPage from './pages/auth/forgot-password-page';
-import ResetPasswordPage from './pages/auth/reset-password-page';
-import ProfilePage from './pages/auth/profile-page';
-import NotFoundPage from './pages/not-found-page';
-import UsersPage from './pages/users/users-page';
+import ForgotPasswordPage from '../pages/auth/forgot-password-page';
+import ResetPasswordPage from '../pages/auth/reset-password-page';
+import ProfilePage from '../pages/auth/profile-page';
+import UsersPage from '../pages/users/users-page';
 import { AuthorizationStatus } from '@/const/store';
 import { AppRoute } from '@/const/routes';
-import UsersShowPage from './pages/users/users-show-page';
-import GradesPage from './pages/grades/grades-page';
-import GradesShowPage from './pages/grades/grades-show-page';
-import SchedulesPage from './pages/schedules-page/schedules-page';
-import LessonsPage from './pages/lessons/lessons-page';
+import UsersShowPage from '../pages/users/users-show-page/users-show-page';
+import GradesPage from '../pages/grades/grades-page';
+import GradesShowPage from '../pages/grades/grades-show-page';
+import SchedulesPage from '../pages/schedules-page/schedules-page';
+import LessonsPage from '../pages/lessons/lessons-page';
+import JournalPage from '@/pages/journal-page';
+import NotFoundPage from '@/pages/not-found-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);

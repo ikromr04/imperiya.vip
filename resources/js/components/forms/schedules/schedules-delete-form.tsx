@@ -1,4 +1,4 @@
-import { SchedulesModal } from '@/components/pages/schedules-page/schedules-page';
+import { SchedulesModal } from '@/pages/schedules-page/schedules-page';
 import Button from '@/components/ui/button';
 import Checkbox from '@/components/ui/checkbox/checkbox';
 import { ScheduleUpdateDTO } from '@/dto/schedules';
@@ -57,7 +57,7 @@ function ScheduleDeleteForm({
             <Button
               className="ml-auto"
               type="reset"
-              variant="error"
+              variant="danger"
               icon="close"
               onClick={() => setModal({
                 isCreating: false,
@@ -84,7 +84,7 @@ function ScheduleDeleteForm({
               icon="delete"
               disabled={isSubmitting}
               loading={isSubmitting}
-              variant="error"
+              variant="danger"
             >
               Удалить
             </Button>

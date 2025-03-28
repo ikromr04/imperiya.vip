@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -39,6 +41,12 @@ class AuthController extends Controller
   public function login(LoginRequest $request): JsonResponse
   {
     $user = User::where('login', $request->login)->first();
+
+    if ($request->password != Crypt::decryptString($user->password)) {
+      throw ValidationException::withMessages([
+        'password' => ['Неверный пароль.'],
+      ]);
+    }
 
     return response()->json([
       'user' => [

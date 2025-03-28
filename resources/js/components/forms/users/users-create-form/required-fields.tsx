@@ -1,6 +1,6 @@
 import Button from '@/components/ui/button';
-import SelectField from '@/components/ui/form-controls/formik/select-field';
-import TextField from '@/components/ui/form-controls/formik/text-field';
+import SelectField from '@/components/ui/formik-controls/select-field';
+import TextField from '@/components/ui/formik-controls/text-field';
 import { RoleName, ROLES, SexName } from '@/const/users';
 import { UserStoreDTO } from '@/dto/users';
 import { useAppDispatch } from '@/hooks';
@@ -57,7 +57,7 @@ function RequiredFields({
         <Button
           className="ml-auto"
           type="reset"
-          variant="error"
+          variant="danger"
           icon="close"
           onClick={() => {
             setIsOpen(false);

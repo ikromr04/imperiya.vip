@@ -1,7 +1,7 @@
-import { SchedulesModal } from '@/components/pages/schedules-page/schedules-page';
+import { SchedulesModal } from '@/pages/schedules-page/schedules-page';
 import Button from '@/components/ui/button';
 import Checkbox from '@/components/ui/checkbox/checkbox';
-import SelectField from '@/components/ui/form-controls/formik/select-field';
+import SelectField from '@/components/ui/formik-controls/select-field';
 import { ScheduleUpdateDTO } from '@/dto/schedules';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
@@ -72,7 +72,7 @@ function ScheduleEditForm({
             <Button
               className="ml-auto"
               type="reset"
-              variant="error"
+              variant="danger"
               icon="close"
               onClick={() => setModal({
                 isCreating: false,

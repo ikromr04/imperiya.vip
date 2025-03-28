@@ -1,6 +1,6 @@
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
-import TextField from '@/components/ui/form-controls/formik/text-field';
+import TextField from '@/components/ui/formik-controls/text-field';
 import { UserUpdateDTO } from '@/dto/users';
 import { useAppDispatch } from '@/hooks';
 import { updateUserAction } from '@/store/users-slice/users-api-actions';
@@ -118,7 +118,7 @@ function UsersPhoneEditForm({
             <Button
               type="reset"
               onClick={() => setIsOpen(false)}
-              variant="error"
+              variant="danger"
             >
               Отмена
             </Button>

@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Hash;
 
 class LoginRequest extends FormRequest
 {
@@ -17,13 +15,7 @@ class LoginRequest extends FormRequest
   {
     return [
       'login' => 'required|exists:users,login',
-      'password' => ['required', function ($attribute, $value, $fail) {
-        $user = User::where('login', $this->login)->first();
-
-        if ($user && !Hash::check($value, $user->password)) {
-          $fail('Неверный пароль.');
-        }
-      }],
+      'password' => 'required',
     ];
   }
 

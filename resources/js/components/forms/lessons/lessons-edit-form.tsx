@@ -1,5 +1,5 @@
 import Button from '@/components/ui/button';
-import TextField from '@/components/ui/form-controls/formik/text-field';
+import TextField from '@/components/ui/formik-controls/text-field';
 import { LessonUpdateDTO } from '@/dto/lessons';
 import { useAppDispatch } from '@/hooks';
 import { updateLessonAction } from '@/store/lessons-slice/lessons-api-actions';
@@ -61,7 +61,7 @@ function LessonsEditForm({
             <Button
               className="ml-auto"
               type="reset"
-              variant="error"
+              variant="danger"
               icon="close"
               onClick={() => setIsOpen(false)}
             >

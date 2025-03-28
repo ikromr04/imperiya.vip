@@ -1,5 +1,5 @@
 import Button from '@/components/ui/button';
-import SelectField from '@/components/ui/form-controls/formik/select-field';
+import SelectField from '@/components/ui/formik-controls/select-field';
 import { GradeStoreDTO } from '@/dto/grades';
 import { useAppDispatch } from '@/hooks';
 import { storeGradeAction } from '@/store/grades-slice/grades-api-actions';
@@ -71,7 +71,7 @@ function GradesCreateForm({
             <Button
               className="ml-auto"
               type="reset"
-              variant="error"
+              variant="danger"
               icon="close"
               onClick={() => setIsOpen(false)}
             >

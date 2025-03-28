@@ -69,7 +69,7 @@ function UsersDeleteForm({
             <Button
               type="reset"
               onClick={() => setIsOpen(false)}
-              variant="error"
+              variant="danger"
             >
               Отмена
             </Button>

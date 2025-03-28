@@ -57,7 +57,7 @@ function GradesDeleteForm({
               className="ml-auto"
               type="reset"
               icon="close"
-              variant="error"
+              variant="danger"
               onClick={() => setIsOpen(false)}
             >
               <span className="sr-only">Отмена</span>

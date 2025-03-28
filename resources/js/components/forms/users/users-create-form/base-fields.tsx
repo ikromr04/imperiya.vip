@@ -1,7 +1,7 @@
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
-import SelectField from '@/components/ui/form-controls/formik/select-field';
-import TextField from '@/components/ui/form-controls/formik/text-field';
+import SelectField from '@/components/ui/formik-controls/select-field';
+import TextField from '@/components/ui/formik-controls/text-field';
 import { UserStoreDTO } from '@/dto/users';
 import { FieldArray, useFormikContext } from 'formik';
 import React, { Dispatch, SetStateAction } from 'react';
@@ -47,7 +47,7 @@ function BaseFields({
         <Button
           className="ml-auto"
           type="reset"
-          variant="error"
+          variant="danger"
           icon="close"
           onClick={() => {
             setIsOpen(false);
@@ -63,13 +63,13 @@ function BaseFields({
         <TextField name="birth_date" label="Дата рождения" type="date" />
         <TextField name="email" label="Электронная почта" />
 
-          <SelectField
-            name="nationality"
-            label="Национальность"
-            cleanable
-            onClean={() => setFieldValue('nationality', '')}
-            options={nationalities.map((nationality) => ({ value: nationality, label: nationality }))}
-          />
+        <SelectField
+          name="nationality"
+          label="Национальность"
+          cleanable
+          onClean={() => setFieldValue('nationality', '')}
+          options={nationalities.map((nationality) => ({ value: nationality, label: nationality }))}
+        />
 
         <TextField name="address" label="Адрес" />
         <TextField name="social_link.facebook" label="Фейсбук" />

@@ -1,6 +1,6 @@
 import Button from '@/components/ui/button';
-import SelectField from '@/components/ui/form-controls/formik/select-field';
-import TextField from '@/components/ui/form-controls/formik/text-field';
+import SelectField from '@/components/ui/formik-controls/select-field';
+import TextField from '@/components/ui/formik-controls/text-field';
 import { UserUpdateDTO } from '@/dto/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { updateUserAction } from '@/store/users-slice/users-api-actions';
@@ -113,7 +113,7 @@ function UsersEditForm({
             <Button
               type="reset"
               onClick={() => setIsOpen(false)}
-              variant="error"
+              variant="danger"
             >
               Отмена
             </Button>

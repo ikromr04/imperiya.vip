@@ -1,4 +1,4 @@
-import SelectField from '@/components/ui/form-controls/formik/select-field';
+import SelectField from '@/components/ui/formik-controls/select-field';
 import { RoleUpdateDTO } from '@/dto/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';

@@ -1,5 +1,5 @@
 import Button from '@/components/ui/button';
-import SelectField from '@/components/ui/form-controls/formik/select-field';
+import SelectField from '@/components/ui/formik-controls/select-field';
 import { GradeUpdateDTO } from '@/dto/grades';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { updateGradeAction } from '@/store/grades-slice/grades-api-actions';
@@ -86,7 +86,7 @@ function GradesEditForm({
               className="ml-auto"
               type="reset"
               icon="close"
-              variant="error"
+              variant="danger"
               onClick={() => setIsOpen(false)}
             >
               <span className="sr-only">Отмена</span>
