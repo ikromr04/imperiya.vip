@@ -1,4 +1,4 @@
-import { SchedulesModal } from '@/pages/schedules-page/schedules-page';
+import * as Yup from 'yup';
 import Button from '@/components/ui/button';
 import Checkbox from '@/components/ui/checkbox/checkbox';
 import SelectField from '@/components/ui/formik-controls/select-field';
@@ -14,22 +14,31 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
+const validationSchema = Yup.object().shape({
+  lesson_id: Yup.number()
+    .required('Выберите урок.')
+    .moreThan(0, 'Выберите урок.'),
+});
+
 type ScheduleCreateFormProps = {
-  modal: SchedulesModal;
-  setModal: Dispatch<SetStateAction<SchedulesModal>>;
+  week: number;
+  dto: ScheduleStoreDTO;
+  setDTO: Dispatch<SetStateAction<ScheduleStoreDTO | null>>;
 };
 
 function ScheduleCreateForm({
-  modal,
-  setModal,
+  week,
+  dto,
+  setDTO,
 }: ScheduleCreateFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
   const lessons = useAppSelector(getLessons);
   const initialValues: ScheduleStoreDTO = {
-    date: dayjs(modal.date).format('YYYY-MM-DD'),
-    hour: modal.hour || 8,
-    grade_id: modal.grade_id || 0,
+    date: dayjs(dto.date).format('YYYY-MM-DD'),
+    hour: dto.hour,
+    grade_id: dto.grade_id,
+    lesson_id: dto.lesson_id,
   };
 
   useEffect(() => {
@@ -44,14 +53,11 @@ function ScheduleCreateForm({
     helpers.setSubmitting(true);
 
     await dispatch(storeScheduleAction({
+      week,
       dto: values,
       onSuccess: () => {
         toast.success('Расписание успешно добавлено.');
-        setModal({
-          isCreating: false,
-          isEditting: false,
-          isDeleting: false,
-        });
+        setDTO(null);
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
       onFail: (message) => toast.success(message),
@@ -63,6 +69,7 @@ function ScheduleCreateForm({
   return (
     <Formik
       initialValues={initialValues}
+      validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
       {({ isSubmitting }) => (
@@ -75,11 +82,7 @@ function ScheduleCreateForm({
               type="reset"
               variant="danger"
               icon="close"
-              onClick={() => setModal({
-                isCreating: false,
-                isEditting: false,
-                isDeleting: false,
-              })}
+              onClick={() => setDTO(null)}
             >
               <span className="sr-only">Отмена</span>
             </Button>

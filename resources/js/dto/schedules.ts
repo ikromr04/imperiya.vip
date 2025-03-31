@@ -8,11 +8,9 @@ export type ScheduleStoreDTO = {
   date: string;
   hour: keyof typeof Hour;
   grade_id: GradeId;
-  topic?: string;
-  homework?: string;
-  all?: boolean;
-  lesson_id?: LessonId;
+  lesson_id: LessonId;
   teacher_id?: UserId;
+  all?: boolean;
 };
 
 export type ScheduleUpdateDTO = {
@@ -20,9 +18,14 @@ export type ScheduleUpdateDTO = {
   date?: string;
   hour?: keyof typeof Hour;
   grade_id?: GradeId;
+  lesson_id?: LessonId;
+  teacher_id?: UserId;
   topic?: string;
   homework?: string;
   all?: boolean;
-  lesson_id?: LessonId;
-  teacher_id?: UserId;
+};
+
+export type ScheduleDeleteDTO = {
+  id: ScheduleId;
+  all?: boolean;
 };

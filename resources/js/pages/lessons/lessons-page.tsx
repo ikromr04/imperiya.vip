@@ -95,7 +95,7 @@ function LessonsPage(): JSX.Element {
       </main>
 
       <Modal isOpen={isCreating}>
-        <LessonsCreateForm setIsOpen={setIsCreating} />
+        <LessonsCreateForm key={isCreating.toString()} setIsOpen={setIsCreating} />
       </Modal>
       <Modal isOpen={isUpdating}>
         <LessonsEditForm key={dto.name} lesson={dto} setIsOpen={setIsUpdating} />

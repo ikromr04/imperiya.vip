@@ -4,14 +4,17 @@ import { AppRoute } from '@/const/routes';
 import { AuthorizationStatus } from '@/const/store';
 import { useAppSelector } from '@/hooks';
 import { getAuthStatus } from '@/store/auth-slice/auth-selector';
-import React from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function LoginPage(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthStatus);
 
-  if (authorizationStatus === AuthorizationStatus.Auth)
-    return <Navigate to={AppRoute.Auth.Profile} />;
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      window.location.href = AppRoute.Auth.Profile;
+    }
+  }, [authorizationStatus]);
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-illustrations bg-bottom bg-contain bg-no-repeat md:bg-gray-100">

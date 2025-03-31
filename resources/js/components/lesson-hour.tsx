@@ -14,10 +14,10 @@ function LessonHour({
   const to = Hour[hour].split(' ')[1];
 
   return (
-    <div className="w-max">
-      {from.slice(0, 2)} <sup>{from.slice(2, 4)}</sup>
+    <div className="w-full text-center">
+      {from.slice(0, 2)} <sup className="text-xs">{from.slice(2, 4)}</sup>
       <span> - </span>
-      {to.slice(0, 2)} <sup>{to.slice(2, 4)}</sup>
+      {to.slice(0, 2)} <sup className="text-xs">{to.slice(2, 4)}</sup>
     </div>
   );
 }

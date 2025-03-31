@@ -1,7 +1,6 @@
-import { SchedulesModal } from '@/pages/schedules-page/schedules-page';
 import Button from '@/components/ui/button';
 import Checkbox from '@/components/ui/checkbox/checkbox';
-import { ScheduleUpdateDTO } from '@/dto/schedules';
+import { ScheduleDeleteDTO, ScheduleUpdateDTO } from '@/dto/schedules';
 import { useAppDispatch } from '@/hooks';
 import { deleteScheduleAction } from '@/store/schedules-slice/schedules-api-actions';
 import { Form, Formik, FormikHelpers } from 'formik';
@@ -9,17 +8,20 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 
 type ScheduleDeleteFormProps = {
-  modal: SchedulesModal;
-  setModal: Dispatch<SetStateAction<SchedulesModal>>;
+  week: number;
+  dto: ScheduleDeleteDTO;
+  setDTO: Dispatch<SetStateAction<ScheduleDeleteDTO | null>>;
 };
 
 function ScheduleDeleteForm({
-  modal,
-  setModal,
+  week,
+  dto,
+  setDTO,
 }: ScheduleDeleteFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const initialValues: ScheduleUpdateDTO = {
-    id: modal.schedule?.id || 0,
+    id: dto.id,
+    all: dto.all,
   };
 
   const onSubmit = async (
@@ -29,14 +31,11 @@ function ScheduleDeleteForm({
     helpers.setSubmitting(true);
 
     await dispatch(deleteScheduleAction({
+      week,
       dto: values,
       onSuccess: () => {
         toast.success('Расписание успешно обновлен.');
-        setModal({
-          isCreating: false,
-          isEditting: false,
-          isDeleting: false,
-        });
+        setDTO(null);
       },
       onFail: (message) => toast.success(message),
     }));
@@ -59,11 +58,7 @@ function ScheduleDeleteForm({
               type="reset"
               variant="danger"
               icon="close"
-              onClick={() => setModal({
-                isCreating: false,
-                isEditting: false,
-                isDeleting: false,
-              })}
+              onClick={() => setDTO(null)}
             >
               <span className="sr-only">Отмена</span>
             </Button>

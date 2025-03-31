@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LessonStoreRequest;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +16,7 @@ class LessonController extends Controller
     return response()->json($lessons, 200);
   }
 
-  public function store(Request $request): JsonResponse
+  public function store(LessonStoreRequest $request): JsonResponse
   {
     $lesson = Lesson::create($request->only(['name']));
 

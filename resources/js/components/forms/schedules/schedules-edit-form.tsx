@@ -1,4 +1,3 @@
-import { SchedulesModal } from '@/pages/schedules-page/schedules-page';
 import Button from '@/components/ui/button';
 import Checkbox from '@/components/ui/checkbox/checkbox';
 import SelectField from '@/components/ui/formik-controls/select-field';
@@ -14,21 +13,23 @@ import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 type ScheduleEditFormProps = {
-  modal: SchedulesModal;
-  setModal: Dispatch<SetStateAction<SchedulesModal>>;
+  week: number;
+  dto: ScheduleUpdateDTO;
+  setDTO: Dispatch<SetStateAction<ScheduleUpdateDTO | null>>;
 };
 
 function ScheduleEditForm({
-  modal,
-  setModal,
+  week,
+  dto,
+  setDTO,
 }: ScheduleEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
   const lessons = useAppSelector(getLessons);
   const initialValues: ScheduleUpdateDTO = {
-    id: modal.schedule?.id || 0,
-    lesson_id: modal.schedule?.lessonId,
-    teacher_id: modal.schedule?.teacherId,
+    id: dto.id,
+    lesson_id: dto.lesson_id,
+    teacher_id: dto.teacher_id,
   };
 
   useEffect(() => {
@@ -43,14 +44,11 @@ function ScheduleEditForm({
     helpers.setSubmitting(true);
 
     await dispatch(updateScheduleAction({
+      week,
       dto: values,
       onSuccess: () => {
         toast.success('Расписание успешно обновлен.');
-        setModal({
-          isCreating: false,
-          isEditting: false,
-          isDeleting: false,
-        });
+        setDTO(null);
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
       onFail: (message) => toast.success(message),
@@ -74,11 +72,7 @@ function ScheduleEditForm({
               type="reset"
               variant="danger"
               icon="close"
-              onClick={() => setModal({
-                isCreating: false,
-                isEditting: false,
-                isDeleting: false,
-              })}
+              onClick={() => setDTO(null)}
             >
               <span className="sr-only">Отмена</span>
             </Button>

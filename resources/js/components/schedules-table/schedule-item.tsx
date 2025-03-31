@@ -2,14 +2,14 @@ import { Hour } from '@/const/lessons';
 import { Grade } from '@/types/grades';
 import { Schedules } from '@/types/schedules';
 import dayjs, { Dayjs } from 'dayjs';
-import React, { Dispatch, SetStateAction } from 'react';
-import { SchedulesModal } from './schedules-page';
+import React, { Dispatch, memo, SetStateAction } from 'react';
 import { Lessons } from '@/types/lessons';
 import { Users } from '@/types/users';
 import { generatePath, Link } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
 import classNames from 'classnames';
 import Button from '@/components/ui/button';
+import { ScheduleDeleteDTO, ScheduleStoreDTO, ScheduleUpdateDTO } from '@/dto/schedules';
 
 type ScheduleProps = {
   date: Dayjs;
@@ -18,7 +18,9 @@ type ScheduleProps = {
   lessons: Lessons;
   teachers: Users;
   schedules: Schedules;
-  setModal: Dispatch<SetStateAction<SchedulesModal>>;
+  setCreateDTO: Dispatch<SetStateAction<ScheduleStoreDTO | null>>;
+  setEditDTO: Dispatch<SetStateAction<ScheduleUpdateDTO | null>>;
+  setDeleteDTO: Dispatch<SetStateAction<ScheduleDeleteDTO | null>>;
 };
 
 function ScheduleItem({
@@ -28,7 +30,9 @@ function ScheduleItem({
   lessons,
   teachers,
   schedules,
-  setModal,
+  setCreateDTO,
+  setEditDTO,
+  setDeleteDTO,
 }: ScheduleProps): JSX.Element {
   const schedule = schedules.find((schedule) => (
     dayjs(schedule.date).format('YYYY-MM-DD') === dayjs(date).format('YYYY-MM-DD') &&
@@ -45,13 +49,11 @@ function ScheduleItem({
             dayjs().format('YYYY-MM-DD') > dayjs(date).format('YYYY-MM-DD') && 'pointer-events-none'
           )}
           type="button"
-          onClick={() => setModal({
-            isCreating: true,
-            isEditting: false,
-            isDeleting: false,
-            date: dayjs(date).format(),
+          onClick={() => setCreateDTO({
+            date: dayjs(date).format('YYYY-MM-DD'),
             hour,
             grade_id: grade.id,
+            lesson_id: 0,
           })}
         >
           <span className="sr-only">Добавить урок</span>
@@ -66,22 +68,23 @@ function ScheduleItem({
         {lessons.find(({ id }) => id === schedule.lessonId)?.name}
       </span>
       {schedule.teacherId && (
-        <Link
-          className="text-sm transition-all duration-150 hover:text-blue-600 truncate"
-          to={generatePath(AppRoute.Users.Show, { id: schedule.teacherId })}
-        >
-          ({teachers.find(({ id }) => id === schedule.teacherId)?.name})
-        </Link>
+        <div className="flex justify-center text-sm items-baseline">
+          (<Link
+            className="transition-all duration-150 hover:text-blue-600 truncate"
+            to={generatePath(AppRoute.Users.Show, { id: schedule.teacherId })}
+          >
+            {teachers.find(({ id }) => id === schedule.teacherId)?.name}
+          </Link>)
+        </div>
       )}
       <div className="absolute right-0 top-0 p-1 flex gap-1 invisible group-hover:visible">
         <Button
           icon="edit"
           variant="warn"
-          onClick={() => setModal({
-            isCreating: false,
-            isEditting: true,
-            isDeleting: false,
-            schedule,
+          onClick={() => setEditDTO({
+            id: schedule.id,
+            lesson_id: schedule.lessonId,
+            teacher_id: schedule.teacherId,
           })}
         >
           <span className="sr-only">Редактировать</span>
@@ -89,11 +92,8 @@ function ScheduleItem({
         <Button
           icon="delete"
           variant="danger"
-          onClick={() => setModal({
-            isCreating: false,
-            isEditting: false,
-            isDeleting: true,
-            schedule,
+          onClick={() => setDeleteDTO({
+            id: schedule.id,
           })}
         >
           <span className="sr-only">Удалить</span>
@@ -103,4 +103,4 @@ function ScheduleItem({
   );
 }
 
-export default ScheduleItem;
+export default memo(ScheduleItem);

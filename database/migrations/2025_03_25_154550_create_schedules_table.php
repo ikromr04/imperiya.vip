@@ -16,10 +16,10 @@ return new class extends Migration
       $table->date('date');
       $table->enum('hour', [1, 2, 3, 4, 5, 6, 7, 8]);
       $table->foreignId('grade_id')->constrained('grades')->onDelete('cascade');
+      $table->foreignId('lesson_id')->constrained('lessons')->onDelete('cascade');
+      $table->foreignId('teacher_id')->nullable()->constrained('users')->onDelete('cascade');
       $table->string('topic')->nullable();
       $table->string('homework')->nullable();
-      $table->foreignId('lesson_id')->nullable()->constrained('lessons')->onDelete('set null');
-      $table->foreignId('teacher_id')->nullable()->constrained('users')->onDelete('set null');
       $table->timestamps();
     });
   }

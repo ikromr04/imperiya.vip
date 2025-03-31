@@ -6,10 +6,13 @@ import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { logoutAction } from '@/store/auth-slice/auth-api-actions';
 import { useAppDispatch } from '@/hooks';
+import useRouteChange from '@/hooks/use-route-change';
+import { setSchedules } from '@/store/schedules-slice/schedules-slice';
 
 function AppSidebar(): JSX.Element {
   const dispatch = useAppDispatch();
   const [isShown, setIsShown] = useState(false);
+  useRouteChange(() => dispatch(setSchedules(null)));
 
   return (
     <>

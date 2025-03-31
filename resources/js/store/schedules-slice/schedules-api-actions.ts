@@ -3,15 +3,17 @@ import { AxiosError, AxiosInstance } from 'axios';
 import { ValidationError } from '@/types/validation-error';
 import { APIRoute } from '@/const/routes';
 import { Schedules } from '@/types/schedules';
-import { ScheduleStoreDTO, ScheduleUpdateDTO } from '@/dto/schedules';
+import { ScheduleDeleteDTO, ScheduleStoreDTO, ScheduleUpdateDTO } from '@/dto/schedules';
 import { generatePath } from 'react-router-dom';
 
-export const fetchSchedulesAction = createAsyncThunk<Schedules, undefined, {
+export const fetchSchedulesAction = createAsyncThunk<Schedules, {
+  week: number;
+}, {
   extra: AxiosInstance
 }>(
   'schedules/fetch',
-  async (_arg, { extra: api }) => {
-    const { data } = await api.get<Schedules>(APIRoute.Schedules.Index);
+  async ({ week = 0 }, { extra: api }) => {
+    const { data } = await api.get<Schedules>(`${APIRoute.Schedules.Index}?week=${week}`);
 
     return data;
   },
@@ -19,6 +21,7 @@ export const fetchSchedulesAction = createAsyncThunk<Schedules, undefined, {
 
 export const storeScheduleAction = createAsyncThunk<Schedules, {
   dto: ScheduleStoreDTO,
+  week: number;
   onSuccess?: () => void,
   onValidationError?: (error: ValidationError) => void,
   onFail?: (message: string) => void,
@@ -27,9 +30,9 @@ export const storeScheduleAction = createAsyncThunk<Schedules, {
   rejectWithValue: ValidationError,
 }>(
   'schedules/store',
-  async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+  async ({ dto, week, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.post<Schedules>(APIRoute.Schedules.Index, dto);
+      const { data } = await api.post<Schedules>(`${APIRoute.Schedules.Index}?week=${week}`, dto);
       if (onSuccess) onSuccess();
       return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,6 +48,7 @@ export const storeScheduleAction = createAsyncThunk<Schedules, {
 
 export const updateScheduleAction = createAsyncThunk<Schedules, {
   dto: ScheduleUpdateDTO,
+  week: number;
   onSuccess?: () => void,
   onValidationError?: (error: ValidationError) => void,
   onFail?: (message: string) => void,
@@ -53,9 +57,9 @@ export const updateScheduleAction = createAsyncThunk<Schedules, {
   rejectWithValue: ValidationError,
 }>(
   'schedules/update',
-  async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+  async ({ dto, week, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.put<Schedules>(APIRoute.Schedules.Index, dto);
+      const { data } = await api.put<Schedules>(`${APIRoute.Schedules.Index}?week=${week}`, dto);
       if (onSuccess) onSuccess();
       return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -70,17 +74,18 @@ export const updateScheduleAction = createAsyncThunk<Schedules, {
 );
 
 export const deleteScheduleAction = createAsyncThunk<Schedules, {
-  dto: ScheduleUpdateDTO,
-  onSuccess?: () => void,
-  onFail?: (message: string) => void,
+  dto: ScheduleDeleteDTO;
+  week: number;
+  onSuccess?: () => void;
+  onFail?: (message: string) => void;
 }, {
   extra: AxiosInstance,
   rejectWithValue: ValidationError,
 }>(
   'schedules/delete',
-  async ({ dto, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+  async ({ dto, week, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.delete<Schedules>(`${generatePath(APIRoute.Schedules.Show, { id: dto.id })}${dto.all ? '?all=true' : ''}`);
+      const { data } = await api.delete<Schedules>(`${generatePath(APIRoute.Schedules.Show, { id: dto.id })}?week=${week}${dto.all ? '&all=true' : ''}`);
       if (onSuccess) onSuccess();
       return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

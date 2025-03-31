@@ -8,6 +8,13 @@ class Schedule extends Model
 {
   protected $guarded = ['id'];
 
+  protected function casts(): array
+  {
+    return [
+      'hour' => 'integer',
+    ];
+  }
+
   public function scopeSelectBasic($query)
   {
     return $query->select(
