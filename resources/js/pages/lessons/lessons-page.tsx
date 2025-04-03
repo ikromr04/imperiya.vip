@@ -1,6 +1,6 @@
 import LessonsCreateForm from '@/components/forms/lessons/lessons-create-form';
 import LessonsEditForm from '@/components/forms/lessons/lessons-edit-form';
-import PageLayout from '@/components/layouts/app-layout';
+import AppLayout from '@/components/layouts/app-layout';
 import Button from '@/components/ui/button';
 import DataTable from '@/components/ui/data-table/data-table';
 import Modal from '@/components/ui/modal';
@@ -60,7 +60,7 @@ function LessonsPage(): JSX.Element {
   ];
 
   return (
-    <PageLayout>
+    <AppLayout>
       <main className="pt-4 pb-40">
         <header className="flex justify-between px-3 items-end mb-1">
           <h1 className="title">
@@ -100,7 +100,7 @@ function LessonsPage(): JSX.Element {
       <Modal isOpen={isUpdating}>
         <LessonsEditForm key={dto.name} lesson={dto} setIsOpen={setIsUpdating} />
       </Modal>
-    </PageLayout>
+    </AppLayout>
   );
 }
 

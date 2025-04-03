@@ -41,4 +41,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/', [ScheduleController::class, 'update']);
     Route::delete('/{id}', [ScheduleController::class, 'delete']);
   });
+
+  Route::get('/journal', [ScheduleController::class, 'journal']);
+  Route::post('/evaluations', [ScheduleController::class, 'storeEvaluation']);
+  Route::put('/evaluations', [ScheduleController::class, 'updateEvaluation']);
 });

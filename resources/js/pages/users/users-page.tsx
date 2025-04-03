@@ -2,7 +2,6 @@ import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { getNationalities, getUsers } from '@/store/users-slice/users-selector';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
-import PageLayout from '@/components/layouts/app-layout';
 import Spinner from '@/components/ui/spinner';
 import { ColumnDef } from '@tanstack/react-table';
 import { User, UsersFilter } from '@/types/users';
@@ -20,6 +19,7 @@ import SelectField from '@/components/ui/form-controls/select-field';
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
 import UsersCreateForm from '@/components/forms/users/users-create-form/users-create-form';
+import AppLayout from '@/components/layouts/app-layout';
 
 function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -321,7 +321,7 @@ function UsersPage(): JSX.Element {
   ];
 
   return (
-    <PageLayout>
+    <AppLayout>
       <main className="pt-4 pb-40">
         <header className="flex justify-between px-3 items-end mb-1">
           <h1 className="title">
@@ -354,7 +354,7 @@ function UsersPage(): JSX.Element {
       <Modal isOpen={isCreating}>
         <UsersCreateForm setIsOpen={setIsCreating} />
       </Modal>
-    </PageLayout>
+    </AppLayout>
   );
 }
 

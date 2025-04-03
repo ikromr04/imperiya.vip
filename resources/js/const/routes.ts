@@ -61,4 +61,10 @@ export const APIRoute = {
     Index: '/schedules',
     Show: '/schedules/:id',
   },
+  Journal: {
+    Index: '/journal',
+  },
+  Evaluations: {
+    Index: '/evaluations',
+  },
 };

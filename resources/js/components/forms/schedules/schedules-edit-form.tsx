@@ -8,6 +8,7 @@ import { getLessons } from '@/store/lessons-slice/lessons-selector';
 import { updateScheduleAction } from '@/store/schedules-slice/schedules-api-actions';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
+import { Schedules } from '@/types/schedules';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -16,12 +17,14 @@ type ScheduleEditFormProps = {
   week: number;
   dto: ScheduleUpdateDTO;
   setDTO: Dispatch<SetStateAction<ScheduleUpdateDTO | null>>;
+  setSchedules: Dispatch<SetStateAction<Schedules | null>>;
 };
 
 function ScheduleEditForm({
-  week,
+  week = 0,
   dto,
   setDTO,
+  setSchedules,
 }: ScheduleEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
@@ -46,9 +49,10 @@ function ScheduleEditForm({
     await dispatch(updateScheduleAction({
       week,
       dto: values,
-      onSuccess: () => {
+      onSuccess: (schedules) => {
         toast.success('Расписание успешно обновлен.');
         setDTO(null);
+        setSchedules(schedules);
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
       onFail: (message) => toast.success(message),

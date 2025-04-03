@@ -15,6 +15,21 @@ export type Schedule = {
   homework?: string;
   lessonId?: LessonId;
   teacherId?: UserId;
+  evaluations?: Evaluations;
 };
+
+export type Journal = {
+  id: UserId;
+  name: string;
+} & Record<string, object | string | number>;
+
+export type Evaluation = {
+  id: ID;
+  value: string;
+  user_id: UserId;
+  schedule_id: ScheduleId;
+};
+
+export type Evaluations = Evaluation[];
 
 export type Schedules = Schedule[];

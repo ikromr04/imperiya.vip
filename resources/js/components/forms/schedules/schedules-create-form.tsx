@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { Schedules } from '@/types/schedules';
 
 const validationSchema = Yup.object().shape({
   lesson_id: Yup.number()
@@ -24,12 +25,14 @@ type ScheduleCreateFormProps = {
   week: number;
   dto: ScheduleStoreDTO;
   setDTO: Dispatch<SetStateAction<ScheduleStoreDTO | null>>;
+  setSchedules: Dispatch<SetStateAction<Schedules | null>>;
 };
 
 function ScheduleCreateForm({
   week,
   dto,
   setDTO,
+  setSchedules,
 }: ScheduleCreateFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
@@ -55,9 +58,10 @@ function ScheduleCreateForm({
     await dispatch(storeScheduleAction({
       week,
       dto: values,
-      onSuccess: () => {
+      onSuccess: (schedules) => {
         toast.success('Расписание успешно добавлено.');
         setDTO(null);
+        setSchedules(schedules);
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
       onFail: (message) => toast.success(message),

@@ -3,6 +3,7 @@ import Checkbox from '@/components/ui/checkbox/checkbox';
 import { ScheduleDeleteDTO, ScheduleUpdateDTO } from '@/dto/schedules';
 import { useAppDispatch } from '@/hooks';
 import { deleteScheduleAction } from '@/store/schedules-slice/schedules-api-actions';
+import { Schedules } from '@/types/schedules';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
@@ -11,12 +12,14 @@ type ScheduleDeleteFormProps = {
   week: number;
   dto: ScheduleDeleteDTO;
   setDTO: Dispatch<SetStateAction<ScheduleDeleteDTO | null>>;
+  setSchedules: Dispatch<SetStateAction<Schedules | null>>;
 };
 
 function ScheduleDeleteForm({
   week,
   dto,
   setDTO,
+  setSchedules,
 }: ScheduleDeleteFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const initialValues: ScheduleUpdateDTO = {
@@ -33,9 +36,10 @@ function ScheduleDeleteForm({
     await dispatch(deleteScheduleAction({
       week,
       dto: values,
-      onSuccess: () => {
+      onSuccess: (schedules) => {
         toast.success('Расписание успешно обновлен.');
         setDTO(null);
+        setSchedules(schedules);
       },
       onFail: (message) => toast.success(message),
     }));

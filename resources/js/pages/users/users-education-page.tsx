@@ -1,4 +1,3 @@
-import PageLayout from '@/components/layouts/app-layout';
 import Details from '@/pages/users/users-show-page/details';
 import Educations from '@/pages/users/users-show-page/educations';
 import PhoneNumbers from '@/pages/users/users-show-page/phone-numbers';
@@ -13,6 +12,7 @@ import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import React, { useEffect } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
+import AppLayout from '@/components/layouts/app-layout';
 
 function UsersEducationPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -26,14 +26,14 @@ function UsersEducationPage(): JSX.Element {
 
   if (!user || !users) {
     return (
-      <PageLayout>
+      <AppLayout>
         <Spinner className="w-8 h-8" />
-      </PageLayout>
+      </AppLayout>
     );
   }
 
   return (
-    <PageLayout>
+    <AppLayout>
       <main className="overflow-y-auto p-2 -m-2 no-scrollbar">
         <Breadcrumbs
           className="mb-2"
@@ -60,7 +60,7 @@ function UsersEducationPage(): JSX.Element {
           </div>
         </div>
       </main>
-    </PageLayout>
+    </AppLayout>
   );
 }
 

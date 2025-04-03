@@ -21,7 +21,9 @@ import { Icons } from '@/components/icons';
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData, TValue> {
     renderFilter?: (column: Column<TData, TValue>) => JSX.Element;
+    renderHeader?: (column: Column<TData, TValue>) => JSX.Element;
     columnClass?: string;
+    thClass?: string;
   }
 };
 
@@ -233,10 +235,16 @@ export default function DataTable<T>({
                       'flex p-2 border-gray-200',
                       columnPinning.left?.includes(header.column.id) && 'border-r',
                       columnPinning.right?.includes(header.column.id) && 'border-l',
+                      header.column.columnDef.meta?.thClass,
                     )}
                   >
                     <span className="text-start truncate select-none">
-                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.column.columnDef.meta?.renderHeader ? (
+                        header.column.columnDef.meta?.renderHeader(header.column)
+                      ) : (
+                        flexRender(header.column.columnDef.header, header.getContext())
+                      )
+                    }
                     </span>
                     {header.column.getCanSort() && renderSortingIcon(header.column.getIsSorted())}
 

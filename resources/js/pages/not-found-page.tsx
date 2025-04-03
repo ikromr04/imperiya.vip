@@ -20,7 +20,7 @@ function NotFoundPage(): JSX.Element {
           К сожалению, страница, которую вы ищете, не существует. Если вы уверены, что произошла ошибка, то сообщите своему администратору или дайте нам знать.
         </p>
 
-        <Button href={AppRoute.Journal}>
+        <Button href={AppRoute.Auth.Profile}>
           Вернуться на главную страницу
         </Button>
       </div>

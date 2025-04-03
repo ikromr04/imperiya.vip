@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Evaluation;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -12,7 +13,7 @@ class ScheduleController extends Controller
   public function index(Request $request): JsonResponse
   {
     $schedules = Schedule::selectBasic()
-      ->whereIn('date', $this->getCurrentWeekDates($request))
+      ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
       ->get();
 
     return response()->json($schedules, 200);
@@ -46,7 +47,7 @@ class ScheduleController extends Controller
       Schedule::insert($dates);
 
       $schedules = Schedule::selectBasic()
-        ->whereIn('date', $this->getCurrentWeekDates($request))
+        ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
         ->get();
 
       return response()->json($schedules, 201);
@@ -61,7 +62,7 @@ class ScheduleController extends Controller
     ]));
 
     $schedules = Schedule::selectBasic()
-      ->whereIn('date', $this->getCurrentWeekDates($request))
+      ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
       ->get();
 
     return response()->json($schedules, 201);
@@ -90,7 +91,7 @@ class ScheduleController extends Controller
         ->where('grade_id', $schedule->grade_id)
         ->update($request->only(['lesson_id', 'teacher_id']));
 
-      $weekDates = $this->getCurrentWeekDates($request);
+      $weekDates = $this->getCurrentWeekDates($request->query('week', 0));
 
       $schedules = Schedule::selectBasic()
         ->whereIn('date', $weekDates)
@@ -109,7 +110,7 @@ class ScheduleController extends Controller
       'homework',
     ]));
 
-    $weekDates = $this->getCurrentWeekDates($request);
+    $weekDates = $this->getCurrentWeekDates($request->query('week', 0));
 
     $schedules = Schedule::selectBasic()
       ->whereIn('date', $weekDates)
@@ -141,7 +142,7 @@ class ScheduleController extends Controller
         ->where('grade_id', $schedule->grade_id)
         ->delete();
 
-      $weekDates = $this->getCurrentWeekDates($request);
+      $weekDates = $this->getCurrentWeekDates($request->query('week', 0));
 
       $schedules = Schedule::selectBasic()
         ->whereIn('date', $weekDates)
@@ -152,7 +153,7 @@ class ScheduleController extends Controller
 
     $schedule->delete();
 
-    $weekDates = $this->getCurrentWeekDates($request);
+    $weekDates = $this->getCurrentWeekDates($request->query('week', 0));
 
     $schedules = Schedule::selectBasic()
       ->whereIn('date', $weekDates)
@@ -161,13 +162,50 @@ class ScheduleController extends Controller
     return response()->json($schedules, 200);
   }
 
-  public function getCurrentWeekDates(Request $request)
+  public function journal(Request $request)
   {
-    $currentWeek = $request->query('week', 0);
+    $schedules = Schedule::selectBasic()
+      ->orderBy('date')
+      ->where('lesson_id', $request->lesson)
+      ->where('grade_id', $request->grade)
+      ->with([
+        'evaluations' => fn($query) => $query->select(
+          'id',
+          'value',
+          'user_id',
+          'schedule_id',
+        ),
+      ])
+      ->get();
+
+    return response()->json($schedules, 200);
+  }
+
+  public function storeEvaluation(Request $request)
+  {
+    $evaluation = Evaluation::create($request->only([
+      'value',
+      'user_id',
+      'schedule_id',
+    ]));
+
+    return response()->json($evaluation, 201);
+  }
+
+  public function updateEvaluation(Request $request)
+  {
+    $evaluation = Evaluation::findOrFail($request->id)
+      ->update($request->only(['value']));
+
+    return response()->json($evaluation, 201);
+  }
+
+  public static function getCurrentWeekDates(int $week)
+  {
     $startOfWeek = Carbon::now()->startOfWeek();
 
-    return collect(range(0, 5))->map(function ($i) use ($startOfWeek, $currentWeek) {
-      return $startOfWeek->copy()->addDays($i + ($currentWeek * 7))->toDateString();
+    return collect(range(0, 5))->map(function ($i) use ($startOfWeek, $week) {
+      return $startOfWeek->copy()->addDays($i + ($week * 7))->toDateString();
     })->toArray();
   }
 }

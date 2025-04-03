@@ -6,6 +6,7 @@ import Cleanable from './cleanable';
 
 type SelectFieldProps = {
   className?: string;
+  inputClass?: string;
   value: string;
   onChange: (value: string) => void;
   options: { value: string; label: string; }[];
@@ -15,6 +16,7 @@ type SelectFieldProps = {
 
 function SelectField({
   className,
+  inputClass,
   value,
   onChange,
   options,
@@ -42,7 +44,10 @@ function SelectField({
 
       <div className="relative flex">
         <button
-          className="flex items-center min-h-8 grow bg-gray-50 min-w-0 border border-gray-200 rounded pl-4 pr-8 leading-none text-base focus:outline-none hover:bg-gray-100 focus:border-primary focus:bg-gray-100"
+          className={classNames(
+            'flex items-center min-h-8 grow bg-gray-50 min-w-0 border border-gray-200 rounded pl-4 pr-8 leading-none text-base focus:outline-none hover:bg-gray-100 focus:border-primary focus:bg-gray-100',
+            inputClass,
+          )}
           id={uniqueId}
           type="button"
           onClick={(evt: BaseSyntheticEvent) => !evt.target.classList.contains('remove-selection') && setIsOpen(!isOpen)}

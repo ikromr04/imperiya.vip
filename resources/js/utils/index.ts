@@ -34,3 +34,9 @@ export const getCurrentWeekDates = (currentWeek = 0) => {
 
 export const capitalizeString = (str: string): string =>
   str.charAt(0).toUpperCase() + str.slice(1);
+
+export const extractText = (html: string) => {
+  const tempElement = document.createElement('div');
+  tempElement.innerHTML = html;
+  return tempElement.innerText;
+};

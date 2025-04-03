@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import PageLayout from '@/components/layouts/app-layout';
 import Spinner from '@/components/ui/spinner';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
@@ -9,6 +8,7 @@ import { getUsers } from '@/store/users-slice/users-selector';
 import { getLessons } from '@/store/lessons-slice/lessons-selector';
 import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
 import SchedulesTable from '@/components/schedules-table/schedules-table';
+import AppLayout from '@/components/layouts/app-layout';
 
 function SchedulesPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -31,7 +31,7 @@ function SchedulesPage(): JSX.Element {
   ]);
 
   return (
-    <PageLayout>
+    <AppLayout>
       <main className="py-2">
         <h1 className="title mb-1 px-3">
           Расписание занятий
@@ -47,7 +47,7 @@ function SchedulesPage(): JSX.Element {
           <Spinner className="w-8 h-8" />
         )}
       </main>
-    </PageLayout >
+    </AppLayout >
   );
 }
 

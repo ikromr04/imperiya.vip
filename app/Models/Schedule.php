@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Schedule extends Model
 {
@@ -13,6 +14,11 @@ class Schedule extends Model
     return [
       'hour' => 'integer',
     ];
+  }
+
+  public function evaluations(): HasMany
+  {
+    return $this->hasMany(Evaluation::class);
   }
 
   public function scopeSelectBasic($query)

@@ -1,4 +1,3 @@
-import PageLayout from '@/components/layouts/app-layout';
 import BaseInfo from './base-info';
 import Deletion from './deletion';
 import Details from './details';
@@ -15,6 +14,7 @@ import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import AppLayout from '@/components/layouts/app-layout';
 
 function UsersShowPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -33,7 +33,7 @@ function UsersShowPage(): JSX.Element {
   }
 
   return (
-    <PageLayout>
+    <AppLayout>
       <main className="pt-4 pb-40">
         <Breadcrumbs
           className="mb-4"
@@ -63,7 +63,7 @@ function UsersShowPage(): JSX.Element {
           </div>
         </div>
       </main>
-    </PageLayout>
+    </AppLayout>
   );
 }
 

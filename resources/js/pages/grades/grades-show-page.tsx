@@ -1,7 +1,7 @@
 import GradesDeleteForm from '@/components/forms/grades/grades-delete-form';
 import GradesEditForm from '@/components/forms/grades/grades-edit-form';
 import { Icons } from '@/components/icons';
-import PageLayout from '@/components/layouts/app-layout';
+import AppLayout from '@/components/layouts/app-layout';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
@@ -34,14 +34,14 @@ function GradesShowPage(): JSX.Element {
 
   if (!grade || !grades.data) {
     return (
-      <PageLayout>
+      <AppLayout>
         <Spinner className="w-8 h-8" />
-      </PageLayout>
+      </AppLayout>
     );
   }
 
   return (
-    <PageLayout>
+    <AppLayout>
       <main className="overflow-y-auto p-2 -m-2 no-scrollbar">
         <Breadcrumbs
           className="mb-2"
@@ -120,7 +120,7 @@ function GradesShowPage(): JSX.Element {
           setIsOpen={setIsEditting}
         />
       </Modal>
-    </PageLayout>
+    </AppLayout>
   );
 }
 

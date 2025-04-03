@@ -18,11 +18,10 @@ import {
   ScheduleStoreDTO,
   ScheduleUpdateDTO,
 } from '@/dto/schedules';
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import { getSchedules } from '@/store/schedules-slice/schedules-selector';
+import { useAppDispatch } from '@/hooks';
 import { fetchSchedulesAction } from '@/store/schedules-slice/schedules-api-actions';
 import Spinner from '../ui/spinner';
-import { setSchedules } from '@/store/schedules-slice/schedules-slice';
+import { Schedules } from '@/types/schedules';
 
 type SchedulesTableProps = {
   grades: Grades;
@@ -36,19 +35,20 @@ function SchedulesTable({
   users
 }: SchedulesTableProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const schedules = useAppSelector(getSchedules);
+  const [schedules, setSchedules] = useState<Schedules | null>(null);
   const [week, setWeek] = useState(0);
   const weekDates = getCurrentWeekDates(week);
-const [createDTO, setCreateDTO] = useState<ScheduleStoreDTO | null>(null);
+  const [createDTO, setCreateDTO] = useState<ScheduleStoreDTO | null>(null);
   const [editDTO, setEditDTO] = useState<ScheduleUpdateDTO | null>(null);
   const [deleteDTO, setDeleteDTO] = useState<ScheduleDeleteDTO | null>(null);
   const tableRef = useRef<HTMLTableElement>(null);
 
   useEffect(() => {
-    if (!schedules.data && !schedules.isFetching) dispatch(fetchSchedulesAction({
+    if (!schedules) dispatch(fetchSchedulesAction({
       week,
+      onSuccess: (schedules) => setSchedules(schedules),
     }));
-  }, [dispatch, schedules.data, schedules.isFetching, week]);
+  }, [dispatch, schedules, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {
@@ -59,7 +59,7 @@ const [createDTO, setCreateDTO] = useState<ScheduleStoreDTO | null>(null);
     }
   };
 
-  if (!schedules.data) return <Spinner className="w-8 h-8" />;
+  if (!schedules) return <Spinner className="w-8 h-8" />;
 
   return (
     <div className="rounded-md shadow border pb-1 bg-[linear-gradient(to_bottom,white_0%,white_50%,#f3f4f6_50%,#f3f4f6_100%)]">
@@ -144,19 +144,17 @@ const [createDTO, setCreateDTO] = useState<ScheduleStoreDTO | null>(null);
                       key={grade.id}
                       className="relative z-0 p-2 border-l min-w-[260px] w-[260px] max-w-[260px]"
                     >
-                      {schedules.data && (
-                        <ScheduleItem
-                          date={date}
-                          hour={Number(hour) as keyof typeof Hour}
-                          grade={grade}
-                          lessons={lessons}
-                          teachers={users.filter((user) => user.role === 'teacher')}
-                          schedules={schedules.data}
-                          setCreateDTO={setCreateDTO}
-                          setEditDTO={setEditDTO}
-                          setDeleteDTO={setDeleteDTO}
-                        />
-                      )}
+                      <ScheduleItem
+                        date={date}
+                        hour={Number(hour) as keyof typeof Hour}
+                        grade={grade}
+                        lessons={lessons}
+                        teachers={users.filter((user) => user.role === 'teacher')}
+                        schedules={schedules}
+                        setCreateDTO={setCreateDTO}
+                        setEditDTO={setEditDTO}
+                        setDeleteDTO={setDeleteDTO}
+                      />
                     </td>
                   ))}
                 </tr>
@@ -189,7 +187,7 @@ const [createDTO, setCreateDTO] = useState<ScheduleStoreDTO | null>(null);
             className="flex justify-center items-center gap-x-2 h-8 border-transparent rounded-md border transform disabled:opacity-50 disabled:pointer-events-none"
             onClick={() => {
               setWeek((prev) => prev - 1);
-              dispatch(setSchedules(null));
+              setSchedules(null);
             }}
           >
             <Icons.previous width={7} />
@@ -200,7 +198,7 @@ const [createDTO, setCreateDTO] = useState<ScheduleStoreDTO | null>(null);
               className="flex justify-center items-center h-8 rounded-md"
               onClick={() => {
                 setWeek(0);
-                dispatch(setSchedules(null));
+                setSchedules(null);
               }}
             >
               <Icons.currentWeek width={16} height={16} />
@@ -211,7 +209,7 @@ const [createDTO, setCreateDTO] = useState<ScheduleStoreDTO | null>(null);
             className="flex justify-center items-center gap-x-2 h-8 border-transparent rounded-md border transform disabled:opacity-50 disabled:pointer-events-none"
             onClick={() => {
               setWeek((prev) => prev + 1);
-              dispatch(setSchedules(null));
+              setSchedules(null);
             }}
           >
             <span className="sr-only md:not-sr-only">Следующая неделя</span>
@@ -226,6 +224,7 @@ const [createDTO, setCreateDTO] = useState<ScheduleStoreDTO | null>(null);
             dto={createDTO}
             week={week}
             setDTO={setCreateDTO}
+            setSchedules={setSchedules}
           />
         )}
         {editDTO && (
@@ -233,6 +232,7 @@ const [createDTO, setCreateDTO] = useState<ScheduleStoreDTO | null>(null);
             dto={editDTO}
             week={week}
             setDTO={setEditDTO}
+            setSchedules={setSchedules}
           />
         )}
         {deleteDTO && (
@@ -240,6 +240,7 @@ const [createDTO, setCreateDTO] = useState<ScheduleStoreDTO | null>(null);
             dto={deleteDTO}
             week={week}
             setDTO={setDeleteDTO}
+            setSchedules={setSchedules}
           />
         )}
       </Modal>

@@ -6,19 +6,16 @@ import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { logoutAction } from '@/store/auth-slice/auth-api-actions';
 import { useAppDispatch } from '@/hooks';
-import useRouteChange from '@/hooks/use-route-change';
-import { setSchedules } from '@/store/schedules-slice/schedules-slice';
 
 function AppSidebar(): JSX.Element {
   const dispatch = useAppDispatch();
   const [isShown, setIsShown] = useState(false);
-  useRouteChange(() => dispatch(setSchedules(null)));
 
   return (
     <>
       <aside
         className={classNames(
-          'fixed left-0 top-0 z-40 flex flex-row-reverse h-screen transition-all duration-150 transform',
+          'fixed left-0 top-0 z-[100] flex flex-row-reverse h-screen transition-all duration-150 transform',
           isShown ? 'translate-x-0' : 'translate-x-[calc(-100%+10px)]'
         )}
         onMouseEnter={() => setIsShown(true)}
@@ -133,7 +130,7 @@ function AppSidebar(): JSX.Element {
 
       <button
         className={classNames(
-          'fixed left-0 top-0 z-30 w-screen h-screen transition-all duration-150 bg-black/10 backdrop-blur-[2px]',
+          'fixed left-0 top-0 z-50 w-screen h-screen transition-all duration-150 bg-black/10 backdrop-blur-[2px]',
           isShown ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         )}
         type="button"

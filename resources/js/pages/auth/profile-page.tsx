@@ -1,4 +1,3 @@
-import PageLayout from '@/components/layouts/app-layout';
 import BaseInfo from '@/pages/users/users-show-page/base-info';
 import Deletion from '@/pages/users/users-show-page/deletion';
 import Details from '@/pages/users/users-show-page/details';
@@ -13,6 +12,7 @@ import { getAuthUser } from '@/store/auth-slice/auth-selector';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import React, { useEffect } from 'react';
+import AppLayout from '@/components/layouts/app-layout';
 
 function ProfilePage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -31,7 +31,7 @@ function ProfilePage(): JSX.Element {
   }
 
   return (
-    <PageLayout>
+    <AppLayout>
       <main className="pt-4 pb-40">
         <UserHeader users={users.data} user={user} />
 
@@ -53,7 +53,7 @@ function ProfilePage(): JSX.Element {
           </div>
         </div>
       </main>
-    </PageLayout>
+    </AppLayout>
   );
 }
 
