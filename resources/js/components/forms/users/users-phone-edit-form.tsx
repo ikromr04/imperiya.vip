@@ -88,7 +88,7 @@ function UsersPhoneEditForm({
                       label="Номер телефона"
                       required
                     />
-                    <Button variant="warn" onClick={() => remove(index)}>
+                    <Button variant="warning" onClick={() => remove(index)}>
                       <Icons.delete width={16} height={16} />
                     </Button>
                   </div>

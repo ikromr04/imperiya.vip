@@ -61,7 +61,7 @@ function LoginForm({
           </div>
 
           <Button
-            className={classNames('justify-center', isSubmitting && 'opacity-60')}
+            className="justify-center"
             type="submit"
             disabled={isSubmitting}
             loading={isSubmitting}

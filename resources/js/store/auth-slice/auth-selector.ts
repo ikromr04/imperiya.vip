@@ -1,5 +1,5 @@
 import { AuthorizationStatus, SliceName } from '@/const/store';
-import { AuthUser } from '@/types/auth';
+import { AuthUser, RegisterLinks } from '@/types/auth';
 import { State } from '@/types/state';
 
 export const getAuthStatus = (state: State): AuthorizationStatus =>
@@ -7,3 +7,6 @@ export const getAuthStatus = (state: State): AuthorizationStatus =>
 
 export const getAuthUser = (state: State): AuthUser | null =>
   state[SliceName.Auth].user;
+
+export const getRegisterLinks = (state: State): {data: RegisterLinks | null, isFetching: boolean} =>
+  state[SliceName.Auth].registerLinks;

@@ -1,4 +1,12 @@
 export const AppRoute = {
+  Auth: {
+    Login: '/auth/login',
+    ForgotPassword: '/auth/forgot-password',
+    ResetPassword: '/auth/reset-password/:token',
+    Profile: '/auth/profile',
+    Register: '/auth/register',
+    RegisterLinks: '/auth/register/links',
+  },
   Journal: '/journal',
   Schedules: {
     Index: '/schedules',
@@ -25,12 +33,6 @@ export const AppRoute = {
   Settings: {
     Index: '/settings',
   },
-  Auth: {
-    Login: '/auth/login',
-    ForgotPassword: '/auth/forgot-password',
-    ResetPassword: '/auth/reset-password/:token',
-    Profile: '/auth/profile',
-  },
   NotFound: '*',
 };
 
@@ -41,6 +43,8 @@ export const APIRoute = {
     ForgotPassword: '/auth/forgot-password',
     ResetPassword: '/auth/reset-password',
     Logout: '/auth/logout',
+    RegisterLinks: '/auth/register/links',
+    RegisterLink: '/auth/register/links/:id',
   },
   Users: {
     Index: '/users',

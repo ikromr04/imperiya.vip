@@ -80,7 +80,7 @@ function ScheduleItem({
       <div className="absolute right-0 top-0 p-1 flex gap-1 invisible group-hover:visible">
         <Button
           icon="edit"
-          variant="warn"
+          variant="warning"
           onClick={() => setEditDTO({
             id: schedule.id,
             lesson_id: schedule.lessonId,

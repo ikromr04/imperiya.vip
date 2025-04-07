@@ -43,7 +43,7 @@ function LessonsPage(): JSX.Element {
         <div className="flex justify-center items-center gap-1">
           <Button
             icon="edit"
-            variant="warn"
+            variant="warning"
             onClick={() => {
               setIsUpdating(true);
               setDTO({

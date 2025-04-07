@@ -101,7 +101,7 @@ function BaseFields({
                   label="Номер телефона"
                   required
                 />
-                <Button className="mt-5" variant="warn" onClick={() => remove(index)}>
+                <Button className="mt-5" variant="warning" onClick={() => remove(index)}>
                   <Icons.delete width={16} height={16} />
                 </Button>
               </div>

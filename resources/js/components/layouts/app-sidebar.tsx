@@ -100,6 +100,15 @@ function AppSidebar(): JSX.Element {
                 Отчет
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Auth.RegisterLinks}
+              >
+                <Icons.link className="navlink__icon" width={16} height={16} />
+                Ссылки для регистрации
+              </NavLink>
+            </li>
           </ul>
 
           <hr className="mt-auto" />

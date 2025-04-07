@@ -52,7 +52,7 @@ function ColumnVisibility<T>({
 
       <div
         className={classNames(
-          'absolute left-0 top-full bg-white py-1 border rounded shadow h-[240px] overflow-y-auto overflow-x-hidden styled-scrollbar',
+          'absolute left-0 top-full bg-white py-1 border rounded shadow max-h-[240px] overflow-y-auto overflow-x-hidden styled-scrollbar',
           isOpen ? 'visible opacity-100' : 'invisible opacity-0'
         )}
       >

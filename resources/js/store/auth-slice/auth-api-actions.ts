@@ -2,10 +2,11 @@ import { APIRoute } from '@/const/routes';
 import { LoginCredentials, ResetPasswordDTO } from '@/dto/auth-dto';
 import { dropToken, saveToken, Token } from '@/services/token';
 import { ResponseMessage } from '@/types';
-import { AuthUser } from '@/types/auth';
+import { AuthUser, RegisterLink, RegisterLinkId, RegisterLinks } from '@/types/auth';
 import { ValidationError } from '@/types/validation-error';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
+import { generatePath } from 'react-router-dom';
 
 export const checkAuthAction = createAsyncThunk<AuthUser, undefined, {
   extra: AxiosInstance
@@ -94,6 +95,87 @@ export const resetPasswordAction = createAsyncThunk<void, {
       const error: AxiosError<ValidationError> = err;
       if (!error.response) throw err;
       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const fetchRegisterLinksAction = createAsyncThunk<RegisterLinks, undefined, {
+  extra: AxiosInstance
+}>(
+  'auth/fetchRegisterLinksAction',
+  async (_arg, { extra: api }) => {
+    const { data } = await api.get<RegisterLinks>(APIRoute.Auth.RegisterLinks);
+    return data;
+  },
+);
+
+export const generateRegisterLinkAction = createAsyncThunk<RegisterLink, {
+  onSuccess?: (link: RegisterLink) => void,
+  onFail?: (message: string) => void,
+}, {
+  extra: AxiosInstance,
+  rejectWithValue: ValidationError,
+}>(
+  'auth/generateRegisterLink',
+  async ({ onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      const { data } = await api.post<RegisterLink>(APIRoute.Auth.RegisterLinks);
+      if (onSuccess) onSuccess(data);
+      return data;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const error: AxiosError<ValidationError> = err;
+      if (!error.response) throw err;
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const updateRegisterLinkAction = createAsyncThunk<RegisterLink, {
+  id: RegisterLinkId;
+  onSuccess?: (link: RegisterLink) => void;
+  onFail?: (message: string) => void;
+}, {
+  extra: AxiosInstance,
+  rejectWithValue: ValidationError,
+}>(
+  'auth/updateRegisterLink',
+  async ({ id, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      const { data } = await api.put<RegisterLink>(generatePath(APIRoute.Auth.RegisterLink, { id }));
+      if (onSuccess) onSuccess(data);
+      return data;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const error: AxiosError<ValidationError> = err;
+      if (!error.response) throw err;
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const deleteRegisterLinkAction = createAsyncThunk<RegisterLinkId, {
+  id: RegisterLinkId,
+  onSuccess?: () => void,
+  onFail?: (message: string) => void,
+}, {
+  extra: AxiosInstance,
+  rejectWithValue: ValidationError,
+}>(
+  'auth/deleteRegisterLink',
+  async ({ id, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      await api.delete(generatePath(APIRoute.Auth.RegisterLink, { id }));
+      if (onSuccess) onSuccess();
+      return id;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const error: AxiosError<ValidationError> = err;
+      if (!error.response) throw err;
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
       return rejectWithValue(error.response.data);
     }

@@ -17,6 +17,7 @@ import SchedulesPage from '../pages/schedules-page/schedules-page';
 import LessonsPage from '../pages/lessons/lessons-page';
 import JournalPage from '@/pages/journal-page';
 import NotFoundPage from '@/pages/not-found-page';
+import RegisterLinksPage from '@/pages/auth/register-links-page/register-links-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -41,6 +42,7 @@ function App(): JSX.Element {
         <Route path={AppRoute.Auth.ForgotPassword} element={<ForgotPasswordPage />} />
         <Route path={AppRoute.Auth.ResetPassword} element={<ResetPasswordPage />} />
         <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
+        <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
 
         <Route path={AppRoute.Journal} element={<JournalPage />} />
 

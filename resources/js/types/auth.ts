@@ -1,4 +1,5 @@
 import { UserId } from './users';
+import { ID } from './index';
 
 export type AuthUser = {
   id: UserId;
@@ -7,3 +8,13 @@ export type AuthUser = {
   avatar?: string;
   avatarThumb?: string;
 };
+
+export type RegisterLinkId = ID;
+
+export type RegisterLink = {
+  id: RegisterLinkId;
+  token: string;
+  expiresAt: string;
+};
+
+export type RegisterLinks = RegisterLink[];

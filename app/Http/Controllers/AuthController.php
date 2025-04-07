@@ -7,6 +7,7 @@ use App\Http\Requests\PasswordResetEmailRequest;
 use App\Http\Requests\PasswordResetRequest;
 use App\Mail\LoginCredentialsEmail;
 use App\Mail\PasswordResetEmail;
+use App\Models\RegisterLink;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -119,5 +120,40 @@ class AuthController extends Controller
     $user->currentAccessToken()->delete();
 
     return response()->json(['message' => 'Вы успешно вышли из системы.'], 200);
+  }
+
+  public function getRegisterLinks(): JsonResponse
+  {
+    $links = RegisterLink::orderBy('expires_at', 'desc')
+      ->selectBasic()
+      ->get();
+
+    return response()->json($links, 200);
+  }
+
+  public function generateRegisterLink(): JsonResponse
+  {
+    $link = RegisterLink::create([
+      'token' => Str::random(16),
+      'expires_at' => Carbon::now()->addHour(),
+    ]);
+
+    return response()->json(RegisterLink::selectBasic()->find($link->id), 200);
+  }
+
+  public function updateRegisterLink(int $id): JsonResponse
+  {
+    RegisterLink::findOrFail($id)->update([
+      'expires_at' => Carbon::now()->addHour(),
+    ]);
+
+    return response()->json(RegisterLink::selectBasic()->find($id), 200);
+  }
+
+  public function deleteRegisterLink(int $id)
+  {
+    RegisterLink::findOrFail($id)->delete();
+
+    return response()->noContent();
   }
 }

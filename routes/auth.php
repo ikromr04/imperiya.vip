@@ -9,5 +9,11 @@ Route::prefix('auth')->group(function () {
   Route::post('/forgot-password', [AuthController::class, 'sendPasswordResetEmail']);
   Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
-  Route::delete('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+  Route::middleware('auth:sanctum')->group(function () {
+    Route::delete('/logout', [AuthController::class, 'logout']);
+    Route::get('/register/links', [AuthController::class, 'getRegisterLinks']);
+    Route::post('/register/links', [AuthController::class, 'generateRegisterLink']);
+    Route::put('/register/links/{id}', [AuthController::class, 'updateRegisterLink']);
+    Route::delete('/register/links/{id}', [AuthController::class, 'deleteRegisterLink']);
+  });
 });
