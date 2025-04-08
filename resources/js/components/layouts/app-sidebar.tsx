@@ -94,15 +94,6 @@ function AppSidebar(): JSX.Element {
             <li>
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Monitoring.Index}
-              >
-                <Icons.monitoring className="navlink__icon" width={16} height={16} />
-                Отчет
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Auth.RegisterLinks}
               >
                 <Icons.link className="navlink__icon" width={16} height={16} />
@@ -114,15 +105,6 @@ function AppSidebar(): JSX.Element {
           <hr className="mt-auto" />
 
           <ul className="flex flex-col p-1 gap-1">
-            <li>
-              <NavLink
-                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Settings.Index}
-              >
-                <Icons.settings className="navlink__icon" width={16} height={16} />
-                Настройки
-              </NavLink>
-            </li>
             <li>
               <button
                 className="navlink"
