@@ -6,21 +6,21 @@
     "isDynamicEntry": true
   },
   "resources/css/public.css": {
-    "file": "assets/public-BUpfpX9e.css",
+    "file": "assets/public-CKAmEoYx.css",
     "src": "resources/css/public.css",
     "isEntry": true
   },
   "resources/js/main.tsx": {
-    "file": "assets/main-DS5jFpVO.js",
+    "file": "assets/main-B_TGLy1C.js",
     "name": "main",
     "src": "resources/js/main.tsx",
     "isEntry": true,
     "css": [
-      "assets/main-CoJA9zNF.css"
+      "assets/main-BTOkymhH.css"
     ]
   },
   "resources/js/public.js": {
-    "file": "assets/public-ZCB6layp.js",
+    "file": "assets/public-CaqlCkQY.js",
     "name": "public",
     "src": "resources/js/public.js",
     "isEntry": true,
