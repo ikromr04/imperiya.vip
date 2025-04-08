@@ -21,7 +21,7 @@ function UserProfileNavigation({
           <Link
             className={classNames(
               'flex items-center h-7 px-2 transition-all duration-150 border border-transparent min-w-max',
-              (generatePath(AppRoute.Users.Show, { id: user.id }) === pathname) &&
+              (AppRoute.Auth.Profile === pathname) &&
               'rounded shadow bg-white border-gray-200'
             )}
             to={generatePath(AppRoute.Users.Show, { id: user.id })}

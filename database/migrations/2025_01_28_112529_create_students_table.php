@@ -13,10 +13,10 @@ return new class extends Migration
   {
     Schema::create('students', function (Blueprint $table) {
       $table->id();
-      $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-      $table->foreignId('grade_id')->nullable()->constrained('grades')->onDelete('SET NULL');
-      $table->foreignId('mother_id')->nullable()->constrained('users')->onDelete('SET NULL');
-      $table->foreignId('father_id')->nullable()->constrained('users')->onDelete('SET NULL');
+      $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+      $table->foreignId('grade_id')->nullable()->constrained('grades')->nullOnDelete();
+      $table->foreignId('mother_id')->nullable()->constrained('users')->nullOnDelete();
+      $table->foreignId('father_id')->nullable()->constrained('users')->nullOnDelete();
       $table->date('admission_date');
       $table->text('previous_schools');
       $table->text('medical_recommendations');
@@ -30,8 +30,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::table('students', function (Blueprint $table) {
-      $table->dropSoftDeletes();
-    });
+    Schema::dropIfExists('students');
   }
 };

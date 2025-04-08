@@ -6,7 +6,7 @@ import { getAuthStatus } from '../store/auth-slice/auth-selector';
 import Spinner from './ui/spinner';
 import ForgotPasswordPage from '../pages/auth/forgot-password-page';
 import ResetPasswordPage from '../pages/auth/reset-password-page';
-import ProfilePage from '../pages/auth/profile-page';
+import ProfilePage from '../pages/auth/profile-page/profile-page';
 import UsersPage from '../pages/users/users-page';
 import { AuthorizationStatus } from '@/const/store';
 import { AppRoute } from '@/const/routes';

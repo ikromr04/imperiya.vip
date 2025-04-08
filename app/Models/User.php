@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -15,7 +14,10 @@ use Spatie\Sluggable\HasSlug;
 
 class User extends Authenticatable
 {
-  use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasSlug;
+  use HasApiTokens;
+  use Notifiable;
+  use SoftDeletes;
+  use HasSlug;
 
   protected $guarded = ['id'];
 
@@ -30,6 +32,17 @@ class User extends Authenticatable
       'social_link' => 'array',
       'phone_numbers' => 'array',
     ];
+  }
+
+  protected static function boot()
+  {
+    parent::boot();
+
+    static::creating(function ($user) {
+      if (empty($user->password)) {
+        $user->password = Crypt::encryptString(Str::random(8));
+      }
+    });
   }
 
   public function getSlugOptions(): SlugOptions
@@ -75,6 +88,8 @@ class User extends Authenticatable
     return $query->select(
       'id',
       'name',
+      'surname',
+      'patronymic',
       'login',
       'role',
       'sex',
@@ -83,7 +98,8 @@ class User extends Authenticatable
       'avatar_thumb as avatarThumb',
       'birth_date as birthDate',
       'address',
-      'nationality',
+      'whatsapp',
+      'nationality_id as nationalityId',
       'social_link as socialLink',
       'phone_numbers as phoneNumbers',
       'updated_at as updatedAt',
@@ -96,25 +112,6 @@ class User extends Authenticatable
       'student' => fn($query) => $query->selectBasic(),
       'parent' => fn($query) => $query->selectBasic(),
     ]);
-  }
-
-  protected static function boot()
-  {
-    parent::boot();
-
-    static::creating(function ($user) {
-      if (empty($user->password)) {
-        $user->password = Crypt::encryptString(Str::random(8));
-      }
-    });
-
-    static::deleting(function ($user) {
-      $user->admin?->delete();
-      $user->director?->delete();
-      $user->teacher?->delete();
-      $user->parent?->delete();
-      $user->student?->delete();
-    });
   }
 
   public function toArray()

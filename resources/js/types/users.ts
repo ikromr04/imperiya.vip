@@ -18,13 +18,13 @@ export type User = {
   login: string;
   role: Role;
   sex: Sex;
+  birthDate: Date;
+  nationalityId: NationalityId;
   email?: string;
   avatar?: string;
   avatarThumb?: string;
-  birthDate: Date;
-  nationality_id: NationalityId;
   address?: {
-    physical_address: string;
+    physicalAddress: string;
     region: string;
   };
   socialLink?: {
@@ -44,7 +44,7 @@ export type User = {
   // teacher?: Teacher;
   parent?: {
     children?: UserId[];
-    profession_id: ProfessionId;
+    professionId: ProfessionId;
     workplace: string;
     position: string;
     whatsapp: {
@@ -56,9 +56,9 @@ export type User = {
     gradeId?: GradeId;
     motherId?: UserId;
     fatherId?: UserId;
-    admission_date: string;
-    previous_schools: string;
-    medical_recommendations: string;
+    admissionDate: string;
+    previousSchools: string;
+    medicalRecommendations: string;
   };
 };
 

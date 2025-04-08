@@ -13,8 +13,8 @@ return new class extends Migration
   {
     Schema::create('guardians', function (Blueprint $table) {
       $table->id();
-      $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-      $table->foreignId('profession_id')->nullable()->constrained('professions')->onDelete('set null');
+      $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+      $table->foreignId('profession_id')->nullable()->constrained('professions')->nullOnDelete();
       $table->string('workplace');
       $table->string('position');
       $table->timestamps();
@@ -27,8 +27,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::table('guardians', function (Blueprint $table) {
-      $table->dropSoftDeletes();
-    });
+    Schema::dropIfExists('guardians');
   }
 };

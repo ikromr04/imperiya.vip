@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Evaluation extends Model
+class Mark extends Model
 {
   protected $guarded = ['id'];
 
   public function schedule(): BelongsTo
   {
-    return $this->belongsTo(Schedule::class);
+    return $this->belongsTo(Lesson::class);
   }
 }

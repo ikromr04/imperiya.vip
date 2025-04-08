@@ -35,17 +35,17 @@ function RoleInfo({
     if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
   }, [dispatch, grades.data, grades.isFetching]);
 
-  switch (true) {
+  switch (user.role) {
     // case user.superadmin !== undefined:
     //   break;
     // case user.admin !== undefined:
     //   break;
     // case user.director !== undefined:
     //   break;
-    case user.teacher !== undefined:
+    // case 'teacher':
 
-      break;
-    case user.student !== undefined:
+    //   break;
+    case 'student':
       list = {
         'Класс': grade ?
           <Link className="text-blue-600" to={generatePath(AppRoute.Classes.Show, { id: grade.id })}>
@@ -61,7 +61,7 @@ function RoleInfo({
           </Link> : '-',
       };
       break;
-    case user.parent !== undefined:
+    case 'parent':
       list = {
         'Дети': children ? children.map((child) => (
           <Fragment key={child.id}>

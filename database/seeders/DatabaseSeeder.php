@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
       NationalitySeeder::class,
       ProfessionSeeder::class,
       UserSeeder::class,
-      // LessonSeeder::class,
-      // ScheduleSeeder::class,
+      SubjectSeeder::class,
+      LessonSeeder::class,
       RegisterLinkSeeder::class,
     ]);
   }

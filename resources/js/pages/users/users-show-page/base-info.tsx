@@ -1,13 +1,16 @@
-import UsersEditForm from '@/components/forms/users/users-edit-form';
+// import UsersEditForm from '@/components/forms/users/users-edit-form';
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
 import DescriptionList from '@/components/ui/description-list';
-import Modal from '@/components/ui/modal';
+// import Modal from '@/components/ui/modal';
 import Tooltip from '@/components/ui/tooltip';
 import { RoleName, SexName } from '@/const/users';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
+import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
 import { User } from '@/types/users';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 type BaseInfoProps = {
@@ -17,7 +20,13 @@ type BaseInfoProps = {
 function BaseInfo({
   user,
 }: BaseInfoProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  const nationalities = useAppSelector(getNationalities);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
+  }, [dispatch, nationalities.data, nationalities.isFetching]);
 
   return (
     <>
@@ -45,17 +54,17 @@ function BaseInfo({
                     {user.email}
                   </Link> : '-',
               'Дата рождения': user.birthDate ? dayjs(user.birthDate).format('DD MMMM YYYY') : '-',
-              'Адрес': user.address ?? '-',
-              'Национальность': user.nationality ?? '-',
+              'Адрес': user.address ? `${user.address.physicalAddress}, район ${user.address.physicalAddress}` : '-',
+              'Национальность': nationalities.data?.find(({id}) => id === user.nationalityId)?.name || '-',
             }}
           />
           <div className="absolute top-[1px] right-0 rounded-br-md z-10 min-w-6 h-[calc(100%-1px)] pointer-events-none bg-gradient-to-l from-white to-transparent"></div>
         </div>
       </section>
 
-      <Modal isOpen={isOpen}>
+      {/* <Modal isOpen={isOpen}>
         <UsersEditForm user={user} setIsOpen={setIsOpen} />
-      </Modal>
+      </Modal> */}
     </>
   );
 }

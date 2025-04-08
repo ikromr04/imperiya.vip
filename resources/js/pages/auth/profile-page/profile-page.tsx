@@ -4,7 +4,6 @@ import Details from '@/pages/users/users-show-page/details';
 import PhoneNumbers from '@/pages/users/users-show-page/phone-numbers';
 import RoleInfo from '@/pages/users/users-show-page/role-info';
 import SocialLinks from '@/pages/users/users-show-page/social-links';
-import UserHeader from '@/pages/users/users-show-page/user-header';
 import UserProfileNavigation from '@/pages/users/users-show-page/user-profile-navigation';
 import Spinner from '@/components/ui/spinner';
 import { useAppDispatch, useAppSelector } from '@/hooks';
@@ -13,6 +12,7 @@ import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import React, { useEffect } from 'react';
 import AppLayout from '@/components/layouts/app-layout';
+import Header from './header';
 
 function ProfilePage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -26,14 +26,16 @@ function ProfilePage(): JSX.Element {
 
   if (!user || !users.data) {
     return (
-      <Spinner className="w-8 h-8 m-2" />
+      <AppLayout>
+        <Spinner className="w-8 h-8 m-2" />
+      </AppLayout>
     );
   }
 
   return (
     <AppLayout>
       <main className="pt-4 pb-40">
-        <UserHeader users={users.data} user={user} />
+        <Header user={user} />
 
         <UserProfileNavigation user={user} />
 

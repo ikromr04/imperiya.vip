@@ -25,7 +25,7 @@ return new class extends Migration
       $table->string('avatar')->nullable();
       $table->string('avatar_thumb')->nullable();
       $table->date('birth_date')->nullable();
-      $table->integer('nationality_id')->nullable()->constrained('nationalities')->onDelete('set null');
+      $table->foreignId('nationality_id')->nullable()->constrained('nationalities')->nullOnDelete();
       $table->json('social_link')->nullable();
       $table->json('phone_numbers')->nullable();
       $table->json('whatsapp')->nullable();
@@ -39,7 +39,7 @@ return new class extends Migration
     Schema::create('password_reset_tokens', function (Blueprint $table) {
       $table->string('email')->primary();
       $table->string('token');
-      $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));;
+      $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
     });
 
     Schema::create('sessions', function (Blueprint $table) {
@@ -60,9 +60,5 @@ return new class extends Migration
     Schema::dropIfExists('users');
     Schema::dropIfExists('password_reset_tokens');
     Schema::dropIfExists('sessions');
-
-    Schema::table('users', function (Blueprint $table) {
-      $table->dropSoftDeletes();
-    });
   }
 };

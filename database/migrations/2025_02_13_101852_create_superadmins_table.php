@@ -13,7 +13,7 @@ return new class extends Migration
   {
     Schema::create('superadmins', function (Blueprint $table) {
       $table->id();
-      $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+      $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
       $table->timestamps();
       $table->softDeletes();
     });
@@ -24,8 +24,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::table('superadmins', function (Blueprint $table) {
-      $table->dropSoftDeletes();
-    });
+    Schema::dropIfExists('superadmins');
   }
 };

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Guardian extends Model
 {
-  use HasFactory, SoftDeletes;
+  use SoftDeletes;
 
   protected $guarded = ['id'];
   protected $hidden = [
@@ -24,19 +23,12 @@ class Guardian extends Model
     return $this->belongsTo(User::class);
   }
 
-  public function educations(): HasMany
-  {
-    return $this->hasMany(Education::class);
-  }
-
   public function scopeSelectBasic($query)
   {
     return $query->select(
       'id',
       'user_id',
-    )->with([
-      'educations' => fn($query) => $query->selectBasic(),
-    ]);
+    );
   }
 
   public function getChildrenAttribute()

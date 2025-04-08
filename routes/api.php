@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\ProfessionController;
-use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,19 +35,19 @@ Route::middleware('auth:sanctum')->group(function () {
   });
 
   Route::prefix('lessons')->group(function () {
-    Route::get('/', [LessonController::class, 'index']);
-    Route::post('/', [LessonController::class, 'store']);
-    Route::put('/', [LessonController::class, 'update']);
+    Route::get('/', [SubjectController::class, 'index']);
+    Route::post('/', [SubjectController::class, 'store']);
+    Route::put('/', [SubjectController::class, 'update']);
   });
 
   Route::prefix('schedules')->group(function () {
-    Route::get('/', [ScheduleController::class, 'index']);
-    Route::post('/', [ScheduleController::class, 'store']);
-    Route::put('/', [ScheduleController::class, 'update']);
-    Route::delete('/{id}', [ScheduleController::class, 'delete']);
+    Route::get('/', [LessonController::class, 'index']);
+    Route::post('/', [LessonController::class, 'store']);
+    Route::put('/', [LessonController::class, 'update']);
+    Route::delete('/{id}', [LessonController::class, 'delete']);
   });
 
-  Route::get('/journal', [ScheduleController::class, 'journal']);
-  Route::post('/evaluations', [ScheduleController::class, 'storeEvaluation']);
-  Route::put('/evaluations', [ScheduleController::class, 'updateEvaluation']);
+  Route::get('/journal', [LessonController::class, 'journal']);
+  Route::post('/evaluations', [LessonController::class, 'storeEvaluation']);
+  Route::put('/evaluations', [LessonController::class, 'updateEvaluation']);
 });

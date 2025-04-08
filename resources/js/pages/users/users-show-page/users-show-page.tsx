@@ -28,7 +28,9 @@ function UsersShowPage(): JSX.Element {
 
   if (!user || !users.data) {
     return (
-      <Spinner className="w-8 h-8 m-2" />
+      <AppLayout>
+        <Spinner className="w-8 h-8 m-2" />
+      </AppLayout>
     );
   }
 
