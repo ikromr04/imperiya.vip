@@ -8,12 +8,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
+use Spatie\Sluggable\SlugOptions;
+use Spatie\Sluggable\HasSlug;
 
 class User extends Authenticatable
 {
-  use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+  use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasSlug;
 
   protected $guarded = ['id'];
 
@@ -23,9 +25,19 @@ class User extends Authenticatable
       'email_verified_at' => 'datetime',
       'socialLink' => 'array',
       'phoneNumbers' => 'array',
+      'address' => 'array',
+      'whatsapp' => 'array',
       'social_link' => 'array',
       'phone_numbers' => 'array',
     ];
+  }
+
+  public function getSlugOptions(): SlugOptions
+  {
+    return SlugOptions::create()
+      ->generateSlugsFrom('name')
+      ->saveSlugsTo('login')
+      ->doNotGenerateSlugsOnUpdate();
   }
 
   public function superadmin(): HasOne
@@ -92,7 +104,7 @@ class User extends Authenticatable
 
     static::creating(function ($user) {
       if (empty($user->password)) {
-        $user->password = Hash::make(Str::random(8));
+        $user->password = Crypt::encryptString(Str::random(8));
       }
     });
 

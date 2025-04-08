@@ -29,21 +29,6 @@ function RegisterLinksPage(): JSX.Element {
 
   const columns: ColumnDef<RegisterLink>[] = [
     {
-      id: 'token',
-      accessorKey: 'token',
-      header: 'Ссылка',
-      size: 1334,
-      cell: ({ row }) => (
-        <a
-          className="text-blue-600"
-          href={`${AppRoute.Auth.Register}?token=${row.original.token}`}
-          target="_blank"
-        >
-          {`${window.location.origin}${AppRoute.Auth.Register}?token=${row.original.token}`}
-        </a>
-      ),
-    },
-    {
       id: 'expiresAt',
       accessorKey: 'expiresAt',
       header: 'Срок действия',
@@ -62,6 +47,26 @@ function RegisterLinksPage(): JSX.Element {
           </div>
         );
       },
+      meta:{
+        columnClass: '!min-w-[160px] !w-[160px] !max-w-[160px]',
+      }
+    },
+    {
+      id: 'token',
+      accessorKey: 'token',
+      header: 'Ссылка',
+      cell: ({ row }) => (
+        <a
+          className="text-blue-600"
+          href={`${AppRoute.Auth.Register}?token=${row.original.token}`}
+          target="_blank"
+        >
+          {`${window.location.origin}${AppRoute.Auth.Register}?token=${row.original.token}`}
+        </a>
+      ),
+      meta:{
+        columnClass: '!min-w-[320px] !w-[320px] !max-w-[320px] sm:!min-w-[640px] sm:!w-[640px] sm:!max-w-[640px] lg:!min-w-[1524px] sm:!w-[1524px] sm:!max-w-[1524px]',
+      }
     },
     {
       id: 'actions',
@@ -82,6 +87,9 @@ function RegisterLinksPage(): JSX.Element {
           </Button>
         </div>
       ),
+      meta:{
+        columnClass: '!min-w-[170px] !w-[170px] !max-w-[170px]',
+      }
     },
   ];
 

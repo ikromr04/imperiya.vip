@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\PasswordResetEmailRequest;
 use App\Http\Requests\PasswordResetRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Mail\LoginCredentialsEmail;
 use App\Mail\PasswordResetEmail;
+use App\Models\Guardian;
 use App\Models\RegisterLink;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -37,6 +40,76 @@ class AuthController extends Controller
         'avatarThumb' => $user->avatar_thumb,
       ] : []),
     ], 200);
+  }
+
+  public function register(RegisterRequest $request): JsonResponse
+  {
+    $link = RegisterLink::where('token', $request->token)->first();
+
+    if (!$link || Carbon::parse($link->expires_at)->isPast()) {
+      throw ValidationException::withMessages([
+        'token' => 'Срок действия вашей ссылки истек.',
+      ]);
+    }
+
+    $father = null;
+    $mother = null;
+
+    foreach ($request->parents as $parent) {
+      $user = User::create([
+        'name' => $parent['name'],
+        'surname' => $parent['surname'],
+        'patronymic' => $parent['patronymic'] ?? null,
+        'birth_date' => $parent['birth_date'],
+        'sex' => $parent['sex'],
+        'nationality_id' => $parent['nationality_id'],
+        'role' => 'parent',
+        'phone_numbers' => $parent['tel'],
+        'whatsapp' => $parent['whatsapp'],
+        'address' => $parent['address'],
+        'email' => $parent['email'] ?? null,
+      ]);
+
+      Guardian::create([
+        'user_id' => $user->id,
+        'profession_id' => $parent['profession_id'],
+        'workplace' => $parent['workplace'],
+        'position' => $parent['position'],
+      ]);
+
+      if ($user->sex === 'male') {
+        $father = $user;
+      }
+
+      if ($user->sex === 'female') {
+        $mother = $user;
+      }
+    }
+
+    foreach ($request->children as $child) {
+      $user = User::create([
+        'name' => $child['name'],
+        'surname' => $child['surname'],
+        'patronymic' => $child['patronymic'] ?? null,
+        'birth_date' => $child['birth_date'],
+        'sex' => $child['sex'],
+        'nationality_id' => $child['nationality_id'],
+        'role' => 'student',
+        'address' => $request->parents[0]['address'],
+      ]);
+
+      Student::create([
+        'user_id' => $user->id,
+        'grade_id' => $child['grade_id'],
+        'mother_id' => $mother->id ?? null,
+        'father_id' => $father->id ?? null,
+        'admission_date' => Carbon::now(),
+        'previous_schools' => '$child[previous_schools]',
+        'medical_recommendations' => '$child[medical_recommendations]',
+      ]);
+    }
+
+    return response()->json();
   }
 
   public function login(LoginRequest $request): JsonResponse

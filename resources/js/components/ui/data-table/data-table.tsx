@@ -319,7 +319,10 @@ export default function DataTable<T>({
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th
-                  className="border-t p-0"
+                  className={classNames(
+                    'border-t p-0',
+                    header.column.columnDef.meta?.columnClass,
+                  )}
                   key={header.id}
                   style={{
                     minWidth: header.getSize() ? `${header.getSize()}px` : 'auto',

@@ -17,6 +17,9 @@ return new class extends Migration
       $table->foreignId('grade_id')->nullable()->constrained('grades')->onDelete('SET NULL');
       $table->foreignId('mother_id')->nullable()->constrained('users')->onDelete('SET NULL');
       $table->foreignId('father_id')->nullable()->constrained('users')->onDelete('SET NULL');
+      $table->date('admission_date');
+      $table->text('previous_schools');
+      $table->text('medical_recommendations');
       $table->timestamps();
       $table->softDeletes();
     });

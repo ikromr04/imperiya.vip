@@ -25,10 +25,11 @@ return new class extends Migration
       $table->string('avatar')->nullable();
       $table->string('avatar_thumb')->nullable();
       $table->date('birth_date')->nullable();
-      $table->text('address')->nullable();
-      $table->string('nationality')->nullable();
+      $table->integer('nationality_id')->nullable()->constrained('nationalities')->onDelete('set null');
       $table->json('social_link')->nullable();
       $table->json('phone_numbers')->nullable();
+      $table->json('whatsapp')->nullable();
+      $table->json('address')->nullable();
       $table->timestamp('email_verified_at')->nullable();
       $table->rememberToken();
       $table->timestamps();

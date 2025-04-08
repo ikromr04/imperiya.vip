@@ -35,15 +35,20 @@ function RegisterPage(): JSX.Element {
 
   if (secondsLeft <= 0) {
     return (
-      <div className="flex">
-        Invalid token
+      <main className="flex flex-col min-h-screen p-4 pb-40 md:px-6 lg:px-8">
         <Timer secondsLeft={secondsLeft} />
-      </div>
+        <AppLogo className="mx-auto mb-4" />
+
+        <section className="leading-[1.2] border border-dashed rounded-md border-orange-300 max-w-[610px] mx-auto px-8 py-4 mb-6">
+          <h2 className="uppercase text-danger mb-2">Срок действия вашей ссылки истек! </h2>
+          <p>Срок действия вашей ссылки истек. Для получения новой ссылки напишите <a className="text-blue-600 underline underline-offset-2" href="https://wa.me/+992918339939" target="_blank">администратору</a>.</p>
+        </section>
+      </main>
     );
   }
 
   return (
-    <main className="flex flex-col min-h-screen p-4 md:px-6 lg:px-8">
+    <main className="flex flex-col min-h-screen p-4 pb-40 md:px-6 lg:px-8">
       <Timer secondsLeft={secondsLeft} />
       <AppLogo className="mx-auto mb-4" />
 
@@ -52,7 +57,7 @@ function RegisterPage(): JSX.Element {
         <p className="inline">Вся информация, внесенная в данную форму, редактированию не подлежит. В случае необходимости внесения изменений или дополнений обратитесь к <a className="text-blue-600 underline underline-offset-2" href="https://wa.me/+992918339939" target="_blank">администратору</a>.</p>
       </section>
 
-      <RegisterForm token={token} />
+      {token && <RegisterForm token={token} />}
     </main>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { FieldArray, Form, Formik, FormikErrors, FormikHelpers } from 'formik';
 import { RegisterDTO } from '@/dto/auth-dto';
@@ -95,6 +95,7 @@ function RegisterForm({
   const nationalities = useAppSelector(getNationalities);
   const professions = useAppSelector(getProfessions);
   const grades = useAppSelector(getGrades);
+  const [key, setKey] = useState(1);
   const initialValues: RegisterDTO = {
     token,
     children: [
@@ -148,12 +149,19 @@ function RegisterForm({
     helpers: FormikHelpers<RegisterDTO>
   ) => {
     helpers.setSubmitting(true);
-    console.log(values);
 
     await dispatch(registerAction({
       dto: values,
-      onSuccess: () => toast.success('Поздравляю! Вы успешно зарегистрировались.'),
-      onValidationError: (error) => helpers.setErrors({ ...error.errors }),
+      onSuccess: () => {
+        toast.success('Поздравляю! Вы успешно зарегистрировались.');
+        setKey((prev) => prev + 1);
+      },
+      onValidationError: (error) => {
+        helpers.setErrors({ ...error.errors });
+        if (error.errors?.token[0]) {
+          toast.error(error.errors.token[0]);
+        }
+      },
       onFail: (message) => toast.error(message),
     }));
 
@@ -193,6 +201,7 @@ function RegisterForm({
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
+      key={key}
     >
       {({ values, isSubmitting, errors }) => (
         <Form className="flex flex-col gap-4 w-full max-w-5xl mx-auto">
@@ -478,14 +487,17 @@ function RegisterForm({
                     </fieldset>
                   ))}
 
-                  <Button
-                    className="justify-center leading-none !w-full shadow-none border !bg-gray-50 border-dashed border-gray-300 mt-1 text-gray-500 hover:border-gray-500"
-                    icon="add"
-                    variant="light"
-                    onClick={() => push(initialValues.parents[0])}
-                  >
-                    Добавить второго родителя
-                  </Button>
+                  {values.parents.length === 1 && (
+                    <Button
+                      className="justify-center leading-none !w-full shadow-none border !bg-gray-50 border-dashed border-gray-300 mt-1 text-gray-500 hover:border-gray-500"
+                      icon="add"
+                      variant="light"
+                      onClick={() => push(initialValues.parents[0])}
+                    >
+                      Добавить второго родителя
+                    </Button>
+                  )
+                  }
                 </div>
               )}
             </FieldArray>
