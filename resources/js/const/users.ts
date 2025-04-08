@@ -20,3 +20,10 @@ export const SexName = {
   'male': 'Мужской',
   'female': 'Женский',
 };
+
+export const REGIONS = [
+  'Исмоили Сомони',
+  'Фирдавси',
+  'Шохмансур',
+  'Сино',
+];

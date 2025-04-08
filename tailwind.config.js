@@ -21,6 +21,7 @@ export default {
       },
       backgroundColor: {
         success: '#66bb6a',
+        danger: '#ef4444',
       },
       backgroundImage: {
         illustrations: 'url(/images/illustrations.png)',

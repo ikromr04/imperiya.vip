@@ -10,7 +10,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import { SexName } from '@/const/users';
-import { getNationalities } from '@/store/users-slice/users-selector';
+import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Обязательное поле.'),

@@ -1,5 +1,5 @@
 import { APIRoute } from '@/const/routes';
-import { LoginCredentials, ResetPasswordDTO } from '@/dto/auth-dto';
+import { LoginCredentials, RegisterDTO, ResetPasswordDTO } from '@/dto/auth-dto';
 import { dropToken, saveToken, Token } from '@/services/token';
 import { ResponseMessage } from '@/types';
 import { AuthUser, RegisterLink, RegisterLinkId, RegisterLinks } from '@/types/auth';
@@ -101,6 +101,31 @@ export const resetPasswordAction = createAsyncThunk<void, {
   },
 );
 
+export const registerAction = createAsyncThunk<void, {
+  dto: RegisterDTO;
+  onSuccess?: () => void;
+  onValidationError?: (error: ValidationError) => void;
+  onFail?: (message: string) => void;
+}, {
+  extra: AxiosInstance,
+  rejectWithValue: ValidationError,
+}>(
+  'auth/register',
+  async ({ dto, onSuccess, onValidationError, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      await api.post<ResponseMessage>(APIRoute.Auth.Register, dto);
+      if (onSuccess) onSuccess();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const error: AxiosError<ValidationError> = err;
+      if (!error.response) throw err;
+      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
 export const fetchRegisterLinksAction = createAsyncThunk<RegisterLinks, undefined, {
   extra: AxiosInstance
 }>(
@@ -177,6 +202,29 @@ export const deleteRegisterLinkAction = createAsyncThunk<RegisterLinkId, {
       const error: AxiosError<ValidationError> = err;
       if (!error.response) throw err;
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const checkRegisterLinkAction = createAsyncThunk<void, {
+  token: string,
+  onSuccess?: (link: RegisterLink) => void,
+  onFail?: (message: string) => void,
+}, {
+  extra: AxiosInstance,
+  rejectWithValue: ValidationError,
+}>(
+  'auth/checkRegisterLink',
+  async ({ token, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      const { data } = await api.get<RegisterLink>(`${APIRoute.Auth.Register}?token=${token}`);
+      if (onSuccess) onSuccess(data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      const error: AxiosError<ValidationError> = err;
+      if (!error.response) throw err;
+      if (onFail) onFail(error.response.data.message);
       return rejectWithValue(error.response.data);
     }
   },

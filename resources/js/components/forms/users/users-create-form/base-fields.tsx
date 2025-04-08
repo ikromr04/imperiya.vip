@@ -7,7 +7,7 @@ import { FieldArray, useFormikContext } from 'formik';
 import React, { Dispatch, SetStateAction } from 'react';
 import { Step } from './users-create-form';
 import { useAppSelector } from '@/hooks';
-import { getNationalities } from '@/store/users-slice/users-selector';
+import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
 
 type BaseFieldsProps = {
   setIsOpen: Dispatch<SetStateAction<boolean>>;

@@ -43,6 +43,7 @@ export const APIRoute = {
     ForgotPassword: '/auth/forgot-password',
     ResetPassword: '/auth/reset-password',
     Logout: '/auth/logout',
+    Register: '/auth/register',
     RegisterLinks: '/auth/register/links',
     RegisterLink: '/auth/register/links/:id',
   },
@@ -52,6 +53,12 @@ export const APIRoute = {
     Avatar: '/users/:id/avatar',
     Role: '/users/:id/role',
     Login: '/users/login/:login',
+  },
+  Nationalities: {
+    Index: '/nationalities',
+  },
+  Professions: {
+    Index: '/professions',
   },
   Grades: {
     Index: '/grades',

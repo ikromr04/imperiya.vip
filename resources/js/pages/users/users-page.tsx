@@ -1,6 +1,6 @@
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { getNationalities, getUsers } from '@/store/users-slice/users-selector';
+import { getUsers } from '@/store/users-slice/users-selector';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import Spinner from '@/components/ui/spinner';
 import { ColumnDef } from '@tanstack/react-table';
@@ -20,6 +20,7 @@ import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
 import UsersCreateForm from '@/components/forms/users/users-create-form/users-create-form';
 import AppLayout from '@/components/layouts/app-layout';
+import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
 
 function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();

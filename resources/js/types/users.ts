@@ -1,37 +1,32 @@
 import { RoleName } from '@/const/users';
 import { ID } from '.';
 import { GradeId } from './grades';
+import { NationalityId } from './nationalities';
+import { ProfessionId } from './professions';
 
 export type Role = keyof typeof RoleName;
 
 export type Sex = 'male' | 'female';
-
-export type EducationId = ID;
-
-export type Education = {
-  id: EducationId;
-  institution: string;
-  faculty: string;
-  speciality: string;
-  form: string;
-  startedAt: string;
-  graduatedAt: string;
-};
 
 export type UserId = ID;
 
 export type User = {
   id: UserId;
   name: string;
+  surname: string;
+  patronymic?: string;
   login: string;
   role: Role;
   sex: Sex;
   email?: string;
   avatar?: string;
   avatarThumb?: string;
-  birthDate?: Date;
-  address?: string;
-  nationality?: string;
+  birthDate: Date;
+  nationality_id: NationalityId;
+  address?: {
+    physical_address: string;
+    region: string;
+  };
   socialLink?: {
     facebook?: string;
     instagram?: string;
@@ -39,25 +34,31 @@ export type User = {
     odnoklassniki?: string;
   };
   phoneNumbers?: {
-    numbers: number;
     code: number;
+    numbers: number;
   }[];
-  updatedAt: Date;
-  createdAt: Date;
+  createdAt: string;
   // superadmin?: Superadmin;
   // admin?: Admin;
   // director?: Director;
-  teacher?: {
-    educations?: Education[];
-  };
+  // teacher?: Teacher;
   parent?: {
     children?: UserId[];
-    educations?: Education[];
+    profession_id: ProfessionId;
+    workplace: string;
+    position: string;
+    whatsapp: {
+      code: number;
+      numbers: number;
+    };
   };
   student?: {
     gradeId?: GradeId;
     motherId?: UserId;
     fatherId?: UserId;
+    admission_date: string;
+    previous_schools: string;
+    medical_recommendations: string;
   };
 };
 

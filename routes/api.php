@@ -2,12 +2,18 @@
 
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\NationalityController;
+use App\Http\Controllers\ProfessionController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 require base_path('routes/auth.php');
 
+
+Route::get('/nationalities', [NationalityController::class, 'index']);
+Route::get('/professions', [ProfessionController::class, 'index']);
+Route::get('/grades', [GradeController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
   Route::prefix('users')->group(function () {
@@ -23,7 +29,6 @@ Route::middleware('auth:sanctum')->group(function () {
   });
 
   Route::prefix('grades')->group(function () {
-    Route::get('/', [GradeController::class, 'index']);
     Route::post('/', [GradeController::class, 'store']);
     Route::put('/', [GradeController::class, 'update']);
     Route::delete('/{id}', [GradeController::class, 'delete']);

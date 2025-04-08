@@ -13,9 +13,9 @@ function Label({
   if (!label) return null;
 
   return (
-    <label className="relative z-0 rounded flex max-w-max text-sm text-gray-500 ml-2" {...props}>
+    <label className="relative z-0 rounded flex leading-none mb-[2px] max-w-max text-sm text-gray-500 ml-2" {...props}>
       {label}
-      {required && <span className="text-error transform scale-[1.4] translate-y-[10%] translate-x-[16%]">*</span>}
+      {required && <span className="text-danger transform scale-[1.4] translate-y-[10%] translate-x-[16%]">*</span>}
     </label>
   );
 }

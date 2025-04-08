@@ -18,7 +18,7 @@
   <title>{{ env('APP_NAME') }}</title>
 </head>
 
-<body class="styled-scrollbar">
+<body class="styled-scrollbar bg-gray-100">
   <div id="root"></div>
 
   @viteReactRefresh

@@ -1,3 +1,7 @@
+import { GradeId } from '@/types/grades';
+import { NationalityId } from '@/types/nationalities';
+import { ProfessionId } from '@/types/professions';
+
 export type LoginCredentials = {
   login: string;
   password: string;
@@ -12,4 +16,44 @@ export type ResetPasswordDTO = {
   password: string;
   password_confirmation: string;
   email: boolean;
+};
+
+export type RegisterDTO = {
+  token: string;
+  children: {
+    name: string;
+    surname: string;
+    patronymic?: string;
+    birth_date: string;
+    sex: string;
+    nationality_id: NationalityId;
+    grade_id: GradeId;
+    admission_date: string;
+    previous_schools: string;
+    medical_recommendations: string;
+  }[];
+  parents: {
+    name: string;
+    surname: string;
+    patronymic?: string;
+    birth_date: string;
+    sex: string;
+    nationality_id: NationalityId;
+    profession_id: ProfessionId;
+    workplace: string;
+    position: string;
+    tel: {
+      code: string;
+      numbers: string;
+    };
+    whatsapp: {
+      code: string;
+      numbers: string;
+    };
+    email?: string;
+    address: {
+      physical_address: string;
+      region: string;
+    };
+  }[];
 };

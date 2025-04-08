@@ -134,11 +134,24 @@ class AuthController extends Controller
   public function generateRegisterLink(): JsonResponse
   {
     $link = RegisterLink::create([
-      'token' => Str::random(16),
+      'token' => Str::random(32),
       'expires_at' => Carbon::now()->addHour(),
     ]);
 
     return response()->json(RegisterLink::selectBasic()->find($link->id), 200);
+  }
+
+  public function checkRegisterLink(Request $request)
+  {
+    $link = RegisterLink::selectBasic()->where('token', $request->token)->first();
+
+    if (!$link) {
+      throw ValidationException::withMessages([
+        'message' => 'Недействительный токен.',
+      ]);
+    }
+
+    return response()->json($link, 200);
   }
 
   public function updateRegisterLink(int $id): JsonResponse

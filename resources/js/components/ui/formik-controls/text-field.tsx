@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, useId } from 'react';
+import React, { InputHTMLAttributes } from 'react';
 import classNames from 'classnames';
 import Label from './partials/label';
 import Before from './partials/before';
@@ -6,6 +6,7 @@ import Input from './partials/input';
 import Cleanable from './partials/cleanable';
 import After from './partials/after';
 import ErrorMessage from './partials/error-message';
+import { nanoid } from 'nanoid';
 
 type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string;
@@ -31,7 +32,7 @@ function TextField({
   after,
   ...props
 }: TextFieldProps): JSX.Element {
-  const uniqueId = useId();
+  const uniqueId = nanoid();
 
   return (
     <div className={classNames(className, 'flex flex-col')}>
