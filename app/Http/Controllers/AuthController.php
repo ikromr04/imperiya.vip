@@ -104,8 +104,8 @@ class AuthController extends Controller
         'mother_id' => $mother->id ?? null,
         'father_id' => $father->id ?? null,
         'admission_date' => Carbon::now(),
-        'previous_schools' => '$child[previous_schools]',
-        'medical_recommendations' => '$child[medical_recommendations]',
+        'previous_schools' => $child['previous_schools'],
+        'medical_recommendations' => $child['medical_recommendations'],
       ]);
     }
 
