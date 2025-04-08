@@ -208,7 +208,7 @@ class AuthController extends Controller
   {
     $link = RegisterLink::create([
       'token' => Str::random(32),
-      'expires_at' => Carbon::now()->addHour(),
+      'expires_at' => Carbon::now()->addHour(12),
     ]);
 
     return response()->json(RegisterLink::selectBasic()->find($link->id), 200);
@@ -230,7 +230,7 @@ class AuthController extends Controller
   public function updateRegisterLink(int $id): JsonResponse
   {
     RegisterLink::findOrFail($id)->update([
-      'expires_at' => Carbon::now()->addHour(),
+      'expires_at' => Carbon::now()->addHour(12),
     ]);
 
     return response()->json(RegisterLink::selectBasic()->find($id), 200);

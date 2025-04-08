@@ -16,6 +16,7 @@ class NationalitySeeder extends Seeder
       'Турок',
       'Афганец',
       'Китаец',
+      'Татар',
       'Другая национальность',
     ];
 

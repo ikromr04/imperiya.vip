@@ -480,7 +480,7 @@ function RegisterForm({
                       />
                       <SelectField
                         name={`parents[${index}].address.region`}
-                        label="Регион"
+                        label="Район"
                         options={REGIONS.map((region) => ({ value: region, label: region }))}
                         required
                       />
