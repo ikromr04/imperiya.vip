@@ -79,7 +79,7 @@ function UsersPhoneEditForm({
                         label="Код страны"
                         required
                       />
-                      <span className="absolute top-6 left-4 transform">+</span>
+                      <span className="absolute top-5 left-4 transform">+</span>
                     </div>
                     <TextField
                       className="w-[120px] grow"

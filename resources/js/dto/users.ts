@@ -1,5 +1,6 @@
 import { Role, Sex, UserId } from '@/types/users';
 import { GradeId } from '../types/grades';
+import { NationalityId } from '@/types/nationalities';
 
 export type UserStoreDTO = {
   name: string;
@@ -29,12 +30,17 @@ export type UserStoreDTO = {
 export type UserUpdateDTO = {
   id: UserId;
   name?: string;
+  surname?: string;
+  patronymic?: string;
   login?: string;
-  email?: string;
-  birth_date?: Date;
-  address?: string;
   sex?: Sex;
-  nationality?: string;
+  birth_date?: Date;
+  nationality_id?: NationalityId;
+  email?: string;
+  address?: {
+    physical_address: string;
+    region: string;
+  };
   social_link?: {
     facebook: string;
     instagram: string;
@@ -45,6 +51,10 @@ export type UserUpdateDTO = {
     numbers: number;
     code: number;
   }[];
+  whatsapp?: {
+    code: number;
+    numbers: number;
+  };
 }
 
 export type RoleUpdateDTO = {

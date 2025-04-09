@@ -52,10 +52,7 @@ function App(): JSX.Element {
 
         <Route path={AppRoute.Users.Index} element={<UsersPage />} />
         <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
-        <Route path={AppRoute.Users.Education} element={<UsersShowPage />} />
-        <Route path={AppRoute.Users.Work} element={<UsersShowPage />} />
-        <Route path={AppRoute.Users.Schedule} element={<UsersShowPage />} />
-        <Route path={AppRoute.Users.Evaluations} element={<UsersShowPage />} />
+        <Route path={AppRoute.Users.Lessons} element={<UsersShowPage />} />
 
         <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
         <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />

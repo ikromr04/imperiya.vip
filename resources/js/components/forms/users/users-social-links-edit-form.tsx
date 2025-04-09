@@ -56,13 +56,29 @@ function UsersSocialLinksEditForm({
       onSubmit={onSubmit}
     >
       {({ isSubmitting }) => (
-        <Form>
-          <TextField name="social_link.facebook" label="Фейсбук" />
-          <TextField name="social_link.instagram" label="Инстаграм" />
-          <TextField name="social_link.telegram" label="Телеграм" />
-          <TextField name="social_link.odnoklassniki" label="Одноклассники" />
+        <Form className="flex flex-col gap-3">
+          <TextField
+            name="social_link.facebook"
+            type="url"
+            label="Фейсбук"
+          />
+          <TextField
+            name="social_link.instagram"
+            type="url"
+            label="Инстаграм"
+          />
+          <TextField
+            name="social_link.telegram"
+            type="url"
+            label="Телеграм"
+          />
+          <TextField
+            name="social_link.odnoklassniki"
+            type="url"
+            label="Одноклассники"
+          />
 
-          <div className="flex items-center justify-end gap-2 mt-6 sm:col-span-2">
+          <div className="flex items-center justify-end gap-2 mt-2 sm:col-span-2">
             <Button
               className="justify-center min-w-[92px]"
               type="submit"

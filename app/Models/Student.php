@@ -50,6 +50,9 @@ class Student extends Model
       'grade_id as gradeId',
       'mother_id as motherId',
       'father_id as fatherId',
+      'admission_date as admissionDate',
+      'previous_schools as previousSchools',
+      'medical_recommendations as medicalRecommendations',
     );
   }
 }

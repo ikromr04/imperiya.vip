@@ -40,7 +40,7 @@ export type User = {
   whatsapp?: {
     code: number;
     numbers: number;
-  }
+  };
   createdAt: string;
   // superadmin?: Superadmin;
   // admin?: Admin;

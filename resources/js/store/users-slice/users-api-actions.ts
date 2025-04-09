@@ -146,7 +146,7 @@ export const fetchUserByIdAction = createAsyncThunk<void, {
 );
 
 export const updateUserAvatarAction = createAsyncThunk<User, {
-  userId: UserId,
+  id: UserId,
   formData: FormData,
   onSuccess?: (user: User) => void,
   onValidationError?: (error: ValidationError) => void,
@@ -156,12 +156,13 @@ export const updateUserAvatarAction = createAsyncThunk<User, {
   rejectWithValue: ValidationError,
 }>(
   'users/updateAvatar',
-  async ({ userId, formData, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+  async ({ id, formData, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     formData.append('_method', 'put');
 
     try {
-      const { data } = await api.post<User>(generatePath(APIRoute.Users.Avatar, { userId }), formData);
+      const { data } = await api.post<User>(generatePath(APIRoute.Users.Avatar, { id }), formData);
       if (onSuccess) onSuccess(data);
+
       return data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -175,16 +176,16 @@ export const updateUserAvatarAction = createAsyncThunk<User, {
 );
 
 export const deleteUserAvatarAction = createAsyncThunk<UserId, {
-  userId: UserId,
+  id: UserId,
   onSuccess?: () => void,
 }, {
   extra: AxiosInstance
 }>(
   'users/deleteAvatar',
-  async ({ userId, onSuccess }, { extra: api }) => {
-    await api.delete(generatePath(APIRoute.Users.Avatar, { userId }));
+  async ({ id, onSuccess }, { extra: api }) => {
+    await api.delete(generatePath(APIRoute.Users.Avatar, { id }));
     if (onSuccess) onSuccess();
-    return userId;
+    return id;
   },
 );
 

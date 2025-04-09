@@ -21,7 +21,7 @@ function UserProfileNavigation({
           <Link
             className={classNames(
               'flex items-center h-7 px-2 transition-all duration-150 border border-transparent min-w-max',
-              (AppRoute.Auth.Profile === pathname) &&
+              (AppRoute.Auth.Profile === pathname || generatePath(AppRoute.Users.Show, { id: user.id }) === pathname) &&
               'rounded shadow bg-white border-gray-200'
             )}
             to={generatePath(AppRoute.Users.Show, { id: user.id })}
@@ -29,59 +29,17 @@ function UserProfileNavigation({
             Профиль
           </Link>
         </li>
-        <PrivateComponent user={user} roles={['parent', 'teacher']}>
-          <li>
-            <Link
-              className={classNames(
-                'flex items-center h-7 px-2 transition-all duration-150 border border-transparent min-w-max',
-                (generatePath(AppRoute.Users.Education, { id: user.id }) === pathname) &&
-                'rounded shadow bg-white border-gray-200'
-              )}
-              to={generatePath(AppRoute.Users.Education, { id: user.id })}
-            >
-              Образование
-            </Link>
-          </li>
-        </PrivateComponent>
-        <PrivateComponent user={user} roles={['parent', 'teacher']}>
-          <li>
-            <Link
-              className={classNames(
-                'flex items-center h-7 px-2 transition-all duration-150 border border-transparent min-w-max',
-                (generatePath(AppRoute.Users.Work, { id: user.id }) === pathname) &&
-                'rounded shadow bg-white border-gray-200'
-              )}
-              to={generatePath(AppRoute.Users.Work, { id: user.id })}
-            >
-              Трудовая деятельность
-            </Link>
-          </li>
-        </PrivateComponent>
         <PrivateComponent user={user} roles={['student', 'teacher']}>
           <li>
             <Link
               className={classNames(
                 'flex items-center h-7 px-2 transition-all duration-150 border border-transparent min-w-max',
-                (generatePath(AppRoute.Users.Schedule, { id: user.id }) === pathname) &&
+                (generatePath(AppRoute.Users.Lessons, { id: user.id }) === pathname) &&
                 'rounded shadow bg-white border-gray-200'
               )}
-              to={generatePath(AppRoute.Users.Schedule, { id: user.id })}
+              to={generatePath(AppRoute.Users.Lessons, { id: user.id })}
             >
               Расписание
-            </Link>
-          </li>
-        </PrivateComponent>
-        <PrivateComponent user={user} roles={['student']}>
-          <li>
-            <Link
-              className={classNames(
-                'flex items-center h-7 px-2 transition-all duration-150 border border-transparent min-w-max',
-                (generatePath(AppRoute.Users.Evaluations, { id: user.id }) === pathname) &&
-                'rounded shadow bg-white border-gray-200'
-              )}
-              to={generatePath(AppRoute.Users.Evaluations, { id: user.id })}
-            >
-              Оценки
             </Link>
           </li>
         </PrivateComponent>

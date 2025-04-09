@@ -41,7 +41,7 @@ function UsersShowPage(): JSX.Element {
           className="mb-4"
           items={[
             ['Справочник пользователей', AppRoute.Users.Index],
-            [user.name, ''],
+            [`${user.name} ${user.surname}`, ''],
           ]}
         />
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\Admin;
 use App\Models\Director;
 use App\Models\Guardian;
@@ -74,7 +75,7 @@ class UserController extends Controller
     return response()->json(User::selectBasic()->find($user->id), 201);
   }
 
-  public function update(Request $request): JsonResponse
+  public function update(UserUpdateRequest $request): JsonResponse
   {
     $user = User::findOrFail($request->id);
 
@@ -84,14 +85,17 @@ class UserController extends Controller
 
     $user->update($request->only([
       'name',
+      'surname',
+      'patronymic',
       'login',
-      'email',
-      'birth_date',
-      'address',
       'sex',
-      'nationality',
+      'birth_date',
+      'nationality_id',
+      'email',
+      'address',
       'social_link',
       'phone_numbers',
+      'whatsapp',
     ]));
 
     return response()->json(User::selectBasic()->find($user->id), 200);
@@ -115,9 +119,7 @@ class UserController extends Controller
 
   public function delete(Request $request)
   {
-    $user = User::findOrFail($request->id);
-
-    $user->delete();
+    User::findOrFail($request->id)->delete();
 
     return response()->noContent();
   }

@@ -1,8 +1,8 @@
-// import UsersEditForm from '@/components/forms/users/users-edit-form';
+import UsersEditForm from '@/components/forms/users/users-edit-form';
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
 import DescriptionList from '@/components/ui/description-list';
-// import Modal from '@/components/ui/modal';
+import Modal from '@/components/ui/modal';
 import Tooltip from '@/components/ui/tooltip';
 import { RoleName, SexName } from '@/const/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
@@ -44,27 +44,41 @@ function BaseInfo({
           <DescriptionList
             className="box__body"
             list={{
-              'ФИО': user.name,
+              'Имя': user.name,
+              'Фамилия': user.surname,
+              'Отчество': user.patronymic ?? '-',
               'Логин': user.login,
               'Позиция': RoleName[user.role],
               'Пол': SexName[user.sex],
               'Электронная почта':
-                user.email ?
+                user.email ? (
                   <Link className="text-blue-600" to={`mailto:${user.email}`}>
                     {user.email}
-                  </Link> : '-',
+                  </Link>
+                ) : '-',
               'Дата рождения': user.birthDate ? dayjs(user.birthDate).format('DD MMMM YYYY') : '-',
-              'Адрес': user.address ? `${user.address.physicalAddress}, район ${user.address.physicalAddress}` : '-',
-              'Национальность': nationalities.data?.find(({id}) => id === user.nationalityId)?.name || '-',
+              'Адрес': user.address ?
+                `${(user.address.region !== 'За пределами города') ? 'район ' : ''}${user.address.region}, ${user.address.physicalAddress}`
+                : '-',
+              'Национальность': nationalities.data?.find(({ id }) => id === user.nationalityId)?.name || '-',
+              'WhatsApp': (user.whatsapp?.code && user.whatsapp?.numbers) ? (
+                <a
+                  className="text-blue-600"
+                  href={`https://wa.me/+${user.whatsapp.code}${user.whatsapp.numbers}`}
+                  target="_blank"
+                >
+                  +{user.whatsapp.code} {user.whatsapp.numbers}
+                </a>
+              ) : '-',
             }}
           />
           <div className="absolute top-[1px] right-0 rounded-br-md z-10 min-w-6 h-[calc(100%-1px)] pointer-events-none bg-gradient-to-l from-white to-transparent"></div>
         </div>
       </section>
 
-      {/* <Modal isOpen={isOpen}>
+      <Modal isOpen={isOpen}>
         <UsersEditForm user={user} setIsOpen={setIsOpen} />
-      </Modal> */}
+      </Modal>
     </>
   );
 }

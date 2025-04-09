@@ -15,10 +15,7 @@ export const AppRoute = {
     Index: '/users',
     Create: '/users/create',
     Show: '/users/:id',
-    Education: '/users/:id/education',
-    Work: '/users/:id/work-experience',
-    Schedule: '/users/:id/schedule',
-    Evaluations: '/users/:id/evaluations',
+    Lessons: '/users/:id/lessons',
   },
   Classes: {
     Index: '/classes',

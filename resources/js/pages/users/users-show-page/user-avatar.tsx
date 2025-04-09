@@ -1,14 +1,13 @@
 import React, { BaseSyntheticEvent, useState } from 'react';
-import Button from './ui/button';
 import { User } from '@/types/users';
 import classNames from 'classnames';
 import { useDropdown } from '@/hooks/use-dropdown';
-import { Icons } from './icons';
 import { useAppDispatch } from '@/hooks';
 import { deleteUserAvatarAction, updateUserAvatarAction } from '@/store/users-slice/users-api-actions';
-import Spinner from './ui/spinner';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import Button from '@/components/ui/button';
+import Spinner from '@/components/ui/spinner';
+import { Icons } from '@/components/icons';
 
 type UserAvatarProps = {
   className?: string;
@@ -30,19 +29,18 @@ function UserAvatar({
 
     await dispatch(updateUserAvatarAction({
       formData,
-      userId: user.id,
+      id: user.id,
       onValidationError: (error) => toast.error(error.message),
       onFail: (message) => toast.error(message),
       onSuccess: () => setIsOpen(false),
     }));
-
     setIsLoading(false);
   };
 
   const handleDeleteButtonClick = async () => {
     setIsLoading(true);
 
-    await dispatch(deleteUserAvatarAction({ userId: user.id }));
+    await dispatch(deleteUserAvatarAction({ id: user.id }));
 
     setIsLoading(false);
   };
@@ -88,13 +86,13 @@ function UserAvatar({
           </li>
           {user.avatarThumb && user.avatar && <>
             <li>
-              <Link
+              <a
                 className="flex w-full gap-2 items-center h-8 transition-all duration-150 hover:bg-gray-100 px-3"
-                to={user.avatar}
+                href={user.avatar}
                 target="_blank"
               >
                 <Icons.visibility width={14} height={14} /> Просмотреть
-              </Link>
+              </a>
             </li>
             <li>
               <button

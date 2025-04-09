@@ -1,4 +1,4 @@
-import UserAvatar from '@/components/user-avatar';
+import UserAvatar from '@/pages/users/users-show-page/user-avatar';
 import { RoleName } from '@/const/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
