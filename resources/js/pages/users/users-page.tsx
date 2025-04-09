@@ -21,6 +21,7 @@ import Modal from '@/components/ui/modal';
 import UsersCreateForm from '@/components/forms/users/users-create-form/users-create-form';
 import AppLayout from '@/components/layouts/app-layout';
 import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
+import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
 
 function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -33,7 +34,8 @@ function UsersPage(): JSX.Element {
   useEffect(() => {
     if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
     if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
-  }, [dispatch, grades.data, grades.isFetching, users.data, users.isFetching]);
+    if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
+  }, [dispatch, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching, users.data, users.isFetching]);
 
   const columns: ColumnDef<User>[] = [
     {
@@ -62,7 +64,7 @@ function UsersPage(): JSX.Element {
       size: 240,
       cell: ({ row }) => (
         <Link to={generatePath(AppRoute.Users.Show, { id: row.original.id })}>
-          {row.original.name}
+          {row.original.name} {row.original.surname}
         </Link>
       ),
       enableColumnFilter: filter.name ? true : false,
@@ -193,6 +195,35 @@ function UsersPage(): JSX.Element {
       }
     },
     {
+      id: 'whatsapp',
+      accessorKey: 'whatsapp',
+      header: 'WhatsApp',
+      size: 140,
+      cell: ({ row }) => row.original.whatsapp && (
+        <div className="flex flex-col">
+          <a
+            key={row.original.whatsapp.numbers}
+            className="font-medium min-w-max"
+            href={`https://wa.me/+${row.original.whatsapp.code}${row.original.whatsapp.numbers}`}
+            target="_blank"
+          >
+            +{`${row.original.whatsapp.code} ${row.original.whatsapp.numbers}`}
+          </a>
+        </div>
+      ),
+      enableColumnFilter: filter.whatsapp ? true : false,
+      meta: {
+        renderFilter: () => (
+          <TextField
+            placeholder="Искать..."
+            value={filter.whatsapp || ''}
+            onInput={(evt: BaseSyntheticEvent) => setFilter((prev) => ({ ...prev, whatsapp: evt.target.value }))}
+            onChange={(value) => setFilter((prev) => ({ ...prev, whatsapp: value as string }))}
+          />
+        ),
+      }
+    },
+    {
       id: 'email',
       accessorKey: 'email',
       header: 'Электронная почта',
@@ -240,7 +271,7 @@ function UsersPage(): JSX.Element {
       header: 'Дата рождения',
       size: 140,
       cell: ({ row }) => row.original.birthDate && (
-        dayjs(row.original.birthDate).format('DD MMMM YYYY')
+        dayjs(row.original.birthDate).format('DD MMM YYYY')
       ),
     },
     {
@@ -249,6 +280,18 @@ function UsersPage(): JSX.Element {
       header: 'Адрес',
       size: 280,
       enableColumnFilter: filter.address ? true : false,
+      cell: ({ row }) => row.original.address && (
+        <>
+          {(row.original.address.region !== 'За пределами города') && 'район '}
+          {row.original.address.region}, {row.original.address.physicalAddress}
+        </>
+      ),
+      sortingFn: (rowA, rowB) => {
+        const addressA = rowA.original.address ? `${rowA.original.address.region}, ${rowA.original.address.physicalAddress}` : '';
+        const addressB = rowB.original.address ? `${rowB.original.address.region}, ${rowB.original.address.physicalAddress}` : '';
+
+        return addressA.localeCompare(addressB);
+      },
       meta: {
         renderFilter: () => (
           <TextField
@@ -266,11 +309,18 @@ function UsersPage(): JSX.Element {
       header: 'Национальность',
       size: 160,
       enableColumnFilter: filter.nationality ? true : false,
+      cell: ({ row }) => nationalities.data?.find((nationality) => nationality.id === row.original.nationalityId)?.name,
+      sortingFn: (rowA, rowB) => {
+        const nationalityA = nationalities.data?.find(({ id }) => id === rowA.original.nationalityId)?.name || '';
+        const nationalityB = nationalities.data?.find(({ id }) => id === rowB.original.nationalityId)?.name || '';
+
+        return nationalityA.localeCompare(nationalityB);
+      },
       meta: {
         renderFilter: () => (
           <SelectField
             placeholder="--Выбрать--"
-            options={nationalities.map((nationality) => ({ value: nationality, label: nationality }))}
+            options={(nationalities.data || []).map((nationality) => ({ value: nationality.id.toString(), label: nationality.name }))}
             value={filter.nationality || ''}
             onChange={(value) => setFilter((prev) => ({ ...prev, nationality: value }))}
           />

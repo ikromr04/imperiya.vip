@@ -37,6 +37,10 @@ export type User = {
     code: number;
     numbers: number;
   }[];
+  whatsapp?: {
+    code: number;
+    numbers: number;
+  }
   createdAt: string;
   // superadmin?: Superadmin;
   // admin?: Admin;
@@ -47,10 +51,6 @@ export type User = {
     professionId: ProfessionId;
     workplace: string;
     position: string;
-    whatsapp: {
-      code: number;
-      numbers: number;
-    };
   };
   student?: {
     gradeId?: GradeId;
@@ -70,6 +70,7 @@ export type UsersFilter = {
   grade?: string,
   role?: string,
   phone?: string,
+  whatsapp?: string,
   email?: string,
   login?: string,
   birthDate?: {

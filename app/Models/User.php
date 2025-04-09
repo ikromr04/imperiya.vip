@@ -117,6 +117,14 @@ class User extends Authenticatable
   public function toArray()
   {
     $array = parent::toArray();
+
+    if (!empty($array['address'])) {
+      $array['address'] = [
+        'physicalAddress' => $array['address']['physical_address'],
+        'region' => $array['address']['region'],
+      ];
+    }
+
     return array_filter($array, fn($value) => $value);
   }
 }

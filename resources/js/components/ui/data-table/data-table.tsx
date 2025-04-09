@@ -212,6 +212,11 @@ export default function DataTable<T>({
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
+              <th
+                className="p-2 min-w-10 w-10 max-w-10 text-start bg-gray-100 cursor-pointer group"
+              >
+                №
+              </th>
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
@@ -244,7 +249,7 @@ export default function DataTable<T>({
                       ) : (
                         flexRender(header.column.columnDef.header, header.getContext())
                       )
-                    }
+                      }
                     </span>
                     {header.column.getCanSort() && renderSortingIcon(header.column.getIsSorted())}
 
@@ -275,6 +280,14 @@ export default function DataTable<T>({
                 (index % 2) ? 'bg-gray-50' : 'bg-white',
               )}
             >
+              <td
+                className={classNames(
+                  'relative p-2 min-w-10 w-10 max-w-10',
+                  (index % 2) ? 'bg-gray-50' : 'bg-white',
+                )}
+              >
+                {(currentPage - 1) * pageSize + index + 1}
+              </td>
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={JSON.stringify(cell)}

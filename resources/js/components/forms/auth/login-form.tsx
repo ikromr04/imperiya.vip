@@ -52,7 +52,7 @@ function LoginForm({
 
           <div className="flex flex-col mb-5">
             <Link
-              className="flex ml-auto transform translate-y-full text-sm text-blue-600 transition-all duration-150 hover:text-blue-400"
+              className="flex ml-auto transform translate-y-[90%] text-sm text-blue-600 transition-all duration-150 hover:text-blue-400"
               to={AppRoute.Auth.ForgotPassword}
             >
               Забыли пароль?

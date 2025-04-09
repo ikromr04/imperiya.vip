@@ -46,6 +46,15 @@ function AppSidebar(): JSX.Element {
                 Профиль
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Users.Index}
+              >
+                <Icons.users className="navlink__icon" width={16} height={16} />
+                Пользователи
+              </NavLink>
+            </li>
             {/* <li>
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
@@ -62,15 +71,6 @@ function AppSidebar(): JSX.Element {
               >
                 <Icons.journal className="navlink__icon" width={16} height={16} />
                 Журнал
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Users.Index}
-              >
-                <Icons.users className="navlink__icon" width={16} height={16} />
-                Пользователи
               </NavLink>
             </li>
             <li>
