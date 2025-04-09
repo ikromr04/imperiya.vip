@@ -64,7 +64,7 @@ class AuthController extends Controller
         'sex' => $parent['sex'],
         'nationality_id' => $parent['nationality_id'],
         'role' => 'parent',
-        'phone_numbers' => $parent['tel'],
+        'phone_numbers' => [$parent['tel']],
         'whatsapp' => $parent['whatsapp'],
         'address' => $parent['address'],
         'email' => $parent['email'] ?? null,

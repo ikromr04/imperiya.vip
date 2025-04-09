@@ -28,6 +28,9 @@ class Guardian extends Model
     return $query->select(
       'id',
       'user_id',
+      'profession_id as professionId',
+      'workplace',
+      'position',
     );
   }
 
