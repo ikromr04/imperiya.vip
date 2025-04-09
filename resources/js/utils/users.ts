@@ -14,8 +14,8 @@ export const filterUsers = (users: Users, filter: UsersFilter): Users => {
     && (filter.birthDate?.day ? (filter.birthDate.day === dayjs(user.birthDate).format('D').toString().padStart(2, '0')) : true)
     && (filter.birthDate?.month ? (filter.birthDate.month === dayjs(user.birthDate).format('M').toString().padStart(2, '0')) : true)
     && (filter.birthDate?.year ? (filter.birthDate.year.toString() === dayjs(user.birthDate).format('YYYY').toString()) : true)
-    // && (filter.address ? (user.address?.toLowerCase()?.includes(filter.address.toLowerCase() || '')) : true)
-    // && (filter.nationality ? (user.nationality === filter.nationality) : true)
+    && (filter.address ? (`район ${user.address?.region}, ${user.address?.physicalAddress}`.toLowerCase()?.includes(filter.address.toLowerCase() || '')) : true)
+    && (filter.nationality ? (user.nationalityId?.toString() === filter.nationality) : true)
   ));
 
   return users;

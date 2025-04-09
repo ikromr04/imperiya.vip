@@ -55,7 +55,7 @@ function ColumnFilter<TData, TValue>({
         onClick={(evt: BaseSyntheticEvent) => !evt.target.closest('.column-filter-header') && setIsOpen(false)}
       >
         <div className="flex flex-col column-filter-header px-3 py-1">
-          <h3 className="text-sm leading-none text-gray-400">
+          <h3 className="text-sm leading-none text-gray-400 mb-1">
             {flexRender(header.column.columnDef.header, header.getContext())}
           </h3>
           {header.column.columnDef.meta?.renderFilter?.(header.column)}
