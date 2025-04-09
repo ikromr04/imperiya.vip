@@ -1,8 +1,10 @@
 import React from 'react';
-import { AppRoute } from '@/const/routes';
 import Button from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 function NotFoundPage(): JSX.Element {
+  const navigate = useNavigate();
+
   return (
     <main className="flex items-center min-h-screen">
       <div className="container flex flex-col items-center my-8">
@@ -20,8 +22,8 @@ function NotFoundPage(): JSX.Element {
           К сожалению, страница, которую вы ищете, не существует. Если вы уверены, что произошла ошибка, то сообщите своему администратору или дайте нам знать.
         </p>
 
-        <Button href={AppRoute.Auth.Profile}>
-          Вернуться на главную страницу
+        <Button onClick={() => navigate(-1)}>
+          Вернуться назад
         </Button>
       </div>
     </main>

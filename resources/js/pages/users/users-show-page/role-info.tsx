@@ -58,10 +58,10 @@ function RoleInfo({
           <Link className="text-blue-600" to={generatePath(AppRoute.Users.Show, { id: father.id })}>
             {father.name} {father.surname}
           </Link> : '-',
-        'С какого года ребенок обучается в ЧОУ «Империя знаний»':
+        'С какого года ребенок обучается в ЧОУ «Империя знаний» :':
           user.student?.admissionDate ? dayjs(user.student.admissionDate).format('DD MMMM YYYY') : '-',
         'Предыдущие школы': user.student?.previousSchools ?? '-',
-        'Медицинские и психологические рекомендации': user.student?.medicalRecommendations ?? '-',
+        'Медицинские и психологические рекомендации :': user.student?.medicalRecommendations ?? '-',
       };
       break;
     case 'parent':

@@ -10,18 +10,16 @@ import RoleFields from './role-fields';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Обязательное поле.'),
+  name: Yup.string().required('Имя обязательно для заполнения.'),
+  surname: Yup.string().required('Фамилия обязательна для заполнения.'),
   login: Yup.string().required('Обязательное поле.'),
-  role: Yup.string().required('Обязательное поле.'),
-  sex: Yup.string().required('Обязательное поле.'),
+  sex: Yup.string().required('Укажите пол.'),
+  birth_date: Yup.string().required('Укажите дату рождения.'),
+  nationality_id: Yup.number()
+    .required('Укажите национальность.')
+    .min(1, 'Укажите национальность.'),
   email: Yup.string().email('Неверный адрес электронной почты.'),
-  phone_numbers: Yup.array()
-    .of(
-      Yup.object().shape({
-        numbers: Yup.number().required(' '),
-        code: Yup.number().required(' '),
-      })
-    ),
+  role: Yup.string().required('Укажите позицию пользователя.'),
 });
 
 export type Step = 'required' | 'base' | 'role';
@@ -37,10 +35,10 @@ function UsersCreateForm({
   const dispatch = useAppDispatch();
   const initialValues: UserStoreDTO = {
     name: '',
+    surnname: '',
     login: '',
     role: 'student',
     sex: 'male',
-    phone_numbers: [],
   };
 
   const onSubmit = async (

@@ -392,7 +392,7 @@ function UsersPage(): JSX.Element {
               <Button
                 icon="add"
                 variant="success"
-                onClick={() => setIsCreating(true)}
+                href={AppRoute.Users.Create}
               >
                 <span className="sr-only md:not-sr-only">Добавить</span>
               </Button>
@@ -402,6 +402,7 @@ function UsersPage(): JSX.Element {
           <Spinner className="w-8 h-8" />
         )}
       </main>
+
       <Modal isOpen={isCreating}>
         <UsersCreateForm setIsOpen={setIsCreating} />
       </Modal>

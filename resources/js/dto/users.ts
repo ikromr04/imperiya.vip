@@ -4,27 +4,29 @@ import { NationalityId } from '@/types/nationalities';
 
 export type UserStoreDTO = {
   name: string;
+  surnname: string;
+  patronymic?: string;
   login: string;
   role: Role;
   sex: Sex;
   email?: string;
-  birth_date?: Date;
+  birth_date?: string;
   address?: string;
-  nationality?: string;
+  nationality_id?: string;
   social_link?: {
     facebook: string;
     instagram: string;
     telegram: string;
     odnoklassniki: string;
   };
-  phone_numbers: {
-    numbers: number;
+  phone_numbers?: {
     code: number;
+    numbers: number;
   }[];
-  grade_id?: GradeId;
-  mother_id?: UserId;
-  father_id?: UserId;
-  children?: UserId[];
+  whatsapp?: {
+    code: number;
+    numbers: number;
+  };
 }
 
 export type UserUpdateDTO = {

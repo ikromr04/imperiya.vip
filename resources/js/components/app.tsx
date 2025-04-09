@@ -11,11 +11,6 @@ import UsersPage from '../pages/users/users-page';
 import { AuthorizationStatus } from '@/const/store';
 import { AppRoute } from '@/const/routes';
 import UsersShowPage from '../pages/users/users-show-page/users-show-page';
-import GradesPage from '../pages/grades/grades-page';
-import GradesShowPage from '../pages/grades/grades-show-page';
-import SchedulesPage from '../pages/schedules-page/schedules-page';
-import LessonsPage from '../pages/lessons/lessons-page';
-import JournalPage from '@/pages/journal-page';
 import NotFoundPage from '@/pages/not-found-page';
 import RegisterLinksPage from '@/pages/auth/register-links-page/register-links-page';
 import RegisterPage from '../pages/auth/register-page/register-page';
@@ -46,21 +41,22 @@ function App(): JSX.Element {
         <Route path={AppRoute.Auth.Register} element={<RegisterPage />} />
         <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
 
-        <Route path={AppRoute.Journal} element={<JournalPage />} />
+        {/* <Route path={AppRoute.Journal} element={<JournalPage />} /> */}
 
-        <Route path={AppRoute.Schedules.Index} element={<SchedulesPage />} />
+        {/* <Route path={AppRoute.Schedules.Index} element={<SchedulesPage />} /> */}
 
         <Route path={AppRoute.Users.Index} element={<UsersPage />} />
         <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
-        <Route path={AppRoute.Users.Lessons} element={<UsersShowPage />} />
+        <Route path={AppRoute.Users.Create} element={<NotFoundPage />} />
+        {/* <Route path={AppRoute.Users.Lessons} element={<UsersShowPage />} /> */}
 
-        <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
-        <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />
+        {/* <Route path={AppRoute.Classes.Index} element={<GradesPage />} /> */}
+        {/* <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} /> */}
 
-        <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} />
+        {/* <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} /> */}
 
-        <Route path={AppRoute.Monitoring.Index} element={<JournalPage />} />
-        <Route path={AppRoute.Settings.Index} element={<JournalPage />} />
+        {/* <Route path={AppRoute.Monitoring.Index} element={<JournalPage />} /> */}
+        {/* <Route path={AppRoute.Settings.Index} element={<JournalPage />} /> */}
 
         <Route path={AppRoute.NotFound} element={<NotFoundPage />} />
       </Routes>
