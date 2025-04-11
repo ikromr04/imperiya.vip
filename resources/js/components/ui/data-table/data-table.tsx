@@ -17,6 +17,7 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import { Icons } from '@/components/icons';
+import Button from '../button';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData, TValue> {
@@ -44,6 +45,7 @@ type DataTableProps<T> = {
   visibilityState?: VisibilityState;
   columnPinningState?: ColumnPinningState;
   actions?: ReactNode;
+  onExport?: (data: T[], columnVisibility: VisibilityState) => void;
 };
 
 export default function DataTable<T>({
@@ -55,6 +57,7 @@ export default function DataTable<T>({
   visibilityState = DEFAULT_VISIBILITY_STATE,
   columnPinningState = DEFAULT_COLUMN_PINNING_STATE,
   actions,
+  onExport,
 }: DataTableProps<T>): JSX.Element {
   const [globalFilter, setGlobalFilter] = useState<string>('');
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize });
@@ -199,7 +202,18 @@ export default function DataTable<T>({
           />
         </label>
 
-        {actions}
+        <div className="flex gap-2">
+          {onExport && (
+            <Button
+              icon="fileExport"
+              variant="light"
+              onClick={() => onExport(data, columnVisibility)}
+            >
+              <span className="sr-only md:not-sr-only">Экспорт</span>
+            </Button>
+          )}
+          {actions}
+        </div>
       </div>
 
       <table className="flex flex-col w-full">
@@ -330,8 +344,11 @@ export default function DataTable<T>({
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
+              <td
+                className="border-t p-0 min-w-10 w-10 max-w-10"
+              ></td>
               {headerGroup.headers.map((header) => (
-                <th
+                <td
                   className={classNames(
                     'border-t p-0',
                     header.column.columnDef.meta?.columnClass,
@@ -342,7 +359,7 @@ export default function DataTable<T>({
                     width: header.getSize() ? `${header.getSize()}px` : 'auto',
                     maxWidth: header.getSize() ? `${header.getSize()}px` : 'auto',
                   }}
-                ></th>
+                ></td>
               ))}
             </tr>
           ))}

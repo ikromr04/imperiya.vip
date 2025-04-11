@@ -13,7 +13,6 @@ export const fetchUsersAction = createAsyncThunk<Users, undefined, {
   'users/fetch',
   async (_arg, { extra: api }) => {
     const { data } = await api.get<Users>(APIRoute.Users.Index);
-    console.log(data);
 
     return data;
   },

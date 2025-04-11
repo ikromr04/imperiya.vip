@@ -16,6 +16,7 @@ export type User = {
   surname: string;
   patronymic?: string;
   login: string;
+  password?: string;
   role: Role;
   sex: Sex;
   birthDate: Date;
@@ -73,11 +74,16 @@ export type UsersFilter = {
   whatsapp?: string,
   email?: string,
   login?: string,
+  password?: string,
   birthDate?: {
     day: string;
     month: string;
     year: string;
   },
-  address?: string;
+  address?: {
+    physicalAddress: string;
+    region: string;
+  }
   nationality?: string;
+  professionId?: string;
 };

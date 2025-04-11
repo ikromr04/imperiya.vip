@@ -14,12 +14,19 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Intervention\Image\Facades\Image;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
   public function index(): JsonResponse
   {
-    $users = User::selectBasic()->get();
+    $users = User::selectBasic()
+      ->get()
+      ->map(function ($user) {
+        $user->password = Crypt::decryptString($user->password);
+
+        return $user;
+      });
 
     return response()->json($users, 200);
   }

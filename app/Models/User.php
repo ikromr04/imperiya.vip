@@ -91,6 +91,7 @@ class User extends Authenticatable
       'surname',
       'patronymic',
       'login',
+      'password',
       'role',
       'sex',
       'email',

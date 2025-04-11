@@ -3,13 +3,13 @@ import { useAppDispatch, useAppSelector } from '@/hooks';
 import { getUsers } from '@/store/users-slice/users-selector';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import Spinner from '@/components/ui/spinner';
-import { ColumnDef } from '@tanstack/react-table';
-import { User, UsersFilter } from '@/types/users';
+import { ColumnDef, VisibilityState } from '@tanstack/react-table';
+import { User, Users, UsersFilter } from '@/types/users';
 import DataTable from '@/components/ui/data-table/data-table';
 import { generatePath, Link } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
 import { Icons } from '@/components/icons';
-import { RoleName, ROLES, SexName } from '@/const/users';
+import { REGIONS, RoleName, ROLES, SexName } from '@/const/users';
 import { getGrades } from '@/store/grades-slice/grades-selector';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import dayjs from 'dayjs';
@@ -17,25 +17,85 @@ import TextField from '@/components/ui/form-controls/text-field';
 import { filterUsers } from '@/utils/users';
 import SelectField from '@/components/ui/form-controls/select-field';
 import Button from '@/components/ui/button';
-import Modal from '@/components/ui/modal';
-import UsersCreateForm from '@/components/forms/users/users-create-form/users-create-form';
 import AppLayout from '@/components/layouts/app-layout';
 import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
 import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
+import { getProfessions } from '@/store/professions-slice/professions-selector';
+import { fetchProfessionsAction } from '@/store/professions-slice/professions-api-actions';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import CopyButton from '@/components/ui/copy-button';
 
 function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
   const nationalities = useAppSelector(getNationalities);
+  const professions = useAppSelector(getProfessions);
   const grades = useAppSelector(getGrades);
   const [filter, setFilter] = useState<UsersFilter>({});
-  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
     if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
     if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
-  }, [dispatch, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching, users.data, users.isFetching]);
+    if (!professions.data && !professions.isFetching) dispatch(fetchProfessionsAction());
+  }, [dispatch, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching, professions.data, professions.isFetching, users.data, users.isFetching]);
+
+  const onExport = (users: Users, columnVisibility: VisibilityState) => {
+    const data = users.map((user) => {
+      let filteredUser = {};
+      if (columnVisibility.name !== false) {
+        filteredUser = { ...filteredUser, 'ФИО': `${user.surname} ${user.name} ${user.patronymic ?? ''}` };
+      }
+      if (columnVisibility.sex !== false) {
+        filteredUser = { ...filteredUser, 'Пол': SexName[user.sex] };
+      }
+      if (columnVisibility.grade !== false) {
+        const grade = grades.data?.find(({ id }) => id === user.student?.gradeId);
+        filteredUser = { ...filteredUser, 'Класс': grade ? `${grade?.level} ${grade?.group}` : '' };
+      }
+      if (columnVisibility.role !== false) {
+        filteredUser = { ...filteredUser, 'Позиция': RoleName[user.role] };
+      }
+      if (columnVisibility.phoneNumbers !== false) {
+        filteredUser = { ...filteredUser, 'Телефоны': user.phoneNumbers?.map((phone) => `+${phone.code} ${phone.numbers}`).join(', \n') };
+      }
+      if (columnVisibility.whatsapp !== false) {
+        filteredUser = { ...filteredUser, 'WhatsApp': user.whatsapp ? `+${user.whatsapp.code} ${user.whatsapp.numbers}` : '' };
+      }
+      if (columnVisibility.email !== false) {
+        filteredUser = { ...filteredUser, 'Электронная почта': user.email ?? '' };
+      }
+      if (columnVisibility.login !== false) {
+        filteredUser = { ...filteredUser, 'Логин': user.login };
+      }
+      if (columnVisibility.password !== false) {
+        filteredUser = { ...filteredUser, 'Пароль': user.password };
+      }
+      if (columnVisibility.birthDate !== false) {
+        filteredUser = { ...filteredUser, 'Дата рождения': user.birthDate ? dayjs(user.birthDate).format('DD MMM YYYY') : '' };
+      }
+      if (columnVisibility.address !== false) {
+        filteredUser = { ...filteredUser, 'Адрес': user.address ? `${(user.address.region !== 'За пределами города') && 'район '} ${user.address.region}, ${user.address.physicalAddress}` : '' };
+      }
+      if (columnVisibility.nationality !== false) {
+        filteredUser = { ...filteredUser, 'Национальность': nationalities.data?.find((nationality) => nationality.id === user.nationalityId)?.name ?? '' };
+      }
+      if (columnVisibility.profession !== false) {
+        filteredUser = { ...filteredUser, 'Сфера деятельности': professions.data?.find(({ id }) => id === user.parent?.professionId)?.name ?? '' };
+      }
+
+      return filteredUser;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+    const wbout = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+    const blob = new Blob([wbout], { type: 'application/octet-stream' });
+    saveAs(blob, 'usersDataSheet.xlsx');
+  };
 
   const columns: ColumnDef<User>[] = [
     {
@@ -64,7 +124,7 @@ function UsersPage(): JSX.Element {
       size: 240,
       cell: ({ row }) => (
         <Link to={generatePath(AppRoute.Users.Show, { id: row.original.id })}>
-          {row.original.name} {row.original.surname}
+          {row.original.surname} {row.original.name} {row.original.patronymic}
         </Link>
       ),
       enableColumnFilter: filter.name ? true : false,
@@ -266,6 +326,27 @@ function UsersPage(): JSX.Element {
       }
     },
     {
+      id: 'password',
+      accessorKey: 'password',
+      header: 'Пароль',
+      size: 220,
+      enableColumnFilter: filter.password ? true : false,
+      cell: ({ row }) => (
+        <CopyButton string={row.original.password ?? ''}>
+          Скопировать
+        </CopyButton>
+      ),
+      meta: {
+        renderFilter: () => (
+          <TextField
+            value={filter.password || ''}
+            onInput={(evt: BaseSyntheticEvent) => setFilter((prev) => ({ ...prev, password: evt.target.value }))}
+            onChange={(value) => setFilter((prev) => ({ ...prev, password: value as string }))}
+          />
+        ),
+      }
+    },
+    {
       id: 'birthDate',
       accessorKey: 'birthDate',
       header: 'Дата рождения',
@@ -279,12 +360,12 @@ function UsersPage(): JSX.Element {
       accessorKey: 'address',
       header: 'Адрес',
       size: 280,
-      enableColumnFilter: filter.address ? true : false,
+      enableColumnFilter: (filter.address?.physicalAddress || filter.address?.region) ? true : false,
       cell: ({ row }) => row.original.address && (
-        <>
+        <div className="leading-[1.1]">
           {(row.original.address.region !== 'За пределами города') && 'район '}
           {row.original.address.region}, {row.original.address.physicalAddress}
-        </>
+        </div>
       ),
       sortingFn: (rowA, rowB) => {
         const addressA = rowA.original.address ? `${rowA.original.address.region}, ${rowA.original.address.physicalAddress}` : '';
@@ -294,12 +375,39 @@ function UsersPage(): JSX.Element {
       },
       meta: {
         renderFilter: () => (
-          <TextField
-            placeholder="Искать..."
-            value={filter.address || ''}
-            onInput={(evt: BaseSyntheticEvent) => setFilter((prev) => ({ ...prev, address: evt.target.value }))}
-            onChange={(value) => setFilter((prev) => ({ ...prev, address: value as string }))}
-          />
+          <div className="flex flex-col gap-2">
+            <TextField
+              placeholder="Искать..."
+              value={filter.address?.physicalAddress || ''}
+              onInput={(evt: BaseSyntheticEvent) => setFilter((prev) => ({
+                ...prev,
+                address: {
+                  physicalAddress: evt.target.value,
+                  region: prev.address?.region || '',
+                },
+              }))}
+              onChange={(value) => setFilter((prev) => ({
+                ...prev,
+                address: {
+                  physicalAddress: value as string,
+                  region: prev.address?.region || '',
+                },
+              }))}
+            />
+
+            <SelectField
+              placeholder="--Район--"
+              options={REGIONS.map((region) => ({ value: region, label: region }))}
+              value={filter.address?.region || ''}
+              onChange={(value) => setFilter((prev) => ({
+                ...prev,
+                address: {
+                  physicalAddress: prev.address?.physicalAddress || '',
+                  region: value,
+                },
+              }))}
+            />
+          </div>
         ),
       }
     },
@@ -324,6 +432,36 @@ function UsersPage(): JSX.Element {
             value={filter.nationality || ''}
             onChange={(value) => setFilter((prev) => ({ ...prev, nationality: value }))}
           />
+        ),
+      }
+    },
+    {
+      id: 'profession',
+      accessorKey: 'profession',
+      header: 'Сфера деятельности',
+      size: 200,
+      enableColumnFilter: filter.professionId ? true : false,
+      cell: ({ row }) => professions.data && row.original.parent?.professionId && (
+        professions.data.find(({ id }) => id === row.original.parent?.professionId)?.name
+      ),
+      sortingFn: (rowA, rowB) => {
+        const professionA = professions.data?.find(({ id }) => id === rowA.original.parent?.professionId)?.name || '';
+        const professionB = professions.data?.find(({ id }) => id === rowB.original.parent?.professionId)?.name || '';
+
+        return professionA.localeCompare(professionB);
+      },
+      meta: {
+        renderFilter: () => (
+          <div className="flex flex-col gap-2">
+            <SelectField
+              options={(professions.data || []).map((profession) => ({ value: profession.id.toString(), label: profession.name }))}
+              value={filter.professionId || ''}
+              onChange={(value) => setFilter((prev) => ({
+                ...prev,
+                professionId: value,
+              }))}
+            />
+          </div>
         ),
       }
     },
@@ -376,7 +514,7 @@ function UsersPage(): JSX.Element {
       <main className="pt-4 pb-40">
         <header className="flex justify-between px-3 items-end mb-1">
           <h1 className="title">
-            Справочник пользователей ({users.data?.length})
+            Справочник пользователей ({users.data ? filterUsers(users.data, filter).length : 0})
           </h1>
         </header>
 
@@ -388,6 +526,7 @@ function UsersPage(): JSX.Element {
               id: 'name',
               desc: false,
             }]}
+            onExport={onExport}
             actions={(
               <Button
                 icon="add"
@@ -402,10 +541,6 @@ function UsersPage(): JSX.Element {
           <Spinner className="w-8 h-8" />
         )}
       </main>
-
-      <Modal isOpen={isCreating}>
-        <UsersCreateForm setIsOpen={setIsCreating} />
-      </Modal>
     </AppLayout>
   );
 }
