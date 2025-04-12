@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\Admin;
 use App\Models\Director;
@@ -31,53 +32,23 @@ class UserController extends Controller
     return response()->json($users, 200);
   }
 
-  public function store(Request $request): JsonResponse
+  public function store(UserStoreRequest $request): JsonResponse
   {
     $user = User::create($request->only([
       'name',
-      'login',
+      'surname',
+      'patronymic',
       'role',
       'sex',
-      'email',
       'birth_date',
+      'nationality_id',
+      'email',
       'address',
-      'nationality',
-      'social_link',
-      'phone_numbers',
+      'whatsapp',
     ]));
 
-    switch ($user->role) {
-      case 'superadmin':
-        Superadmin::create(['user_id' => $user->id]);
-        break;
-      case 'admin':
-        Admin::create(['user_id' => $user->id]);
-        break;
-      case 'director':
-        Director::create(['user_id' => $user->id]);
-        break;
-      case 'teacher':
-        Teacher::create(['user_id' => $user->id]);
-        break;
-      case 'parent':
-        Guardian::create(['user_id' => $user->id]);
-        if ($user->sex === 'male') {
-          Student::whereIn('user_id', collect($request->children))
-            ->update(['father_id' => $user->id]);
-        } else {
-          Student::whereIn('user_id', collect($request->children))
-            ->update(['mother_id' => $user->id]);
-        }
-        break;
-      case 'student':
-        Student::create([
-          'user_id' => $user->id,
-          'grade_id' => $request->grade_id,
-          'mother_id' => $request->mother_id,
-          'father_id' => $request->father_id,
-        ]);
-        break;
-    }
+    $user->phone_numbers = [$request->phone_numbers];
+    $user->save();
 
     return response()->json(User::selectBasic()->find($user->id), 201);
   }

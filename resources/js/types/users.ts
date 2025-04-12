@@ -43,10 +43,6 @@ export type User = {
     numbers: number;
   };
   createdAt: string;
-  // superadmin?: Superadmin;
-  // admin?: Admin;
-  // director?: Director;
-  // teacher?: Teacher;
   parent?: {
     children?: UserId[];
     professionId: ProfessionId;

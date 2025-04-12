@@ -13,7 +13,6 @@ import {
   storeUserAction,
   updateUserAction,
   updateUserAvatarAction,
-  updateUserRoleAction,
 } from './users-api-actions';
 
 export type UsersSlice = {
@@ -47,7 +46,9 @@ export const usersSlice = createSlice({
         state.users.isFetching = true;
       })
       .addCase(storeUserAction.fulfilled, (state, action) => {
-        state.users.data = state.users.data ? [action.payload, ...state.users.data] : [action.payload];
+        if (state.users.data) {
+          state.users.data = [action.payload, ...state.users.data];
+        }
       })
       .addCase(updateUserAvatarAction.fulfilled, (state, action) => {
         if (state.users.data) {
@@ -69,14 +70,6 @@ export const usersSlice = createSlice({
         }
       })
       .addCase(updateUserAction.fulfilled, (state, action) => {
-        if (state.users.data) {
-          const userIndex = state.users.data.findIndex((user) => user.id === action.payload.id);
-          if (userIndex !== -1) {
-            state.users.data[userIndex] = action.payload;
-          }
-        }
-      })
-      .addCase(updateUserRoleAction.fulfilled, (state, action) => {
         if (state.users.data) {
           const userIndex = state.users.data.findIndex((user) => user.id === action.payload.id);
           if (userIndex !== -1) {

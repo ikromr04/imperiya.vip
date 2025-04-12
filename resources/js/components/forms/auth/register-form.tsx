@@ -66,7 +66,7 @@ const validationSchema = Yup.object().shape({
       email: Yup.string().email('Неверный формат email.').nullable().notRequired(),
       address: Yup.object({
         physical_address: Yup.string().required('Фактический адрес обязателен.'),
-        region: Yup.string().required('Укажите регион.'),
+        region: Yup.string().required('Укажите район.'),
       }),
     })
   ).min(1, 'Необходимо указать как минимум одного родителя.'),
@@ -157,7 +157,6 @@ function RegisterForm({
         setKey((prev) => prev + 1);
       },
       onValidationError: (error) => {
-        console.log(error);
         helpers.setErrors({ ...error.errors });
         if (error.errors?.token[0]) {
           toast.error(error.errors.token[0]);
@@ -216,7 +215,7 @@ function RegisterForm({
                 <div
                   className={classNames(
                     'flex flex-col gap-3 bg-white border rounded-md shadow',
-                    values.children.length > 1 ? 'px-4 py-2 ' : 'px-8 py-4 ',
+                    values.children.length > 1 ? 'px-4 py-2 ' : 'px-8 py-4',
                   )}
                 >
                   {values.children.map((_, index) => (

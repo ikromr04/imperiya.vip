@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, ReactNode, useId, useState } from 'react';
+import React, { BaseSyntheticEvent, ReactNode, useState } from 'react';
 import classNames from 'classnames';
 import Label from './partials/label';
 import After from './partials/after';
@@ -9,6 +9,7 @@ import { useField } from 'formik';
 import { Option, Options } from '@/types';
 import { useDropdown } from '@/hooks/use-dropdown';
 import { Icons } from '@/components/icons';
+import { nanoid } from 'nanoid';
 
 type SelectFieldProps = {
   name: string;
@@ -45,7 +46,7 @@ function SelectField(props: SelectFieldProps): JSX.Element {
     inputClassname,
     optionClassname,
   } = props;
-  const uniqueId = useId();
+  const uniqueId = nanoid();
   const [field, meta, helpers] = useField(name);
   const [options, setOptions] = useState(props.options);
   const { ref, menuRef, isOpen, setIsOpen } = useDropdown<HTMLDivElement>();
@@ -106,6 +107,7 @@ function SelectField(props: SelectFieldProps): JSX.Element {
   return (
     <div ref={ref} className={classNames(className, 'relative flex flex-col')}>
       <Label required={required} label={label} htmlFor={uniqueId} />
+      <input className="sr-only" type="text" name={name} />
 
       <div className="relative flex">
         <Before element={before} />

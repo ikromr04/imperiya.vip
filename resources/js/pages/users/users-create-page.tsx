@@ -1,3 +1,4 @@
+import UsersCreateForm from '@/components/forms/users/users-create-form/users-create-form';
 import AppLayout from '@/components/layouts/app-layout';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import { AppRoute } from '@/const/routes';
@@ -17,6 +18,8 @@ function UsersCreatePage(): JSX.Element {
         <h1 className="title mb-1">
           Регистрация нового пользователя
         </h1>
+
+        <UsersCreateForm />
       </main>
     </AppLayout>
   );
