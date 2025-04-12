@@ -157,6 +157,7 @@ function RegisterForm({
         setKey((prev) => prev + 1);
       },
       onValidationError: (error) => {
+        console.log(error);
         helpers.setErrors({ ...error.errors });
         if (error.errors?.token[0]) {
           toast.error(error.errors.token[0]);
@@ -198,10 +199,10 @@ function RegisterForm({
 
   return (
     <Formik
+      key={key}
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
-      key={key}
     >
       {({ values, isSubmitting, errors }) => (
         <Form className="flex flex-col gap-4 w-full max-w-5xl mx-auto">

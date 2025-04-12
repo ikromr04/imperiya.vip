@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\ValidationException;
 
 class RegisterRequest extends FormRequest
 {
@@ -82,5 +85,57 @@ class RegisterRequest extends FormRequest
       'parents.*.address.physical_address.required' => 'Фактический адрес обязателен.',
       'parents.*.address.region.required' => 'Укажите регион.',
     ];
+  }
+
+  protected function prepareForValidation()
+  {
+    $this->replace($this->trimRecursive($this->all()));
+  }
+
+  private function trimRecursive($value)
+  {
+    if (is_array($value)) {
+      return array_map([$this, 'trimRecursive'], $value);
+    }
+
+    return is_string($value) ? trim($value) : $value;
+  }
+
+  protected function failedValidation(Validator $validator)
+  {
+    $rawErrors = (new ValidationException($validator))->errors();
+
+    $structuredErrors = [];
+
+    foreach ($rawErrors as $key => $messages) {
+      $segments = explode('.', $key);
+      $ref = &$structuredErrors;
+
+      foreach ($segments as $i => $segment) {
+        if (is_numeric($segment)) {
+          $segment = (int) $segment;
+          if (!isset($ref[$segment])) {
+            $ref[$segment] = [];
+          }
+          $ref = &$ref[$segment];
+        } elseif ($i === count($segments) - 1) {
+          if (!isset($ref[$segment])) {
+            $ref[$segment] = $messages;
+          } else {
+            $ref[$segment] = array_merge($ref[$segment], $messages);
+          }
+        } else {
+          if (!isset($ref[$segment])) {
+            $ref[$segment] = [];
+          }
+          $ref = &$ref[$segment];
+        }
+      }
+    }
+
+    throw new HttpResponseException(response()->json([
+      'message' => 'Validation failed.',
+      'errors' => $structuredErrors,
+    ], 422));
   }
 }
