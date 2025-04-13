@@ -1,6 +1,6 @@
 import { useAppDispatch } from '@/hooks';
 import { updateEvaluationAction } from '@/store/schedules-slice/schedules-api-actions';
-import { Evaluation } from '@/types/schedules';
+import { Evaluation } from '@/types/lessons';
 import classNames from 'classnames';
 import React, { BaseSyntheticEvent, useState } from 'react';
 import { toast } from 'react-toastify';

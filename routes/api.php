@@ -34,13 +34,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/{id}', [GradeController::class, 'delete']);
   });
 
-  Route::prefix('lessons')->group(function () {
+  Route::prefix('subjects')->group(function () {
     Route::get('/', [SubjectController::class, 'index']);
     Route::post('/', [SubjectController::class, 'store']);
     Route::put('/', [SubjectController::class, 'update']);
   });
 
-  Route::prefix('schedules')->group(function () {
+  Route::prefix('lessons')->group(function () {
     Route::get('/', [LessonController::class, 'index']);
     Route::post('/', [LessonController::class, 'store']);
     Route::put('/', [LessonController::class, 'update']);

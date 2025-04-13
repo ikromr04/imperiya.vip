@@ -1,6 +1,6 @@
 import { useAppDispatch } from '@/hooks';
 import { storeEvaluationAction } from '@/store/schedules-slice/schedules-api-actions';
-import { ScheduleId } from '@/types/schedules';
+import { ScheduleId } from '@/types/lessons';
 import { UserId } from '@/types/users';
 import classNames from 'classnames';
 import React, { BaseSyntheticEvent, useState } from 'react';

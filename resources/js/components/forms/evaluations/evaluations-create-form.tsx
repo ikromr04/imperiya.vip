@@ -1,9 +1,9 @@
 import SelectField from '@/components/ui/formik-controls/select-field';
-import { EvaluationsStoreDTO } from '@/dto/evaluations';
+import { EvaluationsStoreDTO } from '@/dto/marks';
 import { useAppDispatch } from '@/hooks';
 import { useDropdown } from '@/hooks/use-dropdown';
 import { storeEvaluationAction } from '@/store/schedules-slice/schedules-api-actions';
-import { ScheduleId } from '@/types/schedules';
+import { ScheduleId } from '@/types/lessons';
 import { UserId } from '@/types/users';
 import classNames from 'classnames';
 import { Form, Formik, FormikHelpers } from 'formik';

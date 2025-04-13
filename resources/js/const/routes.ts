@@ -8,8 +8,8 @@ export const AppRoute = {
     RegisterLinks: '/auth/register/links',
   },
   Journal: '/journal',
-  Schedules: {
-    Index: '/schedules',
+  Lessons: {
+    Index: '/lessons',
   },
   Users: {
     Index: '/users',
@@ -21,8 +21,8 @@ export const AppRoute = {
     Index: '/classes',
     Show: '/classes/:id',
   },
-  Lessons: {
-    Index: '/lessons',
+  Subjects: {
+    Index: '/subjects',
   },
   Monitoring: {
     Index: '/monitoring',
@@ -65,14 +65,14 @@ export const APIRoute = {
     Index: '/lessons',
     Show: '/lessons/:id',
   },
-  Schedules: {
-    Index: '/schedules',
-    Show: '/schedules/:id',
+  Subjects: {
+    Index: '/subjects',
+    Show: '/subjects/:id',
   },
   Journal: {
     Index: '/journal',
   },
-  Evaluations: {
-    Index: '/evaluations',
+  Marks: {
+    Index: '/marks',
   },
 };

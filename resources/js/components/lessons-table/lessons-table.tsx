@@ -3,52 +3,48 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 import Modal from '@/components/ui/modal';
 import LessonHour from '@/components/lesson-hour';
-import ScheduleCreateForm from '@/components/forms/schedules/schedules-create-form';
-import ScheduleEditForm from '@/components/forms/schedules/schedules-edit-form';
-import ScheduleDeleteForm from '@/components/forms/schedules/schedules-delete-form';
 import { Icons } from '@/components/icons';
 import { capitalizeString, getCurrentWeekDates } from '@/utils';
 import { Hour } from '@/const/lessons';
 import { Grades } from '@/types/grades';
-import { Lessons } from '@/types/lessons';
+import { Subjects } from '@/types/subjects';
 import { Users } from '@/types/users';
-import ScheduleItem from './schedule-item';
-import {
-  ScheduleDeleteDTO,
-  ScheduleStoreDTO,
-  ScheduleUpdateDTO,
-} from '@/dto/schedules';
 import { useAppDispatch } from '@/hooks';
-import { fetchSchedulesAction } from '@/store/schedules-slice/schedules-api-actions';
 import Spinner from '../ui/spinner';
-import { Schedules } from '@/types/schedules';
+import { LessonDeleteDTO, LessonStoreDTO, LessonUpdateDTO } from '@/dto/lessons';
+import { Lessons } from '@/types/lessons';
+import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
+import LessonsItem from './lessons-item';
+import LessonsEditForm from '@/components/forms/lessons/lessons-edit-form';
+import LessonsDeleteForm from '@/components/forms/lessons/lessons-delete-form';
+import LessonsCreateForm from '../forms/lessons/lessons-create-form';
 
-type SchedulesTableProps = {
+type LessonsTableProps = {
   grades: Grades;
-  lessons: Lessons;
+  subjects: Subjects;
   users: Users;
 };
 
-function SchedulesTable({
+function LessonsTable({
   grades,
-  lessons,
+  subjects,
   users
-}: SchedulesTableProps): JSX.Element {
+}: LessonsTableProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const [schedules, setSchedules] = useState<Schedules | null>(null);
+  const [lessons, setLessons] = useState<Lessons | null>(null);
   const [week, setWeek] = useState(0);
   const weekDates = getCurrentWeekDates(week);
-  const [createDTO, setCreateDTO] = useState<ScheduleStoreDTO | null>(null);
-  const [editDTO, setEditDTO] = useState<ScheduleUpdateDTO | null>(null);
-  const [deleteDTO, setDeleteDTO] = useState<ScheduleDeleteDTO | null>(null);
+  const [createDTO, setCreateDTO] = useState<LessonStoreDTO | null>(null);
+  const [editDTO, setEditDTO] = useState<LessonUpdateDTO | null>(null);
+  const [deleteDTO, setDeleteDTO] = useState<LessonDeleteDTO | null>(null);
   const tableRef = useRef<HTMLTableElement>(null);
 
   useEffect(() => {
-    if (!schedules) dispatch(fetchSchedulesAction({
+    if (!lessons) dispatch(fetchLessonsAction({
       week,
-      onSuccess: (schedules) => setSchedules(schedules),
+      onSuccess: (lessons) => setLessons(lessons),
     }));
-  }, [dispatch, schedules, week]);
+  }, [dispatch, lessons, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {
@@ -59,7 +55,7 @@ function SchedulesTable({
     }
   };
 
-  if (!schedules) return <Spinner className="w-8 h-8" />;
+  if (!lessons) return <Spinner className="w-8 h-8" />;
 
   return (
     <div className="rounded-md shadow border pb-1 bg-[linear-gradient(to_bottom,white_0%,white_50%,#f3f4f6_50%,#f3f4f6_100%)]">
@@ -144,13 +140,13 @@ function SchedulesTable({
                       key={grade.id}
                       className="relative z-0 p-2 border-l min-w-[260px] w-[260px] max-w-[260px]"
                     >
-                      <ScheduleItem
+                      <LessonsItem
                         date={date}
                         hour={Number(hour) as keyof typeof Hour}
                         grade={grade}
-                        lessons={lessons}
+                        subjects={subjects}
                         teachers={users.filter((user) => user.role === 'teacher')}
-                        schedules={schedules}
+                        lessons={lessons}
                         setCreateDTO={setCreateDTO}
                         setEditDTO={setEditDTO}
                         setDeleteDTO={setDeleteDTO}
@@ -187,7 +183,7 @@ function SchedulesTable({
             className="flex justify-center items-center gap-x-2 h-8 border-transparent rounded-md border transform disabled:opacity-50 disabled:pointer-events-none"
             onClick={() => {
               setWeek((prev) => prev - 1);
-              setSchedules(null);
+              setLessons(null);
             }}
           >
             <Icons.previous width={7} />
@@ -198,7 +194,7 @@ function SchedulesTable({
               className="flex justify-center items-center h-8 rounded-md"
               onClick={() => {
                 setWeek(0);
-                setSchedules(null);
+                setLessons(null);
               }}
             >
               <Icons.currentWeek width={16} height={16} />
@@ -209,7 +205,7 @@ function SchedulesTable({
             className="flex justify-center items-center gap-x-2 h-8 border-transparent rounded-md border transform disabled:opacity-50 disabled:pointer-events-none"
             onClick={() => {
               setWeek((prev) => prev + 1);
-              setSchedules(null);
+              setLessons(null);
             }}
           >
             <span className="sr-only md:not-sr-only">Следующая неделя</span>
@@ -220,27 +216,27 @@ function SchedulesTable({
 
       <Modal isOpen={(createDTO || editDTO || deleteDTO) ? true : false}>
         {createDTO && (
-          <ScheduleCreateForm
+          <LessonsCreateForm
             dto={createDTO}
             week={week}
             setDTO={setCreateDTO}
-            setSchedules={setSchedules}
+            setLessons={setLessons}
           />
         )}
         {editDTO && (
-          <ScheduleEditForm
+          <LessonsEditForm
             dto={editDTO}
             week={week}
             setDTO={setEditDTO}
-            setSchedules={setSchedules}
+            setLessons={setLessons}
           />
         )}
         {deleteDTO && (
-          <ScheduleDeleteForm
+          <LessonsDeleteForm
             dto={deleteDTO}
             week={week}
             setDTO={setDeleteDTO}
-            setSchedules={setSchedules}
+            setLessons={setLessons}
           />
         )}
       </Modal>
@@ -248,4 +244,4 @@ function SchedulesTable({
   );
 }
 
-export default SchedulesTable;
+export default LessonsTable;

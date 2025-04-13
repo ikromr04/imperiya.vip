@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Evaluation;
 use App\Models\Lesson;
 use App\Models\Mark;
 use Illuminate\Http\Request;
@@ -45,6 +44,13 @@ class LessonController extends Controller
         $startDate->addWeek();
       }
 
+      $justDates = collect($dates)->map(fn($item) => $item['date']);
+
+      Lesson::whereIn('date', $justDates)
+        ->where('hour', $request->hour)
+        ->where('grade_id', $request->grade_id)
+        ->delete();
+
       Lesson::insert($dates);
 
       $lessons = Lesson::selectBasic()
@@ -74,7 +80,7 @@ class LessonController extends Controller
     $lesson = Lesson::findOrFail($request->id);
 
     if ($request->has('all') && $request->all) {
-      $startDate = Carbon::parse($request->date);
+      $startDate = Carbon::parse($lesson->date);
       $endOfMay = Carbon::now()->setMonth(5)->endOfMonth();
 
       if ($startDate->greaterThan($endOfMay)) {
@@ -123,9 +129,10 @@ class LessonController extends Controller
   public function delete(Request $request)
   {
     $lesson = Lesson::findOrFail($request->id);
+    $week = $request->query('week', 0);
 
-    if ($request->has('all') && $request->all) {
-      $startDate = Carbon::parse($request->date);
+    if ($request->query('all') && $request->query('all') === 'true') {
+      $startDate = Carbon::parse($lesson->date);
       $endOfMay = Carbon::now()->setMonth(5)->endOfMonth();
 
       if ($startDate->greaterThan($endOfMay)) {
@@ -143,7 +150,7 @@ class LessonController extends Controller
         ->where('grade_id', $lesson->grade_id)
         ->delete();
 
-      $weekDates = $this->getCurrentWeekDates($request->query('week', 0));
+      $weekDates = $this->getCurrentWeekDates($week);
 
       $lessons = Lesson::selectBasic()
         ->whereIn('date', $weekDates)
@@ -154,7 +161,7 @@ class LessonController extends Controller
 
     $lesson->delete();
 
-    $weekDates = $this->getCurrentWeekDates($request->query('week', 0));
+    $weekDates = $this->getCurrentWeekDates($week);
 
     $lessons = Lesson::selectBasic()
       ->whereIn('date', $weekDates)

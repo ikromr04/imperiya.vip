@@ -1,34 +1,34 @@
 import Button from '@/components/ui/button';
 import TextField from '@/components/ui/formik-controls/text-field';
-import { ScheduleUpdateDTO } from '@/dto/schedules';
+import { LessonUpdateDTO } from '@/dto/lessons';
 import { useAppDispatch } from '@/hooks';
-import { updateScheduleAction } from '@/store/schedules-slice/schedules-api-actions';
-import { Schedule } from '@/types/schedules';
+import { updateLessonAction } from '@/store/lessons-slice/lessons-api-actions';
+import { Lesson } from '@/types/lessons';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { toast } from 'react-toastify';
 
-type ScheduleEditTopicFormProps = {
-  schedule: Schedule;
+type LessonsTopicEditFormProps = {
+  lesson: Lesson;
 };
 
-function ScheduleEditTopicForm({
-  schedule,
-}: ScheduleEditTopicFormProps): JSX.Element {
+function LessonsTopicEditForm({
+  lesson,
+}: LessonsTopicEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const initialValues: ScheduleUpdateDTO = {
-    id: schedule.id,
-    topic: schedule.topic,
-    homework: schedule.homework,
+  const initialValues: LessonUpdateDTO = {
+    id: lesson.id,
+    topic: lesson.topic,
+    homework: lesson.homework,
   };
 
   const onSubmit = async (
-    values: ScheduleUpdateDTO,
-    helpers: FormikHelpers<ScheduleUpdateDTO>
+    values: LessonUpdateDTO,
+    helpers: FormikHelpers<LessonUpdateDTO>
   ) => {
     helpers.setSubmitting(true);
 
-    await dispatch(updateScheduleAction({
+    await dispatch(updateLessonAction({
       dto: values,
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
       onFail: (message) => toast.success(message),
@@ -72,4 +72,4 @@ function ScheduleEditTopicForm({
   );
 }
 
-export default ScheduleEditTopicForm;
+export default LessonsTopicEditForm;

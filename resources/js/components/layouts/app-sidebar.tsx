@@ -49,6 +49,15 @@ function AppSidebar(): JSX.Element {
             <li>
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Lessons.Index}
+              >
+                <Icons.schedule className="navlink__icon" width={16} height={16} />
+                Расписание
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Users.Index}
               >
                 <Icons.users className="navlink__icon" width={16} height={16} />
@@ -58,22 +67,13 @@ function AppSidebar(): JSX.Element {
             {/* <li>
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Schedules.Index}
-              >
-                <Icons.schedule className="navlink__icon" width={16} height={16} />
-                Расписание
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Journal}
               >
                 <Icons.journal className="navlink__icon" width={16} height={16} />
                 Журнал
               </NavLink>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Classes.Index}
@@ -81,8 +81,8 @@ function AppSidebar(): JSX.Element {
                 <Icons.class className="navlink__icon" width={16} height={16} />
                 Классы
               </NavLink>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Lessons.Index}

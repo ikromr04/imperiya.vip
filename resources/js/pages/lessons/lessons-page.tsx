@@ -1,106 +1,45 @@
-import LessonsCreateForm from '@/components/forms/lessons/lessons-create-form';
-import LessonsEditForm from '@/components/forms/lessons/lessons-edit-form';
-import AppLayout from '@/components/layouts/app-layout';
-import Button from '@/components/ui/button';
-import DataTable from '@/components/ui/data-table/data-table';
-import Modal from '@/components/ui/modal';
+import React, { useEffect } from 'react';
 import Spinner from '@/components/ui/spinner';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
-import { getLessons } from '@/store/lessons-slice/lessons-selector';
-import { Lesson } from '@/types/lessons';
-import { ColumnDef } from '@tanstack/react-table';
-import React, { useEffect, useState } from 'react';
+import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
+import { getGrades } from '@/store/grades-slice/grades-selector';
+import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
+import { getUsers } from '@/store/users-slice/users-selector';
+import { getSubjects } from '@/store/subjects-slice/subjects-selector';
+import AppLayout from '@/components/layouts/app-layout';
+import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
+import LessonsTable from '@/components/lessons-table/lessons-table';
 
 function LessonsPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const lessons = useAppSelector(getLessons);
-  const [isCreating, setIsCreating] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [dto, setDTO] = useState<Lesson>({
-    id: 0,
-    name: '',
-  });
+  const grades = useAppSelector(getGrades);
+  const subjects = useAppSelector(getSubjects);
+  const users = useAppSelector(getUsers);
 
   useEffect(() => {
-    if (!lessons.data && !lessons.isFetching) dispatch(fetchLessonsAction());
-  }, [dispatch, lessons.data, lessons.isFetching]);
-
-  const columns: ColumnDef<Lesson>[] = [
-    {
-      id: 'name',
-      accessorKey: 'name',
-      header: 'Урок',
-      size: 1734,
-    },
-    {
-      id: 'actions',
-      accessorKey: 'actions',
-      header: 'Действия',
-      enableSorting: false,
-      size: 120,
-      cell: ({ row }) => (
-        <div className="flex justify-center items-center gap-1">
-          <Button
-            icon="edit"
-            variant="warning"
-            onClick={() => {
-              setIsUpdating(true);
-              setDTO({
-                id: row.original.id,
-                name: row.original.name,
-              });
-            }}
-          >
-            <span className="sr-only">Редактировать</span>
-          </Button>
-        </div>
-      ),
-    },
-  ];
+    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
+    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
+    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
+  }, [dispatch, grades.data, grades.isFetching, subjects.data, subjects.isFetching, users.data, users.isFetching]);
 
   return (
     <AppLayout>
-      <main className="pt-4 pb-40">
-        <header className="flex justify-between px-3 items-end mb-1">
-          <h1 className="title">
-            Уроки ({lessons.data?.length})
-          </h1>
-        </header>
+      <main className="py-2">
+        <h1 className="title mb-1 px-3">
+          Расписание занятий
+        </h1>
 
-        {lessons.data ? (
-          <DataTable
-            data={lessons.data}
-            columns={columns}
-            sortingState={[{
-              id: 'name',
-              desc: false,
-            }]}
-            columnPinningState={{
-              right: ['actions']
-            }}
-            actions={(
-              <Button
-                icon="add"
-                variant="success"
-                onClick={() => setIsCreating(true)}
-              >
-                <span className="sr-only md:not-sr-only">Добавить</span>
-              </Button>
-            )}
+        {(grades.data && subjects.data && users.data) ? (
+          <LessonsTable
+            grades={grades.data}
+            subjects={subjects.data}
+            users={users.data}
           />
         ) : (
           <Spinner className="w-8 h-8" />
         )}
       </main>
-
-      <Modal isOpen={isCreating}>
-        <LessonsCreateForm key={isCreating.toString()} setIsOpen={setIsCreating} />
-      </Modal>
-      <Modal isOpen={isUpdating}>
-        <LessonsEditForm key={dto.name} lesson={dto} setIsOpen={setIsUpdating} />
-      </Modal>
-    </AppLayout>
+    </AppLayout >
   );
 }
 

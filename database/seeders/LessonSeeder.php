@@ -47,8 +47,8 @@ class LessonSeeder extends Seeder
 
               foreach ($students as $student) {
                 Mark::create([
-                  'value' => $faker->randomElement(['н', 'у/п', '2', '3', '4', '5']),
-                  'user_id' => $student->user_id,
+                  'score_1' => $faker->randomElement([2, 3, 4, 5]),
+                  'student_id' => $student->user_id,
                   'lesson_id' => $lesson->id,
                 ]);
               }

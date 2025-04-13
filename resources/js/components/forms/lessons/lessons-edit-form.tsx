@@ -1,32 +1,44 @@
 import Button from '@/components/ui/button';
-import TextField from '@/components/ui/formik-controls/text-field';
+import Checkbox from '@/components/ui/checkbox/checkbox';
+import SelectField from '@/components/ui/formik-controls/select-field';
 import { LessonUpdateDTO } from '@/dto/lessons';
-import { useAppDispatch } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { updateLessonAction } from '@/store/lessons-slice/lessons-api-actions';
-import { Lesson } from '@/types/lessons';
+import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
+import { getSubjects } from '@/store/subjects-slice/subjects-selector';
+import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
+import { getUsers } from '@/store/users-slice/users-selector';
+import { Lessons } from '@/types/lessons';
 import { Form, Formik, FormikHelpers } from 'formik';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import * as Yup from 'yup';
-
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Обязательное поле.'),
-});
 
 type LessonsEditFormProps = {
-  lesson: Lesson;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  week: number;
+  dto: LessonUpdateDTO;
+  setDTO: Dispatch<SetStateAction<LessonUpdateDTO | null>>;
+  setLessons: Dispatch<SetStateAction<Lessons | null>>;
 };
 
 function LessonsEditForm({
-  lesson,
-  setIsOpen,
+  week = 0,
+  dto,
+  setDTO,
+  setLessons,
 }: LessonsEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const users = useAppSelector(getUsers);
+  const subjects = useAppSelector(getSubjects);
   const initialValues: LessonUpdateDTO = {
-    id: lesson.id,
-    name: lesson.name,
+    id: dto.id,
+    subject_id: dto.subject_id,
+    teacher_id: dto.teacher_id,
   };
+
+  useEffect(() => {
+    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
+    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
+  }, [dispatch, subjects.data, subjects.isFetching, users.data, users.isFetching]);
 
   const onSubmit = async (
     values: LessonUpdateDTO,
@@ -35,10 +47,12 @@ function LessonsEditForm({
     helpers.setSubmitting(true);
 
     await dispatch(updateLessonAction({
+      week,
       dto: values,
-      onSuccess: () => {
-        toast.success('Урок успешно обновлен.');
-        setIsOpen(false);
+      onSuccess: (lessons) => {
+        toast.success('Расписание успешно обновлен.');
+        setDTO(null);
+        setLessons(lessons);
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
       onFail: (message) => toast.success(message),
@@ -50,31 +64,48 @@ function LessonsEditForm({
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
       {({ isSubmitting }) => (
         <Form>
           <div className="flex items-center justify-between gap-2 mb-4">
-            <h3 className="title">Редактирование урока</h3>
+            <h3 className="title">Редактирование расписания</h3>
 
             <Button
               className="ml-auto"
               type="reset"
               variant="danger"
               icon="close"
-              onClick={() => setIsOpen(false)}
+              onClick={() => setDTO(null)}
             >
               <span className="sr-only">Отмена</span>
             </Button>
           </div>
 
-          <TextField
-            className="mb-4"
-            name="name"
-            label="Урок"
-            required
-          />
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
+            {subjects.data && (
+              <SelectField
+                name="subject_id"
+                label="Урок"
+                searchable
+                options={subjects.data.map((subject) => ({ value: subject.id, label: subject.name }))}
+              />
+            )}
+
+            {users.data && (
+              <SelectField
+                name="teacher_id"
+                label="Преподователь"
+                options={users.data.filter((user) => user.role === 'teacher').map((user) => ({ value: user.id, label: `${user.name} ${user.surname}` }))}
+              />
+            )}
+
+            <Checkbox
+              className="col-span-2"
+              name="all"
+              label="Редактировать везде"
+            />
+          </div>
 
           <div className="flex items-center justify-end gap-2 sm:col-span-2">
             <Button

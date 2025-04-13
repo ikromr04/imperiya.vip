@@ -15,6 +15,7 @@ import NotFoundPage from '@/pages/not-found-page';
 import RegisterLinksPage from '@/pages/auth/register-links-page/register-links-page';
 import RegisterPage from '../pages/auth/register-page/register-page';
 import UsersCreatePage from '@/pages/users/users-create-page';
+import LessonsPage from '@/pages/lessons/lessons-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -42,9 +43,9 @@ function App(): JSX.Element {
         <Route path={AppRoute.Auth.Register} element={<RegisterPage />} />
         <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
 
-        {/* <Route path={AppRoute.Journal} element={<JournalPage />} /> */}
+        <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} />
 
-        {/* <Route path={AppRoute.Schedules.Index} element={<SchedulesPage />} /> */}
+        {/* <Route path={AppRoute.Journal} element={<JournalPage />} /> */}
 
         <Route path={AppRoute.Users.Index} element={<UsersPage />} />
         <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />

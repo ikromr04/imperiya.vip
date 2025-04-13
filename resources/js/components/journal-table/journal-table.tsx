@@ -1,11 +1,11 @@
 import { AppRoute } from '@/const/routes';
 import { GradeId } from '@/types/grades';
-import { LessonId } from '@/types/lessons';
+import { LessonId } from '@/types/subjects';
 import { Users } from '@/types/users';
 import { ColumnDef } from '@tanstack/react-table';
 import React, { useEffect, useState } from 'react';
 import { generatePath, Link } from 'react-router-dom';
-import { Evaluation, Journal, Schedules } from '@/types/schedules';
+import { Evaluation, Journal, Schedules } from '@/types/lessons';
 import Spinner from '../ui/spinner';
 import { useAppDispatch } from '@/hooks';
 import { fetchJournalAction } from '@/store/schedules-slice/schedules-api-actions';
@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 import EvaluationCreate from './evaluation-create';
 import EvaluationEdit from './evaluation-edit';
-import ScheduleEditTopicForm from '../forms/schedules/schedules-edit-topic-form';
+import ScheduleEditTopicForm from '../forms/lessons/lessons-topic-edit-form';
 
 type JournalTableProps = {
   students: Users;
