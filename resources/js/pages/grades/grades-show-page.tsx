@@ -84,13 +84,13 @@ function GradesShowPage(): JSX.Element {
           </div>
 
           <ul className="box__body flex flex-wrap gap-1">
-            {students?.map(({ id, name }) => (
+            {students?.map(({ id, surname, name }) => (
               <Link
                 key={id}
                 className="py-1 px-2 border rounded bg-gray-100 hover:bg-blue-50"
                 to={generatePath(AppRoute.Users.Show, { id })}
               >
-                {name}
+                {surname} {name}
               </Link>
             ))}
           </ul>

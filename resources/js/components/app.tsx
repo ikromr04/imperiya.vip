@@ -17,6 +17,8 @@ import RegisterPage from '../pages/auth/register-page/register-page';
 import UsersCreatePage from '@/pages/users/users-create-page';
 import LessonsPage from '@/pages/lessons/lessons-page';
 import JournalPage from '@/pages/journal-page';
+import GradesPage from '@/pages/grades/grades-page';
+import GradesShowPage from '@/pages/grades/grades-show-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -53,8 +55,8 @@ function App(): JSX.Element {
         <Route path={AppRoute.Users.Create} element={<UsersCreatePage />} />
         {/* <Route path={AppRoute.Users.Lessons} element={<UsersShowPage />} /> */}
 
-        {/* <Route path={AppRoute.Classes.Index} element={<GradesPage />} /> */}
-        {/* <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} /> */}
+        <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
+        <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />
 
         {/* <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} /> */}
 

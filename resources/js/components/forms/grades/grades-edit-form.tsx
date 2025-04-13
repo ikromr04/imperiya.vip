@@ -113,7 +113,7 @@ function GradesEditForm({
             multiple
             searchable
             label={`Ученики (${values.students.length})`}
-            options={users.data?.filter((user) => user.student).map((student) => ({ value: student.id, label: student.name })) || []}
+            options={users.data?.filter((user) => user.student).map((student) => ({ value: student.id, label: `${student.surname} ${student.name}` })) || []}
           />
 
           <div className="flex items-center justify-end gap-2 sm:col-span-2">

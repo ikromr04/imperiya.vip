@@ -63,7 +63,7 @@ function GradesPage(): JSX.Element {
               className="py-1 px-2 border rounded bg-gray-100 hover:bg-blue-50 min-w-max"
               to={generatePath(AppRoute.Users.Show, { id: user.id })}
             >
-              {user.name}
+              {user.surname} {user.name}
             </Link>
           ))}
         </div>
