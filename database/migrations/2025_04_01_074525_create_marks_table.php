@@ -16,9 +16,9 @@ return new class extends Migration
       $table->tinyInteger('score_1')->unsigned()->nullable();
       $table->tinyInteger('score_2')->unsigned()->nullable();
       $table->boolean('attendance')->nullable();
+      $table->text('comment')->nullable();
       $table->foreignId('student_id')->constrained('users')->cascadeOnDelete();
       $table->foreignId('lesson_id')->constrained('lessons')->cascadeOnDelete();
-      $table->text('comment')->nullable();
       $table->timestamps();
     });
   }

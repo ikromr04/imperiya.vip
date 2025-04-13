@@ -58,21 +58,21 @@ function AppSidebar(): JSX.Element {
             <li>
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Journal}
+              >
+                <Icons.journal className="navlink__icon" width={16} height={16} />
+                Журнал
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Users.Index}
               >
                 <Icons.users className="navlink__icon" width={16} height={16} />
                 Пользователи
               </NavLink>
             </li>
-            {/* <li>
-              <NavLink
-                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Journal}
-              >
-                <Icons.journal className="navlink__icon" width={16} height={16} />
-                Журнал
-              </NavLink>
-            </li> */}
             {/* <li>
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
@@ -88,7 +88,7 @@ function AppSidebar(): JSX.Element {
                 to={AppRoute.Lessons.Index}
               >
                 <Icons.lessons className="navlink__icon" width={16} height={16} />
-                Уроки
+                Занятия
               </NavLink>
             </li> */}
             <li>

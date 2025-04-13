@@ -1,37 +1,34 @@
 import { useAppDispatch } from '@/hooks';
-import { storeEvaluationAction } from '@/store/schedules-slice/schedules-api-actions';
-import { ScheduleId } from '@/types/lessons';
-import { UserId } from '@/types/users';
+import { updateMarkAction } from '@/store/marks-slice/marks-api-actions';
+import { Mark } from '@/types/marks';
 import classNames from 'classnames';
 import React, { BaseSyntheticEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 
-type EvaluationCreateProps = {
-  userId: UserId;
-  scheduleId: ScheduleId;
+type MarkEditProps = {
+  mark: Mark;
 }
 
-function EvaluationCreate({
-  userId,
-  scheduleId,
-}: EvaluationCreateProps): JSX.Element {
+function MarkEdit({
+  mark,
+}: MarkEditProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [value, setValue] = useState(mark.score1);
 
   const onBlur = (evt: BaseSyntheticEvent) => {
-    setIsSubmitting(true);
+    setIsSubmitting(evt.target.value !== mark.score1);
 
-    if (evt.target.value) dispatch(storeEvaluationAction({
+    if ((evt.target.value !== mark.score1)) dispatch(updateMarkAction({
       dto: {
-        value: evt.target.value.toLowerCase(),
-        user_id: userId,
-        schedule_id: scheduleId,
+        id: mark.id,
+        score_1: evt.target.value.toLowerCase(),
       },
       onSuccess: () => setIsSubmitting(false),
       onFail: (message) => {
         toast.error(message);
         setIsSubmitting(false);
-        evt.target.value = '';
+        setValue(mark.score1);
       },
     }));
   };
@@ -42,9 +39,11 @@ function EvaluationCreate({
         'flex items-center justify-center w-[39px] h-[38px] text-center min-w-0 p-2 -m-2 bg-transparent',
         isSubmitting && 'opacity-60 pointer-events-none',
       )}
+      value={value}
+      onChange={(evt: BaseSyntheticEvent) => setValue(evt.target.value)}
       onBlur={onBlur}
     />
   );
 }
 
-export default EvaluationCreate;
+export default MarkEdit;

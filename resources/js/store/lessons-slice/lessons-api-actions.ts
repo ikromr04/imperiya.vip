@@ -7,7 +7,6 @@ import { GradeId } from '@/types/grades';
 import { Lessons } from '@/types/lessons';
 import { LessonDeleteDTO, LessonStoreDTO, LessonUpdateDTO } from '@/dto/lessons';
 import { SubjectId } from '@/types/subjects';
-import { MarkStoreDTO, MarkUpdateDTO } from '@/dto/marks';
 
 export const fetchLessonsAction = createAsyncThunk<void, {
   week: number;
@@ -108,58 +107,8 @@ export const fetchJournalAction = createAsyncThunk<void, {
 }>(
   'journal/fetch',
   async ({ subjectId, gradeId, onSuccess }, { extra: api }) => {
-    const { data } = await api.get<Lessons>(`${APIRoute.Journal.Index}?subject=${subjectId}&grade=${gradeId}`);
+    const { data } = await api.get<Lessons>(`${APIRoute.Journal.Index}?subject_id=${subjectId}&grade_id=${gradeId}`);
 
     onSuccess(data);
-  },
-);
-
-export const storeMarkAction = createAsyncThunk<void, {
-  dto: MarkStoreDTO,
-  onSuccess?: () => void,
-  onValidationError?: (error: ValidationError) => void,
-  onFail?: (message: string) => void,
-}, {
-  extra: AxiosInstance,
-  rejectWithValue: ValidationError,
-}>(
-  'marks/store',
-  async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
-    try {
-      await api.post(APIRoute.Marks.Index, dto);
-      if (onSuccess) onSuccess();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
-      if (!error.response) throw err;
-      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
-      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
-      return rejectWithValue(error.response.data);
-    }
-  },
-);
-
-export const updateMarkAction = createAsyncThunk<void, {
-  dto: MarkUpdateDTO,
-  onSuccess?: () => void,
-  onValidationError?: (error: ValidationError) => void,
-  onFail?: (message: string) => void,
-}, {
-  extra: AxiosInstance,
-  rejectWithValue: ValidationError,
-}>(
-  'marks/update',
-  async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
-    try {
-      await api.put(APIRoute.Marks.Index, dto);
-      if (onSuccess) onSuccess();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
-      if (!error.response) throw err;
-      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
-      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
-      return rejectWithValue(error.response.data);
-    }
   },
 );

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lesson;
-use App\Models\Mark;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
@@ -174,38 +173,14 @@ class LessonController extends Controller
   {
     $lessons = Lesson::selectBasic()
       ->orderBy('date')
-      ->where('subject_id', $request->subject)
-      ->where('grade_id', $request->grade)
+      ->where('subject_id', $request->query('subject_id'))
+      ->where('grade_id', $request->query('grade_id'))
       ->with([
-        'marks' => fn($query) => $query->select(
-          'id',
-          'value',
-          'user_id',
-          'lesson_id',
-        ),
+        'marks' => fn($query) => $query->selectBasic(),
       ])
       ->get();
 
     return response()->json($lessons, 200);
-  }
-
-  public function storeMark(Request $request)
-  {
-    $mark = Mark::create($request->only([
-      'value',
-      'user_id',
-      'lesson_id',
-    ]));
-
-    return response()->json($mark, 201);
-  }
-
-  public function updateMark(Request $request)
-  {
-    $mark = Mark::findOrFail($request->id)
-      ->update($request->only(['value']));
-
-    return response()->json($mark, 201);
   }
 
   public static function getCurrentWeekDates(int $week)

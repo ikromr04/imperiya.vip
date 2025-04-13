@@ -3,15 +3,18 @@ import { MarkId } from '@/types/marks';
 import { UserId } from '@/types/users';
 
 export type MarkStoreDTO = {
-  student_id: UserId;
-  lesson_id: LessonId;
-  score1?: number;
-  score2?: number;
+  score_1?: number;
+  score_2?: number;
   attendance?: boolean;
   comment?: string;
+  student_id: UserId;
+  lesson_id: LessonId;
 };
 
 export type MarkUpdateDTO = {
   id: MarkId;
-  value: string;
+  score_1?: number;
+  score_2?: number;
+  attendance?: boolean;
+  comment?: string;
 };

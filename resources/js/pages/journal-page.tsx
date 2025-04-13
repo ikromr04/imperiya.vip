@@ -4,10 +4,12 @@ import SelectField from '@/components/ui/formik-controls/select-field';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { getGrades } from '@/store/grades-slice/grades-selector';
-import { fetchLessonsAction } from '@/store/subjects-slice/subjects-api-actions';
-import { getLessons } from '@/store/subjects-slice/subjects-selector';
+import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
+import { getSubjects } from '@/store/subjects-slice/subjects-selector';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
+import { GradeId } from '@/types/grades';
+import { SubjectId } from '@/types/subjects';
 import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 
@@ -15,21 +17,24 @@ function JournalPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const grades = useAppSelector(getGrades);
   const users = useAppSelector(getUsers);
-  const lessons = useAppSelector(getLessons);
+  const subjects = useAppSelector(getSubjects);
   const [gradeId, setGradeId] = useState(0);
-  const [lessonId, setLessonId] = useState(0);
+  const [subjectId, setSubjectId] = useState(0);
 
   useEffect(() => {
     if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
-    if (!lessons.data && !lessons.isFetching) dispatch(fetchLessonsAction());
+    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
     if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-  }, [dispatch, grades.data, grades.isFetching, lessons.data, lessons.isFetching, users.data, users.isFetching]);
+  }, [dispatch, grades.data, grades.isFetching, subjects.data, subjects.isFetching, users.data, users.isFetching]);
 
   const onSubmit = async (
-    values: { gradeId: number; lessonId: number; },
+    values: {
+      gradeId: GradeId;
+      subjectId: SubjectId;
+    },
   ) => {
     setGradeId(+values.gradeId);
-    setLessonId(+values.lessonId);
+    setSubjectId(+values.subjectId);
   };
 
   return (
@@ -39,7 +44,7 @@ function JournalPage(): JSX.Element {
           <h1 className="title">Журнал</h1>
 
           <Formik
-            initialValues={{ gradeId, lessonId }}
+            initialValues={{ gradeId, subjectId }}
             onSubmit={onSubmit}
           >
             {({ handleSubmit }) => (
@@ -53,12 +58,12 @@ function JournalPage(): JSX.Element {
                     onChange={() => handleSubmit()}
                   />
                 )}
-                {lessons.data && (
+                {subjects.data && (
                   <SelectField
                     inputClassname="!bg-white"
                     placeholder="Урок"
-                    options={lessons.data.map((lesson) => ({ value: lesson.id.toString(), label: lesson.name }))}
-                    name="lessonId"
+                    options={subjects.data.map((subject) => ({ value: subject.id.toString(), label: subject.name }))}
+                    name="subjectId"
                     onChange={() => handleSubmit()}
                     searchable
                   />
@@ -68,11 +73,11 @@ function JournalPage(): JSX.Element {
           </Formik>
         </header>
 
-        {(gradeId > 0 && lessonId > 0) && users.data && grades.data && lessons.data && (
+        {(gradeId > 0 && subjectId > 0) && users.data && grades.data && subjects.data && (
           <JournalTable
-            key={`${lessonId.toString()}${gradeId.toString()}`}
+            key={`${subjectId.toString()}${gradeId.toString()}`}
             students={users.data.filter((user) => user.student?.gradeId === gradeId)}
-            lessonId={lessonId}
+            subjectId={subjectId}
             gradeId={gradeId}
           />
         )}

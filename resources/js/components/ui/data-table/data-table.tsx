@@ -227,9 +227,11 @@ export default function DataTable<T>({
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               <th
-                className="p-2 min-w-10 w-10 max-w-10 text-start bg-gray-100 cursor-pointer group"
+                className="relative p-2 min-w-10 w-10 max-w-10 text-start bg-gray-100 cursor-pointer group"
               >
-                №
+                <span className="absolute left-0 top-0 w-full h-full flex items-end p-2">
+                  №
+                </span>
               </th>
               {headerGroup.headers.map((header) => (
                 <th
@@ -257,14 +259,13 @@ export default function DataTable<T>({
                       header.column.columnDef.meta?.thClass,
                     )}
                   >
-                    <span className="text-start truncate select-none">
-                      {header.column.columnDef.meta?.renderHeader ? (
-                        header.column.columnDef.meta?.renderHeader(header.column)
-                      ) : (
-                        flexRender(header.column.columnDef.header, header.getContext())
-                      )
-                      }
-                    </span>
+                    {header.column.columnDef.meta?.renderHeader ? (
+                      header.column.columnDef.meta?.renderHeader(header.column)
+                    ) : (
+                      <span className="text-start truncate select-none">
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      </span>
+                    )}
                     {header.column.getCanSort() && renderSortingIcon(header.column.getIsSorted())}
 
                     <ColumnFilter

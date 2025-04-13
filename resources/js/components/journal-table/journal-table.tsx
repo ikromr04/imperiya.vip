@@ -1,59 +1,60 @@
 import { AppRoute } from '@/const/routes';
 import { GradeId } from '@/types/grades';
-import { LessonId } from '@/types/subjects';
 import { Users } from '@/types/users';
 import { ColumnDef } from '@tanstack/react-table';
 import React, { useEffect, useState } from 'react';
 import { generatePath, Link } from 'react-router-dom';
-import { Evaluation, Journal, Schedules } from '@/types/lessons';
+import { Journal, Lessons } from '@/types/lessons';
 import Spinner from '../ui/spinner';
 import { useAppDispatch } from '@/hooks';
-import { fetchJournalAction } from '@/store/schedules-slice/schedules-api-actions';
 import DataTable from '../ui/data-table/data-table';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
-import EvaluationCreate from './evaluation-create';
-import EvaluationEdit from './evaluation-edit';
-import ScheduleEditTopicForm from '../forms/lessons/lessons-topic-edit-form';
+import { SubjectId } from '@/types/subjects';
+import { fetchJournalAction } from '@/store/lessons-slice/lessons-api-actions';
+import { Mark } from '@/types/marks';
+import MarkCreate from './mark-create';
+import LessonsTopicEditForm from '../forms/lessons/lessons-topic-edit-form';
+import MarkEdit from './mark-edit';
 
 type JournalTableProps = {
   students: Users;
-  lessonId: LessonId;
+  subjectId: SubjectId;
   gradeId: GradeId;
 };
 
 function JournalTable({
   students,
-  lessonId,
+  subjectId,
   gradeId,
 }: JournalTableProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [journal, setJournal] = useState<Journal[] | null>(null);
-  const [schedules, setSchedules] = useState<Schedules>([]);
+  const [lessons, setLessons] = useState<Lessons>([]);
 
   useEffect(() => {
     if (!journal) dispatch(fetchJournalAction({
-      lessonId,
+      subjectId,
       gradeId,
-      onSuccess: (schedules) => {
-        setSchedules(schedules);
-        setJournal(students.map((user) => {
-          const dates = schedules.reduce((acc, item) => {
-            const evaluation = item.evaluations?.find((evaluation) => evaluation.user_id === user.id);
-            acc[item.date] = evaluation || '';
+      onSuccess: (lessons) => {
+        setLessons(lessons);
+        setJournal(students.map((student) => {
+          const dates = lessons.reduce((acc, item) => {
+            const mark = item.marks?.find((mark) => mark.studentId === student.id);
+            acc[item.date] = mark || '';
 
             return acc;
           }, {} as Journal);
 
           return {
             ...dates,
-            id: user.id,
-            name: user.name,
+            id: student.id,
+            name: `${student.surname} ${student.name}`,
           };
         }));
       },
     }));
-  }, [dispatch, gradeId, journal, lessonId, students]);
+  }, [dispatch, gradeId, journal, students, subjectId]);
 
   if (!journal) {
     return <Spinner className="w-8 h-8" />;
@@ -64,7 +65,7 @@ function JournalTable({
       id: 'name',
       accessorKey: 'name',
       header: 'ФИО',
-      size: 320,
+      size: 240,
       cell: ({ row }) => (
         <Link to={generatePath(AppRoute.Users.Show, { id: row.original.id })}>
           {row.original.name}
@@ -75,23 +76,23 @@ function JournalTable({
         thClass: 'items-end h-24',
       }
     },
-    ...schedules.reduce((acc, item) => {
+    ...lessons.reduce((acc, item) => {
       acc.push({
         id: item.date,
         accessorKey: item.date,
         header: item.date,
         size: 40,
         cell: ({ row }) => {
-          const evaluation: Evaluation = row.original[item.date] as Evaluation;
+          const mark: Mark = row.original[item.date] as Mark;
 
-          if (!evaluation) {
+          if (!mark) {
             if (dayjs(item.date) > dayjs()) {
               return null;
             }
             return (
-              <EvaluationCreate
-                userId={row.original.id}
-                scheduleId={item.id}
+              <MarkCreate
+                studentId={row.original.id}
+                lessonId={item.id}
               />
             );
           }
@@ -100,7 +101,7 @@ function JournalTable({
             <div className={classNames(
               'flex items-center justify-center -m-2 p-2',
             )}>
-              <EvaluationEdit evaluation={evaluation} />
+              <MarkEdit mark={mark} />
             </div>
           );
         },
@@ -110,13 +111,13 @@ function JournalTable({
           thClass: 'items-end font-medium',
           renderHeader: () => (
             <span className="relative flex items-end w-6 h-20">
-              <span className="absolute left-1/2 top-[84%] -rotate-90 origin-left">
+              <span className="absolute w-24 h-10 top-[calc(100%+8px)] -left-2 -rotate-90 origin-top-left flex items-center justify-center">
                 {item.date}
               </span>
             </span>
           ),
           renderFilter: () => (
-            <ScheduleEditTopicForm schedule={item} />
+            <LessonsTopicEditForm lesson={item} />
           ),
         }
       });

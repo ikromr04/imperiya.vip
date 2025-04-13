@@ -16,7 +16,7 @@ class Lesson extends Model
     ];
   }
 
-  public function evaluations(): HasMany
+  public function marks(): HasMany
   {
     return $this->hasMany(Mark::class);
   }
@@ -27,17 +27,31 @@ class Lesson extends Model
       'id',
       'date',
       'hour',
+      'grade_id',
+      'subject_id',
+      'teacher_id',
       'topic',
       'homework',
-      'subject_id as subjectId',
-      'grade_id as gradeId',
-      'teacher_id as teacherId',
     );
   }
 
   public function toArray()
   {
-    $array = parent::toArray();
-    return array_filter($array, fn($value) => $value);
+    $array = array_filter(parent::toArray(), fn($value) => $value);
+
+    $map = [
+      'grade_id' => 'gradeId',
+      'subject_id' => 'subjectId',
+      'teacher_id' => 'teacherId',
+    ];
+
+    foreach ($map as $snake => $camel) {
+      if (isset($array[$snake])) {
+        $array[$camel] = $array[$snake];
+        unset($array[$snake]);
+      }
+    }
+
+    return $array;
   }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\MarkController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\ProfessionController;
@@ -48,6 +49,10 @@ Route::middleware('auth:sanctum')->group(function () {
   });
 
   Route::get('/journal', [LessonController::class, 'journal']);
-  Route::post('/evaluations', [LessonController::class, 'storeEvaluation']);
-  Route::put('/evaluations', [LessonController::class, 'updateEvaluation']);
+
+  Route::prefix('marks')->group(function () {
+    Route::post('/', [MarkController::class, 'store']);
+    Route::put('/', [MarkController::class, 'update']);
+  });
+
 });
