@@ -40,6 +40,8 @@ class LessonSeeder extends Seeder
               'grade_id' => $gradeId,
               'subject_id' => $subjectId,
               'teacher_id' => $teacherId,
+              'topic' => $faker->text($faker->numberBetween(10, 20)),
+              'homework' => $faker->text($faker->numberBetween(10, 20)),
             ]);
 
             if ($startDate->lessThanOrEqualTo(Carbon::today())) {
@@ -51,7 +53,7 @@ class LessonSeeder extends Seeder
                   'attendance' => $faker->randomElement([true, true, true, true, false, true, false, true, null]),
                   'student_id' => $student->user_id,
                   'lesson_id' => $lesson->id,
-                  'comment' => $faker->text(120),
+                  'comment' => $faker->text($faker->numberBetween(40, 100)),
                 ]);
               }
             }

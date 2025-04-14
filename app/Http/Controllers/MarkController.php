@@ -8,6 +8,17 @@ use Illuminate\Http\JsonResponse;
 
 class MarkController extends Controller
 {
+  public function index(Request $request): JsonResponse
+  {
+    $user = $request->user();
+
+    $marks = Mark::where('student_id', $user->id)
+      ->whereIn('lesson_id', $request->lessons)
+      ->get();
+
+    return response()->json($marks, 200);
+  }
+
   public function store(Request $request): JsonResponse
   {
     $mark = Mark::create($request->only([

@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\ValidationException;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -72,7 +75,7 @@ class UserUpdateRequest extends FormRequest
       'email.max' => 'Поле "Email" не должно превышать 255 символов.',
 
       'address.array' => 'Поле "Адрес" должно быть обектом.',
-      'address.physical_address.required_with' => 'Поле "Физический адрес" обязательно при наличии адреса.',
+      'address.physical_address.required_with' => 'Поле "Фактический адрес" обязательно при наличии адреса.',
       'address.region.required_with' => 'Поле "Район" обязательно при наличии адреса.',
 
       'social_link.array' => 'Поле "Социальные сети" должно быть массивом.',
@@ -86,5 +89,56 @@ class UserUpdateRequest extends FormRequest
       'whatsapp.code.required_with' => 'Поле "Код WhatsApp" обязательно.',
       'whatsapp.numbers.required_with' => 'Поле "Номер WhatsApp" обязательно.',
     ];
+  }
+
+
+  protected function prepareForValidation()
+  {
+    $this->replace($this->trimRecursive($this->all()));
+  }
+
+  private function trimRecursive($value)
+  {
+    if (is_array($value)) {
+      return array_map([$this, 'trimRecursive'], $value);
+    }
+
+    return is_string($value) ? trim($value) : $value;
+  }
+  protected function failedValidation(Validator $validator)
+  {
+    $rawErrors = (new ValidationException($validator))->errors();
+    $structuredErrors = [];
+
+    foreach ($rawErrors as $key => $messages) {
+      $segments = explode('.', $key);
+      $ref = &$structuredErrors;
+
+      foreach ($segments as $i => $segment) {
+        if (is_numeric($segment)) {
+          $segment = (int) $segment;
+          if (!isset($ref[$segment])) {
+            $ref[$segment] = [];
+          }
+          $ref = &$ref[$segment];
+        } elseif ($i === count($segments) - 1) {
+          if (!isset($ref[$segment])) {
+            $ref[$segment] = $messages;
+          } else {
+            $ref[$segment] = array_merge($ref[$segment], $messages);
+          }
+        } else {
+          if (!isset($ref[$segment])) {
+            $ref[$segment] = [];
+          }
+          $ref = &$ref[$segment];
+        }
+      }
+    }
+
+    throw new HttpResponseException(response()->json([
+      'message' => 'Validation failed.',
+      'errors' => $structuredErrors,
+    ], 422));
   }
 }

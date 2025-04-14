@@ -11,24 +11,19 @@ import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import React, { useEffect } from 'react';
 import AppLayout from '@/components/layouts/app-layout';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
 import Header from './header';
-import { User } from '@/types/users';
 
-type SuperadminProfileProps = {
-  user: User;
-};
-
-function SuperadminProfile({
-  user,
-}: SuperadminProfileProps): JSX.Element {
+function SuperadminProfile(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
+  const user = useAppSelector(getAuthUser);
 
   useEffect(() => {
     if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-  }, [dispatch, user, users.data, users.isFetching]);
+  }, [dispatch, users.data, users.isFetching]);
 
-  if (!users.data) {
+  if (!users.data || !user) {
     return (
       <AppLayout>
         <Spinner className="w-8 h-8 m-2" />

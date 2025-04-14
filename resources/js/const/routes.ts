@@ -7,10 +7,14 @@ export const AppRoute = {
     Register: '/auth/register',
     RegisterLinks: '/auth/register/links',
     Lessons: '/auth/lessons',
+    Diary: '/auth/diary',
   },
   Journal: '/journal',
   Lessons: {
     Index: '/lessons',
+  },
+  Diary: {
+    Index: '/diary',
   },
   Users: {
     Index: '/users',
@@ -44,6 +48,7 @@ export const APIRoute = {
     Register: '/auth/register',
     RegisterLinks: '/auth/register/links',
     RegisterLink: '/auth/register/links/:id',
+    Diary: '/auth/diary',
   },
   Users: {
     Index: '/users',
@@ -76,5 +81,6 @@ export const APIRoute = {
   },
   Marks: {
     Index: '/marks',
+    Diary: '/marks/diary',
   },
 };

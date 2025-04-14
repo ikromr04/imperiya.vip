@@ -58,6 +58,18 @@ function AppSidebar(): JSX.Element {
               </NavLink>
             </li>
 
+            {authUser?.role === 'student' && (
+              <li>
+                <NavLink
+                  className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                  to={AppRoute.Diary.Index}
+                >
+                  <Icons.subject className="navlink__icon" width={16} height={16} />
+                  Дневник
+                </NavLink>
+              </li>
+            )}
+
             {authUser?.role === 'superadmin' && (
               <>
                 <li>
@@ -93,7 +105,7 @@ function AppSidebar(): JSX.Element {
                     to={AppRoute.Subjects.Index}
                   >
                     <Icons.subject className="navlink__icon" width={16} height={16} />
-                    Занятия
+                    Предметы
                   </NavLink>
                 </li>
                 <li>

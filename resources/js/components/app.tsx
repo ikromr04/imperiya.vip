@@ -21,6 +21,8 @@ import GradesPage from '@/pages/grades/grades-page';
 import GradesShowPage from '@/pages/grades/grades-show-page';
 import ProfileLessonsPage from '@/pages/auth/profile-page/profile-lessons-page';
 import UsersLessonsPage from '@/pages/users/users-show-page/users-lessons-page';
+import ProfileDiaryPage from '@/pages/auth/profile-page/profile-diary-page';
+import DiaryPage from '@/pages/diary-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -44,12 +46,15 @@ function App(): JSX.Element {
         <Route path={AppRoute.Auth.Login} element={<LoginPage />} />
         <Route path={AppRoute.Auth.ForgotPassword} element={<ForgotPasswordPage />} />
         <Route path={AppRoute.Auth.ResetPassword} element={<ResetPasswordPage />} />
-        <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
         <Route path={AppRoute.Auth.Register} element={<RegisterPage />} />
         <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
+        <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
         <Route path={AppRoute.Auth.Lessons} element={<ProfileLessonsPage />} />
+        <Route path={AppRoute.Auth.Diary} element={<ProfileDiaryPage />} />
 
         <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} />
+
+        <Route path={AppRoute.Diary.Index} element={<DiaryPage />} />
 
         <Route path={AppRoute.Journal} element={<JournalPage />} />
 

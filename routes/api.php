@@ -19,6 +19,7 @@ Route::get('/grades', [GradeController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function () {
   Route::get('/subjects', [SubjectController::class, 'index']);
   Route::get('/lessons', [LessonController::class, 'index']);
+  Route::post('/marks/diary', [MarkController::class, 'index']);
 
   Route::middleware('ability:student')->group(function () {
     Route::get('/users/student', [UserController::class, 'student']);

@@ -36,7 +36,7 @@ function StudentLessonItem({
       </span>
       {teacher && (
         <div className="flex justify-center text-sm items-baseline">
-          {teacher.surname} {teacher.name}
+          ({teacher.surname} {teacher.name})
         </div>
       )}
     </div>
