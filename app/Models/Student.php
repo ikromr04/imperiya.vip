@@ -36,23 +36,40 @@ class Student extends Model
     return $this->belongsTo(Grade::class);
   }
 
-  public function toArray()
-  {
-    $array = parent::toArray();
-    return array_filter($array, fn($value) => $value);
-  }
-
   public function scopeSelectBasic($query)
   {
     return $query->select(
       'id',
       'user_id',
-      'grade_id as gradeId',
-      'mother_id as motherId',
-      'father_id as fatherId',
-      'admission_date as admissionDate',
-      'previous_schools as previousSchools',
-      'medical_recommendations as medicalRecommendations',
+      'grade_id',
+      'mother_id',
+      'father_id',
+      'admission_date',
+      'previous_schools',
+      'medical_recommendations',
     );
+  }
+
+  public function toArray()
+  {
+    $array = array_filter(parent::toArray(), fn($value) => $value);
+
+    $map = [
+      'grade_id' => 'gradeId',
+      'mother_id' => 'motherId',
+      'father_id' => 'fatherId',
+      'admission_date' => 'admissionDate',
+      'previous_schools' => 'previousSchools',
+      'medical_recommendations' => 'medicalRecommendations',
+    ];
+
+    foreach ($map as $snake => $camel) {
+      if (isset($array[$snake])) {
+        $array[$camel] = $array[$snake];
+        unset($array[$snake]);
+      }
+    }
+
+    return $array;
   }
 }

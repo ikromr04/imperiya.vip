@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Users } from '@/types/users';
+import { UserId, Users } from '@/types/users';
 import { SliceName } from '@/const/store';
 import {
   deleteGradeAction,
@@ -9,21 +9,53 @@ import {
 import {
   deleteUserAction,
   deleteUserAvatarAction,
+  fetchStudentAction,
   fetchUsersAction,
   storeUserAction,
   updateUserAction,
   updateUserAvatarAction,
 } from './users-api-actions';
+import { Grade } from '@/types/grades';
+
+export type Student = {
+  mother: {
+    id: UserId;
+    name: string;
+    surname: string;
+    patronymic: string;
+  };
+  father: {
+    id: UserId;
+    name: string;
+    surname: string;
+    patronymic: string;
+  };
+  grade: Grade;
+  teachers: {
+    id: UserId;
+    name: string;
+    surname: string;
+    patronymic: string;
+  }[];
+};
 
 export type UsersSlice = {
   users: {
     data: Users | null;
     isFetching: boolean;
   };
+  student: {
+    data: Student | null;
+    isFetching: boolean;
+  };
 }
 
 const initialState: UsersSlice = {
   users: {
+    data: null,
+    isFetching: false,
+  },
+  student: {
     data: null,
     isFetching: false,
   },
@@ -45,6 +77,18 @@ export const usersSlice = createSlice({
       .addCase(fetchUsersAction.rejected, (state) => {
         state.users.isFetching = true;
       })
+
+      .addCase(fetchStudentAction.pending, (state) => {
+        state.student.isFetching = true;
+      })
+      .addCase(fetchStudentAction.fulfilled, (state, action) => {
+        state.student.data = action.payload;
+        state.student.isFetching = false;
+      })
+      .addCase(fetchStudentAction.rejected, (state) => {
+        state.student.isFetching = true;
+      })
+
       .addCase(storeUserAction.fulfilled, (state, action) => {
         if (state.users.data) {
           state.users.data = [action.payload, ...state.users.data];

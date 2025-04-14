@@ -6,6 +6,7 @@ import { ValidationError } from '@/types/validation-error';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
 import { generatePath } from 'react-router-dom';
+import { Student } from './users-slice';
 
 export const fetchUsersAction = createAsyncThunk<Users, undefined, {
   extra: AxiosInstance
@@ -13,6 +14,17 @@ export const fetchUsersAction = createAsyncThunk<Users, undefined, {
   'users/fetch',
   async (_arg, { extra: api }) => {
     const { data } = await api.get<Users>(APIRoute.Users.Index);
+
+    return data;
+  },
+);
+
+export const fetchStudentAction = createAsyncThunk<Student, undefined, {
+  extra: AxiosInstance
+}>(
+  'users/fetchStudent',
+  async (_arg, { extra: api }) => {
+    const { data } = await api.get<Student>(APIRoute.Users.Student);
 
     return data;
   },

@@ -10,13 +10,14 @@ import { SubjectId } from '@/types/subjects';
 
 export const fetchLessonsAction = createAsyncThunk<void, {
   week: number;
+  gradeId?: GradeId;
   onSuccess: (lessons: Lessons) => void,
 }, {
   extra: AxiosInstance
 }>(
   'lessons/fetch',
-  async ({ week = 0, onSuccess }, { extra: api }) => {
-    const { data } = await api.get<Lessons>(`${APIRoute.Lessons.Index}?week=${week}`);
+  async ({ week = 0, gradeId, onSuccess }, { extra: api }) => {
+    const { data } = await api.get<Lessons>(`${APIRoute.Lessons.Index}?week=${week}${gradeId ? `&grade_id=${gradeId}` : ''}`);
 
     onSuccess(data);
   },

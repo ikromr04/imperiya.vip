@@ -6,10 +6,7 @@ import LessonHour from '@/components/lesson-hour';
 import { Icons } from '@/components/icons';
 import { capitalizeString, getCurrentWeekDates } from '@/utils';
 import { Hour } from '@/const/lessons';
-import { Grades } from '@/types/grades';
-import { Subjects } from '@/types/subjects';
-import { Users } from '@/types/users';
-import { useAppDispatch } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import Spinner from '../ui/spinner';
 import { LessonDeleteDTO, LessonStoreDTO, LessonUpdateDTO } from '@/dto/lessons';
 import { Lessons } from '@/types/lessons';
@@ -18,19 +15,18 @@ import LessonsItem from './lessons-item';
 import LessonsEditForm from '@/components/forms/lessons/lessons-edit-form';
 import LessonsDeleteForm from '@/components/forms/lessons/lessons-delete-form';
 import LessonsCreateForm from '../forms/lessons/lessons-create-form';
+import { getSubjects } from '@/store/subjects-slice/subjects-selector';
+import { getUsers } from '@/store/users-slice/users-selector';
+import { getGrades } from '@/store/grades-slice/grades-selector';
+import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
+import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
+import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
 
-type LessonsTableProps = {
-  grades: Grades;
-  subjects: Subjects;
-  users: Users;
-};
-
-function LessonsTable({
-  grades,
-  subjects,
-  users
-}: LessonsTableProps): JSX.Element {
+function LessonsTable(): JSX.Element {
   const dispatch = useAppDispatch();
+  const grades = useAppSelector(getGrades);
+  const subjects = useAppSelector(getSubjects);
+  const users = useAppSelector(getUsers);
   const [lessons, setLessons] = useState<Lessons | null>(null);
   const [week, setWeek] = useState(0);
   const weekDates = getCurrentWeekDates(week);
@@ -40,11 +36,14 @@ function LessonsTable({
   const tableRef = useRef<HTMLTableElement>(null);
 
   useEffect(() => {
+    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
+    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
+    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
     if (!lessons) dispatch(fetchLessonsAction({
       week,
       onSuccess: (lessons) => setLessons(lessons),
     }));
-  }, [dispatch, lessons, week]);
+  }, [dispatch, grades.data, grades.isFetching, lessons, subjects.data, subjects.isFetching, users.data, users.isFetching, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {
@@ -55,7 +54,7 @@ function LessonsTable({
     }
   };
 
-  if (!lessons) return <Spinner className="w-8 h-8" />;
+  if (!lessons || !grades.data) return <Spinner className="w-8 h-8" />;
 
   return (
     <div className="rounded-md shadow border pb-1 bg-[linear-gradient(to_bottom,white_0%,white_50%,#f3f4f6_50%,#f3f4f6_100%)]">
@@ -77,7 +76,7 @@ function LessonsTable({
             <th className="min-w-7 w-7 max-w-7 sticky left-7 z-10 bg-gray-100"></th>
             <th className="min-w-20 w-20 max-w-20"></th>
 
-            {grades.map((grade) => (
+            {grades.data.map((grade) => (
               <th
                 key={grade.id}
                 className="p-2 min-w-[260px] w-[260px] max-w-[260px] text-center"
@@ -135,7 +134,7 @@ function LessonsTable({
                     <LessonHour hour={+hour as keyof typeof Hour} />
                   </td>
 
-                  {grades.map((grade) => (
+                  {grades.data?.map((grade) => (
                     <td
                       key={grade.id}
                       className="relative z-0 p-2 border-l min-w-[260px] w-[260px] max-w-[260px]"
@@ -144,8 +143,8 @@ function LessonsTable({
                         date={date}
                         hour={Number(hour) as keyof typeof Hour}
                         grade={grade}
-                        subjects={subjects}
-                        teachers={users.filter((user) => user.role === 'teacher')}
+                        subjects={subjects.data || []}
+                        teachers={(users.data || []).filter((user) => user.role === 'teacher')}
                         lessons={lessons}
                         setCreateDTO={setCreateDTO}
                         setEditDTO={setEditDTO}
@@ -167,7 +166,7 @@ function LessonsTable({
             <th className="p-0 border-b min-w-10 w-10"></th>
             <th className="p-0 border-b min-w-[91px]"></th>
 
-            {grades.map((grade) => (
+            {grades.data.map((grade) => (
               <th
                 key={grade.id}
                 className="p-0 min-w-[260px] w-[260px] max-w-[260px] text-center border-b"

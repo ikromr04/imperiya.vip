@@ -2,23 +2,24 @@ import { APIRoute } from '@/const/routes';
 import { LoginCredentials, RegisterDTO, ResetPasswordDTO } from '@/dto/auth-dto';
 import { dropToken, saveToken, Token } from '@/services/token';
 import { ResponseMessage } from '@/types';
-import { AuthUser, RegisterLink, RegisterLinkId, RegisterLinks } from '@/types/auth';
+import { RegisterLink, RegisterLinkId, RegisterLinks } from '@/types/auth';
+import { User } from '@/types/users';
 import { ValidationError } from '@/types/validation-error';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
 import { generatePath } from 'react-router-dom';
 
-export const checkAuthAction = createAsyncThunk<AuthUser, undefined, {
+export const checkAuthAction = createAsyncThunk<User, undefined, {
   extra: AxiosInstance
 }>(
   'auth/check',
   async (_arg, { extra: api }) => {
-    const { data } = await api.get<AuthUser>(APIRoute.Auth.Check);
+    const { data } = await api.get<User>(APIRoute.Auth.Check);
     return data;
   },
 );
 
-export const loginAction = createAsyncThunk<AuthUser, {
+export const loginAction = createAsyncThunk<User, {
   dto: LoginCredentials,
   onValidationError?: (error: ValidationError) => void,
 }, {
@@ -28,7 +29,7 @@ export const loginAction = createAsyncThunk<AuthUser, {
   'auth/login',
   async ({ dto, onValidationError }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.post<{ user: AuthUser, token: Token }>(APIRoute.Auth.Login, dto);
+      const { data } = await api.post<{ user: User, token: Token }>(APIRoute.Auth.Login, dto);
       saveToken(data.token);
       return data.user;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

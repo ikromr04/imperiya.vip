@@ -5,10 +5,12 @@ import MainLogo from '../app-logo';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { logoutAction } from '@/store/auth-slice/auth-api-actions';
-import { useAppDispatch } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
 
 function AppSidebar(): JSX.Element {
   const dispatch = useAppDispatch();
+  const authUser = useAppSelector(getAuthUser);
   const [isShown, setIsShown] = useState(false);
 
   return (
@@ -55,51 +57,56 @@ function AppSidebar(): JSX.Element {
                 Расписание
               </NavLink>
             </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Journal}
-              >
-                <Icons.journal className="navlink__icon" width={16} height={16} />
-                Журнал
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Users.Index}
-              >
-                <Icons.users className="navlink__icon" width={16} height={16} />
-                Пользователи
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Classes.Index}
-              >
-                <Icons.class className="navlink__icon" width={16} height={16} />
-                Классы
-              </NavLink>
-            </li>
-            {/* <li>
-              <NavLink
-                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Lessons.Index}
-              >
-                <Icons.lessons className="navlink__icon" width={16} height={16} />
-                Занятия
-              </NavLink>
-            </li> */}
-            <li>
-              <NavLink
-                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Auth.RegisterLinks}
-              >
-                <Icons.link className="navlink__icon" width={16} height={16} />
-                Ссылки для регистрации
-              </NavLink>
-            </li>
+
+            {authUser?.role === 'superadmin' && (
+              <>
+                <li>
+                  <NavLink
+                    className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                    to={AppRoute.Journal}
+                  >
+                    <Icons.journal className="navlink__icon" width={16} height={16} />
+                    Журнал
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                    to={AppRoute.Users.Index}
+                  >
+                    <Icons.users className="navlink__icon" width={16} height={16} />
+                    Пользователи
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                    to={AppRoute.Classes.Index}
+                  >
+                    <Icons.class className="navlink__icon" width={16} height={16} />
+                    Классы
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                    to={AppRoute.Subjects.Index}
+                  >
+                    <Icons.subject className="navlink__icon" width={16} height={16} />
+                    Занятия
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                    to={AppRoute.Auth.RegisterLinks}
+                  >
+                    <Icons.link className="navlink__icon" width={16} height={16} />
+                    Ссылки для регистрации
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
 
           <hr className="mt-auto" />

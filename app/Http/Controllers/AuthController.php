@@ -31,15 +31,33 @@ class AuthController extends Controller
 
     if (!$user) return response()->json(['message' => 'Вы не авторизованы.'], 401);
 
-    return response()->json([
-      'id' => $user->id,
-      'name' => $user->name,
-      'login' => $user->login,
-      ...($user->avatar ? [
-        'avatar' => $user->avatar,
-        'avatarThumb' => $user->avatar_thumb,
-      ] : []),
-    ], 200);
+    if ($user->role === 'student') {
+      return response()->json(
+        User::select(
+          'id',
+          'name',
+          'surname',
+          'patronymic',
+          'login',
+          'role',
+          'sex',
+          'email',
+          'avatar',
+          'avatar_thumb',
+          'birth_date',
+          'address',
+          'whatsapp',
+          'nationality_id',
+          'social_link',
+          'phone_numbers',
+          'updated_at',
+          'created_at',
+        )->findOrFail($user->id),
+        200
+      );
+    }
+
+    return response()->json(User::selectBasic()->findOrFail($user->id), 200);
   }
 
   public function register(RegisterRequest $request): JsonResponse
@@ -132,7 +150,7 @@ class AuthController extends Controller
           'avatarThumb' => $user->avatar_thumb,
         ] : []),
       ],
-      'token' => $user->createToken('access_token')->plainTextToken,
+      'token' => $user->createToken('access_token', [$user->role])->plainTextToken,
     ], 200);
   }
 

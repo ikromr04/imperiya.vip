@@ -3,7 +3,7 @@ import { UserId, Users, UsersFilter } from '../types/users';
 
 export const filterUsers = (users: Users, filter: UsersFilter): Users => {
   users = users.filter((user) => (
-    `${user.name} ${user.surname}`.toLowerCase().includes((filter.name || '').toLowerCase())
+    `${user.surname} ${user.name}`.toLowerCase().includes((filter.name || '').toLowerCase())
     && (filter.sex ? (user.sex === filter.sex) : true)
     && (filter.grade ? (user.student?.gradeId?.toString() === filter.grade) : true)
     && (filter.role ? (user.role === filter.role) : true)

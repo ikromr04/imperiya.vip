@@ -96,15 +96,15 @@ class User extends Authenticatable
       'sex',
       'email',
       'avatar',
-      'avatar_thumb as avatarThumb',
-      'birth_date as birthDate',
+      'avatar_thumb',
+      'birth_date',
       'address',
       'whatsapp',
-      'nationality_id as nationalityId',
-      'social_link as socialLink',
-      'phone_numbers as phoneNumbers',
-      'updated_at as updatedAt',
-      'created_at as createdAt',
+      'nationality_id',
+      'social_link',
+      'phone_numbers',
+      'updated_at',
+      'created_at',
     )->with([
       'superadmin' => fn($query) => $query->selectBasic(),
       'admin' => fn($query) => $query->selectBasic(),
@@ -117,7 +117,24 @@ class User extends Authenticatable
 
   public function toArray()
   {
-    $array = parent::toArray();
+    $array = array_filter(parent::toArray(), fn($value) => $value);
+
+    $map = [
+      'avatar_thumb' => 'avatarThumb',
+      'birth_date' => 'birthDate',
+      'nationality_id' => 'nationalityId',
+      'social_link' => 'socialLink',
+      'phone_numbers' => 'phoneNumbers',
+      'updated_at' => 'updatedAt',
+      'created_at' => 'createdAt',
+    ];
+
+    foreach ($map as $snake => $camel) {
+      if (isset($array[$snake])) {
+        $array[$camel] = $array[$snake];
+        unset($array[$snake]);
+      }
+    }
 
     if (!empty($array['address'])) {
       $array['address'] = [
@@ -126,6 +143,6 @@ class User extends Authenticatable
       ];
     }
 
-    return array_filter($array, fn($value) => $value);
+    return $array;
   }
 }

@@ -15,10 +15,12 @@ import NotFoundPage from '@/pages/not-found-page';
 import RegisterLinksPage from '@/pages/auth/register-links-page/register-links-page';
 import RegisterPage from '../pages/auth/register-page/register-page';
 import UsersCreatePage from '@/pages/users/users-create-page';
-import LessonsPage from '@/pages/lessons/lessons-page';
+import LessonsPage from '@/pages/lessons-page';
 import JournalPage from '@/pages/journal-page';
 import GradesPage from '@/pages/grades/grades-page';
 import GradesShowPage from '@/pages/grades/grades-show-page';
+import ProfileLessonsPage from '@/pages/auth/profile-page/profile-lessons-page';
+import UsersLessonsPage from '@/pages/users/users-show-page/users-lessons-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -45,6 +47,7 @@ function App(): JSX.Element {
         <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
         <Route path={AppRoute.Auth.Register} element={<RegisterPage />} />
         <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
+        <Route path={AppRoute.Auth.Lessons} element={<ProfileLessonsPage />} />
 
         <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} />
 
@@ -53,12 +56,12 @@ function App(): JSX.Element {
         <Route path={AppRoute.Users.Index} element={<UsersPage />} />
         <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
         <Route path={AppRoute.Users.Create} element={<UsersCreatePage />} />
-        {/* <Route path={AppRoute.Users.Lessons} element={<UsersShowPage />} /> */}
+        <Route path={AppRoute.Users.Lessons} element={<UsersLessonsPage />} />
 
         <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
         <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />
 
-        {/* <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} /> */}
+        {/* <Route path={AppRoute.Subjects.Index} element={<LessonsPage />} /> */}
 
         {/* <Route path={AppRoute.Monitoring.Index} element={<JournalPage />} /> */}
         {/* <Route path={AppRoute.Settings.Index} element={<JournalPage />} /> */}

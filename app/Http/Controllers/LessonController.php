@@ -11,9 +11,23 @@ class LessonController extends Controller
 {
   public function index(Request $request): JsonResponse
   {
-    $lessons = Lesson::selectBasic()
-      ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
-      ->get();
+    $lessons = [];
+
+    switch ($request->user()->role) {
+      case 'superadmin':
+        $lessons = Lesson::selectBasic()
+          ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
+          ->get();
+        break;
+
+      case 'student':
+        $lessons = Lesson::selectBasic()
+          ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
+          ->where('grade_id', $request->query('grade_id'))
+          ->get();
+        break;
+    }
+
 
     return response()->json($lessons, 200);
   }

@@ -4,12 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
-use App\Models\Admin;
-use App\Models\Director;
-use App\Models\Guardian;
 use App\Models\Student;
-use App\Models\Superadmin;
-use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -147,5 +142,55 @@ class UserController extends Controller
     $user->save();
 
     return response()->noContent();
+  }
+
+  public function student(Request $request): JsonResponse
+  {
+    $user = $request->user();
+
+    $student = Student::select(
+      'id',
+      'user_id',
+      'grade_id',
+      'mother_id',
+      'father_id',
+    )
+      ->where('user_id', $user->id)
+      ->with([
+        'mother' => fn($query) => $query->select(
+          'id',
+          'name',
+          'surname',
+          'patronymic',
+        ),
+        'father' => fn($query) => $query->select(
+          'id',
+          'name',
+          'surname',
+          'patronymic',
+        ),
+        'grade' => fn($query) => $query->select(
+          'id',
+          'level',
+          'group',
+        ),
+      ])
+      ->first();
+
+    $teachers = User::select(
+      'id',
+      'name',
+      'surname',
+      'role',
+      'patronymic',
+    )->where('role', 'teacher')
+      ->get();
+
+    return response()->json([
+      'mother' => $student->mother,
+      'father' => $student->father,
+      'grade' => $student->grade,
+      'teachers' => $teachers,
+    ], 200);
   }
 }

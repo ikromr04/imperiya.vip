@@ -6,6 +6,7 @@ export const AppRoute = {
     Profile: '/auth/profile',
     Register: '/auth/register',
     RegisterLinks: '/auth/register/links',
+    Lessons: '/auth/lessons',
   },
   Journal: '/journal',
   Lessons: {
@@ -50,6 +51,7 @@ export const APIRoute = {
     Avatar: '/users/:id/avatar',
     Role: '/users/:id/role',
     Login: '/users/login/:login',
+    Student: '/users/student',
   },
   Nationalities: {
     Index: '/nationalities',

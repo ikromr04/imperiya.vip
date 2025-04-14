@@ -75,7 +75,7 @@ function LessonItem({
             className="transition-all duration-150 hover:text-blue-600 truncate"
             to={generatePath(AppRoute.Users.Show, { id: lesson.teacherId })}
           >
-            {teacher.name} {teacher.surname}
+            {teacher.surname} {teacher.name}
           </Link>)
         </div>
       )}

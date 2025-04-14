@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { checkAuthAction, deleteRegisterLinkAction, fetchRegisterLinksAction, generateRegisterLinkAction, loginAction, logoutAction, updateRegisterLinkAction } from './auth-api-actions';
 import { AuthorizationStatus, SliceName } from '@/const/store';
-import { AuthUser, RegisterLinks } from '@/types/auth';
+import { RegisterLinks } from '@/types/auth';
+import { User } from '@/types/users';
 
 export type AuthSlice = {
   authStatus: AuthorizationStatus;
-  user: AuthUser | null;
+  user: User | null;
   registerLinks: {
     data: RegisterLinks | null;
     isFetching: boolean;
