@@ -116,8 +116,8 @@ function JournalTable({
               </span>
             </span>
           ),
-          renderFilter: () => (
-            <LessonsTopicEditForm lesson={item} />
+          renderFilter: (_, setIsOpen) => (
+            <LessonsTopicEditForm lesson={item} setIsOpen={setIsOpen} />
           ),
         }
       });

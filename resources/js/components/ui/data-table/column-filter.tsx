@@ -58,7 +58,7 @@ function ColumnFilter<TData, TValue>({
           <h3 className="text-sm leading-none text-gray-400 mb-1">
             {flexRender(header.column.columnDef.header, header.getContext())}
           </h3>
-          {header.column.columnDef.meta?.renderFilter?.(header.column)}
+          {header.column.columnDef.meta?.renderFilter?.(header.column, setIsOpen)}
         </div>
 
         <hr className="my-1" />

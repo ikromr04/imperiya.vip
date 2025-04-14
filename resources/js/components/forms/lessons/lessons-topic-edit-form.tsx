@@ -5,15 +5,17 @@ import { useAppDispatch } from '@/hooks';
 import { updateLessonAction } from '@/store/lessons-slice/lessons-api-actions';
 import { Lesson } from '@/types/lessons';
 import { Form, Formik, FormikHelpers } from 'formik';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 
 type LessonsTopicEditFormProps = {
   lesson: Lesson;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 function LessonsTopicEditForm({
   lesson,
+  setIsOpen,
 }: LessonsTopicEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const initialValues: LessonUpdateDTO = {
@@ -30,6 +32,7 @@ function LessonsTopicEditForm({
 
     await dispatch(updateLessonAction({
       dto: values,
+      onSuccess: () => setIsOpen(false),
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
       onFail: (message) => toast.success(message),
     }));

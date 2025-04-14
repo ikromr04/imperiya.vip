@@ -164,10 +164,16 @@ function DiaryTable(): JSX.Element {
           onScroll={scrollSync}
         >
           <tr>
-            <th className="p-0 border-b min-w-10 w-10"></th>
-            <th className="p-0 border-b min-w-[91px]"></th>
-
-            <th className="p-0 min-w-[260px] w-[260px] max-w-[260px] text-center border-b"></th>
+            <td className="p-0 min-w-7 w-7 max-w-7 sticky left-0 z-10 bg-gray-100"></td>
+            <td className="p-0 min-w-7 w-7 max-w-7 sticky left-7 z-10 bg-gray-100"></td>
+            <td className="p-0 min-w-20 w-20 max-w-20"></td>
+            <td className="p-0 border-t min-w-[260px] w-[260px] max-w-[260px] text-start"></td>
+            <td className="p-0 border-t min-w-[120px] w-[120px] max-w-[120px] text-start"></td>
+            <td className="p-0 border-t min-w-20 w-20 max-w-20 text-center font-bold"></td>
+            <td className="p-0 border-t min-w-[360px] w-[360px] max-w-[360px] text-start"></td>
+            <td className="p-0 border-t min-w-[288px] w-[288px] max-w-[288px] text-start"></td>
+            <td className="p-0 border-t min-w-[288px] w-[288px] max-w-[288px] text-start"></td>
+            <td className="p-0 border-t min-w-[320px] w-[320px] max-w-[320px] text-start"></td>
           </tr>
         </tfoot>
       </table>

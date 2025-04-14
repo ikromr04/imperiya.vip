@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, ReactNode, useState } from 'react';
+import React, { BaseSyntheticEvent, Dispatch, ReactNode, SetStateAction, useRef, useState } from 'react';
 import classNames from 'classnames';
 import ColumnFilter from './column-filter';
 import ColumnVisibility from './column-visibility';
@@ -21,7 +21,7 @@ import Button from '../button';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData, TValue> {
-    renderFilter?: (column: Column<TData, TValue>) => JSX.Element;
+    renderFilter?: (column: Column<TData, TValue>, setIsOpen: Dispatch<SetStateAction<boolean>>) => JSX.Element;
     renderHeader?: (column: Column<TData, TValue>) => JSX.Element;
     columnClass?: string;
     thClass?: string;
@@ -64,6 +64,7 @@ export default function DataTable<T>({
   const [sorting, setSorting] = useState<SortingState>(sortingState);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(visibilityState);
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>(columnPinningState);
+  const tableRef = useRef<HTMLTableElement>(null);
 
   const table = useReactTable({
     data,
@@ -177,6 +178,15 @@ export default function DataTable<T>({
     );
   };
 
+  const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
+    if (tableRef.current) {
+      const { scrollLeft } = event.currentTarget;
+      tableRef.current.querySelectorAll('.sync-scroll').forEach((element) => {
+        element.scrollLeft = scrollLeft;
+      });
+    }
+  };
+
   return (
     <div
       className={classNames(
@@ -216,13 +226,10 @@ export default function DataTable<T>({
         </div>
       </div>
 
-      <table className="flex flex-col w-full">
+      <table ref={tableRef} className="flex flex-col w-full">
         <thead
-          className="sticky top-0 z-20 shadow overflow-x-auto no-scrollbar"
-          onScroll={(evt: BaseSyntheticEvent) => {
-            evt.target.nextElementSibling.scrollLeft = evt.target.scrollLeft;
-            evt.target.nextElementSibling.nextElementSibling.scrollLeft = evt.target.scrollLeft;
-          }}
+          className="sticky top-0 z-20 shadow overflow-x-auto no-scrollbar sync-scroll"
+          onScroll={scrollSync}
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -282,11 +289,8 @@ export default function DataTable<T>({
         </thead>
 
         <tbody
-          className="overflow-x-auto no-scrollbar"
-          onScroll={(evt: BaseSyntheticEvent) => {
-            evt.target.nextElementSibling.scrollLeft = evt.target.scrollLeft;
-            evt.target.previousElementSibling.scrollLeft = evt.target.scrollLeft;
-          }}
+          className="overflow-x-auto no-scrollbar sync-scroll"
+          onScroll={scrollSync}
         >
           {table.getRowModel().rows.map((row, index) => (
             <tr
@@ -337,11 +341,8 @@ export default function DataTable<T>({
         </tbody>
 
         <tfoot
-          className="sticky bottom-[48px] z-10 overflow-x-auto bg-white styled-scrollbar mb-[-1px]"
-          onScroll={(evt: BaseSyntheticEvent) => {
-            evt.target.previousElementSibling.scrollLeft = evt.target.scrollLeft;
-            evt.target.previousElementSibling.previousElementSibling.scrollLeft = evt.target.scrollLeft;
-          }}
+          className="sticky bottom-[48px] z-10 overflow-x-auto bg-white styled-scrollbar mb-[-1px] sync-scroll"
+          onScroll={scrollSync}
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
