@@ -18,12 +18,17 @@ class GradeController extends Controller
 
   public function store(Request $request): JsonResponse
   {
-    $grade = Grade::create($request->only(['level', 'group']));
+    $grade = Grade::create($request->only([
+      'level',
+      'group',
+      'teacher_id',
+    ]));
 
     return response()->json([
       'id' => $grade->id,
       'level' => $grade->level,
       'group' => $grade->group,
+      'teacher_id' => $grade->teacher_id,
     ], 201);
   }
 
@@ -31,10 +36,11 @@ class GradeController extends Controller
   {
     $grade = Grade::findOrFail($request->id);
 
-    $grade->update([
-      'level' => $request->level,
-      'group' => $request->group,
-    ]);
+    $grade->update($request->only([
+      'level',
+      'group',
+      'teacher_id'
+    ]));
 
     $newStudentIds = collect($request->students);
 

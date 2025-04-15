@@ -23,6 +23,7 @@ import ProfileLessonsPage from '@/pages/auth/profile-page/profile-lessons-page';
 import UsersLessonsPage from '@/pages/users/users-show-page/users-lessons-page';
 import ProfileDiaryPage from '@/pages/auth/profile-page/profile-diary-page';
 import DiaryPage from '@/pages/diary-page';
+import SubjectsPage from '@/pages/subjects-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -66,7 +67,7 @@ function App(): JSX.Element {
         <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
         <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />
 
-        {/* <Route path={AppRoute.Subjects.Index} element={<LessonsPage />} /> */}
+        <Route path={AppRoute.Subjects.Index} element={<SubjectsPage />} />
 
         {/* <Route path={AppRoute.Monitoring.Index} element={<JournalPage />} /> */}
         {/* <Route path={AppRoute.Settings.Index} element={<JournalPage />} /> */}

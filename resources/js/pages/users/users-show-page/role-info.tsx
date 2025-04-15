@@ -41,9 +41,19 @@ function RoleInfo({
     //   break;
     // case user.director !== undefined:
     //   break;
-    // case 'teacher':
-
-    //   break;
+    case 'teacher':
+      list = {
+        'Классы': grades.data ? (
+          <div className="flex flex-wrap gap-2">
+            {grades.data.filter((grade) => grade.teacherId === user.id).map((grade) => (
+              <Link className="text-blue-600" to={generatePath(AppRoute.Classes.Show, { id: grade.id })}>
+                {grade.level} {grade.group}
+              </Link>
+            ))}
+          </div>
+        ) : '-',
+      };
+      break;
     case 'student':
       list = {
         'Класс': grade ?
@@ -74,7 +84,7 @@ function RoleInfo({
             <br />
           </Fragment>
         )) : '-',
-        'Сфера деятельности': professions.data?.find(({id}) => user.parent?.professionId === id)?.name ?? '-',
+        'Сфера деятельности': professions.data?.find(({ id }) => user.parent?.professionId === id)?.name ?? '-',
         'Место работы': user.parent?.workplace ?? '-',
         'Должность': user.parent?.position ?? '-',
       };

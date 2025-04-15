@@ -11,6 +11,7 @@ return new class extends Migration
     Schema::create('grades', function (Blueprint $table) {
       $table->id();
       $table->unsignedTinyInteger('level');
+      $table->foreignId('teacher_id')->nullable()->constrained('users')->nullOnDelete();
       $table->string('group');
       $table->timestamps();
       $table->softDeletes();

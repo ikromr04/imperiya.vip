@@ -103,6 +103,7 @@ class User extends Authenticatable
       'nationality_id',
       'social_link',
       'phone_numbers',
+      'blocked_at',
       'updated_at',
       'created_at',
     )->with([
@@ -125,6 +126,7 @@ class User extends Authenticatable
       'nationality_id' => 'nationalityId',
       'social_link' => 'socialLink',
       'phone_numbers' => 'phoneNumbers',
+      'blocked_at' => 'blockedAt',
       'updated_at' => 'updatedAt',
       'created_at' => 'createdAt',
     ];

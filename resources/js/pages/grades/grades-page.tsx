@@ -12,10 +12,10 @@ import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import { Grade } from '@/types/grades';
 import { ColumnDef } from '@tanstack/react-table';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { generatePath, Link } from 'react-router-dom';
 
-function GradesPage(): JSX.Element {
+function GradesPage(): ReactNode {
   const [isCreating, setIsCreating] = useState(false);
   const grades = useAppSelector(getGrades);
   const users = useAppSelector(getUsers);
@@ -48,6 +48,29 @@ function GradesPage(): JSX.Element {
         if (levelA > levelB) return 1;
 
         return 0;
+      },
+    },
+    {
+      id: 'teacher',
+      accessorKey: 'teacher',
+      header: 'Руководитель',
+      size: 320,
+      cell: ({ row }) => {
+        const teacher = users.data?.find(({ id }) => id === row.original.teacherId);
+
+        if (!teacher) return null;
+
+        return (
+          <Link className="block leading-[1.2]" to={generatePath(AppRoute.Users.Show, { id: teacher.id })}>
+            {teacher.surname} {teacher.name} {teacher.patronymic}
+          </Link>
+        );
+      },
+      sortingFn: (rowA, rowB) => {
+        const teacherA = users.data?.find(({ id }) => id === rowA.original.teacherId)?.surname || '';
+        const teacherB = users.data?.find(({ id }) => id === rowB.original.teacherId)?.surname || '';
+
+        return teacherA.localeCompare(teacherB);
       },
     },
     {

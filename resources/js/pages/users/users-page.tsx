@@ -1,10 +1,10 @@
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { getUsers } from '@/store/users-slice/users-selector';
-import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
+import { fetchUsersAction, updateUserAction } from '@/store/users-slice/users-api-actions';
 import Spinner from '@/components/ui/spinner';
 import { ColumnDef, VisibilityState } from '@tanstack/react-table';
-import { User, Users, UsersFilter } from '@/types/users';
+import { User, UserId, Users, UsersFilter } from '@/types/users';
 import DataTable from '@/components/ui/data-table/data-table';
 import { generatePath, Link } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
@@ -25,6 +25,7 @@ import { fetchProfessionsAction } from '@/store/professions-slice/professions-ap
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import CopyButton from '@/components/ui/copy-button';
+import { toast } from 'react-toastify';
 
 function UsersPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -95,6 +96,28 @@ function UsersPage(): JSX.Element {
     const wbout = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
     const blob = new Blob([wbout], { type: 'application/octet-stream' });
     saveAs(blob, 'usersDataSheet.xlsx');
+  };
+
+  const blockUser = (id: UserId) => () => {
+    dispatch(updateUserAction({
+      dto: {
+        id,
+        blocked_at: dayjs().format(),
+      },
+      onFail: (message) => toast.error(message),
+      onSuccess: () => toast.success('Пользователь заблокирован.'),
+    }));
+  };
+
+  const unblockUser = (id: UserId) => () => {
+    dispatch(updateUserAction({
+      dto: {
+        id,
+        blocked_at: '',
+      },
+      onFail: (message) => toast.error(message),
+      onSuccess: () => toast.success('Пользователь разблокирован.'),
+    }));
   };
 
   const columns: ColumnDef<User>[] = [
@@ -466,6 +489,33 @@ function UsersPage(): JSX.Element {
       }
     },
     {
+      id: 'blockedAt',
+      accessorKey: 'blockedAt',
+      header: 'Блокировка',
+      size: 160,
+      cell: ({ row }) => row.original.blockedAt ? (
+        <>
+          <Button
+            className="mb-1"
+            variant="danger"
+            onClick={unblockUser(row.original.id)}
+          >
+            Разблокировать
+          </Button>
+          <span className="flex text-sm leading-none text-danger">
+            Заблокирован с <br /> {dayjs(row.original.blockedAt).format('DD MMMM YYYY HH:mm')}
+          </span>
+        </>
+      ) : (
+        <Button
+          variant="light"
+          onClick={blockUser(row.original.id)}
+        >
+          Заблокировать
+        </Button>
+      ),
+    },
+    {
       id: 'socialLinks',
       accessorKey: 'socialLinks',
       header: 'Социальные сети',
@@ -514,7 +564,7 @@ function UsersPage(): JSX.Element {
       <main className="pt-4 pb-40">
         <header className="flex justify-between px-3 items-end mb-1">
           <h1 className="title">
-            Справочник пользователей ({users.data ? filterUsers(users.data, filter).length : 0})
+            Справочник пользователей ({users.data?.length})
           </h1>
         </header>
 

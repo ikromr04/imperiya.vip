@@ -34,6 +34,7 @@ function GradesEditForm({
     id: grade.id,
     level: grade.level,
     group: grade.group,
+    teacher_id: grade.teacherId,
     students: students?.map(({ id }) => id) || [],
   };
 
@@ -109,11 +110,19 @@ function GradesEditForm({
 
           <SelectField
             className="mb-4"
+            name="teacher_id"
+            searchable
+            label="Руководитель"
+            options={users.data?.filter((user) => user.role === 'teacher').map((teacher) => ({ value: teacher.id, label: `${teacher.surname} ${teacher.name}` })) || []}
+          />
+
+          <SelectField
+            className="mb-4"
             name="students"
             multiple
             searchable
-            label={`Ученики (${values.students.length})`}
-            options={users.data?.filter((user) => user.student).map((student) => ({ value: student.id, label: `${student.surname} ${student.name}` })) || []}
+            label={`Ученики (${values.students?.length})`}
+            options={users.data?.filter((user) => user.role === 'student').map((student) => ({ value: student.id, label: `${student.surname} ${student.name}` })) || []}
           />
 
           <div className="flex items-center justify-end gap-2 sm:col-span-2">

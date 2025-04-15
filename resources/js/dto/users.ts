@@ -1,28 +1,56 @@
-import { Role, Sex, UserId } from '@/types/users';
+import { Sex, UserId } from '@/types/users';
 import { NationalityId } from '@/types/nationalities';
+import { GradeId } from '@/types/grades';
+import { ProfessionId } from '@/types/professions';
 
 export type UserStoreDTO = {
   name: string;
   surname: string;
   patronymic?: string;
-  role: Role;
-  sex: Sex;
+
+  role: string;
+  sex: string;
   birth_date: string;
+
   nationality_id: NationalityId;
+
   email?: string;
+
   address: {
     physical_address: string;
     region: string;
   };
-  phone_numbers: {
+
+  phone_numbers?: {
+    code: string;
+    numbers: string;
+  }[];
+
+  whatsapp?: {
     code: string;
     numbers: string;
   };
-  whatsapp: {
-    code: string;
-    numbers: string;
+
+  teacher?: {
+    grades?: GradeId[];
   };
-}
+
+  parent?: {
+    children?: UserId[];
+    profession_id: ProfessionId;
+    workplace: string;
+    position: string;
+  };
+
+  student?: {
+    grade_id: GradeId;
+    mother_id?: UserId;
+    father_id?: UserId;
+    admission_date: string;
+    previous_schools: string;
+    medical_recommendations: string;
+  };
+};
 
 export type UserUpdateDTO = {
   id: UserId;
@@ -52,4 +80,5 @@ export type UserUpdateDTO = {
     code: number;
     numbers: number;
   };
+  blocked_at?: string;
 }

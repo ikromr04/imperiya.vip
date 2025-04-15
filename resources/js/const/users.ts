@@ -12,8 +12,8 @@ export const ROLES = [
   'admin',
   'director',
   'teacher',
-  'student',
   'parent',
+  'student',
 ];
 
 export const SexName = {

@@ -35,7 +35,9 @@ export const gradesSlice = createSlice({
       })
 
       .addCase(storeGradeAction.fulfilled, (state, action) => {
-        state.grades.data = state.grades.data ? [action.payload, ...state.grades.data] : [action.payload];
+        if (state.grades.data) {
+          state.grades.data =  [action.payload, ...state.grades.data];
+        }
       })
       .addCase(updateGradeAction.fulfilled, (state, action) => {
         if (state.grades.data) {

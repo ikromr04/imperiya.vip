@@ -4,7 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\Admin;
+use App\Models\Director;
+use App\Models\Grade;
+use App\Models\Guardian;
 use App\Models\Student;
+use App\Models\Superadmin;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -39,11 +45,74 @@ class UserController extends Controller
       'nationality_id',
       'email',
       'address',
+      'phone_numbers',
       'whatsapp',
     ]));
 
-    $user->phone_numbers = [$request->phone_numbers];
-    $user->save();
+    switch ($user->role) {
+      case 'superadmin':
+        Superadmin::create(['user_id' => $user->id]);
+        break;
+
+      case 'admin':
+        Admin::create(['user_id' => $user->id]);
+        break;
+
+      case 'director':
+        Director::create(['user_id' => $user->id]);
+        break;
+
+      case 'teacher':
+        Teacher::create(['user_id' => $user->id]);
+
+        if ($request->has('teacher.grades')) {
+          $gradeIds = $request->input('teacher.grades');
+
+          Grade::whereIn('id', $gradeIds)->update(['teacher_id' => $user->id]);
+        }
+        break;
+
+      case 'parent':
+        Guardian::create([
+          'user_id' => $user->id,
+          'profession_id' => $request->input('parent.profession_id'),
+          'workplace' => $request->input('parent.workplace'),
+          'position' => $request->input('parent.position'),
+        ]);
+
+        if ($request->has('parent.children')) {
+          if ($user->sex === 'male') {
+            Student::whereIn('id', $request->input('parent.children'))
+              ->update(['father_id' => $user->id]);
+          }
+          if ($user->sex === 'female') {
+            Student::whereIn('id', $request->input('parent.children'))
+              ->update(['mother_id' => $user->id]);
+          }
+        }
+        break;
+
+      case 'student':
+        Student::create([
+          'user_id' => $user->id,
+          'grade_id' => $request->input('student.grade_id'),
+          'mother_id' => $request->input('student.mother_id'),
+          'father_id' => $request->input('student.father_id'),
+          'admission_date' => $request->input('student.admission_date'),
+          'previous_schools' => $request->input('student.previous_schools'),
+          'medical_recommendations' => $request->input('student.medical_recommendations'),
+        ]);
+
+        if ($request->has('parent.children')) {
+          if ($user->sex === 'male') {
+            Student::whereIn('id', $request->input('parent.children'))->update('father_id', $user->id);
+          }
+          if ($user->sex === 'female') {
+            Student::whereIn('id', $request->input('parent.children'))->update('mother_id', $user->id);
+          }
+        }
+        break;
+    }
 
     return response()->json(User::selectBasic()->find($user->id), 201);
   }
@@ -69,6 +138,7 @@ class UserController extends Controller
       'social_link',
       'phone_numbers',
       'whatsapp',
+      'blocked_at',
     ]));
 
     return response()->json(User::selectBasic()->find($user->id), 200);

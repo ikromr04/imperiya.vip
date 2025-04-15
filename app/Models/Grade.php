@@ -23,6 +23,25 @@ class Grade extends Model
       'id',
       'level',
       'group',
+      'teacher_id',
     );
+  }
+
+  public function toArray()
+  {
+    $array = array_filter(parent::toArray(), fn($value) => $value);
+
+    $map = [
+      'teacher_id' => 'teacherId',
+    ];
+
+    foreach ($map as $snake => $camel) {
+      if (isset($array[$snake])) {
+        $array[$camel] = $array[$snake];
+        unset($array[$snake]);
+      }
+    }
+
+    return $array;
   }
 }

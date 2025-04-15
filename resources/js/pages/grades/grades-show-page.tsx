@@ -26,6 +26,7 @@ function GradesShowPage(): JSX.Element {
   const [isEditting, setIsEditting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const students = users.data?.filter((user) => user.student?.gradeId === grade?.id);
+  const teacher = users.data?.find(({ id }) => id === grade?.teacherId);
 
   useEffect(() => {
     if (!grade && !grades.isFetching && params.id) dispatch(fetchGradesAction());
@@ -42,20 +43,15 @@ function GradesShowPage(): JSX.Element {
 
   return (
     <AppLayout>
-      <main className="overflow-y-auto p-2 -m-2 no-scrollbar">
+      <main className="pt-4 pb-40">
         <Breadcrumbs
-          className="mb-2"
           items={[
             ['Все классы', AppRoute.Classes.Index],
             [`${grade.level} ${grade.group}`, ''],
           ]}
         />
 
-        <header className="flex items-end justify-between mb-4">
-          <h1 className="title">
-            Класс {grade.level}<sup>"</sup>{grade.group}<sup>"</sup>
-          </h1>
-
+        <header className="flex items-end justify-end mb-4">
           <div className="flex items-center gap-1">
             <Button
               variant="light"
@@ -74,27 +70,49 @@ function GradesShowPage(): JSX.Element {
           </div>
         </header>
 
-        <section className="box">
+        <div className="box">
           <div className="box__header">
-            <h2 className="title !text-lg">Ученики ({students?.length})</h2>
+            <h1 className="title">
+              Класс {grade.level}<sup>"</sup>{grade.group}<sup>"</sup>
+            </h1>
+
             <Button variant="light" onClick={() => setIsEditting(true)}>
               <Icons.edit width={14} height={14} />
               <Tooltip label="Редактировать" position="left" />
             </Button>
           </div>
 
-          <ul className="box__body flex flex-wrap gap-1">
-            {students?.map(({ id, surname, name }) => (
-              <Link
-                key={id}
-                className="py-1 px-2 border rounded bg-gray-100 hover:bg-blue-50"
-                to={generatePath(AppRoute.Users.Show, { id })}
-              >
-                {surname} {name}
-              </Link>
-            ))}
-          </ul>
-        </section>
+          <section className="box__body">
+            <h2 className="title !text-lg">Руководитель</h2>
+
+            <div className="flex flex-wrap gap-1">
+              {teacher && (
+                <Link
+                  className="py-1 px-2 border rounded bg-gray-100 hover:bg-blue-50"
+                  to={generatePath(AppRoute.Users.Show, { id: teacher.id })}
+                >
+                  {teacher.surname} {teacher.name} {teacher.patronymic}
+                </Link>
+              )}
+            </div>
+          </section>
+
+          <section className="box__body">
+            <h2 className="title !text-lg">Ученики ({students?.length})</h2>
+
+            <div className="flex flex-wrap gap-1">
+              {students?.map(({ id, surname, name }) => (
+                <Link
+                  key={id}
+                  className="py-1 px-2 border rounded bg-gray-100 hover:bg-blue-50"
+                  to={generatePath(AppRoute.Users.Show, { id })}
+                >
+                  {surname} {name}
+                </Link>
+              ))}
+            </div>
+          </section>
+        </div>
 
         <Button
           className="ml-auto mt-2 md:mt-4"

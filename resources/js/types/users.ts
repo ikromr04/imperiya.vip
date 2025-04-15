@@ -43,6 +43,9 @@ export type User = {
     numbers: number;
   };
   createdAt: string;
+  teacher?: {
+    grades: GradeId[];
+  };
   parent?: {
     children?: UserId[];
     professionId: ProfessionId;
@@ -57,6 +60,7 @@ export type User = {
     previousSchools: string;
     medicalRecommendations: string;
   };
+  blockedAt?: string;
 };
 
 export type Users = User[];
@@ -79,7 +83,8 @@ export type UsersFilter = {
   address?: {
     physicalAddress: string;
     region: string;
-  }
+  };
+  blockedAt?: string;
   nationality?: string;
   professionId?: string;
 };
