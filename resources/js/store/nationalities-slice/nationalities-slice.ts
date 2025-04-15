@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SliceName } from '@/const/store';
 import { Nationalities } from '@/types/nationalities';
-import { fetchNationalitiesAction } from './nationalities-api-actions';
+import {
+  deleteNationalityAction,
+  fetchNationalitiesAction,
+  storeNationalityAction,
+  updateNationalityAction
+} from './nationalities-api-actions';
 
 export type NationalitiesSlice = {
   nationalities: {
@@ -32,6 +37,27 @@ export const nationalitiesSlice = createSlice({
       })
       .addCase(fetchNationalitiesAction.rejected, (state) => {
         state.nationalities.isFetching = false;
+      })
+
+      .addCase(storeNationalityAction.fulfilled, (state, action) => {
+        if (state.nationalities.data) {
+          state.nationalities.data = [action.payload, ...state.nationalities.data];
+        }
+      })
+      .addCase(updateNationalityAction.fulfilled, (state, action) => {
+        if (state.nationalities.data) {
+          const index = state.nationalities.data.findIndex(({ id }) => id === action.payload.id);
+
+          if (index !== -1) {
+            state.nationalities.data[index] = action.payload;
+          }
+        }
+      })
+
+      .addCase(deleteNationalityAction.fulfilled, (state, action) => {
+        if (state.nationalities.data) {
+          state.nationalities.data = state.nationalities.data.filter(({ id }) => id !== action.payload);
+        }
       });
   },
 });

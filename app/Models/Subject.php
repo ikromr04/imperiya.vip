@@ -18,10 +18,4 @@ class Subject extends Model
       'name',
     );
   }
-
-  public function toArray()
-  {
-    $array = parent::toArray();
-    return array_filter($array, fn($value) => $value);
-  }
 }

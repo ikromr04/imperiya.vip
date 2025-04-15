@@ -10,4 +10,12 @@ class Profession extends Model
   use SoftDeletes;
 
   protected $guarded = ['id'];
+
+  public function scopeSelectBasic($query)
+  {
+    return $query->select(
+      'id',
+      'name',
+    );
+  }
 }

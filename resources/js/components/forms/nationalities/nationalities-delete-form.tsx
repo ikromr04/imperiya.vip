@@ -1,20 +1,20 @@
 import Button from '@/components/ui/button';
 import { useAppDispatch } from '@/hooks';
-import { deleteSubjectAction } from '@/store/subjects-slice/subjects-api-actions';
-import { SubjectId } from '@/types/subjects';
+import { deleteNationalityAction } from '@/store/nationalities-slice/nationalities-api-actions';
+import { NationalityId } from '@/types/nationalities';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 
-type SubjectsDeleteFormProps = {
-  dto: SubjectId;
-  setDTO: Dispatch<SetStateAction<SubjectId | null>>;
+type NationalitiesDeleteFormProps = {
+  dto: NationalityId;
+  setDTO: Dispatch<SetStateAction<NationalityId | null>>;
 };
 
-function SubjectsDeleteForm({
+function NationalitiesDeleteForm({
   dto,
   setDTO,
-}: SubjectsDeleteFormProps): JSX.Element {
+}: NationalitiesDeleteFormProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const onSubmit = async (
@@ -23,10 +23,10 @@ function SubjectsDeleteForm({
   ) => {
     helpers.setSubmitting(true);
 
-    await dispatch(deleteSubjectAction({
+    await dispatch(deleteNationalityAction({
       id: dto,
       onSuccess: () => {
-        toast.success('Предмет успешно удален.');
+        toast.success('Национальность успешно удалена.');
         setDTO(null);
       },
     }));
@@ -42,7 +42,7 @@ function SubjectsDeleteForm({
       {({ isSubmitting }) => (
         <Form>
           <div className="flex items-center justify-between gap-2 mb-4">
-            <h3 className="title">Удаление предмета</h3>
+            <h3 className="title">Удалить национальность</h3>
 
             <Button
               className="ml-auto"
@@ -56,7 +56,7 @@ function SubjectsDeleteForm({
           </div>
 
           <p>
-            Вы уверены что хотите удалить этот предмет?
+            Вы уверены что хотите удалить?
           </p>
 
           <div className="flex items-center justify-end gap-2 sm:col-span-2">
@@ -77,4 +77,4 @@ function SubjectsDeleteForm({
   );
 }
 
-export default SubjectsDeleteForm;
+export default NationalitiesDeleteForm;

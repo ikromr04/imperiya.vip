@@ -44,6 +44,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/subjects', [SubjectController::class, 'update']);
     Route::delete('/subjects/{id}', [SubjectController::class, 'delete']);
 
+    Route::post('/nationalities', [NationalityController::class, 'store']);
+    Route::put('/nationalities', [NationalityController::class, 'update']);
+    Route::delete('/nationalities/{id}', [NationalityController::class, 'delete']);
+
+    Route::post('/professions', [ProfessionController::class, 'store']);
+    Route::put('/professions', [ProfessionController::class, 'update']);
+    Route::delete('/professions/{id}', [ProfessionController::class, 'delete']);
+
     Route::post('/lessons', [LessonController::class, 'store']);
     Route::put('/lessons', [LessonController::class, 'update']);
     Route::delete('/lessons/{id}', [LessonController::class, 'delete']);

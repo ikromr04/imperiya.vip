@@ -29,6 +29,9 @@ export const AppRoute = {
   Subjects: {
     Index: '/subjects',
   },
+  Nationalities: {
+    Index: '/nationalities',
+  },
   Monitoring: {
     Index: '/monitoring',
   },
@@ -58,12 +61,6 @@ export const APIRoute = {
     Login: '/users/login/:login',
     Student: '/users/student',
   },
-  Nationalities: {
-    Index: '/nationalities',
-  },
-  Professions: {
-    Index: '/professions',
-  },
   Grades: {
     Index: '/grades',
     Show: '/grades/:id',
@@ -75,6 +72,14 @@ export const APIRoute = {
   Subjects: {
     Index: '/subjects',
     Show: '/subjects/:id',
+  },
+  Nationalities: {
+    Index: '/nationalities',
+    Show: '/nationalities/:id',
+  },
+  Professions: {
+    Index: '/professions',
+    Show: '/professions/:id',
   },
   Journal: {
     Index: '/journal',
