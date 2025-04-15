@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SliceName } from '@/const/store';
 import { Professions } from '@/types/professions';
-import { fetchProfessionsAction } from './professions-api-actions';
+import { deleteProfessionAction, fetchProfessionsAction, storeProfessionAction, updateProfessionAction } from './professions-api-actions';
 
 export type ProfessionsSlice = {
   professions: {
@@ -32,6 +32,26 @@ export const professionsSlice = createSlice({
       })
       .addCase(fetchProfessionsAction.rejected, (state) => {
         state.professions.isFetching = false;
+      })
+
+      .addCase(storeProfessionAction.fulfilled, (state, action) => {
+        if (state.professions.data) {
+          state.professions.data = [action.payload, ...state.professions.data];
+        }
+      })
+      .addCase(updateProfessionAction.fulfilled, (state, action) => {
+        if (state.professions.data) {
+          const index = state.professions.data.findIndex(({ id }) => id === action.payload.id);
+
+          if (index !== -1) {
+            state.professions.data[index] = action.payload;
+          }
+        }
+      })
+      .addCase(deleteProfessionAction.fulfilled, (state, action) => {
+        if (state.professions.data) {
+          state.professions.data = state.professions.data.filter(({ id }) => id !== action.payload);
+        }
       });
   },
 });

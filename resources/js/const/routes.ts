@@ -32,6 +32,9 @@ export const AppRoute = {
   Nationalities: {
     Index: '/nationalities',
   },
+  Professions: {
+    Index: '/professions',
+  },
   Monitoring: {
     Index: '/monitoring',
   },
