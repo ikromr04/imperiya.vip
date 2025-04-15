@@ -7,10 +7,10 @@ export enum AuthorizationStatus {
 export enum SliceName {
   App = 'App',
   Auth = 'Auth',
+  Lessons = 'Lessons',
   Users = 'Users',
   Grades = 'Grades',
   Subjects = 'Subjects',
-  Lessons = 'Lessons',
   Nationalities = 'Nationalities',
   Professions = 'Professions',
 };

@@ -106,7 +106,7 @@ function RegisterLinksPage(): JSX.Element {
             columns={columns}
             sortingState={[{
               id: 'expiresAt',
-              desc: true,
+              desc: false,
             }]}
             columnPinningState={{
               right: ['actions']

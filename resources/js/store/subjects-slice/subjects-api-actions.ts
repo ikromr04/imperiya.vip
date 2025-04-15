@@ -2,8 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
 import { ValidationError } from '@/types/validation-error';
 import { APIRoute } from '@/const/routes';
-import { Subject, Subjects } from '@/types/subjects';
+import { Subject, SubjectId, Subjects } from '@/types/subjects';
 import { SubjectUpdateDTO } from '@/dto/subjects';
+import { generatePath } from 'react-router-dom';
 
 export const fetchSubjectsAction = createAsyncThunk<Subjects, undefined, {
   extra: AxiosInstance;
@@ -65,5 +66,19 @@ export const updateSubjectAction = createAsyncThunk<Subject, {
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
       return rejectWithValue(error.response.data);
     }
+  },
+);
+
+export const deleteSubjectAction = createAsyncThunk<SubjectId, {
+  id: SubjectId,
+  onSuccess?: () => void,
+}, {
+  extra: AxiosInstance
+}>(
+  'subjects/delete',
+  async ({ id, onSuccess }, { extra: api }) => {
+    await api.delete(generatePath(APIRoute.Subjects.Show, { id }));
+    if (onSuccess) onSuccess();
+    return id;
   },
 );

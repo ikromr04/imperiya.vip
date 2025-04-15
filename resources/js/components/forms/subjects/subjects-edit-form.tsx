@@ -1,8 +1,8 @@
 import Button from '@/components/ui/button';
 import TextField from '@/components/ui/formik-controls/text-field';
-import { LessonStoreDTO } from '@/dto/subjects';
+import { SubjectUpdateDTO } from '@/dto/subjects';
 import { useAppDispatch } from '@/hooks';
-import { storeLessonAction } from '@/store/subjects-slice/subjects-api-actions';
+import { updateSubjectAction } from '@/store/subjects-slice/subjects-api-actions';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
@@ -12,29 +12,32 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required('Обязательное поле.'),
 });
 
-type LessonsCreateFormProps = {
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+type SubjectsEditFormProps = {
+  dto: SubjectUpdateDTO;
+  setDTO: Dispatch<SetStateAction<SubjectUpdateDTO | null>>;
 };
 
-function LessonsCreateForm({
-  setIsOpen,
-}: LessonsCreateFormProps): JSX.Element {
+function SubjectsEditForm({
+  dto,
+  setDTO,
+}: SubjectsEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const initialValues: LessonStoreDTO = {
-    name: '',
+  const initialValues: SubjectUpdateDTO = {
+    id: dto.id,
+    name: dto.name,
   };
 
   const onSubmit = async (
-    values: LessonStoreDTO,
-    helpers: FormikHelpers<LessonStoreDTO>
+    values: SubjectUpdateDTO,
+    helpers: FormikHelpers<SubjectUpdateDTO>
   ) => {
     helpers.setSubmitting(true);
 
-    await dispatch(storeLessonAction({
-      name: values.name,
+    await dispatch(updateSubjectAction({
+      dto: values,
       onSuccess: () => {
-        toast.success('Урок успешно добавлен.');
-        setIsOpen(false);
+        toast.success('Предмет успешно обновлен.');
+        setDTO(null);
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
       onFail: (message) => toast.success(message),
@@ -52,14 +55,14 @@ function LessonsCreateForm({
       {({ isSubmitting }) => (
         <Form>
           <div className="flex items-center justify-between gap-2 mb-4">
-            <h3 className="title">Добавление урока</h3>
+            <h3 className="title">Редактирование предмета</h3>
 
             <Button
               className="ml-auto"
               type="reset"
               variant="danger"
               icon="close"
-              onClick={() => setIsOpen(false)}
+              onClick={() => setDTO(null)}
             >
               <span className="sr-only">Отмена</span>
             </Button>
@@ -68,7 +71,7 @@ function LessonsCreateForm({
           <TextField
             className="mb-4"
             name="name"
-            label="Урок"
+            label="Название предмета"
             required
           />
 
@@ -76,12 +79,12 @@ function LessonsCreateForm({
             <Button
               className="justify-center min-w-[92px]"
               type="submit"
-              icon="add"
+              icon="edit"
               disabled={isSubmitting}
               loading={isSubmitting}
               variant="success"
             >
-              Добавить
+              Сохранить
             </Button>
           </div>
         </Form>
@@ -90,4 +93,4 @@ function LessonsCreateForm({
   );
 }
 
-export default LessonsCreateForm;
+export default SubjectsEditForm;

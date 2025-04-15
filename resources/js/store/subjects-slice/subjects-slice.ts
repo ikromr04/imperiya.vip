@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SliceName } from '@/const/store';
 import { Subjects } from '@/types/subjects';
-import { fetchSubjectsAction, storeSubjectAction, updateSubjectAction } from './subjects-api-actions';
+import { deleteSubjectAction, fetchSubjectsAction, storeSubjectAction, updateSubjectAction } from './subjects-api-actions';
 
 export type SubjectsSlice = {
   subjects: {
@@ -46,6 +46,11 @@ export const subjectsSlice = createSlice({
           if (index !== -1) {
             state.subjects.data[index] = action.payload;
           }
+        }
+      })
+      .addCase(deleteSubjectAction.fulfilled, (state, action) => {
+        if (state.subjects.data) {
+          state.subjects.data = state.subjects.data.filter(({ id }) => id !== action.payload);
         }
       });
   },

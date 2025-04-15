@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SubjectStoreRequest extends FormRequest
+class SubjectUpdateRequest extends FormRequest
 {
   public function authorize(): bool
   {
@@ -14,6 +14,7 @@ class SubjectStoreRequest extends FormRequest
   public function rules(): array
   {
     return [
+      'id' => 'required|exists:subjects,id',
       'name' => 'required|unique:subjects,name',
     ];
   }
@@ -21,6 +22,8 @@ class SubjectStoreRequest extends FormRequest
   public function messages(): array
   {
     return [
+      'id.required' => 'Обязательное поле.',
+      'id.exists' => 'Предмет не найден.',
       'name.required' => 'Обязательное поле.',
       'name.unique' => 'Такой предмет уже существует',
     ];
