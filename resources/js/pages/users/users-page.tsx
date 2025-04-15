@@ -102,7 +102,7 @@ function UsersPage(): JSX.Element {
     dispatch(updateUserAction({
       dto: {
         id,
-        blocked_at: dayjs().format(),
+        blocked_at: dayjs().format('DD-MM-YYYY HH:mm:ss'),
       },
       onFail: (message) => toast.error(message),
       onSuccess: () => toast.success('Пользователь заблокирован.'),
