@@ -3,6 +3,7 @@ import { checkAuthAction, deleteRegisterLinkAction, fetchRegisterLinksAction, ge
 import { AuthorizationStatus, SliceName } from '@/const/store';
 import { RegisterLinks } from '@/types/auth';
 import { User } from '@/types/users';
+import { updateUserAction } from '../users-slice/users-api-actions';
 
 export type AuthSlice = {
   authStatus: AuthorizationStatus;
@@ -35,6 +36,11 @@ export const authSlice = createSlice({
       .addCase(checkAuthAction.rejected, (state) => {
         state.authStatus = AuthorizationStatus.NoAuth;
         state.user = null;
+      })
+      .addCase(updateUserAction.fulfilled, (state, action) => {
+        if (action.payload.id === state.user?.id) {
+          state.user = action.payload;
+        }
       })
       .addCase(loginAction.fulfilled, (state, action) => {
         state.authStatus = AuthorizationStatus.Auth;

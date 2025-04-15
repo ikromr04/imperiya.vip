@@ -61,7 +61,7 @@ function JournalPage(): JSX.Element {
                 {subjects.data && (
                   <SelectField
                     inputClassname="!bg-white"
-                    placeholder="Урок"
+                    placeholder="Предмет"
                     options={subjects.data.map((subject) => ({ value: subject.id.toString(), label: subject.name }))}
                     name="subjectId"
                     onChange={() => handleSubmit()}

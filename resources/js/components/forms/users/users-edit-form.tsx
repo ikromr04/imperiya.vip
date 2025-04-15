@@ -151,7 +151,7 @@ function UsersEditForm({
                   placeholder="Код"
                   required
                 />
-                <span className="absolute top-1/2 left-3 -translate-y-1/2 text-xl">+</span>
+                <span className="absolute top-4 left-3 -translate-y-1/2 text-xl">+</span>
               </div>
               <TextField
                 className="w-[120px] grow"

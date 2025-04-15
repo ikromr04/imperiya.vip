@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder
       NationalitySeeder::class,
       ProfessionSeeder::class,
       UserSeeder::class,
-      SubjectSeeder::class,
-      LessonSeeder::class,
-      RegisterLinkSeeder::class,
+      // SubjectSeeder::class,
+      // LessonSeeder::class,
+      // RegisterLinkSeeder::class,
     ]);
   }
 }

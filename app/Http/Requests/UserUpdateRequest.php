@@ -20,28 +20,30 @@ class UserUpdateRequest extends FormRequest
       'id' => ['required', 'integer', 'exists:users,id'],
       'name' => ['string', 'max:255'],
       'surname' => ['string', 'max:255'],
-      'patronymic' => ['string', 'max:255'],
+      'patronymic' => ['nullable', 'string', 'max:255'],
       'login' => ['string', 'max:255'],
       'sex' => ['in:male,female'],
       'birth_date' => ['date'],
       'nationality_id' => ['integer', 'exists:nationalities,id'],
       'email' => ['nullable', 'email', 'max:255'],
 
-      'address' => ['array'],
+      'address' => ['nullable', 'array'],
       'address.physical_address' => ['required_with:address', 'string', 'max:255'],
       'address.region' => ['required_with:address', 'string', 'max:255'],
 
-      'social_link' => ['array'],
+      'social_link' => ['nullable', 'array'],
       'social_link.facebook' => ['nullable', 'url'],
       'social_link.instagram' => ['nullable', 'url'],
       'social_link.telegram' => ['nullable', 'url'],
       'social_link.odnoklassniki' => ['nullable', 'url'],
 
-      'phone_numbers' => ['array'],
+      'phone_numbers' => ['nullable', 'array'],
       'phone_numbers.*.numbers' => ['required_with:phone_numbers', 'numeric'],
       'phone_numbers.*.code' => ['required_with:phone_numbers', 'numeric'],
 
       'whatsapp' => ['nullable', 'array'],
+      'whatsapp.code' => ['required_with:whatsapp', 'numeric'],
+      'whatsapp.numbers' => ['required_with:whatsapp', 'numeric'],
     ];
   }
 
