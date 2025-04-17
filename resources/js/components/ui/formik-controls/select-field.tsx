@@ -101,7 +101,11 @@ function SelectField(props: SelectFieldProps): JSX.Element {
       );
     }
 
-    return props.options.find((option) => option.value === field.value)?.label;
+    return (
+      <span className="truncate">
+        {props.options.find((option) => option.value === field.value)?.label}
+      </span>
+    );
   };
 
   return (
@@ -145,7 +149,7 @@ function SelectField(props: SelectFieldProps): JSX.Element {
       <div
         ref={menuRef}
         className={classNames(
-          'absolute top-[calc(100%+4px)] right-0 z-10 border rounded-md pb-1 bg-white shadow-sm text-sm min-w-max w-full text-gray-500',
+          'absolute top-[calc(100%+4px)] right-0 z-10 border rounded-md pb-1 bg-white shadow-sm text-sm w-full text-gray-500',
           isOpen ? 'visible opacity-100' : 'invisible opacity-0',
           searchable ? 'pt-0' : 'pt-1'
         )}
@@ -164,7 +168,7 @@ function SelectField(props: SelectFieldProps): JSX.Element {
               <button
                 className={classNames(
                   optionClassname,
-                  'flex w-full items-center h-8 transition-all duration-150 hover:bg-green-50 px-3',
+                  'flex w-full items-center h-8 transition-all duration-150 hover:bg-green-50 px-3 leading-none text-left min-h-max',
                   multiple && (field.value || []).includes(option.value) && 'bg-blue-50 hover:bg-red-50',
                   !multiple && (field.value === option.value) && 'bg-blue-50 hover:bg-red-50',
                 )}

@@ -7,6 +7,15 @@ import { Marks } from './marks';
 
 export type LessonId = ID;
 
+export type TypeId = ID;
+
+export type Type = {
+  id: TypeId;
+  name: string;
+};
+
+export type Types = Type[];
+
 export type Lesson = {
   id: LessonId;
   date: string;
@@ -16,6 +25,7 @@ export type Lesson = {
   homework?: string;
   subjectId?: SubjectId;
   teacherId?: UserId;
+  typeId?: TypeId;
   marks?: Marks;
 };
 

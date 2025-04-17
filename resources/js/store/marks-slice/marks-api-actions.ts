@@ -3,7 +3,7 @@ import { AxiosError, AxiosInstance } from 'axios';
 import { ValidationError } from '@/types/validation-error';
 import { APIRoute } from '@/const/routes';
 import { MarkStoreDTO, MarkUpdateDTO } from '@/dto/marks';
-import { Marks } from '@/types/marks';
+import { Mark, Marks } from '@/types/marks';
 import { LessonId } from '@/types/lessons';
 
 export const fetchMarksAction = createAsyncThunk<void, {
@@ -33,7 +33,7 @@ export const fetchMarksAction = createAsyncThunk<void, {
 
 export const storeMarkAction = createAsyncThunk<void, {
   dto: MarkStoreDTO,
-  onSuccess?: () => void,
+  onSuccess?: (mark: Mark) => void,
   onValidationError?: (error: ValidationError) => void,
   onFail?: (message: string) => void,
 }, {
@@ -43,8 +43,8 @@ export const storeMarkAction = createAsyncThunk<void, {
   'marks/store',
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      await api.post(APIRoute.Marks.Index, dto);
-      if (onSuccess) onSuccess();
+      const { data } = await api.post<Mark>(APIRoute.Marks.Index, dto);
+      if (onSuccess) onSuccess(data);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;
@@ -58,7 +58,7 @@ export const storeMarkAction = createAsyncThunk<void, {
 
 export const updateMarkAction = createAsyncThunk<void, {
   dto: MarkUpdateDTO,
-  onSuccess?: () => void,
+  onSuccess?: (mark: Mark) => void,
   onValidationError?: (error: ValidationError) => void,
   onFail?: (message: string) => void,
 }, {
@@ -68,8 +68,8 @@ export const updateMarkAction = createAsyncThunk<void, {
   'marks/update',
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      await api.put(APIRoute.Marks.Index, dto);
-      if (onSuccess) onSuccess();
+      const { data } = await api.put<Mark>(APIRoute.Marks.Index, dto);
+      if (onSuccess) onSuccess(data);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const error: AxiosError<ValidationError> = err;

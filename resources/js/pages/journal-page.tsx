@@ -11,15 +11,17 @@ import { getUsers } from '@/store/users-slice/users-selector';
 import { GradeId } from '@/types/grades';
 import { SubjectId } from '@/types/subjects';
 import { Form, Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 function JournalPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const grades = useAppSelector(getGrades);
   const users = useAppSelector(getUsers);
   const subjects = useAppSelector(getSubjects);
-  const [gradeId, setGradeId] = useState(0);
-  const [subjectId, setSubjectId] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const gradeId = searchParams.get('gradeId');
+  const subjectId = searchParams.get('subjectId');
 
   useEffect(() => {
     if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
@@ -33,8 +35,17 @@ function JournalPage(): JSX.Element {
       subjectId: SubjectId;
     },
   ) => {
-    setGradeId(+values.gradeId);
-    setSubjectId(+values.subjectId);
+    if (values.gradeId) {
+      setSearchParams({
+        subjectId: values.subjectId.toString(),
+        gradeId: values.gradeId.toString(),
+      });
+    }
+  };
+
+  const initialValues = {
+    gradeId: !isNaN(Number(gradeId)) ? Number(gradeId) : 0,
+    subjectId: !isNaN(Number(subjectId)) ? Number(subjectId) : 0,
   };
 
   return (
@@ -44,7 +55,7 @@ function JournalPage(): JSX.Element {
           <h1 className="title">Журнал</h1>
 
           <Formik
-            initialValues={{ gradeId, subjectId }}
+            initialValues={initialValues}
             onSubmit={onSubmit}
           >
             {({ handleSubmit }) => (
@@ -53,7 +64,7 @@ function JournalPage(): JSX.Element {
                   <SelectField
                     inputClassname="!bg-white"
                     placeholder="Класс"
-                    options={grades.data.map((grade) => ({ value: grade.id.toString(), label: `${grade.level} ${grade.group}` }))}
+                    options={grades.data.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
                     name="gradeId"
                     onChange={() => handleSubmit()}
                   />
@@ -62,7 +73,7 @@ function JournalPage(): JSX.Element {
                   <SelectField
                     inputClassname="!bg-white"
                     placeholder="Предмет"
-                    options={subjects.data.map((subject) => ({ value: subject.id.toString(), label: subject.name }))}
+                    options={subjects.data.map((subject) => ({ value: subject.id, label: subject.name }))}
                     name="subjectId"
                     onChange={() => handleSubmit()}
                     searchable
@@ -73,12 +84,12 @@ function JournalPage(): JSX.Element {
           </Formik>
         </header>
 
-        {(gradeId > 0 && subjectId > 0) && users.data && grades.data && subjects.data && (
+        {(gradeId && +gradeId > 0 && subjectId && +subjectId > 0) && users.data && grades.data && subjects.data && (
           <JournalTable
             key={`${subjectId.toString()}${gradeId.toString()}`}
-            students={users.data.filter((user) => user.student?.gradeId === gradeId)}
-            subjectId={subjectId}
-            gradeId={gradeId}
+            students={users.data.filter((user) => user.student?.gradeId === +gradeId)}
+            subjectId={+subjectId}
+            gradeId={+gradeId}
           />
         )}
       </main>

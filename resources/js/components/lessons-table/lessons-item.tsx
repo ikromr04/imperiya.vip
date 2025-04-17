@@ -66,13 +66,13 @@ function LessonItem({
 
   return (
     <div className="flex flex-col text-center leading-none group">
-      <span className="truncate">
+      <Link className="duration-150 hover:text-blue-600 truncate" to={`${AppRoute.Journal}?gradeId=${lesson.gradeId}&subjectId=${lesson.subjectId}`}>
         {subjects.find(({ id }) => id === lesson.subjectId)?.name}
-      </span>
+      </Link>
       {teacher && (
         <div className="flex justify-center text-sm items-baseline">
           (<Link
-            className="transition-all duration-150 hover:text-blue-600 truncate"
+            className="duration-150 hover:text-blue-600 truncate"
             to={generatePath(AppRoute.Users.Show, { id: lesson.teacherId })}
           >
             {teacher.surname} {teacher.name}

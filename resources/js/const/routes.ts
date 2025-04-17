@@ -12,6 +12,7 @@ export const AppRoute = {
   Journal: '/journal',
   Lessons: {
     Index: '/lessons',
+    Types: '/lessons/types',
   },
   Diary: {
     Index: '/diary',
@@ -71,6 +72,8 @@ export const APIRoute = {
   Lessons: {
     Index: '/lessons',
     Show: '/lessons/:id',
+    Types: '/lessons/types',
+    TypesShow: '/lessons/types/:id',
   },
   Subjects: {
     Index: '/subjects',

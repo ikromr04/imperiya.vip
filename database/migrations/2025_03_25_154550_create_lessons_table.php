@@ -16,6 +16,7 @@ return new class extends Migration
       $table->date('date');
       $table->enum('hour', [1, 2, 3, 4, 5, 6, 7, 8]);
       $table->foreignId('grade_id')->constrained('grades')->cascadeOnDelete();
+      $table->foreignId('type_id')->nullable()->constrained('lesson_types')->nullOnDelete();
       $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
       $table->foreignId('teacher_id')->nullable()->constrained('users')->nullOnDelete();
       $table->string('topic')->nullable();

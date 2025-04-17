@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LessonTypeStoreRequest;
+use App\Http\Requests\LessonTypeUpdateRequest;
 use App\Models\Lesson;
+use App\Models\LessonType;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
@@ -126,6 +129,7 @@ class LessonController extends Controller
       'grade_id',
       'subject_id',
       'teacher_id',
+      'type_id',
       'topic',
       'homework',
     ]));
@@ -204,5 +208,41 @@ class LessonController extends Controller
     return collect(range(0, 5))->map(function ($i) use ($startOfWeek, $week) {
       return $startOfWeek->copy()->addDays($i + ($week * 7))->toDateString();
     })->toArray();
+  }
+
+  public function types(): JsonResponse
+  {
+    $types = LessonType::selectBasic()->orderBy('name')->get();
+
+    return response()->json($types, 200);
+  }
+
+  public function storeType(LessonTypeStoreRequest $request): JsonResponse
+  {
+    $type = LessonType::create($request->only(['name']));
+
+    return response()->json([
+      'id' => $type->id,
+      'name' => $type->name,
+    ], 201);
+  }
+
+  public function updateType(LessonTypeUpdateRequest $request): JsonResponse
+  {
+    $type = LessonType::findOrFail($request->id);
+
+    $type->update($request->only('name'));
+
+    return response()->json([
+      'id' => $type->id,
+      'name' => $type->name,
+    ], 200);
+  }
+
+  public function deleteType(Request $request)
+  {
+    LessonType::findOrFail($request->id)->delete();
+
+    return response()->noContent();
   }
 }

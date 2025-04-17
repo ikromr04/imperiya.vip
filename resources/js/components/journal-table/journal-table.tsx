@@ -6,16 +6,17 @@ import React, { useEffect, useState } from 'react';
 import { generatePath, Link } from 'react-router-dom';
 import { Journal, Lessons } from '@/types/lessons';
 import Spinner from '../ui/spinner';
-import { useAppDispatch } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import DataTable from '../ui/data-table/data-table';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 import { SubjectId } from '@/types/subjects';
-import { fetchJournalAction } from '@/store/lessons-slice/lessons-api-actions';
+import { fetchJournalAction, fetchLessonsTypesAction } from '@/store/lessons-slice/lessons-api-actions';
 import { Mark } from '@/types/marks';
 import MarkCreate from './mark-create';
-import LessonsTopicEditForm from '../forms/lessons/lessons-topic-edit-form';
 import MarkEdit from './mark-edit';
+import LessonsJournalEditForm from '../forms/lessons/lessons-journal-edit-form';
+import { getLessonsTypes } from '@/store/lessons-slice/lessons-selector';
 
 type JournalTableProps = {
   students: Users;
@@ -29,10 +30,12 @@ function JournalTable({
   gradeId,
 }: JournalTableProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const lessonsTypes = useAppSelector(getLessonsTypes);
   const [journal, setJournal] = useState<Journal[] | null>(null);
   const [lessons, setLessons] = useState<Lessons>([]);
 
   useEffect(() => {
+    if (!lessonsTypes.data && !lessonsTypes.isFetching) dispatch(fetchLessonsTypesAction());
     if (!journal) dispatch(fetchJournalAction({
       subjectId,
       gradeId,
@@ -54,9 +57,9 @@ function JournalTable({
         }));
       },
     }));
-  }, [dispatch, gradeId, journal, students, subjectId]);
+  }, [dispatch, gradeId, journal, lessonsTypes.data, lessonsTypes.isFetching, students, subjectId]);
 
-  if (!journal) {
+  if (!journal || !lessonsTypes.data || !lessons) {
     return <Spinner className="w-8 h-8" />;
   }
 
@@ -91,6 +94,7 @@ function JournalTable({
             }
             return (
               <MarkCreate
+                studentName={row.original.name}
                 studentId={row.original.id}
                 lessonId={item.id}
               />
@@ -101,7 +105,10 @@ function JournalTable({
             <div className={classNames(
               'flex items-center justify-center -m-2 p-2',
             )}>
-              <MarkEdit mark={mark} />
+              <MarkEdit
+                mark={mark}
+                studentName={row.original.name}
+              />
             </div>
           );
         },
@@ -117,7 +124,11 @@ function JournalTable({
             </span>
           ),
           renderFilter: (_, setIsOpen) => (
-            <LessonsTopicEditForm lesson={item} setIsOpen={setIsOpen} />
+            <LessonsJournalEditForm
+              lesson={item}
+              types={lessonsTypes.data || []}
+              setIsOpen={setIsOpen}
+            />
           ),
         }
       });

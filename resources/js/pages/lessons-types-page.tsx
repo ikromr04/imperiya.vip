@@ -6,26 +6,26 @@ import Spinner from '@/components/ui/spinner';
 import { ColumnDef } from '@tanstack/react-table';
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
-import { getProfessions } from '@/store/professions-slice/professions-selector';
-import { ProfessionStoreDTO, ProfessionUpdateDTO } from '@/dto/professions';
-import { Profession, ProfessionId } from '@/types/professions';
-import { fetchProfessionsAction } from '@/store/professions-slice/professions-api-actions';
-import ProfessionsCreateForm from '@/components/forms/professions/professions-create-form';
-import ProfessionsEditForm from '@/components/forms/professions/professions-edit-form';
-import ProfessionsDeleteForm from '@/components/forms/professions/profession-delete-form';
+import { getLessonsTypes } from '@/store/lessons-slice/lessons-selector';
+import { TypeStoreDTO, TypeUpdateDTO } from '@/dto/lessons';
+import { Type, TypeId } from '@/types/lessons';
+import { fetchLessonsTypesAction } from '@/store/lessons-slice/lessons-api-actions';
+import TypesCreateForm from '@/components/forms/types/types-create-form';
+import TypesEditForm from '@/components/forms/types/types-edit-form';
+import TypesDeleteForm from '@/components/forms/types/types-delete-form';
 
-function ProfessionsPage(): JSX.Element {
+function LessonsTypesPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const professions = useAppSelector(getProfessions);
-  const [createDTO, setCreateDTO] = useState<ProfessionStoreDTO | null>(null);
-  const [editDTO, setEditDTO] = useState<ProfessionUpdateDTO | null>(null);
-  const [deleteDTO, setDeleteDTO] = useState<ProfessionId | null>(null);
+  const types = useAppSelector(getLessonsTypes);
+  const [createDTO, setCreateDTO] = useState<TypeStoreDTO | null>(null);
+  const [editDTO, setEditDTO] = useState<TypeUpdateDTO | null>(null);
+  const [deleteDTO, setDeleteDTO] = useState<TypeId | null>(null);
 
   useEffect(() => {
-    if (!professions.data && !professions.isFetching) dispatch(fetchProfessionsAction());
-  }, [dispatch, professions.data, professions.isFetching]);
+    if (!types.data && !types.isFetching) dispatch(fetchLessonsTypesAction());
+  }, [dispatch, types.data, types.isFetching]);
 
-  const columns: ColumnDef<Profession>[] = [
+  const columns: ColumnDef<Type>[] = [
     {
       id: 'name',
       accessorKey: 'name',
@@ -66,12 +66,12 @@ function ProfessionsPage(): JSX.Element {
     <AppLayout>
       <main className="py-2">
         <h1 className="title mb-1 px-3">
-          Сфера деятельности ({professions.data?.length})
+          Типы экзаменов ({types.data?.length})
         </h1>
 
-        {professions.data ? (
+        {types.data ? (
           <DataTable
-            data={professions.data}
+            data={types.data}
             columns={columns}
             sortingState={[{
               id: 'name',
@@ -97,17 +97,17 @@ function ProfessionsPage(): JSX.Element {
 
       <Modal isOpen={(createDTO || editDTO || deleteDTO) ? true : false}>
         {createDTO && (
-          <ProfessionsCreateForm dto={createDTO} setDTO={setCreateDTO} />
+          <TypesCreateForm dto={createDTO} setDTO={setCreateDTO} />
         )}
         {editDTO && (
-          <ProfessionsEditForm dto={editDTO} setDTO={setEditDTO} />
+          <TypesEditForm dto={editDTO} setDTO={setEditDTO} />
         )}
         {deleteDTO && (
-          <ProfessionsDeleteForm dto={deleteDTO} setDTO={setDeleteDTO} />
+          <TypesDeleteForm dto={deleteDTO} setDTO={setDeleteDTO} />
         )}
       </Modal>
     </AppLayout >
   );
 }
 
-export default ProfessionsPage;
+export default LessonsTypesPage;

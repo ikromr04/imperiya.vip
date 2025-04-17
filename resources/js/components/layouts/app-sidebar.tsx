@@ -129,6 +129,15 @@ function AppSidebar(): JSX.Element {
                 <li>
                   <NavLink
                     className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                    to={AppRoute.Lessons.Types}
+                  >
+                    <Icons.types className="navlink__icon" width={16} height={16} />
+                    Типы экзаменов
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                     to={AppRoute.Auth.RegisterLinks}
                   >
                     <Icons.link className="navlink__icon" width={16} height={16} />

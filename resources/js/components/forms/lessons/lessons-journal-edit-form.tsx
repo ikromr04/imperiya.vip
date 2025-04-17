@@ -1,27 +1,33 @@
+import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
+import SelectField from '@/components/ui/formik-controls/select-field';
 import TextField from '@/components/ui/formik-controls/text-field';
 import { LessonUpdateDTO } from '@/dto/lessons';
 import { useAppDispatch } from '@/hooks';
 import { updateLessonAction } from '@/store/lessons-slice/lessons-api-actions';
-import { Lesson } from '@/types/lessons';
+import { Lesson, Types } from '@/types/lessons';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 
-type LessonsTopicEditFormProps = {
+type LessonsJournalEditFormProps = {
   lesson: Lesson;
+  types: Types;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-function LessonsTopicEditForm({
+function LessonsJournalEditForm({
   lesson,
   setIsOpen,
-}: LessonsTopicEditFormProps): JSX.Element {
+  types,
+}: LessonsJournalEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
+
   const initialValues: LessonUpdateDTO = {
     id: lesson.id,
     topic: lesson.topic,
     homework: lesson.homework,
+    type_id: lesson.typeId,
   };
 
   const onSubmit = async (
@@ -45,8 +51,20 @@ function LessonsTopicEditForm({
       initialValues={initialValues}
       onSubmit={onSubmit}
     >
-      {({ isSubmitting }) => (
-        <Form className="flex flex-col gap-1">
+      {({ isSubmitting, setFieldValue }) => (
+        <Form className="flex flex-col gap-2">
+          <div className="flex justify-between items-center pl-2 pr-1">
+            <button
+              className="absolute right-1 top-1 border rounded p-1 text-danger"
+              type="button"
+              onClick={() => setIsOpen(false)}
+            >
+              <Icons.close width={10} height={10} />
+            </button>
+          </div>
+
+          <hr className="-mx-3" />
+
           <TextField
             name="topic"
             label="Тема:"
@@ -54,14 +72,21 @@ function LessonsTopicEditForm({
 
           <TextField
             name="homework"
-            label="Домашнее задание"
+            label="Домашнее задание:"
           />
 
-          <div className="flex items-center justify-end gap-2 sm:col-span-2 mt-1">
+          <SelectField
+            name="type_id"
+            label="Тип:"
+            cleanable
+            onClean={() => setFieldValue('type_id', null)}
+            options={types.map((type) => ({ value: type.id, label: type.name }))}
+          />
+
+          <div className="flex items-center justify-end gap-2 sm:col-span-2 -mt-1">
             <Button
-              className="justify-center min-w-[92px]"
+              className="!h-8 bg-transparent !text-success shadow-none hover:!bg-transparent"
               type="submit"
-              icon="edit"
               disabled={isSubmitting}
               loading={isSubmitting}
               variant="success"
@@ -75,4 +100,4 @@ function LessonsTopicEditForm({
   );
 }
 
-export default LessonsTopicEditForm;
+export default LessonsJournalEditForm;

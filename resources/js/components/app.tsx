@@ -25,7 +25,8 @@ import ProfileDiaryPage from '@/pages/auth/profile-page/profile-diary-page';
 import DiaryPage from '@/pages/diary-page';
 import SubjectsPage from '@/pages/subjects-page';
 import NationalitiesPage from '@/pages/nationalities-page';
-import ProfesionsPage from '@/pages/professions-page';
+import ProfessionsPage from '@/pages/professions-page';
+import LessonsTypesPage from '@/pages/lessons-types-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -73,7 +74,9 @@ function App(): JSX.Element {
 
         <Route path={AppRoute.Nationalities.Index} element={<NationalitiesPage />} />
 
-        <Route path={AppRoute.Professions.Index} element={<ProfesionsPage />} />
+        <Route path={AppRoute.Professions.Index} element={<ProfessionsPage />} />
+
+        <Route path={AppRoute.Lessons.Types} element={<LessonsTypesPage />} />
 
         <Route path={AppRoute.NotFound} element={<NotFoundPage />} />
       </Routes>

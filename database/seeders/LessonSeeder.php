@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Lesson;
+use App\Models\LessonType;
 use App\Models\Mark;
 use App\Models\Student;
 use App\Models\Teacher;
@@ -21,6 +22,23 @@ class LessonSeeder extends Seeder
     $endDate = Carbon::create(null, 5, 31);
 
     $dates = ['2024-09-02', '2024-09-03', '2024-09-04', '2024-09-05', '2024-09-06', '2024-09-07'];
+    $types = [
+      'Самостоятельная работа',
+      'Контрольная работа',
+      'Диктант',
+      'Контрольный диктант',
+      'Тест',
+      'Сочинение',
+      'Изложение',
+      'Эссе',
+      'Лабораторная работа',
+      'Графическая работа',
+      'Техника чтения',
+    ];
+
+    foreach ($types as $type) {
+      LessonType::create(['name' => $type]);
+    }
 
     $teachers = User::where('role', 'teacher')->get()->map(fn($user) => $user->id);
 
@@ -50,7 +68,7 @@ class LessonSeeder extends Seeder
               foreach ($students as $student) {
                 Mark::create([
                   'score_1' => $faker->randomElement([2, 3, 4, 5]),
-                  'attendance' => $faker->randomElement([true, true, true, true, false, true, false, true, null]),
+                  'attendance' => $faker->randomElement(['P', 'L', 'A', 'EA', 'SUS']),
                   'student_id' => $student->user_id,
                   'lesson_id' => $lesson->id,
                   'comment' => $faker->text($faker->numberBetween(40, 100)),

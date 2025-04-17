@@ -228,7 +228,7 @@ export default function DataTable<T>({
 
       <table ref={tableRef} className="flex flex-col w-full">
         <thead
-          className="sticky top-0 z-20 shadow overflow-x-auto no-scrollbar sync-scroll"
+          className="sticky top-0 z-40 shadow overflow-x-auto no-scrollbar sync-scroll"
           onScroll={scrollSync}
         >
           {table.getHeaderGroups().map((headerGroup) => (
@@ -313,8 +313,8 @@ export default function DataTable<T>({
                   className={classNames(
                     'relative p-0',
                     (index % 2) ? 'bg-gray-50' : 'bg-white',
-                    columnPinning.left?.includes(cell.column.id) && 'sticky left-0 z-10',
-                    columnPinning.right?.includes(cell.column.id) && 'sticky right-0 z-10',
+                    columnPinning.left?.includes(cell.column.id) && 'sticky left-0 z-30',
+                    columnPinning.right?.includes(cell.column.id) && 'sticky right-0 z-30',
                     cell.column.columnDef.meta?.columnClass,
                   )}
                   style={{

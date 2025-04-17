@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Lesson extends Model
@@ -21,6 +22,11 @@ class Lesson extends Model
     return $this->hasMany(Mark::class);
   }
 
+  public function type(): BelongsTo
+  {
+    return $this->belongsTo(LessonType::class);
+  }
+
   public function scopeSelectBasic($query)
   {
     return $query->select(
@@ -30,6 +36,7 @@ class Lesson extends Model
       'grade_id',
       'subject_id',
       'teacher_id',
+      'type_id',
       'topic',
       'homework',
     );
@@ -43,6 +50,7 @@ class Lesson extends Model
       'grade_id' => 'gradeId',
       'subject_id' => 'subjectId',
       'teacher_id' => 'teacherId',
+      'type_id' => 'typeId',
     ];
 
     foreach ($map as $snake => $camel) {
