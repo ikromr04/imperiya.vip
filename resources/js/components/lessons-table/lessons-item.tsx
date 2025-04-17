@@ -80,7 +80,7 @@ function LessonItem({
         </div>
       )}
 
-      {dayjs().format('YYYY-MM-DD') < dayjs(date).format('YYYY-MM-DD') && (
+      {dayjs().format('YYYY-MM-DD') <= dayjs(date).format('YYYY-MM-DD') && (
         <div className="absolute right-0 top-0 p-1 flex gap-1 invisible group-hover:visible">
           <Button
             icon="edit"

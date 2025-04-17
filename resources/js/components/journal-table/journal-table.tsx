@@ -9,7 +9,6 @@ import Spinner from '../ui/spinner';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import DataTable from '../ui/data-table/data-table';
 import dayjs from 'dayjs';
-import classNames from 'classnames';
 import { SubjectId } from '@/types/subjects';
 import { fetchJournalAction, fetchLessonsTypesAction } from '@/store/lessons-slice/lessons-api-actions';
 import { Mark } from '@/types/marks';
@@ -89,9 +88,8 @@ function JournalTable({
           const mark: Mark = row.original[item.date] as Mark;
 
           if (!mark) {
-            if (dayjs(item.date) > dayjs()) {
-              return null;
-            }
+            if (dayjs(item.date) > dayjs()) return null;
+
             return (
               <MarkCreate
                 studentName={row.original.name}
@@ -102,13 +100,8 @@ function JournalTable({
           }
 
           return (
-            <div className={classNames(
-              'flex items-center justify-center -m-2 p-2',
-            )}>
-              <MarkEdit
-                mark={mark}
-                studentName={row.original.name}
-              />
+            <div className="flex items-center justify-center -m-2 p-2">
+              <MarkEdit mark={mark} studentName={row.original.name} />
             </div>
           );
         },

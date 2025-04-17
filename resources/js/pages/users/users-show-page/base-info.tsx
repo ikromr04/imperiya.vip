@@ -1,6 +1,7 @@
 import UsersEditForm from '@/components/forms/users/users-edit-form';
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
+import CopyButton from '@/components/ui/copy-button';
 import DescriptionList from '@/components/ui/description-list';
 import Modal from '@/components/ui/modal';
 import Tooltip from '@/components/ui/tooltip';
@@ -48,6 +49,11 @@ function BaseInfo({
               'Фамилия': user.surname,
               'Отчество': user.patronymic ?? '-',
               'Логин': user.login,
+              'Пароль': user.password ? (
+                <CopyButton className="items-baseline font-normal text-[16px] h-auto !p-0 shadow-none" string={user.password} >
+                  Скопировать
+                </CopyButton>
+              ) : '',
               'Позиция': RoleName[user.role],
               'Пол': SexName[user.sex],
               'Электронная почта':
