@@ -37,8 +37,8 @@ export const AppRoute = {
   Professions: {
     Index: '/professions',
   },
-  Monitoring: {
-    Index: '/monitoring',
+  Ratings: {
+    Dates: '/ratings/dates',
   },
   Settings: {
     Index: '/settings',

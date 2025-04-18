@@ -127,6 +127,15 @@ function SuperadminSidebar(): JSX.Element {
                 Ссылки для регистрации
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Ratings.Dates}
+              >
+                <Icons.ratingDates className="navlink__icon" width={16} height={16} />
+                Даты рейтингов
+              </NavLink>
+            </li>
           </ul>
 
           <hr className="mt-auto" />

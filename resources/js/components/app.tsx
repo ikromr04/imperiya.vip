@@ -29,6 +29,7 @@ import LessonsTypesPage from '@/pages/lessons-types-page';
 import SuperadminRoute from './superadmin-route';
 import UsersLessonsPage from '@/pages/users-show-page/users-lessons-page';
 import UsersDiaryPage from '@/pages/users-show-page/users-diary-page';
+import RatingDatesPage from '@/pages/rating-dates-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -56,7 +57,6 @@ function App(): JSX.Element {
         <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
         <Route path={AppRoute.Auth.Lessons} element={<ProfileLessonsPage />} />
         <Route path={AppRoute.Auth.Diary} element={<ProfileDiaryPage />} />
-        <Route path={AppRoute.Auth.Journal} element={<ProfileDiaryPage />} />
 
         <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} />
 
@@ -79,6 +79,7 @@ function App(): JSX.Element {
           <Route path={AppRoute.Lessons.Types} element={<LessonsTypesPage />} />
           <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
           <Route path={AppRoute.Users.Create} element={<UsersCreatePage />} />
+          <Route path={AppRoute.Ratings.Dates} element={<RatingDatesPage />} />
         </Route>
 
         <Route path={AppRoute.NotFound} element={<NotFoundPage />} />

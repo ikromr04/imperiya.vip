@@ -71,6 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/marks', [MarkController::class, 'update']);
 
+    Route::put('/ratings/dates', [RatingController::class, 'updateDate']);
     Route::put('/ratings', [RatingController::class, 'update']);
   });
 });

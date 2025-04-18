@@ -1,6 +1,6 @@
 import { RatingName } from '@/const/ratings';
 import { GradeId } from '@/types/grades';
-import { RatingId } from '@/types/ratings';
+import { RatingDateId, RatingId } from '@/types/ratings';
 import { SubjectId } from '@/types/subjects';
 import { UserId } from '@/types/users';
 
@@ -16,4 +16,18 @@ export type RatingStoreDTO = {
 export type RatingUpdateDTO = {
   id: RatingId;
   score: number;
+};
+
+export type RatingDateUpdateDTO = {
+  id: RatingDateId;
+  years: string;
+  quarter1?: string;
+  quarter2?: string;
+  semester1?: string;
+  quarter3?: string;
+  quarter4?: string;
+  semester2?: string;
+  annual?: string;
+  assessment?: string;
+  final?: string;
 };

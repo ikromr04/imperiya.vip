@@ -48,4 +48,21 @@ class RatingController extends Controller
 
     return response()->json(Rating::find($request->id), 200);
   }
+
+  public function updateDate(Request $request): JsonResponse
+  {
+    RatingDate::findOrFail($request->id)->update($request->only([
+      'quarter1',
+      'quarter2',
+      'semester1',
+      'quarter3',
+      'quarter4',
+      'semester2',
+      'annual',
+      'assessment',
+      'final',
+    ]));
+
+    return response()->json(RatingDate::find($request->id), 200);
+  }
 }
