@@ -56,6 +56,7 @@ function App(): JSX.Element {
         <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
         <Route path={AppRoute.Auth.Lessons} element={<ProfileLessonsPage />} />
         <Route path={AppRoute.Auth.Diary} element={<ProfileDiaryPage />} />
+        <Route path={AppRoute.Auth.Journal} element={<ProfileDiaryPage />} />
 
         <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} />
 

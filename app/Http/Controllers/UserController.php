@@ -30,8 +30,8 @@ class UserController extends Controller
         $users = User::selectBasic()->get();
         break;
 
-      case 'student':
-        $users = User::selectForStudents()->get();
+      case 'teacher':
+        $users = User::selectForTeachers()->get();
         break;
 
       case 'parent':
@@ -43,6 +43,10 @@ class UserController extends Controller
           ...User::selectForStudents()->get(),
           ...User::selectBasic()->whereIn('id', $childIds)->get(),
         ];
+        break;
+
+      case 'student':
+        $users = User::selectForStudents()->get();
         break;
     }
 

@@ -6,6 +6,8 @@ import { Role } from '@/types/users';
 import SuperadminUsersShow from './superadmin-users-show/superadmin-users-show';
 import StudentUsersShow from './student-users-show/student-users-show';
 import ParentUsersShow from './parent-users-show/parent-users-show';
+import { Navigate } from 'react-router-dom';
+import { AppRoute } from '@/const/routes';
 
 const Page = {
   'superadmin': () => <SuperadminUsersShow />,
@@ -19,7 +21,11 @@ const Page = {
 function UsersShowPage(): JSX.Element {
   const authUser = useAppSelector(getAuthUser);
 
-  return Page[authUser?.role as Role]();
+  if (!authUser) {
+      return <Navigate to={AppRoute.Auth.Login} />;
+    }
+
+    return Page[authUser.role as Role]();
 }
 
 export default UsersShowPage;

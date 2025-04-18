@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AppRoute } from '@/const/routes';
 import classNames from 'classnames';
-import { generatePath, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { logoutAction } from '@/store/auth-slice/auth-api-actions';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { Icons } from '@/components/icons';
@@ -9,7 +9,7 @@ import AppLogo from '@/components/app-logo';
 import { getUsers } from '@/store/users-slice/users-selector';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 
-function ParentSidebar(): JSX.Element {
+function TeacherSidebar(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
   const [isShown, setIsShown] = useState(false);
@@ -53,22 +53,24 @@ function ParentSidebar(): JSX.Element {
                 Профиль
               </NavLink>
             </li>
-          </ul>
-
-          <h2 className="text-sm text-gray-400 pl-4">Дети</h2>
-          <ul className="flex flex-col p-1 gap-1">
-            {users.data?.filter(({ role }) => role === 'student').map((user) => (
-              <li key={user.id}>
-                <NavLink
-                  className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                  to={generatePath(AppRoute.Users.Show, { id: user.id })}
-                  onClick={() => setIsShown(false)}
-                >
-                  <Icons.accountCircle className="navlink__icon" width={16} height={16} />
-                  {user.surname} {user.name}
-                </NavLink>
-              </li>
-            ))}
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Lessons.Index}
+              >
+                <Icons.schedule className="navlink__icon" width={16} height={16} />
+                Расписание
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Journal}
+              >
+                <Icons.journal className="navlink__icon" width={16} height={16} />
+                Журнал
+              </NavLink>
+            </li>
           </ul>
 
           <hr className="mt-auto" />
@@ -100,4 +102,4 @@ function ParentSidebar(): JSX.Element {
   );
 }
 
-export default ParentSidebar;
+export default TeacherSidebar;

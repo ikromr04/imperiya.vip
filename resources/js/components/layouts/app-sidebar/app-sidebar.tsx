@@ -6,12 +6,13 @@ import { Role } from '@/types/users';
 import SuperadminSidebar from './superadmin-sidebar';
 import StudentSidebar from './student-sidebar';
 import ParentSidebar from './parent-sidebar';
+import TeacherSidebar from './teacher-sidebar';
 
 const Sidebar = {
   'superadmin': () => <SuperadminSidebar />,
   'admin': () => <NotFoundPage />,
   'director': () => <NotFoundPage />,
-  'teacher': () => <NotFoundPage />,
+  'teacher': () => <TeacherSidebar />,
   'parent': () => <ParentSidebar />,
   'student': () => <StudentSidebar />,
 };

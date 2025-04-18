@@ -140,6 +140,30 @@ class User extends Authenticatable
       ]);
   }
 
+  public function scopeSelectForTeachers($query)
+  {
+    return $query->whereIn('role', ['student', 'parent', 'teacher'])
+      ->select(
+        'id',
+        'name',
+        'surname',
+        'patronymic',
+        'role',
+        'sex',
+        'email',
+        'avatar',
+        'avatar_thumb',
+        'birth_date',
+        'address',
+        'whatsapp',
+        'nationality_id',
+        'social_link',
+        'phone_numbers',
+      )->with([
+        'student' => fn($query) => $query->selectBasic(),
+      ]);
+  }
+
   public function toArray()
   {
     $array = array_filter(parent::toArray(), fn($value) => $value);

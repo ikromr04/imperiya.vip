@@ -17,6 +17,11 @@ Route::get('/nationalities', [NationalityController::class, 'index']);
 Route::get('/professions', [ProfessionController::class, 'index']);
 Route::get('/grades', [GradeController::class, 'index']);
 
+Route::middleware(['auth:sanctum', 'ability:superadmin,teacher'])->group(function () {
+  Route::post('/ratings', [RatingController::class, 'store']);
+  Route::post('/marks', [MarkController::class, 'store']);
+});
+
 Route::middleware('auth:sanctum')->group(function () {
   Route::get('/users', [UserController::class, 'index']);
   Route::get('/subjects', [SubjectController::class, 'index']);
@@ -25,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('/ratings/dates', [RatingController::class, 'dates']);
   Route::get('/lessons/types', [LessonController::class, 'types']);
   Route::get('/journal', [LessonController::class, 'journal']);
+  Route::get('/ratings', [RatingController::class, 'index']);
 
   Route::middleware('ability:student')->group(function () {
     Route::get('/users/student', [UserController::class, 'student']);
@@ -63,11 +69,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/lessons', [LessonController::class, 'update']);
     Route::delete('/lessons/{id}', [LessonController::class, 'delete']);
 
-    Route::post('/marks', [MarkController::class, 'store']);
     Route::put('/marks', [MarkController::class, 'update']);
 
-    Route::get('/ratings', [RatingController::class, 'index']);
-    Route::post('/ratings', [RatingController::class, 'store']);
     Route::put('/ratings', [RatingController::class, 'update']);
   });
 });

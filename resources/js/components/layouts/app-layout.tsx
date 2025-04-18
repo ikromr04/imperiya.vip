@@ -5,7 +5,6 @@ import AppSidebar from './app-sidebar/app-sidebar';
 function AppLayout({
   children,
 }: PropsWithChildren): JSX.Element {
-
   return (
     <PrivateRoute>
       <div className="min-w-screen min-h-screen bg-gray-100 text-base">

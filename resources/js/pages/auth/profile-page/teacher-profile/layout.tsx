@@ -9,8 +9,6 @@ import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
 import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
 import DescriptionList from '@/components/ui/description-list';
-import { getStudent } from '@/store/users-slice/users-selector';
-import { fetchStudentAction } from '@/store/users-slice/users-api-actions';
 import Button from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import classNames from 'classnames';
@@ -27,15 +25,12 @@ function Layout({
   const dispatch = useAppDispatch();
   const user = useAppSelector(getAuthUser);
   const grades = useAppSelector(getGrades);
-  const grade = grades.data?.find(({ id }) => id === user?.student?.gradeId);
   const nationalities = useAppSelector(getNationalities);
-  const student = useAppSelector(getStudent);
 
   useEffect(() => {
     if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
     if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
-    if (!student.data && !student.isFetching) dispatch(fetchStudentAction());
-  }, [dispatch, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching, student.data, student.isFetching]);
+  }, [dispatch, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching]);
 
   if (!user) {
     return (
@@ -49,9 +44,7 @@ function Layout({
     <AppLayout>
       <main className="pt-4 pb-40">
         <header className="relative z-10 lg:flex lg:items-top lg:gap-4">
-          <div
-            className="relative min-w-36 max-w-36 min-h-36 max-h-36 !p-0 mb-2 lg:mb-0"
-          >
+          <div className="relative min-w-36 max-w-36 min-h-36 max-h-36 !p-0 mb-2 lg:mb-0">
             <img
               className="block w-full h-full rounded-full object-cover border-[2px] border-white"
               src={user.avatarThumb || '/images/avatar.png'}
@@ -65,7 +58,7 @@ function Layout({
             <h1 className="title mb-1">{user.surname} {user.name}</h1>
 
             <span className="flex max-w-max text-center bg-blue-200 text-primary rounded-full text-sm py-1 px-2 leading-none">
-              {RoleName[user.role]} {grade && `${grade?.level} ${grade.group}`}
+              {RoleName[user.role]}
             </span>
           </div>
         </header>
@@ -92,17 +85,6 @@ function Layout({
                 to={AppRoute.Auth.Lessons}
               >
                 Расписание занятий
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => classNames(
-                  'flex items-center h-7 px-2 transition-all duration-150 border border-transparent min-w-max',
-                  isActive && 'rounded shadow bg-white border-gray-200'
-                )}
-                to={AppRoute.Auth.Diary}
-              >
-                Дневник
               </NavLink>
             </li>
           </ul>

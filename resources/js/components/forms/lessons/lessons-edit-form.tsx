@@ -96,6 +96,7 @@ function LessonsEditForm({
               <SelectField
                 name="teacher_id"
                 label="Преподователь"
+                searchable
                 options={users.data.filter((user) => user.role === 'teacher').map((user) => ({ value: user.id, label: `${user.name} ${user.surname}` }))}
               />
             )}

@@ -85,7 +85,7 @@ function StudentSidebar(): JSX.Element {
 
       <button
         className={classNames(
-          'fixed left-0 top-0 z-50 w-screen h-screen transition-all duration-150 bg-black/10 backdrop-blur-[2px]',
+          'fixed left-0 top-0 z-[90] w-screen h-screen transition-all duration-150 bg-black/10 backdrop-blur-[2px]',
           isShown ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         )}
         type="button"

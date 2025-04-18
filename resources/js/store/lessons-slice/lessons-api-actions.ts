@@ -7,17 +7,19 @@ import { GradeId } from '@/types/grades';
 import { Lessons, Type, TypeId, Types } from '@/types/lessons';
 import { LessonDeleteDTO, LessonStoreDTO, LessonUpdateDTO, TypeUpdateDTO } from '@/dto/lessons';
 import { SubjectId } from '@/types/subjects';
+import { UserId } from '@/types/users';
 
 export const fetchLessonsAction = createAsyncThunk<void, {
   week: number;
   gradeId?: GradeId;
+  teacherId?: UserId;
   onSuccess: (lessons: Lessons) => void,
 }, {
   extra: AxiosInstance
 }>(
   'lessons/fetch',
-  async ({ week = 0, gradeId, onSuccess }, { extra: api }) => {
-    const { data } = await api.get<Lessons>(`${APIRoute.Lessons.Index}?week=${week}${gradeId ? `&grade_id=${gradeId}` : ''}`);
+  async ({ week = 0, gradeId, teacherId, onSuccess }, { extra: api }) => {
+    const { data } = await api.get<Lessons>(`${APIRoute.Lessons.Index}?week=${week}${gradeId ? `&grade_id=${gradeId}` : ''}${teacherId ? `&teacher_id=${teacherId}` : ''}`);
 
     onSuccess(data);
   },

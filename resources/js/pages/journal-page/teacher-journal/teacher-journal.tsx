@@ -1,4 +1,4 @@
-import JournalTable from '@/components/journal-table/journal-table';
+import TeacherJournalTable from '@/components/journal-table/teacher-journal-table';
 import AppLayout from '@/components/layouts/app-layout';
 import SelectField from '@/components/ui/formik-controls/select-field';
 import { useAppDispatch, useAppSelector } from '@/hooks';
@@ -16,7 +16,7 @@ import { Form, Formik } from 'formik';
 import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-function SuperadminJournalPage(): JSX.Element {
+function TeacherJournal(): JSX.Element {
   const dispatch = useAppDispatch();
   const grades = useAppSelector(getGrades);
   const users = useAppSelector(getUsers);
@@ -92,7 +92,7 @@ function SuperadminJournalPage(): JSX.Element {
         </header>
 
         {(gradeId && +gradeId > 0 && subjectId && +subjectId > 0) && users.data && grades.data && subjects.data && (
-          <JournalTable
+          <TeacherJournalTable
             key={`${subjectId.toString()}${gradeId.toString()}`}
             students={users.data.filter((user) => user.student?.gradeId === +gradeId)}
             subjectId={+subjectId}
@@ -105,4 +105,4 @@ function SuperadminJournalPage(): JSX.Element {
   );
 }
 
-export default SuperadminJournalPage;
+export default TeacherJournal;

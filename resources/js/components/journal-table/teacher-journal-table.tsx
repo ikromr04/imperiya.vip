@@ -13,28 +13,27 @@ import { SubjectId } from '@/types/subjects';
 import { fetchJournalAction, fetchLessonsTypesAction } from '@/store/lessons-slice/lessons-api-actions';
 import { Mark } from '@/types/marks';
 import MarkCreate from './mark-create';
-import MarkEdit from './mark-edit';
 import LessonsJournalEditForm from '../forms/lessons/lessons-journal-edit-form';
 import { getLessonsTypes } from '@/store/lessons-slice/lessons-selector';
 import { Rating, RatingDate, Ratings } from '@/types/ratings';
 import { RatingName } from '@/const/ratings';
 import RatingCreate from './rating-create';
 import { fetchRatingsAction } from '@/store/ratings-slice/ratings-api-actions';
-import RatingEdit from './rating-edit';
+import { AttendanceAbbr } from '@/const/marks';
 
-type JournalTableProps = {
+type TeacherJournalTableProps = {
   students: Users;
   subjectId: SubjectId;
   gradeId: GradeId;
   ratingDate: RatingDate | undefined;
 };
 
-function JournalTable({
+function TeacherJournalTable({
   students,
   subjectId,
   gradeId,
   ratingDate,
-}: JournalTableProps): JSX.Element {
+}: TeacherJournalTableProps): JSX.Element {
   const dispatch = useAppDispatch();
   const lessonsTypes = useAppSelector(getLessonsTypes);
   const [journal, setJournal] = useState<Journal[] | null>(null);
@@ -141,10 +140,7 @@ function JournalTable({
 
             return (
               <div className="flex items-center justify-center -m-2 p-2">
-                <RatingEdit
-                  studentName={row.original.name}
-                  rating={rating}
-                />
+                {rating.score ?? ''}
               </div>
             );
           },
@@ -196,10 +192,7 @@ function JournalTable({
 
             return (
               <div className="flex items-center justify-center -m-2 p-2">
-                <RatingEdit
-                  studentName={row.original.name}
-                  rating={rating}
-                />
+                {rating.score ?? ''}
               </div>
             );
           },
@@ -251,10 +244,7 @@ function JournalTable({
 
             return (
               <div className="flex items-center justify-center -m-2 p-2">
-                <RatingEdit
-                  studentName={row.original.name}
-                  rating={rating}
-                />
+                {rating.score ?? ''}
               </div>
             );
           },
@@ -306,10 +296,7 @@ function JournalTable({
 
             return (
               <div className="flex items-center justify-center -m-2 p-2">
-                <RatingEdit
-                  studentName={row.original.name}
-                  rating={rating}
-                />
+                {rating.score ?? ''}
               </div>
             );
           },
@@ -361,10 +348,7 @@ function JournalTable({
 
             return (
               <div className="flex items-center justify-center -m-2 p-2">
-                <RatingEdit
-                  studentName={row.original.name}
-                  rating={rating}
-                />
+                {rating.score ?? ''}
               </div>
             );
           },
@@ -416,10 +400,7 @@ function JournalTable({
 
             return (
               <div className="flex items-center justify-center -m-2 p-2">
-                <RatingEdit
-                  studentName={row.original.name}
-                  rating={rating}
-                />
+                {rating.score ?? ''}
               </div>
             );
           },
@@ -471,10 +452,7 @@ function JournalTable({
 
             return (
               <div className="flex items-center justify-center -m-2 p-2">
-                <RatingEdit
-                  studentName={row.original.name}
-                  rating={rating}
-                />
+                {rating.score ?? ''}
               </div>
             );
           },
@@ -526,10 +504,7 @@ function JournalTable({
 
             return (
               <div className="flex items-center justify-center -m-2 p-2">
-                <RatingEdit
-                  studentName={row.original.name}
-                  rating={rating}
-                />
+                {rating.score ?? ''}
               </div>
             );
           },
@@ -581,10 +556,7 @@ function JournalTable({
 
             return (
               <div className="flex items-center justify-center -m-2 p-2">
-                <RatingEdit
-                  studentName={row.original.name}
-                  rating={rating}
-                />
+                {rating.score ?? ''}
               </div>
             );
           },
@@ -612,7 +584,7 @@ function JournalTable({
           const mark: Mark = row.original[item.date] as Mark;
 
           if (!mark) {
-            if (dayjs(item.date) > dayjs()) return null;
+            if (dayjs(item.date) > dayjs() || dayjs(item.date) < dayjs()) return null;
 
             return (
               <MarkCreate
@@ -625,7 +597,10 @@ function JournalTable({
 
           return (
             <div className="flex items-center justify-center -m-2 p-2">
-              <MarkEdit mark={mark} studentName={row.original.name} />
+              {mark.score1 ?? ''}
+              {mark.score1 && mark.score2 && '/'}
+              {mark.score2 ?? ''}
+              {!mark.score1 && !mark.score2 && AttendanceAbbr[mark.attendance as keyof typeof AttendanceAbbr]}
             </div>
           );
         },
@@ -671,4 +646,4 @@ function JournalTable({
   );
 }
 
-export default JournalTable;
+export default TeacherJournalTable;

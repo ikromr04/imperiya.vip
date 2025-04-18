@@ -23,10 +23,10 @@ class LessonController extends Controller
           ->get();
         break;
 
-      case 'student':
+      case 'teacher':
         $lessons = Lesson::selectBasic()
           ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
-          ->where('grade_id', $request->query('grade_id'))
+          ->where('teacher_id', $request->query('teacher_id'))
           ->get();
         break;
 
@@ -36,8 +36,14 @@ class LessonController extends Controller
           ->where('grade_id', $request->query('grade_id'))
           ->get();
         break;
-    }
 
+      case 'student':
+        $lessons = Lesson::selectBasic()
+          ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
+          ->where('grade_id', $request->query('grade_id'))
+          ->get();
+        break;
+    }
 
     return response()->json($lessons, 200);
   }
@@ -196,14 +202,33 @@ class LessonController extends Controller
 
   public function journal(Request $request)
   {
-    $lessons = Lesson::selectBasic()
-      ->orderBy('date')
-      ->where('subject_id', $request->query('subject_id'))
-      ->where('grade_id', $request->query('grade_id'))
-      ->with([
-        'marks' => fn($query) => $query->selectBasic(),
-      ])
-      ->get();
+    $user = $request->user();
+
+    $lessons = [];
+
+    switch ($user->role) {
+      case 'superadmin':
+        $lessons = Lesson::selectBasic()
+          ->orderBy('date')
+          ->where('subject_id', $request->query('subject_id'))
+          ->where('grade_id', $request->query('grade_id'))
+          ->with([
+            'marks' => fn($query) => $query->selectBasic(),
+          ])
+          ->get();
+        break;
+
+      case 'teacher':
+        $lessons = Lesson::selectBasic()
+          ->orderBy('date')
+          ->where('subject_id', $request->query('subject_id'))
+          ->where('grade_id', $request->query('grade_id'))
+          ->with([
+            'marks' => fn($query) => $query->selectBasic(),
+          ])
+          ->get();
+        break;
+    }
 
     return response()->json($lessons, 200);
   }
