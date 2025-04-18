@@ -94,4 +94,8 @@ export const APIRoute = {
     Index: '/marks',
     Diary: '/marks/diary',
   },
+  Ratings: {
+    Index: '/ratings',
+    Dates: '/ratings/dates',
+  },
 };

@@ -311,10 +311,10 @@ export default function DataTable<T>({
                 <td
                   key={JSON.stringify(cell)}
                   className={classNames(
-                    'relative p-0',
+                    'p-0',
                     (index % 2) ? 'bg-gray-50' : 'bg-white',
-                    columnPinning.left?.includes(cell.column.id) && 'sticky left-0 z-30',
-                    columnPinning.right?.includes(cell.column.id) && 'sticky right-0 z-30',
+                    columnPinning.left?.includes(cell.column.id) && 'sticky left-0 z-10',
+                    columnPinning.right?.includes(cell.column.id) && 'sticky right-0 z-10',
                     cell.column.columnDef.meta?.columnClass,
                   )}
                   style={{

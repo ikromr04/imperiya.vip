@@ -7,6 +7,7 @@ import { nationalitiesSlice } from './nationalities-slice/nationalities-slice';
 import { professionsSlice } from './professions-slice/professions-slice';
 import { subjectsSlice } from './subjects-slice/subjects-slice';
 import { lessonsSlice } from './lessons-slice/lessons-slice';
+import { ratingsSlice } from './ratings-slice/ratings-slice';
 
 export const rootReducer = combineReducers({
   [SliceName.Auth]: authSlice.reducer,
@@ -16,4 +17,5 @@ export const rootReducer = combineReducers({
   [SliceName.Subjects]: subjectsSlice.reducer,
   [SliceName.Nationalities]: nationalitiesSlice.reducer,
   [SliceName.Professions]: professionsSlice.reducer,
+  [SliceName.Ratings]: ratingsSlice.reducer,
 });

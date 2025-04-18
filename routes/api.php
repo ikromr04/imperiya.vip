@@ -6,6 +6,7 @@ use App\Http\Controllers\MarkController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\ProfessionController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('/subjects', [SubjectController::class, 'index']);
   Route::get('/lessons', [LessonController::class, 'index']);
   Route::post('/marks/diary', [MarkController::class, 'index']);
+  Route::get('/ratings/dates', [RatingController::class, 'dates']);
 
   Route::middleware('ability:student')->group(function () {
     Route::get('/users/student', [UserController::class, 'student']);
@@ -61,10 +63,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/lessons', [LessonController::class, 'update']);
     Route::delete('/lessons/{id}', [LessonController::class, 'delete']);
 
-
     Route::get('/journal', [LessonController::class, 'journal']);
 
     Route::post('/marks', [MarkController::class, 'store']);
     Route::put('/marks', [MarkController::class, 'update']);
+
+    Route::get('/ratings', [RatingController::class, 'index']);
+    Route::post('/ratings', [RatingController::class, 'store']);
+    Route::put('/ratings', [RatingController::class, 'update']);
   });
 });

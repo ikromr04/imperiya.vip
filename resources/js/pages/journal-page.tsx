@@ -4,6 +4,8 @@ import SelectField from '@/components/ui/formik-controls/select-field';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { getGrades } from '@/store/grades-slice/grades-selector';
+import { fetchRatingDatesAction } from '@/store/ratings-slice/ratings-api-actions';
+import { getRatingDates } from '@/store/ratings-slice/ratings-selector';
 import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
 import { getSubjects } from '@/store/subjects-slice/subjects-selector';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
@@ -19,15 +21,18 @@ function JournalPage(): JSX.Element {
   const grades = useAppSelector(getGrades);
   const users = useAppSelector(getUsers);
   const subjects = useAppSelector(getSubjects);
+  const ratingDates = useAppSelector(getRatingDates);
   const [searchParams, setSearchParams] = useSearchParams();
   const gradeId = searchParams.get('gradeId');
   const subjectId = searchParams.get('subjectId');
+  const currentRatingDate = ratingDates.data?.find(({ years }) => years === '2024-2025');
 
   useEffect(() => {
     if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
     if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
     if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-  }, [dispatch, grades.data, grades.isFetching, subjects.data, subjects.isFetching, users.data, users.isFetching]);
+    if (!ratingDates.data && !ratingDates.isFetching) dispatch(fetchRatingDatesAction());
+  }, [dispatch, grades.data, grades.isFetching, ratingDates.data, ratingDates.isFetching, subjects.data, subjects.isFetching, users.data, users.isFetching]);
 
   const onSubmit = async (
     values: {
@@ -90,6 +95,7 @@ function JournalPage(): JSX.Element {
             students={users.data.filter((user) => user.student?.gradeId === +gradeId)}
             subjectId={+subjectId}
             gradeId={+gradeId}
+            ratingDate={currentRatingDate}
           />
         )}
       </main>

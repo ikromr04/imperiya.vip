@@ -11,16 +11,24 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('lessons', function (Blueprint $table) {
+    Schema::create('ratings', function (Blueprint $table) {
       $table->id();
-      $table->date('date');
-      $table->enum('hour', [1, 2, 3, 4, 5, 6, 7, 8]);
+      $table->string('years');
+      $table->enum('rating', [
+        'quarter1',
+        'quarter2',
+        'semester1',
+        'quarter3',
+        'quarter4',
+        'semester2',
+        'annual',
+        'assessment',
+        'final',
+      ]);
+      $table->tinyInteger('score')->unsigned()->nullable();
+      $table->foreignId('student_id')->constrained('users')->cascadeOnDelete();
       $table->foreignId('grade_id')->constrained('grades')->cascadeOnDelete();
       $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
-      $table->foreignId('teacher_id')->nullable()->constrained('users')->nullOnDelete();
-      $table->foreignId('type_id')->nullable()->constrained('lesson_types')->nullOnDelete();
-      $table->string('topic')->nullable();
-      $table->string('homework')->nullable();
       $table->timestamps();
     });
   }
@@ -30,6 +38,6 @@ return new class extends Migration
    */
   public function down(): void
   {
-    Schema::dropIfExists('lessons');
+    Schema::dropIfExists('ratings');
   }
 };

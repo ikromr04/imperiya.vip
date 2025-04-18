@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
       ProfessionSeeder::class,
       UserSeeder::class,
       SubjectSeeder::class,
+      RatingDateSeeder::class,
       LessonSeeder::class,
       RegisterLinkSeeder::class,
     ]);
