@@ -33,26 +33,7 @@ class AuthController extends Controller
 
     if ($user->role === 'student') {
       return response()->json(
-        User::select(
-          'id',
-          'name',
-          'surname',
-          'patronymic',
-          'login',
-          'role',
-          'sex',
-          'email',
-          'avatar',
-          'avatar_thumb',
-          'birth_date',
-          'address',
-          'whatsapp',
-          'nationality_id',
-          'social_link',
-          'phone_numbers',
-          'updated_at',
-          'created_at',
-        )->findOrFail($user->id),
+        User::selectBasic()->findOrFail($user->id),
         200
       );
     }

@@ -13,9 +13,8 @@ import dayjs from 'dayjs';
 import { getStudent } from '@/store/users-slice/users-selector';
 import { fetchStudentAction } from '@/store/users-slice/users-api-actions';
 import Layout from './layout';
-import CopyButton from '@/components/ui/copy-button';
 
-function StudentProfile(): JSX.Element {
+function ParentProfile(): JSX.Element {
   const dispatch = useAppDispatch();
   const user = useAppSelector(getAuthUser);
   const grades = useAppSelector(getGrades);
@@ -51,11 +50,6 @@ function StudentProfile(): JSX.Element {
               'Имя': user.name,
               'Отчество': user.patronymic ?? '-',
               'Логин': user.login,
-              'Пароль': user.password ? (
-                <CopyButton className="items-baseline font-normal text-[16px] h-auto !p-0 shadow-none" string={user.password} >
-                  Скопировать
-                </CopyButton>
-              ) : '',
               'Позиция': RoleName[user.role],
               'Пол': SexName[user.sex],
               'Электронная почта':
@@ -105,4 +99,4 @@ function StudentProfile(): JSX.Element {
   );
 }
 
-export default StudentProfile;
+export default ParentProfile;
