@@ -11,9 +11,9 @@ import { Hour } from '@/const/lessons';
 import LessonHour from '../lesson-hour';
 import StudentLessonsItem from './student-lessons-item';
 import { getSubjects } from '@/store/subjects-slice/subjects-selector';
-import { getStudent } from '@/store/users-slice/users-selector';
+import { getStudent, getUsers } from '@/store/users-slice/users-selector';
 import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
-import { fetchStudentAction } from '@/store/users-slice/users-api-actions';
+import { fetchStudentAction, fetchUsersAction } from '@/store/users-slice/users-api-actions';
 
 function StudentLessonsTable(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -23,16 +23,18 @@ function StudentLessonsTable(): JSX.Element {
   const tableRef = useRef<HTMLTableElement>(null);
   const subjects = useAppSelector(getSubjects);
   const student = useAppSelector(getStudent);
+  const users = useAppSelector(getUsers);
 
   useEffect(() => {
     if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
     if (!student.data && !student.isFetching) dispatch(fetchStudentAction());
+    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
     if (!lessons && student.data) dispatch(fetchLessonsAction({
       week,
       gradeId: student.data.grade.id,
       onSuccess: (lessons) => setLessons(lessons),
     }));
-  }, [dispatch, lessons, student.data, student.isFetching, subjects.data, subjects.isFetching, week]);
+  }, [dispatch, lessons, student.data, student.isFetching, subjects.data, subjects.isFetching, users.data, users.isFetching, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {
@@ -43,7 +45,7 @@ function StudentLessonsTable(): JSX.Element {
     }
   };
 
-  if (!lessons || !subjects.data || !student.data) return <Spinner className="w-8 h-8" />;
+  if (!lessons || !subjects.data || !student.data || !users.data) return <Spinner className="w-8 h-8" />;
 
   return (
     <div className="rounded-md shadow border pb-1 bg-[linear-gradient(to_bottom,white_0%,white_50%,#f3f4f6_50%,#f3f4f6_100%)] max-w-full">
@@ -104,12 +106,12 @@ function StudentLessonsTable(): JSX.Element {
                     dayjs(date).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD') ? 'bg-green-50' : 'bg-white',
                   )}
                 >
-                  {subjects.data && student.data && (
+                  {subjects.data && users.data && (
                     <StudentLessonsItem
                       date={date}
                       hour={Number(hour) as keyof typeof Hour}
                       subjects={subjects.data}
-                      student={student.data}
+                      users={users.data}
                       lessons={lessons}
                     />
                   )}

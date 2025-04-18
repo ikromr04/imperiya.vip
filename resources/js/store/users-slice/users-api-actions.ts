@@ -132,31 +132,6 @@ export const storeUserAction = createAsyncThunk<User, {
   },
 );
 
-export const fetchUserByIdAction = createAsyncThunk<void, {
-  userId: UserId,
-  onSuccess?: (user: User) => void,
-  onValidationError?: (error: ValidationError) => void,
-  onFail?: (message: string) => void,
-}, {
-  extra: AxiosInstance,
-  rejectWithValue: ValidationError,
-}>(
-  'users/fetchById',
-  async ({ userId, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
-    try {
-      const { data } = await api.get<User>(generatePath(APIRoute.Users.Show, { userId }));
-      if (onSuccess) onSuccess(data);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
-      if (!error.response) throw err;
-      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
-      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
-      return rejectWithValue(error.response.data);
-    }
-  },
-);
-
 export const updateUserAvatarAction = createAsyncThunk<User, {
   id: UserId,
   formData: FormData,

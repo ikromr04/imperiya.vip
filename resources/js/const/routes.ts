@@ -21,7 +21,6 @@ export const AppRoute = {
     Index: '/users',
     Create: '/users/create',
     Show: '/users/:id',
-    Lessons: '/users/:id/lessons',
   },
   Classes: {
     Index: '/classes',

@@ -1,15 +1,17 @@
 import { Hour } from '@/const/lessons';
 import dayjs, { Dayjs } from 'dayjs';
-import React, { memo, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { Subjects } from '@/types/subjects';
 import { Lessons } from '@/types/lessons';
-import { Student } from '@/store/users-slice/users-slice';
+import { generatePath, Link } from 'react-router-dom';
+import { AppRoute } from '@/const/routes';
+import { Users } from '@/types/users';
 
 type StudentLessonItemProps = {
   date: Dayjs;
   hour: keyof typeof Hour;
   subjects: Subjects;
-  student: Student;
+  users: Users;
   lessons: Lessons;
 };
 
@@ -17,8 +19,8 @@ function StudentLessonItem({
   date,
   hour,
   subjects,
-  student,
   lessons,
+  users,
 }: StudentLessonItemProps): ReactNode {
   const lesson = lessons.find((lesson) => (
     dayjs(lesson.date).format('YYYY-MM-DD') === dayjs(date).format('YYYY-MM-DD') &&
@@ -27,7 +29,7 @@ function StudentLessonItem({
 
   if (!lesson) return null;
 
-  const teacher = student.teachers.find(({ id }) => id === lesson.teacherId);
+  const teacher = users.find(({ id }) => id === lesson.teacherId);
 
   return (
     <div className="flex flex-col text-center leading-none group">
@@ -36,11 +38,16 @@ function StudentLessonItem({
       </span>
       {teacher && (
         <div className="flex justify-center text-sm items-baseline">
-          ({teacher.surname} {teacher.name})
+          (<Link
+            className="duration-150 hover:text-blue-600 truncate"
+            to={generatePath(AppRoute.Users.Show, { id: lesson.teacherId })}
+          >
+            {teacher.surname} {teacher.name}
+          </Link>)
         </div>
       )}
     </div>
   );
 }
 
-export default memo(StudentLessonItem);
+export default StudentLessonItem;

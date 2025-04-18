@@ -31,12 +31,6 @@ export type Student = {
     patronymic: string;
   };
   grade: Grade;
-  teachers: {
-    id: UserId;
-    name: string;
-    surname: string;
-    patronymic: string;
-  }[];
 };
 
 export type UsersSlice = {

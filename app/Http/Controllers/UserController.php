@@ -16,19 +16,24 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Intervention\Image\Facades\Image;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
-  public function index(): JsonResponse
+  public function index(Request $request): JsonResponse
   {
-    $users = User::selectBasic()
-      ->get()
-      ->map(function ($user) {
-        $user->password = Crypt::decryptString($user->password);
+    $user = $request->user();
 
-        return $user;
-      });
+    $users = [];
+
+    switch ($user->role) {
+      case 'superadmin':
+        $users = User::selectBasic()->get();
+        break;
+
+      case 'student':
+        $users = User::selectForStudents()->get();
+        break;
+    }
 
     return response()->json($users, 200);
   }
@@ -144,13 +149,6 @@ class UserController extends Controller
     return response()->json(User::selectBasic()->find($user->id), 200);
   }
 
-  public function show(int $id): JsonResponse
-  {
-    $user = User::selectBasic()->find($id);
-
-    return response()->json($user, 200);
-  }
-
   public function checkLogin(string $login)
   {
     if (User::where('login', $login)->exists()) {
@@ -247,20 +245,10 @@ class UserController extends Controller
       ])
       ->first();
 
-    $teachers = User::select(
-      'id',
-      'name',
-      'surname',
-      'role',
-      'patronymic',
-    )->where('role', 'teacher')
-      ->get();
-
     return response()->json([
       'mother' => $student->mother,
       'father' => $student->father,
       'grade' => $student->grade,
-      'teachers' => $teachers,
     ], 200);
   }
 }

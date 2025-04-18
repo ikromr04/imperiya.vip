@@ -116,6 +116,30 @@ class User extends Authenticatable
     ]);
   }
 
+  public function scopeSelectForStudents($query)
+  {
+    return $query->where('role', 'teacher')
+      ->select(
+        'id',
+        'name',
+        'surname',
+        'patronymic',
+        'role',
+        'sex',
+        'email',
+        'avatar',
+        'avatar_thumb',
+        'birth_date',
+        'address',
+        'whatsapp',
+        'nationality_id',
+        'social_link',
+        'phone_numbers',
+      )->with([
+        'teacher' => fn($query) => $query->selectBasic(),
+      ]);
+  }
+
   public function toArray()
   {
     $array = array_filter(parent::toArray(), fn($value) => $value);
@@ -136,6 +160,10 @@ class User extends Authenticatable
         $array[$camel] = $array[$snake];
         unset($array[$snake]);
       }
+    }
+
+    if (!empty($array['password'])) {
+      $array['password'] = Crypt::decryptString($array['password']);
     }
 
     if (!empty($array['address'])) {

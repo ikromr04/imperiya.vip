@@ -18,21 +18,22 @@ Route::get('/professions', [ProfessionController::class, 'index']);
 Route::get('/grades', [GradeController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
+  Route::get('/users', [UserController::class, 'index']);
   Route::get('/subjects', [SubjectController::class, 'index']);
   Route::get('/lessons', [LessonController::class, 'index']);
   Route::post('/marks/diary', [MarkController::class, 'index']);
   Route::get('/ratings/dates', [RatingController::class, 'dates']);
+  Route::get('/lessons/types', [LessonController::class, 'types']);
+  Route::get('/journal', [LessonController::class, 'journal']);
 
   Route::middleware('ability:student')->group(function () {
     Route::get('/users/student', [UserController::class, 'student']);
   });
 
   Route::middleware('abilities:superadmin')->group(function () {
-    Route::get('/users', [UserController::class, 'index']);
     Route::post('/users', [UserController::class, 'store']);
     Route::put('/users', [UserController::class, 'update']);
     Route::get('/users/login/{login}', [UserController::class, 'checkLogin']);
-    Route::get('/users/{id}', [UserController::class, 'show']);
     Route::delete('/users/{id}', [UserController::class, 'delete']);
     Route::put('/users/{id}/avatar', [UserController::class, 'updateAvatar']);
     Route::delete('/users/{id}/avatar', [UserController::class, 'deleteAvatar']);
@@ -54,7 +55,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/professions', [ProfessionController::class, 'update']);
     Route::delete('/professions/{id}', [ProfessionController::class, 'delete']);
 
-    Route::get('/lessons/types', [LessonController::class, 'types']);
     Route::post('/lessons/types', [LessonController::class, 'storeType']);
     Route::put('/lessons/types', [LessonController::class, 'updateType']);
     Route::delete('/lessons/types/{id}', [LessonController::class, 'deleteType']);
@@ -62,8 +62,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/lessons', [LessonController::class, 'store']);
     Route::put('/lessons', [LessonController::class, 'update']);
     Route::delete('/lessons/{id}', [LessonController::class, 'delete']);
-
-    Route::get('/journal', [LessonController::class, 'journal']);
 
     Route::post('/marks', [MarkController::class, 'store']);
     Route::put('/marks', [MarkController::class, 'update']);

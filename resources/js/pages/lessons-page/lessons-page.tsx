@@ -1,23 +1,24 @@
-import { useAppSelector } from '@/hooks';
 import React from 'react';
+import { useAppSelector } from '@/hooks';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
-import NotFoundPage from '@/pages/not-found-page';
-import SuperadminRegisterLinks from './superadmin-register-links/superadmin-register-links';
+import NotFoundPage from '../not-found-page';
+import StudentLessons from './student-lessons/student-lessons';
+import SuperadminLessons from './superadmin-lessons/superadmin-lessons';
 import { Role } from '@/types/users';
 
 const Page = {
-  'superadmin': () => <SuperadminRegisterLinks />,
+  'superadmin': () => <SuperadminLessons />,
   'admin': () => <NotFoundPage />,
   'director': () => <NotFoundPage />,
   'teacher': () => <NotFoundPage />,
   'parent': () => <NotFoundPage />,
-  'student': () => <NotFoundPage />,
+  'student': () => <StudentLessons />,
 };
 
-function RegisterLinksPage(): JSX.Element {
+function LessonsPage(): JSX.Element {
   const authUser = useAppSelector(getAuthUser);
 
   return Page[authUser?.role as Role]();
 }
 
-export default RegisterLinksPage;
+export default LessonsPage;
