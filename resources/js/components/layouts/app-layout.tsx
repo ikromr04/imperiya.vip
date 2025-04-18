@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import PrivateRoute from '../private-route';
-import AppSidebar from './app-sidebar';
+import AppSidebar from './app-sidebar/app-sidebar';
 
 function AppLayout({
   children,

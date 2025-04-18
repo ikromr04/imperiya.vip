@@ -31,13 +31,6 @@ class AuthController extends Controller
 
     if (!$user) return response()->json(['message' => 'Вы не авторизованы.'], 401);
 
-    if ($user->role === 'student') {
-      return response()->json(
-        User::selectBasic()->findOrFail($user->id),
-        200
-      );
-    }
-
     return response()->json(User::selectBasic()->findOrFail($user->id), 200);
   }
 

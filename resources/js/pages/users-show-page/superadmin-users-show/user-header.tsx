@@ -33,7 +33,7 @@ function UserHeader({
       <UserAvatar className="mb-2 lg:mb-0" user={user} />
 
       <div className="lg:grow lg:mt-20">
-        <h1 className="title mb-1">{user.name} {user.surname}</h1>
+        <h1 className="title mb-1">{user.surname} {user.name}</h1>
         <span className="flex max-w-max text-center bg-blue-200 text-primary rounded-full text-sm py-1 px-2 leading-none">
           {RoleName[user.role]} {grade && `${grade?.level} ${grade.group}`}
         </span>

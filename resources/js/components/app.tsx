@@ -27,6 +27,8 @@ import NationalitiesPage from '@/pages/nationalities-page';
 import ProfessionsPage from '@/pages/professions-page';
 import LessonsTypesPage from '@/pages/lessons-types-page';
 import SuperadminRoute from './superadmin-route';
+import UsersLessonsPage from '@/pages/users-show-page/users-lessons-page';
+import UsersDiaryPage from '@/pages/users-show-page/users-diary-page';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -63,6 +65,8 @@ function App(): JSX.Element {
 
         <Route path={AppRoute.Users.Index} element={<UsersPage />} />
         <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
+        <Route path={AppRoute.Users.Lessons} element={<UsersLessonsPage />} />
+        <Route path={AppRoute.Users.Diary} element={<UsersDiaryPage />} />
 
         <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
         <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />

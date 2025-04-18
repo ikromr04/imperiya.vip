@@ -29,6 +29,13 @@ class LessonController extends Controller
           ->where('grade_id', $request->query('grade_id'))
           ->get();
         break;
+
+      case 'parent':
+        $lessons = Lesson::selectBasic()
+          ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
+          ->where('grade_id', $request->query('grade_id'))
+          ->get();
+        break;
     }
 
 

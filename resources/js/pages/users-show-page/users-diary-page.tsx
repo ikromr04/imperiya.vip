@@ -3,23 +3,21 @@ import React from 'react';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
 import NotFoundPage from '@/pages/not-found-page';
 import { Role } from '@/types/users';
-import SuperadminUsersShow from './superadmin-users-show/superadmin-users-show';
-import StudentUsersShow from './student-users-show/student-users-show';
-import ParentUsersShow from './parent-users-show/parent-users-show';
+import ParentUsersDiary from './parent-users-show/parent-users-diary';
 
 const Page = {
-  'superadmin': () => <SuperadminUsersShow />,
+  'superadmin': () => <NotFoundPage />,
   'admin': () => <NotFoundPage />,
   'director': () => <NotFoundPage />,
   'teacher': () => <NotFoundPage />,
-  'parent': () => <ParentUsersShow />,
-  'student': () => <StudentUsersShow />,
+  'parent': () => <ParentUsersDiary />,
+  'student': () => <NotFoundPage />,
 };
 
-function UsersShowPage(): JSX.Element {
+function UsersDiaryPage(): JSX.Element {
   const authUser = useAppSelector(getAuthUser);
 
   return Page[authUser?.role as Role]();
 }
 
-export default UsersShowPage;
+export default UsersDiaryPage;

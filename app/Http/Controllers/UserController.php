@@ -33,6 +33,17 @@ class UserController extends Controller
       case 'student':
         $users = User::selectForStudents()->get();
         break;
+
+      case 'parent':
+        $childIds = Student::where('mother_id', $user->id)
+          ->orWhere('father_id', $user->id)
+          ->pluck('user_id');
+
+        $users = [
+          ...User::selectForStudents()->get(),
+          ...User::selectBasic()->whereIn('id', $childIds)->get(),
+        ];
+        break;
     }
 
     return response()->json($users, 200);

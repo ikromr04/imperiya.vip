@@ -1,6 +1,6 @@
 import React from 'react';
 import AppLayout from '@/components/layouts/app-layout';
-import StudentDiaryTable from '@/components/student-diary-table/student-diary-table';
+import StudentDiaryTable from '@/components/diary-table/student-diary-table';
 
 function StudentDiary(): JSX.Element {
   return (

@@ -5,8 +5,10 @@ import { APIRoute } from '@/const/routes';
 import { MarkStoreDTO, MarkUpdateDTO } from '@/dto/marks';
 import { Mark, Marks } from '@/types/marks';
 import { LessonId } from '@/types/lessons';
+import { UserId } from '@/types/users';
 
 export const fetchMarksAction = createAsyncThunk<void, {
+  studentId?: UserId;
   lessons: LessonId[],
   onSuccess?: (marks: Marks) => void,
   onValidationError?: (error: ValidationError) => void,
@@ -16,9 +18,9 @@ export const fetchMarksAction = createAsyncThunk<void, {
   rejectWithValue: ValidationError,
 }>(
   'marks/fetch',
-  async ({ lessons, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+  async ({ studentId, lessons, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.post<Marks>(APIRoute.Marks.Diary, { lessons });
+      const { data } = await api.post<Marks>(APIRoute.Marks.Diary, { studentId, lessons });
       if (onSuccess) onSuccess(data);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
