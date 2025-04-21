@@ -122,7 +122,7 @@ function TeacherJournalTable({
             ));
 
             if (!rating) {
-              if (dayjs(item.date) >= dayjs()) return null;
+              if (dayjs(item.date) > dayjs()) return null;
 
               return (
                 <RatingCreate
@@ -584,7 +584,7 @@ function TeacherJournalTable({
           const mark: Mark = row.original[item.date] as Mark;
 
           if (!mark) {
-            if (dayjs(item.date) > dayjs() || dayjs(item.date) < dayjs()) return null;
+            if (dayjs(item.date).format('YYYY-MM-DD') > dayjs().format('YYYY-MM-DD') || dayjs(item.date).format('YYYY-MM-DD') < dayjs().format('YYYY-MM-DD')) return null;
 
             return (
               <MarkCreate
