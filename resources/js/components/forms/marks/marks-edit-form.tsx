@@ -1,6 +1,7 @@
 import Button from '@/components/ui/button';
 import ContentField from '@/components/ui/formik-controls/content-field';
 import SelectField from '@/components/ui/formik-controls/select-field';
+import TextField from '@/components/ui/formik-controls/text-field';
 import { Attendance } from '@/const/marks';
 import { MarkUpdateDTO } from '@/dto/marks';
 import { useAppDispatch } from '@/hooks';
@@ -73,29 +74,29 @@ function MarksEditForm({
           />
           {values.attendance && ['P', 'L'].includes(values.attendance) && (
             <div className="flex gap-x-2 items-center">
-              <SelectField
-                className="grow"
+              <TextField
+                className="grow min-w-0"
                 name="score_1"
                 label="Оценка 1"
                 cleanable
                 onClean={() => setFieldValue('score_1', null)}
-                options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
+                // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
               />
               <span className="translate-y-2">/</span>
-              <SelectField
-                className="grow"
+              <TextField
+                className="grow min-w-0"
                 name="score_2"
                 label="Оценка 2"
                 cleanable
                 onClean={() => setFieldValue('score_2', null)}
-                options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
+                // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
               />
             </div>
           )}
 
           <ContentField
             name="comment"
-            label="Комментария"
+            label="Комментарий"
           />
 
           <div className="flex items-center justify-end gap-2 -mt-1">

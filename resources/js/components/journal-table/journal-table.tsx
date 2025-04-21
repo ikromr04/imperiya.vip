@@ -60,7 +60,7 @@ function JournalTable({
         setJournal(students.map((student) => {
           const dates = lessons.reduce((acc, item) => {
             const mark = item.marks?.find((mark) => mark.studentId === student.id);
-            acc[item.date] = mark || '';
+            acc[`${item.date} ${item.hour}`] = mark || '';
 
             return acc;
           }, {} as Journal);
@@ -609,7 +609,7 @@ function JournalTable({
         header: item.date,
         size: 40,
         cell: ({ row }) => {
-          const mark: Mark = row.original[item.date] as Mark;
+          const mark: Mark = row.original[`${item.date} ${item.hour}`] as Mark;
 
           if (!mark) {
             if (dayjs(item.date) > dayjs()) return null;

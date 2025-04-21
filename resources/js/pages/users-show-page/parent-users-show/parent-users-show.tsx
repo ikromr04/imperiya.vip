@@ -39,7 +39,7 @@ function ParentUsersShow(): JSX.Element {
   }
 
   return (
-    <Layout>
+    <Layout withSidebar>
       <section className="box">
         <div className="box__header">
           <h2 className="title !text-lg">Базовая информация</h2>

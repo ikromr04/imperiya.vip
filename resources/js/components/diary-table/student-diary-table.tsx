@@ -84,7 +84,7 @@ function StudentDiaryTable(): JSX.Element {
               Оценка
             </th>
             <th className="p-2 min-w-[360px] w-[360px] max-w-[360px] text-start">
-              Комментария
+              Комментарий
             </th>
             <th className="p-2 min-w-[288px] w-[288px] max-w-[288px] text-start">
               Домашнее задание
