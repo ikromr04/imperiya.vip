@@ -79,7 +79,7 @@ function MarksEditForm({
                 name="score_1"
                 label="Оценка 1"
                 cleanable
-                onClean={() => setFieldValue('score_1', null)}
+                // onClean={() => setFieldValue('score_1', null)}
                 // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
               />
               <span className="translate-y-2">/</span>
@@ -88,7 +88,7 @@ function MarksEditForm({
                 name="score_2"
                 label="Оценка 2"
                 cleanable
-                onClean={() => setFieldValue('score_2', null)}
+                // onClean={() => setFieldValue('score_2', null)}
                 // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
               />
             </div>
