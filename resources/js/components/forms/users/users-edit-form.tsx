@@ -13,6 +13,7 @@ import { REGIONS, SexName } from '@/const/users';
 import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
 import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
 import Label from '@/components/ui/formik-controls/partials/label';
+import PasswordField from '@/components/ui/formik-controls/password-field';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Имя обязательно для заполнения.'),
@@ -47,6 +48,7 @@ function UsersEditForm({
     surname: user.surname,
     patronymic: user.patronymic,
     login: user.login,
+    password: user.password,
     sex: user.sex,
     birth_date: user.birthDate,
     nationality_id: user.nationalityId,
@@ -96,6 +98,8 @@ function UsersEditForm({
           <TextField name="patronymic" label="Очество" />
 
           <TextField name="login" label="Логин" required />
+
+          <PasswordField name="password" label="Пароль" />
 
           <SelectField
             name="sex"

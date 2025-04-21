@@ -46,6 +46,8 @@ type DataTableProps<T> = {
   columnPinningState?: ColumnPinningState;
   actions?: ReactNode;
   onExport?: (data: T[], columnVisibility: VisibilityState) => void;
+  searchValue?: string;
+  onSearchInput?: (evt: BaseSyntheticEvent) => void;
 };
 
 export default function DataTable<T>({
@@ -58,6 +60,8 @@ export default function DataTable<T>({
   columnPinningState = DEFAULT_COLUMN_PINNING_STATE,
   actions,
   onExport,
+  searchValue,
+  onSearchInput,
 }: DataTableProps<T>): JSX.Element {
   const [globalFilter, setGlobalFilter] = useState<string>('');
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize });
@@ -187,6 +191,14 @@ export default function DataTable<T>({
     }
   };
 
+  const handleSearchInput = (evt: BaseSyntheticEvent) => {
+    if (onSearchInput) {
+      onSearchInput(evt);
+    } else {
+      setGlobalFilter(evt.target.value);
+    }
+  };
+
   return (
     <div
       className={classNames(
@@ -207,8 +219,8 @@ export default function DataTable<T>({
             className="flex cursor-pointer focus:cursor-auto grow min-w-none w-full focus:outline-none placeholder:text-inherit focus:placeholder:font-normal focus:placeholder:text-gray-400"
             type="search"
             placeholder="Искать"
-            value={globalFilter}
-            onInput={(evt: BaseSyntheticEvent) => setGlobalFilter(evt.target.value)}
+            value={searchValue || globalFilter}
+            onInput={handleSearchInput}
           />
         </label>
 

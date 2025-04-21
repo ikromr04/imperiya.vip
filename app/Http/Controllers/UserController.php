@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Intervention\Image\Facades\Image;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
@@ -160,6 +161,9 @@ class UserController extends Controller
       'whatsapp',
       'blocked_at',
     ]));
+
+    $user->password = Crypt::encryptString($request->password);
+    $user->save();
 
     return response()->json(User::selectBasic()->find($user->id), 200);
   }

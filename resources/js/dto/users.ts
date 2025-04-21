@@ -58,6 +58,7 @@ export type UserUpdateDTO = {
   surname?: string;
   patronymic?: string;
   login?: string;
+  password?: string;
   sex?: Sex;
   birth_date?: Date;
   nationality_id?: NationalityId;

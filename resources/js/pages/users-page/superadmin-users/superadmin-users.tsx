@@ -576,6 +576,11 @@ function SuperadminUsers(): ReactNode {
           <DataTable
             data={filterUsers(users.data, filter)}
             columns={columns}
+            searchValue={filter.name}
+            onSearchInput={(evt) => setFilter((prev) => ({
+              ...prev,
+              name: evt.target.value,
+            }))}
             sortingState={[{
               id: 'name',
               desc: false,

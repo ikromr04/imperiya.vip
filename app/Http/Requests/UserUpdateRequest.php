@@ -22,6 +22,7 @@ class UserUpdateRequest extends FormRequest
       'surname' => ['string', 'max:255'],
       'patronymic' => ['nullable', 'string', 'max:255'],
       'login' => ['string', 'max:255'],
+      'password' => ['nullable'],
       'sex' => ['in:male,female'],
       'birth_date' => ['date'],
       'nationality_id' => ['integer', 'exists:nationalities,id'],

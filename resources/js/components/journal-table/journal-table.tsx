@@ -625,7 +625,7 @@ function JournalTable({
 
           return (
             <div className="flex items-center justify-center -m-2 p-2">
-              <MarkEdit mark={mark} studentName={row.original.name} />
+              <MarkEdit key={mark.id} mark={mark} studentName={row.original.name} />
             </div>
           );
         },
