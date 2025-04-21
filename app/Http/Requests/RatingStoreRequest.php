@@ -34,6 +34,14 @@ class RatingStoreRequest extends FormRequest
     ];
   }
 
+  public function messages(): array
+  {
+    return [
+      'score.numeric' => 'Оценка должна быть числом.',
+      'score.in' => 'Оценка должна быть одной из следующих: 2, 3, 4, 5, null.',
+    ];
+  }
+
   protected function prepareForValidation()
   {
     $this->replace($this->trimRecursive($this->all()));

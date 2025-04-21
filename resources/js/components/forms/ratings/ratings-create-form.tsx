@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 import Button from '@/components/ui/button';
-import SelectField from '@/components/ui/formik-controls/select-field';
 import { useAppDispatch } from '@/hooks';
 import { UserId } from '@/types/users';
 import { Form, Formik, FormikHelpers } from 'formik';
@@ -12,11 +11,10 @@ import { GradeId } from '@/types/grades';
 import { SubjectId } from '@/types/subjects';
 import { RatingStoreDTO } from '@/dto/ratings';
 import { storeRatingAction } from '@/store/ratings-slice/ratings-api-actions';
+import TextField from '@/components/ui/formik-controls/text-field';
 
 const validationSchema = Yup.object().shape({
-  score: Yup.number()
-    .required(' ')
-    .min(2, ' '),
+  score: Yup.number().required(''),
 });
 
 type RatingsCreateFormProps = {
@@ -38,7 +36,7 @@ function RatingsCreateForm({
   const initialValues: RatingStoreDTO = {
     years: createDTO.years,
     rating: createDTO.rating,
-    score: 0,
+    score: null,
     student_id: createDTO.studentId,
     grade_id: createDTO.gradeId,
     subject_id: createDTO.subjectId,
@@ -71,11 +69,11 @@ function RatingsCreateForm({
     >
       {({ isSubmitting }) => (
         <Form className="flex flex-col px-2 gap-2">
-          <SelectField
+          <TextField
             className="grow"
             name="score"
             label="Оценка"
-            options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
+            // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
           />
 
           <div className="flex items-center justify-end gap-2 -mt-1">

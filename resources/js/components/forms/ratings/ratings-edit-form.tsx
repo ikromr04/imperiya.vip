@@ -1,5 +1,5 @@
 import Button from '@/components/ui/button';
-import SelectField from '@/components/ui/formik-controls/select-field';
+import TextField from '@/components/ui/formik-controls/text-field';
 import { RatingUpdateDTO } from '@/dto/ratings';
 import { useAppDispatch } from '@/hooks';
 import { updateRatingAction } from '@/store/ratings-slice/ratings-api-actions';
@@ -50,11 +50,11 @@ function RatingsEditForm({
     >
       {({ isSubmitting }) => (
         <Form className="flex flex-col px-2 gap-2">
-          <SelectField
+          <TextField
             className="grow"
             name="score"
             label="Оценка"
-            options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
+            // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
           />
 
           <div className="flex items-center justify-end gap-2 -mt-1">

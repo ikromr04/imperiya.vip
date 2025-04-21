@@ -7,7 +7,7 @@ import { UserId } from '@/types/users';
 export type RatingStoreDTO = {
   years: string;
   rating: keyof typeof RatingName;
-  score: number;
+  score: number | null;
   student_id: UserId;
   grade_id: GradeId;
   subject_id: SubjectId;
