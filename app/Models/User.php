@@ -34,16 +34,16 @@ class User extends Authenticatable
     ];
   }
 
-  protected static function boot()
-  {
-    parent::boot();
+  // protected static function boot()
+  // {
+  //   parent::boot();
 
-    static::creating(function ($user) {
-      if (empty($user->password)) {
-        $user->password = Crypt::encryptString(Str::random(8));
-      }
-    });
-  }
+  //   static::creating(function ($user) {
+  //     if (empty($user->password)) {
+  //       $user->password = Crypt::encryptString(Str::random(8));
+  //     }
+  //   });
+  // }
 
   public function getSlugOptions(): SlugOptions
   {

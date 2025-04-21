@@ -16,7 +16,7 @@ import { Form, Formik } from 'formik';
 import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-function SuperadminJournalPage(): JSX.Element {
+function SuperadminJournal(): JSX.Element {
   const dispatch = useAppDispatch();
   const grades = useAppSelector(getGrades);
   const users = useAppSelector(getUsers);
@@ -105,4 +105,4 @@ function SuperadminJournalPage(): JSX.Element {
   );
 }
 
-export default SuperadminJournalPage;
+export default SuperadminJournal;
