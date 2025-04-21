@@ -84,7 +84,7 @@ function MarksCreateForm({
                 className="grow min-w-0"
                 name="score_1"
                 label="Оценка 1"
-                cleanable
+                // cleanable
                 // onClean={() => setFieldValue('score_1', null)}
                 // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
               />
@@ -93,7 +93,7 @@ function MarksCreateForm({
                 className="grow min-w-0"
                 name="score_2"
                 label="Оценка 2"
-                cleanable
+                // cleanable
                 // onClean={() => setFieldValue('score_2', null)}
                 // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
               />
