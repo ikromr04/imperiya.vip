@@ -4,10 +4,10 @@ import { Marks } from '@/types/marks';
 import { Subjects } from '@/types/subjects';
 import dayjs from 'dayjs';
 import React, { ReactNode } from 'react';
-import { Icons } from '../icons';
 import { Users } from '@/types/users';
 import { generatePath, Link } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
+import { Attendance } from '@/const/marks';
 
 type DiaryItemProps = {
   date: string;
@@ -41,17 +41,13 @@ function DiaryItem({
       </td>
       <td className="p-2 min-w-[120px] w-[120px] max-w-[120px] border-l">
         <span className="flex justify-center">
-          {mark?.attendance && (
-            <Icons.checked className="w-4 h-4 text-success" />
-          )}
-
-          {!mark?.attendance && mark?.attendance !== undefined && (
-            <Icons.close className="w-4 h-4 text-danger" />
-          )}
+          {mark?.attendance && Attendance[mark.attendance]}
         </span>
       </td>
       <td className="p-2 min-w-20 w-20 max-w-20 text-center font-bold border-l">
-        {mark?.attendance && mark?.score1}
+        {mark?.score1 ?? ''}
+        {mark?.score1 && mark.score2 && '/'}
+        {mark?.score2 ?? ''}
       </td>
       <td className="p-2 min-w-[360px] w-[360px] max-w-[360px] text-start border-l truncate hover:text-wrap">
         {mark?.comment}

@@ -64,6 +64,7 @@ function MarksEditForm({
 
               if (!['P', 'L'].includes(value.toString())) {
                 setFieldValue('score_1', null);
+                setFieldValue('score_2', null);
               }
 
               setFieldValue('attendance', value);
