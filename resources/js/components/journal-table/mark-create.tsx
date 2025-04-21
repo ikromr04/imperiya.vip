@@ -26,16 +26,17 @@ function MarkCreate({
     if (ref.current && menuRef.current) {
       await setIsOpen(!isOpen);
       const containerRect = ref.current.getBoundingClientRect();
+      console.log(containerRect.bottom, window.innerHeight);
 
       menuRef.current.style.top = `${containerRect.top + containerRect.height + 4}px`;
       menuRef.current.style.left = `${containerRect.left + containerRect.width + 4}px`;
       const menuRect = menuRef.current.getBoundingClientRect();
-      if (menuRect.right > window.innerWidth && menuRect.bottom > window.innerHeight) {
-        menuRef.current.style.transform = `translateX(-${menuRect.right - window.innerWidth + 32}px) translateY(-${menuRect.bottom - window.innerHeight + 16}px)`;
-      } else if (menuRect.right > window.innerWidth) {
+      if (menuRect.right > window.innerWidth) {
         menuRef.current.style.transform = `translateX(-${menuRect.right - window.innerWidth + 32}px)`;
-      } else if (menuRect.bottom > window.innerHeight) {
-        menuRef.current.style.transform = `translateY(-${menuRect.bottom - window.innerHeight + 16}px)`;
+      }
+      if (menuRect.bottom > window.innerHeight) {
+        menuRef.current.style.top = 'auto';
+        menuRef.current.style.bottom = '16px';
       }
     }
   };

@@ -26,6 +26,10 @@ function MarkEdit(props: MarkEditProps): JSX.Element {
       if (menuRect.right > window.innerWidth) {
         menuRef.current.style.transform = `translateX(-${menuRect.right - window.innerWidth + 32}px)`;
       }
+      if (menuRect.bottom > window.innerHeight) {
+        menuRef.current.style.top = 'auto';
+        menuRef.current.style.bottom = '16px';
+      }
     }
   };
 
