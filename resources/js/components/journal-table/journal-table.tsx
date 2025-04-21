@@ -604,7 +604,7 @@ function JournalTable({
       }
 
       acc.push({
-        id: item.date,
+        id: `${item.date} ${item.hour}`,
         accessorKey: item.date,
         header: item.date,
         size: 40,
