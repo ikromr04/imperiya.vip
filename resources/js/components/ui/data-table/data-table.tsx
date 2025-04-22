@@ -206,7 +206,7 @@ export default function DataTable<T>({
         className,
       )}
     >
-      <div className="flex gap-4 p-2 pl-4 border-b">
+      <div className="flex gap-4 p-2 pl-4 border-b relative z-50">
         <ColumnVisibility
           table={table}
           columnVisibility={columnVisibility}

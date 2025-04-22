@@ -20,6 +20,7 @@ Route::get('/grades', [GradeController::class, 'index']);
 Route::middleware(['auth:sanctum', 'ability:superadmin,teacher'])->group(function () {
   Route::post('/ratings', [RatingController::class, 'store']);
   Route::post('/marks', [MarkController::class, 'store']);
+  Route::put('/lessons', [LessonController::class, 'update']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -66,7 +67,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/lessons/types/{id}', [LessonController::class, 'deleteType']);
 
     Route::post('/lessons', [LessonController::class, 'store']);
-    Route::put('/lessons', [LessonController::class, 'update']);
     Route::delete('/lessons/{id}', [LessonController::class, 'delete']);
 
     Route::put('/marks', [MarkController::class, 'update']);

@@ -38,7 +38,10 @@ function LessonsJournalEditForm({
 
     await dispatch(updateLessonAction({
       dto: values,
-      onSuccess: () => setIsOpen(false),
+      onSuccess: () => {
+        setIsOpen(false);
+        toast.success('Данные успешно сохранены.');
+      },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
       onFail: (message) => toast.success(message),
     }));

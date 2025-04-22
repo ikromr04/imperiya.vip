@@ -150,7 +150,7 @@ function SuperadminUsers(): ReactNode {
       header: 'ФИО',
       size: 240,
       cell: ({ row }) => (
-        <Link to={generatePath(AppRoute.Users.Show, { id: row.original.id })}>
+        <Link className="flex leading-none" to={generatePath(AppRoute.Users.Show, { id: row.original.id })}>
           {row.original.surname} {row.original.name} {row.original.patronymic}
         </Link>
       ),
