@@ -1,6 +1,6 @@
 import Button from '@/components/ui/button';
 import classNames from 'classnames';
-import React, { ReactNode, useState } from 'react';
+import React, { memo, ReactNode, useState } from 'react';
 
 type CopyButtonProps = {
   className?: string;
@@ -42,4 +42,4 @@ function CopyButton({
   );
 }
 
-export default CopyButton;
+export default memo(CopyButton);

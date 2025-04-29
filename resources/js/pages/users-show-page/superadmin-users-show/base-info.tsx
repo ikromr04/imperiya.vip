@@ -6,28 +6,22 @@ import DescriptionList from '@/components/ui/description-list';
 import Modal from '@/components/ui/modal';
 import Tooltip from '@/components/ui/tooltip';
 import { RoleName, SexName } from '@/const/users';
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
-import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
+import { Nationalities } from '@/types/nationalities';
 import { User } from '@/types/users';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 type BaseInfoProps = {
   user: User;
+  nationalities: Nationalities;
 };
 
 function BaseInfo({
   user,
+  nationalities,
 }: BaseInfoProps): JSX.Element {
-  const dispatch = useAppDispatch();
-  const nationalities = useAppSelector(getNationalities);
   const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
-  }, [dispatch, nationalities.data, nationalities.isFetching]);
 
   return (
     <>
@@ -66,7 +60,7 @@ function BaseInfo({
               'Адрес': user.address ?
                 `${(user.address.region !== 'За пределами города') ? 'район ' : ''}${user.address.region}, ${user.address.physicalAddress}`
                 : '-',
-              'Национальность': nationalities.data?.find(({ id }) => id === user.nationalityId)?.name || '-',
+              'Национальность': nationalities.find(({ id }) => id === user.nationalityId)?.name || '-',
               'WhatsApp': (user.whatsapp?.code && user.whatsapp?.numbers) ? (
                 <a
                   className="text-blue-600"

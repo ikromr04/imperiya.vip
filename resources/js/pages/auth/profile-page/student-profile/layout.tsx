@@ -31,12 +31,11 @@ function Layout({
   const grades = useAppSelector(getGrades);
   const grade = grades.data?.find(({ id }) => id === user?.student?.gradeId);
   const nationalities = useAppSelector(getNationalities);
-  const student = useAppSelector(getStudent);
+  const student = {};
 
   useEffect(() => {
     if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
     if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
-    if (!student.data && !student.isFetching) dispatch(fetchStudentAction());
   }, [dispatch, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching, student.data, student.isFetching]);
 
   if (!user) {

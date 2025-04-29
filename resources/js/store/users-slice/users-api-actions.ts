@@ -6,12 +6,11 @@ import { ValidationError } from '@/types/validation-error';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
 import { generatePath } from 'react-router-dom';
-import { Student } from './users-slice';
 
 export const fetchUsersAction = createAsyncThunk<Users, undefined, {
-  extra: AxiosInstance
+  extra: AxiosInstance;
 }>(
-  'users/fetch',
+  'users/fetchUsers',
   async (_arg, { extra: api }) => {
     const { data } = await api.get<Users>(APIRoute.Users.Index);
 
@@ -19,30 +18,20 @@ export const fetchUsersAction = createAsyncThunk<Users, undefined, {
   },
 );
 
-export const fetchStudentAction = createAsyncThunk<Student, undefined, {
-  extra: AxiosInstance
-}>(
-  'users/fetchStudent',
-  async (_arg, { extra: api }) => {
-    const { data } = await api.get<Student>(APIRoute.Users.Student);
-
-    return data;
-  },
-);
-
 export const updateUserAction = createAsyncThunk<User, {
-  dto: UserUpdateDTO,
-  onSuccess?: (user: User) => void,
-  onValidationError?: (error: ValidationError) => void,
-  onFail?: (message: string) => void,
+  id: UserId;
+  dto: UserUpdateDTO;
+  onSuccess?: (user: User) => void;
+  onValidationError?: (error: ValidationError) => void;
+  onFail?: (message: string) => void;
 }, {
-  extra: AxiosInstance,
-  rejectWithValue: ValidationError,
+  extra: AxiosInstance;
+  rejectWithValue: ValidationError;
 }>(
-  'users/update',
-  async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+  'users/updateUser',
+  async ({ id, dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.put<User>(APIRoute.Users.Index, dto);
+      const { data } = await api.put<User>(generatePath(APIRoute.Users.Show, { id }), dto);
       if (onSuccess) onSuccess(data);
 
       return data;

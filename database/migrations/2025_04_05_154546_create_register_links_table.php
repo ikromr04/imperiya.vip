@@ -13,8 +13,10 @@ return new class extends Migration
   {
     Schema::create('register_links', function (Blueprint $table) {
       $table->id();
+
       $table->string('token');
       $table->timestamp('expires_at');
+
       $table->timestamps();
     });
   }

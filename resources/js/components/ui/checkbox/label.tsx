@@ -5,7 +5,7 @@ function Label({
 }: {
   label?: string;
 }): ReactNode {
-  if (!label) return null;
+  if (!label) return;
 
   return (
     <span className="flex text-sm text-gray-500 ml-2">

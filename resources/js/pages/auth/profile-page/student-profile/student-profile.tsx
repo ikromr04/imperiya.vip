@@ -10,7 +10,6 @@ import { getNationalities } from '@/store/nationalities-slice/nationalities-sele
 import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
 import DescriptionList from '@/components/ui/description-list';
 import dayjs from 'dayjs';
-import { getStudent } from '@/store/users-slice/users-selector';
 import { fetchStudentAction } from '@/store/users-slice/users-api-actions';
 import Layout from './layout';
 import CopyButton from '@/components/ui/copy-button';
@@ -20,19 +19,16 @@ function StudentProfile(): JSX.Element {
   const user = useAppSelector(getAuthUser);
   const grades = useAppSelector(getGrades);
   const nationalities = useAppSelector(getNationalities);
-  const student = useAppSelector(getStudent);
+  const student = {};
 
   useEffect(() => {
-    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
+    // if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
     if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
-    if (!student.data && !student.isFetching) dispatch(fetchStudentAction());
-  }, [dispatch, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching, student.data, student.isFetching]);
+  }, [dispatch, grades.data, nationalities.data, nationalities.isFetching, student.data, student.isFetching]);
 
   if (!user) {
     return (
-      <AppLayout>
-        <Spinner className="w-8 h-8 m-2" />
-      </AppLayout>
+      <Spinner className="w-8 h-8 m-2" />
     );
   }
 

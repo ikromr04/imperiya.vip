@@ -20,12 +20,4 @@ class Admin extends Model
   {
     return $this->belongsTo(User::class);
   }
-
-  public function scopeSelectBasic($query)
-  {
-    return $query->select(
-      'id',
-      'user_id',
-    );
-  }
 }

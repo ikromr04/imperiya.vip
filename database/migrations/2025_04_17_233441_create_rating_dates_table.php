@@ -13,6 +13,7 @@ return new class extends Migration
   {
     Schema::create('rating_dates', function (Blueprint $table) {
       $table->id();
+
       $table->string('years');
       $table->date('quarter1')->nullable();
       $table->date('quarter2')->nullable();
@@ -23,6 +24,7 @@ return new class extends Migration
       $table->date('annual')->nullable();
       $table->date('assessment')->nullable();
       $table->date('final')->nullable();
+
       $table->timestamps();
     });
   }

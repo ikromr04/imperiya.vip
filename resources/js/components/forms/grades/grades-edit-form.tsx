@@ -70,7 +70,7 @@ function GradesEditForm({
     helpers.setSubmitting(false);
   };
 
-  if (!users.data) return null;
+  if (!users.data) return;
 
   return (
     <Formik

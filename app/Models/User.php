@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Spatie\Sluggable\SlugOptions;
 use Spatie\Sluggable\HasSlug;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -21,24 +22,19 @@ class User extends Authenticatable
 
   protected $guarded = ['id'];
 
-  protected function casts(): array
-  {
-    return [
-      'email_verified_at' => 'datetime',
-      'socialLink' => 'array',
-      'phoneNumbers' => 'array',
-      'address' => 'array',
-      'whatsapp' => 'array',
-      'social_link' => 'array',
-      'phone_numbers' => 'array',
-    ];
-  }
+  protected $casts = [
+    'email_verified_at' => 'datetime',
+    'address' => 'array',
+    'whatsapp' => 'array',
+    'social_link' => 'array',
+    'phone_numbers' => 'array',
+  ];
 
-  protected static function boot()
+  protected static function booted(): void
   {
     parent::boot();
 
-    static::creating(function ($user) {
+    static::creating(function (User $user) {
       if (empty($user->password)) {
         $user->password = Crypt::encryptString(Str::random(8));
       }
@@ -83,9 +79,9 @@ class User extends Authenticatable
     return $this->hasOne(Guardian::class);
   }
 
-  public function scopeSelectBasic($query)
+  public function scopeSelectFullData(Builder $query): Builder
   {
-    return $query->select(
+    return $query->select([
       'id',
       'name',
       'surname',
@@ -94,74 +90,41 @@ class User extends Authenticatable
       'password',
       'role',
       'sex',
+      'birth_date',
+      'nationality_id',
       'email',
+      'address',
+      'phone_numbers',
+      'whatsapp',
+      'social_link',
       'avatar',
       'avatar_thumb',
-      'birth_date',
-      'address',
-      'whatsapp',
-      'nationality_id',
-      'social_link',
-      'phone_numbers',
       'blocked_at',
-      'updated_at',
       'created_at',
-    )->with([
-      'superadmin' => fn($query) => $query->selectBasic(),
-      'admin' => fn($query) => $query->selectBasic(),
-      'director' => fn($query) => $query->selectBasic(),
-      'teacher' => fn($query) => $query->selectBasic(),
-      'student' => fn($query) => $query->selectBasic(),
-      'parent' => fn($query) => $query->selectBasic(),
     ]);
   }
 
-  public function scopeSelectForStudents($query)
+  public function scopeWithRoles(Builder $query): Builder
   {
-    return $query->where('role', 'teacher')
-      ->select(
+    return $query->with([
+      'student' => fn($query) => $query->select(
         'id',
-        'name',
-        'surname',
-        'patronymic',
-        'role',
-        'sex',
-        'email',
-        'avatar',
-        'avatar_thumb',
-        'birth_date',
-        'address',
-        'whatsapp',
-        'nationality_id',
-        'social_link',
-        'phone_numbers',
-      )->with([
-        'teacher' => fn($query) => $query->selectBasic(),
-      ]);
-  }
-
-  public function scopeSelectForTeachers($query)
-  {
-    return $query->whereIn('role', ['student', 'parent', 'teacher'])
-      ->select(
+        'user_id',
+        'grade_id',
+        'mother_id',
+        'father_id',
+        'admission_date',
+        'previous_schools',
+        'medical_recommendations',
+      ),
+      'parent' => fn($query) => $query->select(
         'id',
-        'name',
-        'surname',
-        'patronymic',
-        'role',
-        'sex',
-        'email',
-        'avatar',
-        'avatar_thumb',
-        'birth_date',
-        'address',
-        'whatsapp',
-        'nationality_id',
-        'social_link',
-        'phone_numbers',
-      )->with([
-        'student' => fn($query) => $query->selectBasic(),
-      ]);
+        'user_id',
+        'profession_id',
+        'workplace',
+        'position',
+      ),
+    ]);
   }
 
   public function toArray()
@@ -169,14 +132,17 @@ class User extends Authenticatable
     $array = array_filter(parent::toArray(), fn($value) => $value);
 
     $map = [
-      'avatar_thumb' => 'avatarThumb',
       'birth_date' => 'birthDate',
       'nationality_id' => 'nationalityId',
-      'social_link' => 'socialLink',
       'phone_numbers' => 'phoneNumbers',
+      'social_link' => 'socialLink',
+      'avatar_thumb' => 'avatarThumb',
       'blocked_at' => 'blockedAt',
-      'updated_at' => 'updatedAt',
+      'email_verified_at' => 'emailVerifiedAt',
+      'remember_token' => 'rememberToken',
       'created_at' => 'createdAt',
+      'updated_at' => 'updatedAt',
+      'deleted_at' => 'deletedAt',
     ];
 
     foreach ($map as $snake => $camel) {
@@ -192,8 +158,8 @@ class User extends Authenticatable
 
     if (!empty($array['address'])) {
       $array['address'] = [
-        'physicalAddress' => $array['address']['physical_address'],
-        'region' => $array['address']['region'],
+        'physicalAddress' => $array['address']['physical_address'] ?? null,
+        'region' => $array['address']['region'] ?? null,
       ];
     }
 

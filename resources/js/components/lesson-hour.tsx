@@ -8,7 +8,7 @@ type LessonHourProps = {
 function LessonHour({
   hour,
 }: LessonHourProps): ReactNode {
-  if (!Hour[hour]) return null;
+  if (!Hour[hour]) return;
 
   const from = Hour[hour].split(' ')[0];
   const to = Hour[hour].split(' ')[1];

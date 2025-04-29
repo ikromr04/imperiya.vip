@@ -27,7 +27,7 @@ function TeacherLessonItem({
     +lesson.hour === +hour
   ));
 
-  if (!lesson) return null;
+  if (!lesson) return;
 
   const grade = grades.find(({ id }) => id === lesson.gradeId);
 

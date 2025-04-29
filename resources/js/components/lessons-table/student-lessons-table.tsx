@@ -13,7 +13,7 @@ import StudentLessonsItem from './student-lessons-item';
 import { getSubjects } from '@/store/subjects-slice/subjects-selector';
 import { getStudent, getUsers } from '@/store/users-slice/users-selector';
 import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
-import { fetchStudentAction, fetchUsersAction } from '@/store/users-slice/users-api-actions';
+import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 
 function StudentLessonsTable(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -22,19 +22,19 @@ function StudentLessonsTable(): JSX.Element {
   const weekDates = getCurrentWeekDates(week);
   const tableRef = useRef<HTMLTableElement>(null);
   const subjects = useAppSelector(getSubjects);
-  const student = useAppSelector(getStudent);
+  const student = {};
   const users = useAppSelector(getUsers);
 
   useEffect(() => {
     if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
-    if (!student.data && !student.isFetching) dispatch(fetchStudentAction());
+    // if (!student.data && !student.isFetching) dispatch(fetchStudentAction());
     if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-    if (!lessons && student.data) dispatch(fetchLessonsAction({
-      week,
-      gradeId: student.data.grade.id,
-      onSuccess: (lessons) => setLessons(lessons),
-    }));
-  }, [dispatch, lessons, student.data, student.isFetching, subjects.data, subjects.isFetching, users.data, users.isFetching, week]);
+    // if (!lessons && student.data) dispatch(fetchLessonsAction({
+    //   week,
+    //   gradeId: student.data.grade.id,
+    //   onSuccess: (lessons) => setLessons(lessons),
+    // }));
+  }, [dispatch, lessons, subjects.data, subjects.isFetching, users.data, users.isFetching, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {

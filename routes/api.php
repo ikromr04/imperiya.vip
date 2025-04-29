@@ -12,66 +12,65 @@ use Illuminate\Support\Facades\Route;
 
 require base_path('routes/auth.php');
 
-
-Route::get('/nationalities', [NationalityController::class, 'index']);
-Route::get('/professions', [ProfessionController::class, 'index']);
-Route::get('/grades', [GradeController::class, 'index']);
-
-Route::middleware(['auth:sanctum', 'ability:superadmin,teacher'])->group(function () {
-  Route::post('/ratings', [RatingController::class, 'store']);
-  Route::post('/marks', [MarkController::class, 'store']);
-  Route::put('/lessons', [LessonController::class, 'update']);
+Route::prefix('users')->controller(UserController::class)->group(function () {
+  Route::get('/', 'index')->middleware('auth:sanctum');
+  Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/{id}/avatar', 'updateAvatar')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::delete('/{id}/avatar', 'deleteAvatar')->middleware(['auth:sanctum', 'ability:superadmin']);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-  Route::get('/users', [UserController::class, 'index']);
-  Route::get('/subjects', [SubjectController::class, 'index']);
-  Route::get('/lessons', [LessonController::class, 'index']);
-  Route::post('/marks/diary', [MarkController::class, 'index']);
-  Route::get('/ratings/dates', [RatingController::class, 'dates']);
-  Route::get('/lessons/types', [LessonController::class, 'types']);
-  Route::get('/journal', [LessonController::class, 'journal']);
-  Route::get('/ratings', [RatingController::class, 'index']);
+Route::prefix('nationalities')->controller(NationalityController::class)->group(function () {
+  Route::get('/', 'index');
+  Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
+});
 
-  Route::middleware('ability:student')->group(function () {
-    Route::get('/users/student', [UserController::class, 'student']);
-  });
+Route::prefix('grades')->controller(GradeController::class)->group(function () {
+  Route::get('/', 'index');
+  Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
+});
 
-  Route::middleware('abilities:superadmin')->group(function () {
-    Route::post('/users', [UserController::class, 'store']);
-    Route::put('/users', [UserController::class, 'update']);
-    Route::get('/users/login/{login}', [UserController::class, 'checkLogin']);
-    Route::delete('/users/{id}', [UserController::class, 'delete']);
-    Route::put('/users/{id}/avatar', [UserController::class, 'updateAvatar']);
-    Route::delete('/users/{id}/avatar', [UserController::class, 'deleteAvatar']);
-    Route::put('/users/{id}/role', [UserController::class, 'updateRole']);
+Route::prefix('professions')->controller(ProfessionController::class)->group(function () {
+  Route::get('/', 'index');
+  Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
+});
 
-    Route::post('/grades', [GradeController::class, 'store']);
-    Route::put('/grades', [GradeController::class, 'update']);
-    Route::delete('/grades/{id}', [GradeController::class, 'delete']);
+Route::prefix('lessons')->controller(LessonController::class)->group(function () {
+  Route::get('/', 'index')->middleware('auth:sanctum');
+  Route::get('/journal', 'journal')->middleware('auth:sanctum');
+  Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin,teacher']);
+  Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::get('/types', 'types')->middleware('auth:sanctum');
+  Route::post('/types', 'storeType')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/types', 'updateType')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::delete('/types/{id}', 'deleteType')->middleware(['auth:sanctum', 'ability:superadmin']);
+});
 
-    Route::post('/subjects', [SubjectController::class, 'store']);
-    Route::put('/subjects', [SubjectController::class, 'update']);
-    Route::delete('/subjects/{id}', [SubjectController::class, 'delete']);
+Route::prefix('subjects')->controller(SubjectController::class)->group(function () {
+  Route::get('/', 'index')->middleware('auth:sanctum');
+  Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
+});
 
-    Route::post('/nationalities', [NationalityController::class, 'store']);
-    Route::put('/nationalities', [NationalityController::class, 'update']);
-    Route::delete('/nationalities/{id}', [NationalityController::class, 'delete']);
+Route::prefix('marks')->controller(MarkController::class)->group(function () {
+  Route::post('/diary', 'index')->middleware('auth:sanctum');
+  Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin,teacher']);
+  Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
+});
 
-    Route::post('/professions', [ProfessionController::class, 'store']);
-    Route::put('/professions', [ProfessionController::class, 'update']);
-    Route::delete('/professions/{id}', [ProfessionController::class, 'delete']);
-
-    Route::post('/lessons/types', [LessonController::class, 'storeType']);
-    Route::put('/lessons/types', [LessonController::class, 'updateType']);
-    Route::delete('/lessons/types/{id}', [LessonController::class, 'deleteType']);
-
-    Route::post('/lessons', [LessonController::class, 'store']);
-    Route::delete('/lessons/{id}', [LessonController::class, 'delete']);
-
-    Route::put('/marks', [MarkController::class, 'update']);
-
-    Route::put('/ratings/dates', [RatingController::class, 'updateDate']);
-    Route::put('/ratings', [RatingController::class, 'update']);
-  });
+Route::prefix('ratings')->controller(RatingController::class)->group(function () {
+  Route::get('/', 'index')->middleware('auth:sanctum');
+  Route::get('/dates', 'dates')->middleware('auth:sanctum');
+  Route::put('/dates', 'updateDate')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin,teacher']);
 });

@@ -13,6 +13,19 @@ return new class extends Migration
   {
     Schema::create('ratings', function (Blueprint $table) {
       $table->id();
+
+      $table->foreignId('student_id')
+        ->constrained('users')
+        ->cascadeOnDelete();
+
+      $table->foreignId('grade_id')
+        ->constrained('grades')
+        ->cascadeOnDelete();
+
+      $table->foreignId('subject_id')
+        ->constrained('subjects')
+        ->cascadeOnDelete();
+
       $table->string('years');
       $table->enum('rating', [
         'quarter1',
@@ -25,10 +38,8 @@ return new class extends Migration
         'assessment',
         'final',
       ]);
-      $table->tinyInteger('score')->unsigned()->nullable();
-      $table->foreignId('student_id')->constrained('users')->cascadeOnDelete();
-      $table->foreignId('grade_id')->constrained('grades')->cascadeOnDelete();
-      $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
+      $table->unsignedTinyInteger('score')->nullable();
+
       $table->timestamps();
     });
   }

@@ -122,7 +122,7 @@ function TeacherJournalTable({
             ));
 
             if (!rating) {
-              if (dayjs(item.date) > dayjs()) return null;
+              if (dayjs(item.date) > dayjs()) return;
 
               return (
                 <RatingCreate

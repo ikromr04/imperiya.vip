@@ -1,24 +1,34 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { checkAuthAction, deleteRegisterLinkAction, fetchRegisterLinksAction, generateRegisterLinkAction, loginAction, logoutAction, updateRegisterLinkAction } from './auth-api-actions';
+import {
+  checkAuthAction,
+  deleteRegisterLinkAction,
+  fetchRegisterLinksAction,
+  generateRegisterLinkAction,
+  loginAction,
+  logoutAction,
+  updateRegisterLinkAction,
+} from './auth-api-actions';
 import { AuthorizationStatus, SliceName } from '@/const/store';
 import { RegisterLinks } from '@/types/auth';
 import { User } from '@/types/users';
-import { updateUserAction } from '../users-slice/users-api-actions';
+import {
+  deleteUserAvatarAction,
+  updateUserAction,
+  updateUserAvatarAction,
+} from '../users-slice/users-api-actions';
 
 export type AuthSlice = {
   authStatus: AuthorizationStatus;
-  user: User | null;
+  user?: User;
   registerLinks: {
-    data: RegisterLinks | null;
+    data?: RegisterLinks;
     isFetching: boolean;
   };
 }
 
 const initialState: AuthSlice = {
   authStatus: AuthorizationStatus.Unknown,
-  user: null,
   registerLinks: {
-    data: null,
     isFetching: false,
   },
 };
@@ -35,7 +45,7 @@ export const authSlice = createSlice({
       })
       .addCase(checkAuthAction.rejected, (state) => {
         state.authStatus = AuthorizationStatus.NoAuth;
-        state.user = null;
+        state.user = undefined;
       })
       .addCase(updateUserAction.fulfilled, (state, action) => {
         if (action.payload.id === state.user?.id) {
@@ -77,6 +87,17 @@ export const authSlice = createSlice({
       .addCase(deleteRegisterLinkAction.fulfilled, (state, action) => {
         if (state.registerLinks.data) {
           state.registerLinks.data = state.registerLinks.data.filter(({ id }) => id !== action.payload);
+        }
+      })
+      .addCase(updateUserAvatarAction.fulfilled, (state, action) => {
+        if (state.user?.id === action.payload.id) {
+          state.user = action.payload;
+        }
+      })
+      .addCase(deleteUserAvatarAction.fulfilled, (state, action) => {
+        if (state.user?.id === action.payload) {
+          state.user.avatar = undefined;
+          state.user.avatarThumb = undefined;
         }
       });
   },

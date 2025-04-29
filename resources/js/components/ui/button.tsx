@@ -24,7 +24,7 @@ type ButtonProps = {
   iconClassname?: string;
 } & (LinkProps | ButtonHTMLAttributes<HTMLButtonElement>);
 
-export default function Button({
+function Button({
   className,
   href,
   children,
@@ -64,3 +64,5 @@ export default function Button({
     </button>
   );
 }
+
+export default Button;

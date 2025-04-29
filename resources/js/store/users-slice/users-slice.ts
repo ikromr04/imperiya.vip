@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { UserId, Users } from '@/types/users';
-import { SliceName } from '@/const/store';
+import { Users } from '@/types/users';
+import { AsyncStatus, SliceName } from '@/const/store';
 import {
   deleteGradeAction,
   storeGradeAction,
@@ -9,49 +9,22 @@ import {
 import {
   deleteUserAction,
   deleteUserAvatarAction,
-  fetchStudentAction,
   fetchUsersAction,
   storeUserAction,
   updateUserAction,
   updateUserAvatarAction,
 } from './users-api-actions';
-import { Grade } from '@/types/grades';
-
-export type Student = {
-  mother: {
-    id: UserId;
-    name: string;
-    surname: string;
-    patronymic: string;
-  };
-  father: {
-    id: UserId;
-    name: string;
-    surname: string;
-    patronymic: string;
-  };
-  grade: Grade;
-};
 
 export type UsersSlice = {
   users: {
-    data: Users | null;
-    isFetching: boolean;
-  };
-  student: {
-    data: Student | null;
-    isFetching: boolean;
+    data?: Users;
+    status: AsyncStatus;
   };
 }
 
 const initialState: UsersSlice = {
   users: {
-    data: null,
-    isFetching: false,
-  },
-  student: {
-    data: null,
-    isFetching: false,
+    status: AsyncStatus.Idle,
   },
 };
 
@@ -62,25 +35,14 @@ export const usersSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchUsersAction.pending, (state) => {
-        state.users.isFetching = true;
+        state.users.status = AsyncStatus.Loading;
       })
       .addCase(fetchUsersAction.fulfilled, (state, action) => {
+        state.users.status = AsyncStatus.Succeeded;
         state.users.data = action.payload;
-        state.users.isFetching = false;
       })
       .addCase(fetchUsersAction.rejected, (state) => {
-        state.users.isFetching = true;
-      })
-
-      .addCase(fetchStudentAction.pending, (state) => {
-        state.student.isFetching = true;
-      })
-      .addCase(fetchStudentAction.fulfilled, (state, action) => {
-        state.student.data = action.payload;
-        state.student.isFetching = false;
-      })
-      .addCase(fetchStudentAction.rejected, (state) => {
-        state.student.isFetching = true;
+        state.users.status = AsyncStatus.Failed;
       })
 
       .addCase(storeUserAction.fulfilled, (state, action) => {
@@ -122,10 +84,12 @@ export const usersSlice = createSlice({
       })
 
       .addCase(storeGradeAction.fulfilled, (state) => {
-        state.users.data = null;
+        state.users.status = AsyncStatus.Idle;
+        state.users.data = [];
       })
       .addCase(updateGradeAction.fulfilled, (state) => {
-        state.users.data = null;
+        state.users.status = AsyncStatus.Idle;
+        state.users.data = [];
       })
       .addCase(deleteGradeAction.fulfilled, (state, action) => {
         if (state.users.data) {

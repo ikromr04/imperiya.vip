@@ -11,6 +11,7 @@ class Student extends Model
   use SoftDeletes;
 
   protected $guarded = ['id'];
+
   protected $hidden = [
     'id',
     'user_id',
@@ -36,20 +37,6 @@ class Student extends Model
     return $this->belongsTo(Grade::class);
   }
 
-  public function scopeSelectBasic($query)
-  {
-    return $query->select(
-      'id',
-      'user_id',
-      'grade_id',
-      'mother_id',
-      'father_id',
-      'admission_date',
-      'previous_schools',
-      'medical_recommendations',
-    );
-  }
-
   public function toArray()
   {
     $array = array_filter(parent::toArray(), fn($value) => $value);
@@ -61,6 +48,9 @@ class Student extends Model
       'admission_date' => 'admissionDate',
       'previous_schools' => 'previousSchools',
       'medical_recommendations' => 'medicalRecommendations',
+      'created_at' => 'createdAt',
+      'updated_at' => 'updatedAt',
+      'deleted_at' => 'deletedAt',
     ];
 
     foreach ($map as $snake => $camel) {

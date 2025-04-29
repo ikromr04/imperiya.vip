@@ -13,14 +13,30 @@ return new class extends Migration
   {
     Schema::create('lessons', function (Blueprint $table) {
       $table->id();
+
+      $table->foreignId('grade_id')
+        ->constrained('grades')
+        ->cascadeOnDelete();
+
+      $table->foreignId('subject_id')
+        ->constrained('subjects')
+        ->cascadeOnDelete();
+
+      $table->foreignId('teacher_id')
+        ->nullable()
+        ->constrained('users')
+        ->nullOnDelete();
+
+      $table->foreignId('type_id')
+        ->nullable()
+        ->constrained('lesson_types')
+        ->nullOnDelete();
+
       $table->date('date');
       $table->enum('hour', [1, 2, 3, 4, 5, 6, 7, 8]);
-      $table->foreignId('grade_id')->constrained('grades')->cascadeOnDelete();
-      $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
-      $table->foreignId('teacher_id')->nullable()->constrained('users')->nullOnDelete();
-      $table->foreignId('type_id')->nullable()->constrained('lesson_types')->nullOnDelete();
       $table->string('topic')->nullable();
       $table->string('homework')->nullable();
+
       $table->timestamps();
     });
   }

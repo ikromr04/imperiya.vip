@@ -10,7 +10,7 @@ function Label({
   required,
   ...props
 }: LabelProps): ReactNode {
-  if (!label) return null;
+  if (!label) return;
 
   return (
     <label className="relative z-0 rounded flex leading-none mb-[2px] max-w-max text-sm text-gray-500 ml-2" {...props}>

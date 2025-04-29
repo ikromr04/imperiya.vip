@@ -27,7 +27,7 @@ function StudentLessonItem({
     +lesson.hour === +hour
   ));
 
-  if (!lesson) return null;
+  if (!lesson) return;
 
   const teacher = users.find(({ id }) => id === lesson.teacherId);
 

@@ -5,7 +5,7 @@ function After({
 }: {
   element?: ReactNode;
 }): ReactNode {
-  if (!element) return null;
+  if (!element) return;
 
   return (
     <div className="absolute right-[1px] top-[1px] rounded-r-[3px] transform w-[30px] h-[30px] flex justify-center items-center">

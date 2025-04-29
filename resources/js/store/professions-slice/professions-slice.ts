@@ -1,19 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SliceName } from '@/const/store';
+import { AsyncStatus, SliceName } from '@/const/store';
 import { Professions } from '@/types/professions';
-import { deleteProfessionAction, fetchProfessionsAction, storeProfessionAction, updateProfessionAction } from './professions-api-actions';
+import {
+  deleteProfessionAction,
+  fetchProfessionsAction,
+  storeProfessionAction,
+  updateProfessionAction,
+} from './professions-api-actions';
 
 export type ProfessionsSlice = {
   professions: {
-    data: Professions | null;
-    isFetching: boolean;
+    data: Professions;
+    status: AsyncStatus,
   };
 }
 
 const initialState: ProfessionsSlice = {
   professions: {
-    data: null,
-    isFetching: false,
+    data: [],
+    status: AsyncStatus.Idle,
   },
 };
 
@@ -24,14 +29,14 @@ export const professionsSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchProfessionsAction.pending, (state) => {
-        state.professions.isFetching = true;
+        state.professions.status = AsyncStatus.Loading;
       })
       .addCase(fetchProfessionsAction.fulfilled, (state, action) => {
+        state.professions.status = AsyncStatus.Succeeded;
         state.professions.data = action.payload;
-        state.professions.isFetching = false;
       })
       .addCase(fetchProfessionsAction.rejected, (state) => {
-        state.professions.isFetching = false;
+        state.professions.status = AsyncStatus.Failed;
       })
 
       .addCase(storeProfessionAction.fulfilled, (state, action) => {

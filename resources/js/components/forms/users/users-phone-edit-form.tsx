@@ -31,9 +31,6 @@ function UsersPhoneEditForm({
 }: UsersPhoneEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const initialValues: UserUpdateDTO = {
-    id: user.id,
-    name: user.name,
-    login: user.login,
     phone_numbers: user.phoneNumbers
   };
 
@@ -44,6 +41,7 @@ function UsersPhoneEditForm({
     helpers.setSubmitting(true);
 
     await dispatch(updateUserAction({
+      id: user.id,
       dto: values,
       onSuccess: () => {
         toast.success('Данные успешно сохранены.');

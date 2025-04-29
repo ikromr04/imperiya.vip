@@ -15,12 +15,12 @@ export type User = {
   name: string;
   surname: string;
   patronymic?: string;
-  login: string;
+  login?: string;
   password?: string;
   role: Role;
   sex: Sex;
-  birthDate: Date;
-  nationalityId: NationalityId;
+  birthDate?: Date;
+  nationalityId?: NationalityId;
   email?: string;
   avatar?: string;
   avatarThumb?: string;
@@ -42,7 +42,7 @@ export type User = {
     code: number;
     numbers: number;
   };
-  createdAt: string;
+  createdAt?: string;
   teacher?: {
     grades: GradeId[];
   };

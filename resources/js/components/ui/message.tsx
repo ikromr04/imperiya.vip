@@ -19,7 +19,7 @@ export default function Message({
   className,
   message,
 }: MessageProps): ReactNode {
-  if (!message) return null;
+  if (!message) return;
 
   return (
     <p className={classNames(className, MessageVariant[message[1]])}>

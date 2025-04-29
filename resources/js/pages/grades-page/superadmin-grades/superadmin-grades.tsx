@@ -58,7 +58,7 @@ function SuperadminGrades(): ReactNode {
       cell: ({ row }) => {
         const teacher = users.data?.find(({ id }) => id === row.original.teacherId);
 
-        if (!teacher) return null;
+        if (!teacher) return;
 
         return (
           <Link className="block leading-[1.2]" to={generatePath(AppRoute.Users.Show, { id: teacher.id })}>

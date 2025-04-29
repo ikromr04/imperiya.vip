@@ -17,12 +17,11 @@ class UserUpdateRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'id' => ['required', 'integer', 'exists:users,id'],
       'name' => ['string', 'max:255'],
       'surname' => ['string', 'max:255'],
       'patronymic' => ['nullable', 'string', 'max:255'],
       'login' => ['string', 'max:255'],
-      'password' => ['nullable'],
+      'password' => ['nullable', 'string', 'min:1'],
       'sex' => ['in:male,female'],
       'birth_date' => ['date'],
       'nationality_id' => ['integer', 'exists:nationalities,id'],
@@ -108,6 +107,7 @@ class UserUpdateRequest extends FormRequest
 
     return is_string($value) ? trim($value) : $value;
   }
+
   protected function failedValidation(Validator $validator)
   {
     $rawErrors = (new ValidationException($validator))->errors();

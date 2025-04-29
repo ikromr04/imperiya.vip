@@ -19,16 +19,12 @@ function UsersSocialLinksEditForm({
 }: UsersSocialLinksEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const initialValues: UserUpdateDTO = {
-    id: user.id,
-    name: user.name,
-    login: user.login,
     social_link: {
       facebook: user.socialLink?.facebook || '',
       instagram: user.socialLink?.instagram || '',
       telegram: user.socialLink?.telegram || '',
       odnoklassniki: user.socialLink?.odnoklassniki || '',
     },
-    phone_numbers: user.phoneNumbers,
   };
 
   const onSubmit = async (
@@ -38,6 +34,7 @@ function UsersSocialLinksEditForm({
     helpers.setSubmitting(true);
 
     await dispatch(updateUserAction({
+      id: user.id,
       dto: values,
       onSuccess: () => {
         toast.success('Данные успешно сохранены.');

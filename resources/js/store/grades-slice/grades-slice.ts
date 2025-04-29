@@ -1,19 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { deleteGradeAction, fetchGradesAction, storeGradeAction, updateGradeAction } from './grades-api-actions';
 import { Grades } from '@/types/grades';
-import { SliceName } from '@/const/store';
+import { AsyncStatus, SliceName } from '@/const/store';
 
 export type GradesSlice = {
   grades: {
-    data: Grades | null;
-    isFetching: boolean;
+    data?: Grades;
+    status: AsyncStatus;
   };
 }
 
 const initialState: GradesSlice = {
   grades: {
-    data: null,
-    isFetching: false,
+    status: AsyncStatus.Idle,
   },
 };
 
@@ -24,14 +23,14 @@ export const gradesSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchGradesAction.pending, (state) => {
-        state.grades.isFetching = true;
+        state.grades.status = AsyncStatus.Loading;
       })
       .addCase(fetchGradesAction.fulfilled, (state, action) => {
+        state.grades.status = AsyncStatus.Succeeded;
         state.grades.data = action.payload;
-        state.grades.isFetching = false;
       })
       .addCase(fetchGradesAction.rejected, (state) => {
-        state.grades.isFetching = false;
+        state.grades.status = AsyncStatus.Failed;
       })
 
       .addCase(storeGradeAction.fulfilled, (state, action) => {

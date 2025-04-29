@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { ReactNode } from 'react';
+import React, { memo, ReactNode } from 'react';
 
 type DescriptionListProps = {
   className?: string;
@@ -9,7 +9,7 @@ type DescriptionListProps = {
   };
 };
 
-export default function DescriptionList({
+function DescriptionList({
   className,
   variant = 'default',
   list,
@@ -50,3 +50,4 @@ export default function DescriptionList({
     </dl>
   );
 }
+export default memo(DescriptionList);

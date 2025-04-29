@@ -30,6 +30,8 @@ import SuperadminRoute from './superadmin-route';
 import UsersLessonsPage from '@/pages/users-show-page/users-lessons-page';
 import UsersDiaryPage from '@/pages/users-show-page/users-diary-page';
 import RatingDatesPage from '@/pages/rating-dates-page';
+import AppLayout from './layouts/app-layout';
+import { ToastContainer } from 'react-toastify';
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -54,36 +56,41 @@ function App(): JSX.Element {
         <Route path={AppRoute.Auth.ForgotPassword} element={<ForgotPasswordPage />} />
         <Route path={AppRoute.Auth.ResetPassword} element={<ResetPasswordPage />} />
         <Route path={AppRoute.Auth.Register} element={<RegisterPage />} />
-        <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
-        <Route path={AppRoute.Auth.Lessons} element={<ProfileLessonsPage />} />
-        <Route path={AppRoute.Auth.Diary} element={<ProfileDiaryPage />} />
 
-        <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} />
+        <Route element={<AppLayout />}>
+          <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
+          <Route path={AppRoute.Auth.Lessons} element={<ProfileLessonsPage />} />
+          <Route path={AppRoute.Auth.Diary} element={<ProfileDiaryPage />} />
 
-        <Route path={AppRoute.Diary.Index} element={<DiaryPage />} />
+          <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} />
 
-        <Route path={AppRoute.Journal} element={<JournalPage />} />
+          <Route path={AppRoute.Diary.Index} element={<DiaryPage />} />
 
-        <Route path={AppRoute.Users.Index} element={<UsersPage />} />
-        <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
-        <Route path={AppRoute.Users.Lessons} element={<UsersLessonsPage />} />
-        <Route path={AppRoute.Users.Diary} element={<UsersDiaryPage />} />
+          <Route path={AppRoute.Journal} element={<JournalPage />} />
 
-        <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
-        <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />
+          <Route path={AppRoute.Users.Index} element={<UsersPage />} />
+          <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
+          <Route path={AppRoute.Users.Lessons} element={<UsersLessonsPage />} />
+          <Route path={AppRoute.Users.Diary} element={<UsersDiaryPage />} />
 
-        <Route element={<SuperadminRoute />}>
-          <Route path={AppRoute.Subjects.Index} element={<SubjectsPage />} />
-          <Route path={AppRoute.Nationalities.Index} element={<NationalitiesPage />} />
-          <Route path={AppRoute.Professions.Index} element={<ProfessionsPage />} />
-          <Route path={AppRoute.Lessons.Types} element={<LessonsTypesPage />} />
-          <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
-          <Route path={AppRoute.Users.Create} element={<UsersCreatePage />} />
-          <Route path={AppRoute.Ratings.Dates} element={<RatingDatesPage />} />
+          <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
+          <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />
+
+          <Route element={<SuperadminRoute />}>
+            <Route path={AppRoute.Subjects.Index} element={<SubjectsPage />} />
+            <Route path={AppRoute.Nationalities.Index} element={<NationalitiesPage />} />
+            <Route path={AppRoute.Professions.Index} element={<ProfessionsPage />} />
+            <Route path={AppRoute.Lessons.Types} element={<LessonsTypesPage />} />
+            <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
+            <Route path={AppRoute.Users.Create} element={<UsersCreatePage />} />
+            <Route path={AppRoute.Ratings.Dates} element={<RatingDatesPage />} />
+          </Route>
         </Route>
 
         <Route path={AppRoute.NotFound} element={<NotFoundPage />} />
       </Routes>
+
+      <ToastContainer position="bottom-right" />
     </BrowserRouter>
   );
 }

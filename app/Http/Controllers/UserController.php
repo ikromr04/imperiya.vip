@@ -24,15 +24,19 @@ class UserController extends Controller
   {
     $user = $request->user();
 
-    $users = [];
+    $users = collect();
 
     switch ($user->role) {
       case 'superadmin':
-        $users = User::selectBasic()->get();
+        $users = User::selectFullData()->withRoles()->get();
         break;
 
       case 'teacher':
-        $users = User::selectForTeachers()->get();
+        $users = User::whereIn('role', ['student', 'parent', 'teacher'])
+          ->select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'email', 'avatar', 'avatar_thumb', 'birth_date', 'address', 'whatsapp', 'nationality_id', 'social_link', 'phone_numbers'])
+          ->with([
+            'student' => fn($query) => $query->select(['id', 'user_id', 'grade_id', 'mother_id', 'father_id', 'admission_date', 'previous_schools', 'medical_recommendations']),
+          ])->get();
         break;
 
       case 'parent':
@@ -41,13 +45,84 @@ class UserController extends Controller
           ->pluck('user_id');
 
         $users = [
-          ...User::selectForStudents()->get(),
-          ...User::selectBasic()->whereIn('id', $childIds)->get(),
+          ...User::where('role', 'teacher')->select(
+            'id',
+            'name',
+            'surname',
+            'patronymic',
+            'role',
+            'sex',
+            'birth_date',
+            'nationality_id',
+            'email',
+            'address',
+            'phone_numbers',
+            'whatsapp',
+            'social_link',
+            'avatar',
+            'avatar_thumb',
+          )->get(),
+          ...User::select(
+            'id',
+            'name',
+            'surname',
+            'patronymic',
+            'login',
+            'password',
+            'role',
+            'sex',
+            'birth_date',
+            'nationality_id',
+            'email',
+            'address',
+            'phone_numbers',
+            'whatsapp',
+            'social_link',
+            'avatar',
+            'avatar_thumb',
+            'blocked_at',
+            'created_at',
+          )->with([
+            'student' => fn($query) => $query->select(
+              'id',
+              'user_id',
+              'grade_id',
+              'mother_id',
+              'father_id',
+              'admission_date',
+              'previous_schools',
+              'medical_recommendations',
+            ),
+            'parent' => fn($query) => $query->select(
+              'id',
+              'user_id',
+              'profession_id',
+              'workplace',
+              'position',
+            ),
+          ])->whereIn('id', $childIds)->get(),
         ];
         break;
 
       case 'student':
-        $users = User::selectForStudents()->get();
+        $users = User::where('role', 'teacher')
+          ->select(
+            'id',
+            'name',
+            'surname',
+            'patronymic',
+            'role',
+            'sex',
+            'birth_date',
+            'nationality_id',
+            'email',
+            'address',
+            'phone_numbers',
+            'whatsapp',
+            'social_link',
+            'avatar',
+            'avatar_thumb',
+          )->get();
         break;
     }
 
@@ -135,12 +210,50 @@ class UserController extends Controller
         break;
     }
 
-    return response()->json(User::selectBasic()->find($user->id), 201);
+    return response()->json(User::select(
+      'id',
+      'name',
+      'surname',
+      'patronymic',
+      'login',
+      'password',
+      'role',
+      'sex',
+      'birth_date',
+      'nationality_id',
+      'email',
+      'address',
+      'phone_numbers',
+      'whatsapp',
+      'social_link',
+      'avatar',
+      'avatar_thumb',
+      'blocked_at',
+      'created_at',
+    )->with([
+      'student' => fn($query) => $query->select(
+        'id',
+        'user_id',
+        'grade_id',
+        'mother_id',
+        'father_id',
+        'admission_date',
+        'previous_schools',
+        'medical_recommendations',
+      ),
+      'parent' => fn($query) => $query->select(
+        'id',
+        'user_id',
+        'profession_id',
+        'workplace',
+        'position',
+      ),
+    ])->find($user->id), 201);
   }
 
-  public function update(UserUpdateRequest $request): JsonResponse
+  public function update(UserUpdateRequest $request, int $id): JsonResponse
   {
-    $user = User::findOrFail($request->id);
+    $user = User::findOrFail($id);
 
     if ($user->login !== $request->login && User::where('login', $request->login)->exists()) {
       throw ValidationException::withMessages(['login' => ['Пользователь с таким логином уже существует.']]);
@@ -162,19 +275,50 @@ class UserController extends Controller
       'blocked_at',
     ]));
 
-    $user->password = Crypt::encryptString($request->password);
+    if ($request->password) {
+      $user->password = Crypt::encryptString($request->password);
+    }
     $user->save();
 
-    return response()->json(User::selectBasic()->find($user->id), 200);
-  }
-
-  public function checkLogin(string $login)
-  {
-    if (User::where('login', $login)->exists()) {
-      throw ValidationException::withMessages(['login' => ['Пользователь с таким логином уже существует.']]);
-    } else {
-      return response()->json(['message' => 'Валидный логин'], 200);
-    }
+    return response()->json(User::select(
+      'id',
+      'name',
+      'surname',
+      'patronymic',
+      'login',
+      'password',
+      'role',
+      'sex',
+      'birth_date',
+      'nationality_id',
+      'email',
+      'address',
+      'phone_numbers',
+      'whatsapp',
+      'social_link',
+      'avatar',
+      'avatar_thumb',
+      'blocked_at',
+      'created_at',
+    )->with([
+      'student' => fn($query) => $query->select(
+        'id',
+        'user_id',
+        'grade_id',
+        'mother_id',
+        'father_id',
+        'admission_date',
+        'previous_schools',
+        'medical_recommendations',
+      ),
+      'parent' => fn($query) => $query->select(
+        'id',
+        'user_id',
+        'profession_id',
+        'workplace',
+        'position',
+      ),
+    ])->find($user->id), 200);
   }
 
   public function delete(Request $request)
@@ -212,7 +356,45 @@ class UserController extends Controller
       'avatar_thumb' => $avatarThumbPath,
     ]);
 
-    return response(User::selectBasic()->find($id), 200);
+    return response(User::select(
+      'id',
+      'name',
+      'surname',
+      'patronymic',
+      'login',
+      'password',
+      'role',
+      'sex',
+      'birth_date',
+      'nationality_id',
+      'email',
+      'address',
+      'phone_numbers',
+      'whatsapp',
+      'social_link',
+      'avatar',
+      'avatar_thumb',
+      'blocked_at',
+      'created_at',
+    )->with([
+      'student' => fn($query) => $query->select(
+        'id',
+        'user_id',
+        'grade_id',
+        'mother_id',
+        'father_id',
+        'admission_date',
+        'previous_schools',
+        'medical_recommendations',
+      ),
+      'parent' => fn($query) => $query->select(
+        'id',
+        'user_id',
+        'profession_id',
+        'workplace',
+        'position',
+      ),
+    ])->find($id), 200);
   }
 
   public function deleteAvatar($id)

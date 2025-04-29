@@ -31,7 +31,7 @@ class AuthController extends Controller
 
     if (!$user) return response()->json(['message' => 'Вы не авторизованы.'], 401);
 
-    return response()->json(User::selectBasic()->findOrFail($user->id), 200);
+    return response()->json(User::selectFullData()->findOrFail($user->id), 200);
   }
 
   public function register(RegisterRequest $request): JsonResponse

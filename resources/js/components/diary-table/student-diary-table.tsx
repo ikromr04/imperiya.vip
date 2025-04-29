@@ -19,7 +19,7 @@ import { fetchMarksAction } from '@/store/marks-slice/marks-api-actions';
 
 function StudentDiaryTable(): JSX.Element {
   const dispatch = useAppDispatch();
-  const student = useAppSelector(getStudent);
+  const student = {};
   const subjects = useAppSelector(getSubjects);
   const users = useAppSelector(getUsers);
   const [lessons, setLessons] = useState<Lessons | null>(null);
@@ -30,7 +30,6 @@ function StudentDiaryTable(): JSX.Element {
 
   useEffect(() => {
     if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
-    if (!student.data && !student.isFetching) dispatch(fetchStudentAction());
     if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
     if (!lessons && student.data) dispatch(fetchLessonsAction({
       week,

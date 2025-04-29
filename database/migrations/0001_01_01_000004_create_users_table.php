@@ -14,6 +14,12 @@ return new class extends Migration
   {
     Schema::create('users', function (Blueprint $table) {
       $table->id();
+
+      $table->foreignId('nationality_id')
+        ->nullable()
+        ->constrained('nationalities')
+        ->nullOnDelete();
+
       $table->string('name');
       $table->string('surname');
       $table->string('patronymic')->nullable();
@@ -22,17 +28,17 @@ return new class extends Migration
       $table->enum('role', ['superadmin', 'admin', 'director', 'teacher', 'parent', 'student']);
       $table->enum('sex', ['male', 'female']);
       $table->date('birth_date')->nullable();
-      $table->foreignId('nationality_id')->nullable()->constrained('nationalities')->nullOnDelete();
       $table->string('email')->nullable();
       $table->json('address')->nullable();
       $table->json('phone_numbers')->nullable();
       $table->json('whatsapp')->nullable();
+      $table->json('social_link')->nullable();
       $table->string('avatar')->nullable();
       $table->string('avatar_thumb')->nullable();
-      $table->json('social_link')->nullable();
-      $table->timestamp('email_verified_at')->nullable();
-      $table->rememberToken();
       $table->timestamp('blocked_at')->nullable();
+      $table->timestamp('email_verified_at')->nullable();
+
+      $table->rememberToken();
       $table->timestamps();
       $table->softDeletes();
     });

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SliceName } from '@/const/store';
+import { AsyncStatus, SliceName } from '@/const/store';
 import { Nationalities } from '@/types/nationalities';
 import {
   deleteNationalityAction,
@@ -10,15 +10,14 @@ import {
 
 export type NationalitiesSlice = {
   nationalities: {
-    data: Nationalities | null;
-    isFetching: boolean;
+    data?: Nationalities;
+    status: AsyncStatus;
   };
 }
 
 const initialState: NationalitiesSlice = {
   nationalities: {
-    data: null,
-    isFetching: false,
+    status: AsyncStatus.Idle,
   },
 };
 
@@ -29,14 +28,14 @@ export const nationalitiesSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchNationalitiesAction.pending, (state) => {
-        state.nationalities.isFetching = true;
+        state.nationalities.status = AsyncStatus.Loading;
       })
       .addCase(fetchNationalitiesAction.fulfilled, (state, action) => {
+        state.nationalities.status = AsyncStatus.Succeeded;
         state.nationalities.data = action.payload;
-        state.nationalities.isFetching = false;
       })
       .addCase(fetchNationalitiesAction.rejected, (state) => {
-        state.nationalities.isFetching = false;
+        state.nationalities.status = AsyncStatus.Failed;
       })
 
       .addCase(storeNationalityAction.fulfilled, (state, action) => {

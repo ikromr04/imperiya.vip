@@ -1,38 +1,31 @@
 import DescriptionList from '@/components/ui/description-list';
 import { AppRoute } from '@/const/routes';
 import { RoleName } from '@/const/users';
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
-import { getGrades } from '@/store/grades-slice/grades-selector';
-import { fetchProfessionsAction } from '@/store/professions-slice/professions-api-actions';
-import { getProfessions } from '@/store/professions-slice/professions-selector';
+import { Grades } from '@/types/grades';
+import { Professions } from '@/types/professions';
 import { User, Users } from '@/types/users';
 import dayjs from 'dayjs';
-import React, { Fragment, ReactNode, useEffect } from 'react';
+import React, { Fragment, ReactNode } from 'react';
 import { generatePath, Link } from 'react-router-dom';
 
 type RoleInfoProps = {
   users: Users;
   user: User;
+  grades: Grades;
+  professions: Professions;
 };
 
 function RoleInfo({
   users,
   user,
+  grades,
+  professions,
 }: RoleInfoProps): JSX.Element {
   let list: { [term: string]: ReactNode; } = {};
-  const grades = useAppSelector(getGrades);
-  const dispatch = useAppDispatch();
-  const professions = useAppSelector(getProfessions);
-  const grade = grades.data?.find(({ id }) => id === user.student?.gradeId);
+  const grade = grades.find(({ id }) => id === user.student?.gradeId);
   const mother = users.find(({ id }) => id === user.student?.motherId);
   const father = users.find(({ id }) => id === user.student?.fatherId);
   const children = users.filter(({ id }) => user.parent?.children?.includes(id));
-
-  useEffect(() => {
-    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
-    if (!professions.data && !professions.isFetching) dispatch(fetchProfessionsAction());
-  }, [dispatch, grades.data, grades.isFetching, professions.data, professions.isFetching]);
 
   switch (user.role) {
     // case user.superadmin !== undefined:
@@ -43,9 +36,9 @@ function RoleInfo({
     //   break;
     case 'teacher':
       list = {
-        'Классы': grades.data ? (
+        'Классы': grades.length ? (
           <div className="flex flex-wrap gap-2">
-            {grades.data.filter((grade) => grade.teacherId === user.id).map((grade) => (
+            {grades.filter((grade) => grade.teacherId === user.id).map((grade) => (
               <Link className="text-blue-600" to={generatePath(AppRoute.Classes.Show, { id: grade.id })}>
                 {grade.level} {grade.group}
               </Link>
@@ -84,7 +77,7 @@ function RoleInfo({
             <br />
           </Fragment>
         )) : '-',
-        'Сфера деятельности': professions.data?.find(({ id }) => user.parent?.professionId === id)?.name ?? '-',
+        'Сфера деятельности': professions.find(({ id }) => user.parent?.professionId === id)?.name ?? '-',
         'Место работы': user.parent?.workplace ?? '-',
         'Должность': user.parent?.position ?? '-',
       };

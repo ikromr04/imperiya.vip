@@ -20,7 +20,7 @@ function Cleanable({
 }: CleanableProps): ReactNode {
   const [field] = useField(name);
 
-  if (!cleanable || !field.value || (multiple && field.value.length === 0)) return null;
+  if (!cleanable || !field.value || (multiple && field.value.length === 0)) return;
 
   return (
     <button

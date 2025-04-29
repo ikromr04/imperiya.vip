@@ -53,7 +53,6 @@ export type UserStoreDTO = {
 };
 
 export type UserUpdateDTO = {
-  id: UserId;
   name?: string;
   surname?: string;
   patronymic?: string;

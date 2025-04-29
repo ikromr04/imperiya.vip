@@ -41,13 +41,6 @@ class SubjectSeeder extends Seeder
       array('id' => '29', 'name' => 'Продленка', 'created_at' => '2025-04-16 16:18:24', 'updated_at' => '2025-04-16 16:18:24', 'deleted_at' => NULL)
     );
 
-
-    foreach ($subjects as $subject) {
-      Subject::create([
-        'name' => $subject['name'],
-        'created_at' => $subject['created_at'],
-        'updated_at' => $subject['updated_at'],
-      ]);
-    }
+    Subject::insert($subjects);
   }
 }

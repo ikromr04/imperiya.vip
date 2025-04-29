@@ -12,26 +12,17 @@ class Guardian extends Model
   use SoftDeletes;
 
   protected $guarded = ['id'];
+
   protected $hidden = [
     'id',
     'user_id',
   ];
+
   protected $appends = ['children'];
 
   public function user(): BelongsTo
   {
     return $this->belongsTo(User::class);
-  }
-
-  public function scopeSelectBasic($query)
-  {
-    return $query->select(
-      'id',
-      'user_id',
-      'profession_id as professionId',
-      'workplace',
-      'position',
-    );
   }
 
   public function getChildrenAttribute()
@@ -44,7 +35,19 @@ class Guardian extends Model
 
   public function toArray()
   {
-    $array = parent::toArray();
-    return array_filter($array, fn($value) => $value);
+    $array = array_filter(parent::toArray(), fn($value) => $value);
+
+    $map = [
+      'profession_id' => 'professionId',
+    ];
+
+    foreach ($map as $snake => $camel) {
+      if (isset($array[$snake])) {
+        $array[$camel] = $array[$snake];
+        unset($array[$snake]);
+      }
+    }
+
+    return $array;
   }
 }

@@ -44,7 +44,7 @@ function SuperadminUsers(): ReactNode {
     if (!professions.data && !professions.isFetching) dispatch(fetchProfessionsAction());
   }, [dispatch, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching, professions.data, professions.isFetching, users.data, users.isFetching]);
 
-  if (authUser?.role !== 'superadmin') return null;
+  if (authUser?.role !== 'superadmin') return;
 
   const onExport = (users: Users, columnVisibility: VisibilityState) => {
     const data = users.map((user) => {

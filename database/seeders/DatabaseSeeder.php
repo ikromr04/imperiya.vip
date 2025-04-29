@@ -11,12 +11,11 @@ class DatabaseSeeder extends Seeder
     $this->call([
       NationalitySeeder::class,
       ProfessionSeeder::class,
+      GradeSeeder::class,
       UserSeeder::class,
-      // GradeSeeder::class,
       SubjectSeeder::class,
       RatingDateSeeder::class,
       LessonSeeder::class,
-      // RegisterLinkSeeder::class,
     ]);
   }
 }
