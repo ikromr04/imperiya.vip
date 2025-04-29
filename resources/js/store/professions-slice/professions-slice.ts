@@ -10,14 +10,13 @@ import {
 
 export type ProfessionsSlice = {
   professions: {
-    data: Professions;
+    data?: Professions;
     status: AsyncStatus,
   };
 }
 
 const initialState: ProfessionsSlice = {
   professions: {
-    data: [],
     status: AsyncStatus.Idle,
   },
 };

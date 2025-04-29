@@ -16,17 +16,20 @@ import LessonsEditForm from '@/components/forms/lessons/lessons-edit-form';
 import LessonsDeleteForm from '@/components/forms/lessons/lessons-delete-form';
 import LessonsCreateForm from '../forms/lessons/lessons-create-form';
 import { getSubjects } from '@/store/subjects-slice/subjects-selector';
-import { getUsers } from '@/store/users-slice/users-selector';
-import { getGrades } from '@/store/grades-slice/grades-selector';
+import { getUsers, getUsersStatus } from '@/store/users-slice/users-selector';
+import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
+import { AsyncStatus } from '@/const/store';
 
 function LessonsTable(): JSX.Element {
   const dispatch = useAppDispatch();
+  const gradesStatus = useAppSelector(getGradesStatus);
+  const usersStatus = useAppSelector(getUsersStatus);
   const grades = useAppSelector(getGrades);
-  const subjects = useAppSelector(getSubjects);
   const users = useAppSelector(getUsers);
+  const subjects = useAppSelector(getSubjects);
   const [lessons, setLessons] = useState<Lessons | null>(null);
   const [week, setWeek] = useState(0);
   const weekDates = getCurrentWeekDates(week);
@@ -36,8 +39,8 @@ function LessonsTable(): JSX.Element {
   const tableRef = useRef<HTMLTableElement>(null);
 
   useEffect(() => {
-    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
+    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
+    if (usersStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
     if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
     if (!lessons) dispatch(fetchLessonsAction({
       week,
