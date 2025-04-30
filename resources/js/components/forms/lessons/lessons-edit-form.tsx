@@ -4,20 +4,18 @@ import SelectField from '@/components/ui/formik-controls/select-field';
 import { LessonUpdateDTO } from '@/dto/lessons';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { updateLessonAction } from '@/store/lessons-slice/lessons-api-actions';
-import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
 import { getSubjects } from '@/store/subjects-slice/subjects-selector';
-import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import { Lessons } from '@/types/lessons';
 import { Form, Formik, FormikHelpers } from 'formik';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 
 type LessonsEditFormProps = {
   week: number;
   dto: LessonUpdateDTO;
-  setDTO: Dispatch<SetStateAction<LessonUpdateDTO | null>>;
-  setLessons: Dispatch<SetStateAction<Lessons | null>>;
+  setDTO: Dispatch<SetStateAction<LessonUpdateDTO | undefined>>;
+  setLessons: Dispatch<SetStateAction<Lessons | undefined>>;
 };
 
 function LessonsEditForm({
@@ -35,11 +33,6 @@ function LessonsEditForm({
     teacher_id: dto.teacher_id,
   };
 
-  useEffect(() => {
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
-  }, [dispatch, subjects.data, subjects.isFetching, users.data, users.isFetching]);
-
   const onSubmit = async (
     values: LessonUpdateDTO,
     helpers: FormikHelpers<LessonUpdateDTO>
@@ -51,7 +44,7 @@ function LessonsEditForm({
       dto: values,
       onSuccess: (lessons) => {
         toast.success('Расписание успешно обновлен.');
-        setDTO(null);
+        setDTO(undefined);
         setLessons(lessons);
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
@@ -76,28 +69,28 @@ function LessonsEditForm({
               type="reset"
               variant="danger"
               icon="close"
-              onClick={() => setDTO(null)}
+              onClick={() => setDTO(undefined)}
             >
               <span className="sr-only">Отмена</span>
             </Button>
           </div>
 
           <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
-            {subjects.data && (
+            {subjects && (
               <SelectField
                 name="subject_id"
                 label="Урок"
                 searchable
-                options={subjects.data.map((subject) => ({ value: subject.id, label: subject.name }))}
+                options={subjects.map((subject) => ({ value: subject.id, label: subject.name }))}
               />
             )}
 
-            {users.data && (
+            {users && (
               <SelectField
                 name="teacher_id"
                 label="Преподователь"
                 searchable
-                options={users.data.filter((user) => user.role === 'teacher').map((user) => ({ value: user.id, label: `${user.name} ${user.surname}` }))}
+                options={users.filter((user) => user.role === 'teacher').map((user) => ({ value: user.id, label: `${user.name} ${user.surname}` }))}
               />
             )}
 

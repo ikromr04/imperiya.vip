@@ -11,8 +11,8 @@ import { toast } from 'react-toastify';
 type LessonsDeleteFormProps = {
   week: number;
   dto: LessonDeleteDTO;
-  setDTO: Dispatch<SetStateAction<LessonDeleteDTO | null>>;
-  setLessons: Dispatch<SetStateAction<Lessons | null>>;
+  setDTO: Dispatch<SetStateAction<LessonDeleteDTO | undefined>>;
+  setLessons: Dispatch<SetStateAction<Lessons | undefined>>;
 };
 
 function LessonsDeleteForm({
@@ -38,7 +38,7 @@ function LessonsDeleteForm({
       dto: values,
       onSuccess: (lessons) => {
         toast.success('Расписание успешно обновлен.');
-        setDTO(null);
+        setDTO(undefined);
         setLessons(lessons);
       },
       onFail: (message) => toast.success(message),
@@ -62,7 +62,7 @@ function LessonsDeleteForm({
               type="reset"
               variant="danger"
               icon="close"
-              onClick={() => setDTO(null)}
+              onClick={() => setDTO(undefined)}
             >
               <span className="sr-only">Отмена</span>
             </Button>

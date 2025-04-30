@@ -1,0 +1,78 @@
+import LessonHour from '@/components/lesson-hour';
+import { Hour } from '@/const/lessons';
+import { LessonDeleteDTO, LessonStoreDTO, LessonUpdateDTO } from '@/dto/lessons';
+import { useAppSelector } from '@/hooks';
+import { getGrades } from '@/store/grades-slice/grades-selector';
+import { capitalizeString } from '@/utils';
+import classNames from 'classnames';
+import dayjs from 'dayjs';
+import React, { Dispatch, memo, ReactNode, SetStateAction } from 'react';
+import LessonsItem from './lessons-item';
+import { Lessons } from '@/types/lessons';
+
+type LessonRowProps = {
+  date: dayjs.Dayjs;
+  isToday: boolean;
+  lessons?: Lessons;
+  setCreateDTO: Dispatch<SetStateAction<LessonStoreDTO | undefined>>
+  setEditDTO: Dispatch<SetStateAction<LessonUpdateDTO | undefined>>
+  setDeleteDTO: Dispatch<SetStateAction<LessonDeleteDTO | undefined>>
+}
+
+function LessonRow({
+  date,
+  isToday,
+  lessons,
+  setCreateDTO,
+  setEditDTO,
+  setDeleteDTO,
+}: LessonRowProps): ReactNode {
+  const grades = useAppSelector(getGrades);
+
+  return (
+    <>
+      <tr className={classNames('border-b', isToday && 'bg-green-50')}>
+        <td
+          className={classNames('min-w-7 w-7 max-w-7 sticky left-0 z-10', isToday ? 'bg-green-50' : 'bg-white')}
+          rowSpan={9}
+        >
+          <div className="absolute left-1/2 top-1/2 flex gap-2 min-w-max text-blue-700 -translate-x-1/2 -translate-y-1/2 -rotate-90">
+            {capitalizeString(date.format('dddd - DD'))}
+          </div>
+        </td>
+      </tr>
+      {Object.keys(Hour).map((hour) => (
+        <tr key={hour} className={classNames('min-h-[53px] h-[53px] max-h-[53px] border-b', isToday && 'bg-green-50')}>
+          <td className="min-w-7 w-7 max-w-7 text-center font-semibold sticky left-7 z-10">
+            <div
+              className={classNames(
+                'absolute left-0 top-0 w-full h-full border-r border-l flex justify-center items-center',
+                isToday ? 'bg-green-50' : 'bg-white'
+              )}
+            >
+              {hour}
+            </div>
+          </td>
+          <td className="min-w-20 w-20 max-w-20 text-sm">
+            <LessonHour hour={+hour as keyof typeof Hour} />
+          </td>
+          {grades?.map((grade) => (
+            <td key={grade.id} className="relative z-0 p-2 border-l min-w-[260px]">
+              <LessonsItem
+                date={date}
+                hour={+hour as keyof typeof Hour}
+                grade={grade}
+                lessons={lessons}
+                setCreateDTO={setCreateDTO}
+                setEditDTO={setEditDTO}
+                setDeleteDTO={setDeleteDTO}
+              />
+            </td>
+          ))}
+        </tr>
+      ))}
+    </>
+  );
+}
+
+export default memo(LessonRow);

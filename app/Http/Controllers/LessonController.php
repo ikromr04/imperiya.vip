@@ -93,7 +93,7 @@ class LessonController extends Controller
       'date',
       'hour',
       'grade_id',
-      'lesson_id',
+      'subject_id',
       'teacher_id',
     ]));
 

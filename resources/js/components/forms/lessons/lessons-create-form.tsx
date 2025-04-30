@@ -3,16 +3,14 @@ import Button from '@/components/ui/button';
 import Checkbox from '@/components/ui/checkbox/checkbox';
 import SelectField from '@/components/ui/formik-controls/select-field';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import dayjs from 'dayjs';
 import { Form, Formik, FormikHelpers } from 'formik';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 import { LessonStoreDTO } from '@/dto/lessons';
 import { Lessons } from '@/types/lessons';
 import { getSubjects } from '@/store/subjects-slice/subjects-selector';
-import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
 import { storeLessonAction } from '@/store/lessons-slice/lessons-api-actions';
 
 const validationSchema = Yup.object().shape({
@@ -24,8 +22,8 @@ const validationSchema = Yup.object().shape({
 type LessonsCreateFormProps = {
   week: number;
   dto: LessonStoreDTO;
-  setDTO: Dispatch<SetStateAction<LessonStoreDTO | null>>;
-  setLessons: Dispatch<SetStateAction<Lessons | null>>;
+  setDTO: Dispatch<SetStateAction<LessonStoreDTO | undefined>>;
+  setLessons: Dispatch<SetStateAction<Lessons | undefined>>;
 };
 
 function LessonsCreateForm({
@@ -44,11 +42,6 @@ function LessonsCreateForm({
     subject_id: dto.subject_id,
   };
 
-  useEffect(() => {
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
-  }, [dispatch, subjects.data, subjects.isFetching, users.data, users.isFetching]);
-
   const onSubmit = async (
     values: LessonStoreDTO,
     helpers: FormikHelpers<LessonStoreDTO>
@@ -60,7 +53,7 @@ function LessonsCreateForm({
       dto: values,
       onSuccess: (lessons) => {
         toast.success('Расписание успешно добавлено.');
-        setDTO(null);
+        setDTO(undefined);
         setLessons(lessons);
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
@@ -86,28 +79,28 @@ function LessonsCreateForm({
               type="reset"
               variant="danger"
               icon="close"
-              onClick={() => setDTO(null)}
+              onClick={() => setDTO(undefined)}
             >
               <span className="sr-only">Отмена</span>
             </Button>
           </div>
 
           <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4">
-            {subjects.data && (
+            {subjects && (
               <SelectField
                 name="subject_id"
                 label="Урок"
                 searchable
-                options={subjects.data.map((subject) => ({ value: subject.id, label: subject.name }))}
+                options={subjects.map((subject) => ({ value: subject.id, label: subject.name }))}
               />
             )}
 
-            {users.data && (
+            {users && (
               <SelectField
                 name="teacher_id"
                 label="Преподователь"
                 searchable
-                options={users.data.filter((user) => user.role === 'teacher').map((user) => ({ value: user.id, label: `${user.name} ${user.surname}` }))}
+                options={users.filter((user) => user.role === 'teacher').map((user) => ({ value: user.id, label: `${user.name} ${user.surname}` }))}
               />
             )}
 

@@ -2,39 +2,38 @@ import { Hour } from '@/const/lessons';
 import { Grade } from '@/types/grades';
 import dayjs, { Dayjs } from 'dayjs';
 import React, { Dispatch, memo, SetStateAction } from 'react';
-import { Subjects } from '@/types/subjects';
-import { Users } from '@/types/users';
 import { generatePath, Link } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
 import classNames from 'classnames';
 import Button from '@/components/ui/button';
 import { LessonDeleteDTO, LessonStoreDTO, LessonUpdateDTO } from '@/dto/lessons';
 import { Lessons } from '@/types/lessons';
+import { useAppSelector } from '@/hooks';
+import { getSubjects } from '@/store/subjects-slice/subjects-selector';
+import { getUsers } from '@/store/users-slice/users-selector';
 
 type LessonItemProps = {
   date: Dayjs;
   hour: keyof typeof Hour;
   grade: Grade;
-  subjects: Subjects;
-  teachers: Users;
-  lessons: Lessons;
-  setCreateDTO: Dispatch<SetStateAction<LessonStoreDTO | null>>;
-  setEditDTO: Dispatch<SetStateAction<LessonUpdateDTO | null>>;
-  setDeleteDTO: Dispatch<SetStateAction<LessonDeleteDTO | null>>;
+  lessons?: Lessons;
+  setCreateDTO: Dispatch<SetStateAction<LessonStoreDTO | undefined>>;
+  setEditDTO: Dispatch<SetStateAction<LessonUpdateDTO | undefined>>;
+  setDeleteDTO: Dispatch<SetStateAction<LessonDeleteDTO | undefined>>;
 };
 
 function LessonItem({
   date,
   hour,
   grade,
-  subjects,
-  teachers,
   lessons,
   setCreateDTO,
   setEditDTO,
   setDeleteDTO,
 }: LessonItemProps): JSX.Element {
-  const lesson = lessons.find((lesson) => (
+  const subjects = useAppSelector(getSubjects);
+  const users = useAppSelector(getUsers);
+  const lesson = lessons?.find((lesson) => (
     dayjs(lesson.date).format('YYYY-MM-DD') === dayjs(date).format('YYYY-MM-DD') &&
     lesson.gradeId === grade.id &&
     +lesson.hour === +hour
@@ -62,12 +61,15 @@ function LessonItem({
     );
   }
 
-  const teacher = teachers.find(({ id }) => id === lesson.teacherId);
+  const teacher = users?.find(({ id }) => id === lesson.teacherId);
 
   return (
     <div className="flex flex-col text-center leading-none group">
-      <Link className="duration-150 hover:text-blue-600 truncate" to={`${AppRoute.Journal}?gradeId=${lesson.gradeId}&subjectId=${lesson.subjectId}`}>
-        {subjects.find(({ id }) => id === lesson.subjectId)?.name}
+      <Link
+        className="duration-150 hover:text-blue-600 truncate"
+        to={`${AppRoute.Journal}?gradeId=${lesson.gradeId}&subjectId=${lesson.subjectId}`}
+      >
+        {subjects?.find(({ id }) => id === lesson.subjectId)?.name}
       </Link>
       {teacher && (
         <div className="flex justify-center text-sm items-baseline">

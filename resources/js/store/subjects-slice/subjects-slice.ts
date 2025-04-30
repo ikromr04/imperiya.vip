@@ -1,19 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SliceName } from '@/const/store';
+import { AsyncStatus, SliceName } from '@/const/store';
 import { Subjects } from '@/types/subjects';
 import { deleteSubjectAction, fetchSubjectsAction, storeSubjectAction, updateSubjectAction } from './subjects-api-actions';
 
 export type SubjectsSlice = {
   subjects: {
-    data: Subjects | null;
-    isFetching: boolean;
+    data?: Subjects;
+    status: AsyncStatus;
   };
 }
 
 const initialState: SubjectsSlice = {
   subjects: {
-    data: null,
-    isFetching: false,
+    status: AsyncStatus.Idle,
   },
 };
 
@@ -24,14 +23,14 @@ export const subjectsSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchSubjectsAction.pending, (state) => {
-        state.subjects.isFetching = true;
+        state.subjects.status = AsyncStatus.Loading;
       })
       .addCase(fetchSubjectsAction.fulfilled, (state, action) => {
+        state.subjects.status = AsyncStatus.Succeeded;
         state.subjects.data = action.payload;
-        state.subjects.isFetching = false;
       })
       .addCase(fetchSubjectsAction.rejected, (state) => {
-        state.subjects.isFetching = false;
+        state.subjects.status = AsyncStatus.Failed;
       })
 
       .addCase(storeSubjectAction.fulfilled, (state, action) => {

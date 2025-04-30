@@ -1,14 +1,183 @@
-import React from 'react';
-import LessonsTable from '@/components/lessons-table/lessons-table';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
+import { getUsersStatus } from '@/store/users-slice/users-selector';
+import { getSubjectsStatus } from '@/store/subjects-slice/subjects-selector';
+import { Lessons } from '@/types/lessons';
+import { capitalizeString, getCurrentWeekDates } from '@/utils';
+import { LessonDeleteDTO, LessonStoreDTO, LessonUpdateDTO } from '@/dto/lessons';
+import dayjs from 'dayjs';
+import LessonsCreateForm from '@/components/forms/lessons/lessons-create-form';
+import LessonsEditForm from '@/components/forms/lessons/lessons-edit-form';
+import LessonsDeleteForm from '@/components/forms/lessons/lessons-delete-form';
+import { Icons } from '@/components/icons';
+import LessonRow from './lesson-row';
+import Modal from '@/components/ui/modal';
+import { AsyncStatus } from '@/const/store';
+import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
+import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
+import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
+import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
 
 function SuperadminLessons(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const gradesStatus = useAppSelector(getGradesStatus);
+  const usersStatus = useAppSelector(getUsersStatus);
+  const subjectsStatus = useAppSelector(getSubjectsStatus);
+  const grades = useAppSelector(getGrades);
+  const [week, setWeek] = useState(0);
+  const weekDates = useMemo(() => getCurrentWeekDates(week), [week]);
+  const [createDTO, setCreateDTO] = useState<LessonStoreDTO>();
+  const [editDTO, setEditDTO] = useState<LessonUpdateDTO>();
+  const [deleteDTO, setDeleteDTO] = useState<LessonDeleteDTO>();
+  const tableRef = useRef<HTMLTableElement>(null);
+  const today = useMemo(() => dayjs().format('YYYY-MM-DD'), []);
+  const [lessons, setLessons] = useState<Lessons>();
+
+  useEffect(() => {
+    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
+    if (usersStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
+    if (subjectsStatus === AsyncStatus.Idle) dispatch(fetchSubjectsAction());
+  }, [dispatch, gradesStatus, subjectsStatus, usersStatus]);
+
+  useEffect(() => {
+    dispatch(fetchLessonsAction({
+      week,
+      onSuccess: (lessons) => setLessons(lessons),
+    }));
+  }, [dispatch, week]);
+
+  const scrollSync = useCallback((event: React.UIEvent<HTMLDivElement>) => {
+    const { scrollLeft } = event.currentTarget;
+    if (!tableRef.current) return;
+
+    tableRef.current
+      .querySelectorAll<HTMLDivElement>('.sync-scroll')
+      .forEach((element) => {
+        element.scrollLeft = scrollLeft;
+      });
+  }, []);
+
+  const handleWeekChange = useCallback((change: number) => () => {
+    setWeek((prev) => (change === 0) ? 0 : (prev + change));
+  }, []);
+
+  const modalContent = useMemo(() => {
+    if (createDTO) return (
+      <LessonsCreateForm dto={createDTO} week={week} setDTO={setCreateDTO} setLessons={setLessons} />
+    );
+    if (editDTO) return (
+      <LessonsEditForm dto={editDTO} week={week} setDTO={setEditDTO} setLessons={setLessons} />
+    );
+    if (deleteDTO) return (
+      <LessonsDeleteForm dto={deleteDTO} week={week} setDTO={setDeleteDTO} setLessons={setLessons} />
+    );
+    return null;
+  }, [createDTO, editDTO, deleteDTO, week]);
+
   return (
     <main className="py-2">
       <h1 className="title mb-1 px-3">
         Расписание занятий
       </h1>
 
-      <LessonsTable />
+      <div className="rounded-md shadow border pb-1 bg-[linear-gradient(to_bottom,white_0%,white_50%,#f3f4f6_50%,#f3f4f6_100%)]">
+        <table ref={tableRef} className="flex flex-col w-full">
+          <caption className="text-left p-2 pl-4 border-b">
+            <div className="flex items-baseline gap-1 text-blue-700">
+              <Icons.calendar className="relative top-[1px]" height={16} />
+              {capitalizeString(dayjs(weekDates[0]).format('MMMM'))}
+              {dayjs(weekDates[0]).format('M') !== dayjs(weekDates[5]).format('M') && ` - ${capitalizeString(dayjs(weekDates[5]).format('MMMM'))}`}
+            </div>
+          </caption>
+
+          <thead
+            className="sticky top-0 z-20 bg-gray-100 shadow overflow-x-auto no-scrollbar sync-scroll"
+            onScroll={scrollSync}
+          >
+            <tr>
+              <th className="min-w-7 w-7 max-w-7 sticky left-0 z-10 bg-gray-100"></th>
+              <th className="min-w-7 w-7 max-w-7 sticky left-7 z-10 bg-gray-100"></th>
+              <th className="min-w-20 w-20 max-w-20"></th>
+
+              {grades?.map((grade) => (
+                <th
+                  key={grade.id}
+                  className="p-2 min-w-[260px] w-[260px] max-w-[260px] text-center"
+                >
+                  Класс {grade.level} {grade.group}
+                </th>
+              ))}
+            </tr>
+          </thead>
+
+          <tbody
+            className="overflow-x-auto no-scrollbar sync-scroll bg-white"
+            onScroll={scrollSync}
+          >
+            {weekDates.map((date) => (
+              <LessonRow
+                key={date.toString()}
+                date={date}
+                isToday={date.format('YYYY-MM-DD') === today}
+                lessons={lessons}
+                setCreateDTO={setCreateDTO}
+                setEditDTO={setEditDTO}
+                setDeleteDTO={setDeleteDTO}
+              />
+            ))}
+          </tbody>
+
+          <tfoot
+            className="sticky bottom-[48px] z-10 overflow-x-auto bg-white styled-scrollbar mb-[-1px] sync-scroll"
+            onScroll={scrollSync}
+          >
+            <tr>
+              <th className="p-0 border-b min-w-10 w-10"></th>
+              <th className="p-0 border-b min-w-[91px]"></th>
+
+              {grades?.map((grade) => (
+                <th
+                  key={grade.id}
+                  className="p-0 min-w-[260px] w-[260px] max-w-[260px] text-center border-b"
+                ></th>
+              ))}
+            </tr>
+          </tfoot>
+        </table>
+
+        <div className="sticky bottom-0 z-10 p-2 border-t bg-gray-100">
+          <div className="flex w-max ml-auto gap-4">
+            <button
+              className="flex justify-center items-center gap-x-2 h-8 border-transparent rounded-md border transform disabled:opacity-50 disabled:pointer-events-none"
+              onClick={handleWeekChange(-1)}
+            >
+              <Icons.previous width={7} />
+              <span className="sr-only md:not-sr-only">Предыдущая неделя</span>
+            </button>
+            {week !== 0 && (
+              <button
+                className="flex justify-center items-center h-8 rounded-md"
+                onClick={handleWeekChange(0)}
+              >
+                <Icons.currentWeek width={16} height={16} />
+                <span className="sr-only">Текущая неделя</span>
+              </button>
+            )}
+            <button
+              className="flex justify-center items-center gap-x-2 h-8 border-transparent rounded-md border transform disabled:opacity-50 disabled:pointer-events-none"
+              onClick={handleWeekChange(1)}
+            >
+              <span className="sr-only md:not-sr-only">Следующая неделя</span>
+              <Icons.next width={7} />
+            </button>
+          </div>
+        </div>
+
+        <Modal isOpen={!!(createDTO || editDTO || deleteDTO)}>
+          {modalContent}
+        </Modal>
+      </div>
     </main>
   );
 }

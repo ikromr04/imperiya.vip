@@ -1,6 +1,6 @@
 import { SliceName } from '@/const/store';
-import { Types } from '@/types/lessons';
 import { State } from '@/types/state';
 
-export const getLessonsTypes = (state: State): { data: Types | null; isFetching: boolean } =>
-  state[SliceName.Lessons].types;
+export const getLessonsStatus = (state: State) => state[SliceName.Lessons].lessons.status;
+
+export const getLessonsTypes = (state: State) => state[SliceName.Lessons].types.data;

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SliceName } from '@/const/store';
+import { AsyncStatus, SliceName } from '@/const/store';
 import { Types } from '@/types/lessons';
 import {
   deleteLessonTypeAction,
@@ -11,21 +11,20 @@ import {
 
 export type LessonsSlice = {
   lessons: {
-    isFetching: boolean;
+    status: AsyncStatus;
   };
   types: {
-    data: Types | null;
-    isFetching: boolean;
+    data?: Types;
+    status: AsyncStatus;
   };
 }
 
 const initialState: LessonsSlice = {
   lessons: {
-    isFetching: false,
+    status: AsyncStatus.Idle,
   },
   types: {
-    data: null,
-    isFetching: false,
+    status: AsyncStatus.Idle,
   },
 };
 
@@ -36,24 +35,24 @@ export const lessonsSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchLessonsAction.pending, (state) => {
-        state.lessons.isFetching = true;
+        state.lessons.status = AsyncStatus.Loading;
       })
       .addCase(fetchLessonsAction.fulfilled, (state) => {
-        state.lessons.isFetching = false;
+        state.lessons.status = AsyncStatus.Succeeded;
       })
       .addCase(fetchLessonsAction.rejected, (state) => {
-        state.lessons.isFetching = false;
+        state.lessons.status = AsyncStatus.Failed;
       })
 
       .addCase(fetchLessonsTypesAction.pending, (state) => {
-        state.types.isFetching = true;
+        state.types.status = AsyncStatus.Loading;
       })
       .addCase(fetchLessonsTypesAction.fulfilled, (state, action) => {
+        state.types.status = AsyncStatus.Succeeded;
         state.types.data = action.payload;
-        state.types.isFetching = false;
       })
       .addCase(fetchLessonsTypesAction.rejected, (state) => {
-        state.types.isFetching = false;
+        state.types.status = AsyncStatus.Failed;
       })
       .addCase(storeLessonTypeAction.fulfilled, (state, action) => {
         if (state.types.data) {

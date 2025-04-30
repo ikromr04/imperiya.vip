@@ -75,7 +75,7 @@ export const updateLessonAction = createAsyncThunk<void, {
   'lessons/update',
   async ({ dto, week, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.put<Lessons>(`${APIRoute.Lessons.Index}${week ? `?week=${week}` : ''}`, dto);
+      const { data } = await api.put<Lessons>(`${generatePath(APIRoute.Lessons.Show, { id: dto.id })}${week ? `?week=${week}` : ''}`, dto);
       if (onSuccess) onSuccess(data);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
