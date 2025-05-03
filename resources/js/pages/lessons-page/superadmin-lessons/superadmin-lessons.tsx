@@ -35,17 +35,17 @@ function SuperadminLessons(): JSX.Element {
   const [lessons, setLessons] = useState<Lessons>();
 
   useEffect(() => {
-    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
-    if (usersStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
-    if (subjectsStatus === AsyncStatus.Idle) dispatch(fetchSubjectsAction());
-  }, [dispatch, gradesStatus, subjectsStatus, usersStatus]);
-
-  useEffect(() => {
     dispatch(fetchLessonsAction({
       week,
       onSuccess: (lessons) => setLessons(lessons),
     }));
   }, [dispatch, week]);
+
+  useEffect(() => {
+    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
+    if (usersStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
+    if (subjectsStatus === AsyncStatus.Idle) dispatch(fetchSubjectsAction());
+  }, [dispatch, gradesStatus, subjectsStatus, usersStatus]);
 
   const scrollSync = useCallback((event: React.UIEvent<HTMLDivElement>) => {
     const { scrollLeft } = event.currentTarget;

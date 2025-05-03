@@ -1,6 +1,6 @@
 import { SliceName } from '@/const/store';
-import { RatingDates } from '@/types/ratings';
 import { State } from '@/types/state';
 
-export const getRatingDates = (state: State): { data: RatingDates | null; isFetching: boolean } =>
-  state[SliceName.Ratings].dates;
+export const getRatingDatesStatus = (state: State) => state[SliceName.Ratings].dates.status;
+
+export const getRatingDates = (state: State) => state[SliceName.Ratings].dates.data;

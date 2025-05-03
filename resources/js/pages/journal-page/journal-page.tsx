@@ -5,14 +5,13 @@ import NotFoundPage from '@/pages/not-found-page';
 import { Role } from '@/types/users';
 import { Navigate } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
-import TeacherJournal from './teacher-journal/teacher-journal';
 import SuperadminJournal from './superadmin-journal/superadmin-journal';
 
 const Page = {
   'superadmin': () => <SuperadminJournal />,
   'admin': () => <NotFoundPage />,
   'director': () => <NotFoundPage />,
-  'teacher': () => <TeacherJournal />,
+  'teacher': () => <NotFoundPage />,
   'parent': () => <NotFoundPage />,
   'student': () => <NotFoundPage />,
 };

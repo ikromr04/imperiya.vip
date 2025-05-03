@@ -80,7 +80,7 @@ function App(): JSX.Element {
             <Route path={AppRoute.Subjects.Index} element={<SubjectsPage />} />
             <Route path={AppRoute.Nationalities.Index} element={<NationalitiesPage />} />
             <Route path={AppRoute.Professions.Index} element={<ProfessionsPage />} />
-            <Route path={AppRoute.Lessons.Types} element={<LessonsTypesPage />} />
+            {/* <Route path={AppRoute.Lessons.Types} element={<LessonsTypesPage />} /> */}
             <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
             <Route path={AppRoute.Users.Create} element={<UsersCreatePage />} />
             <Route path={AppRoute.Ratings.Dates} element={<RatingDatesPage />} />

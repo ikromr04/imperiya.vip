@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AsyncStatus, SliceName } from '@/const/store';
-import { Types } from '@/types/lessons';
+import { LessonTypes } from '@/types/lessons';
 import {
   deleteLessonTypeAction,
   fetchLessonsAction,
-  fetchLessonsTypesAction,
+  fetchLessonTypesAction,
   storeLessonTypeAction,
   updateLessonsTypeAction,
 } from './lessons-api-actions';
@@ -14,7 +14,7 @@ export type LessonsSlice = {
     status: AsyncStatus;
   };
   types: {
-    data?: Types;
+    data?: LessonTypes;
     status: AsyncStatus;
   };
 }
@@ -44,14 +44,14 @@ export const lessonsSlice = createSlice({
         state.lessons.status = AsyncStatus.Failed;
       })
 
-      .addCase(fetchLessonsTypesAction.pending, (state) => {
+      .addCase(fetchLessonTypesAction.pending, (state) => {
         state.types.status = AsyncStatus.Loading;
       })
-      .addCase(fetchLessonsTypesAction.fulfilled, (state, action) => {
+      .addCase(fetchLessonTypesAction.fulfilled, (state, action) => {
         state.types.status = AsyncStatus.Succeeded;
         state.types.data = action.payload;
       })
-      .addCase(fetchLessonsTypesAction.rejected, (state) => {
+      .addCase(fetchLessonTypesAction.rejected, (state) => {
         state.types.status = AsyncStatus.Failed;
       })
       .addCase(storeLessonTypeAction.fulfilled, (state, action) => {

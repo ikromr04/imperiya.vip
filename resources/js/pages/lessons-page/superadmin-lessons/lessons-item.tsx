@@ -7,16 +7,18 @@ import { AppRoute } from '@/const/routes';
 import classNames from 'classnames';
 import Button from '@/components/ui/button';
 import { LessonDeleteDTO, LessonStoreDTO, LessonUpdateDTO } from '@/dto/lessons';
-import { Lessons } from '@/types/lessons';
 import { useAppSelector } from '@/hooks';
 import { getSubjects } from '@/store/subjects-slice/subjects-selector';
 import { getUsers } from '@/store/users-slice/users-selector';
+import { Lesson } from '@/types/lessons';
+import { getLessonsStatus } from '@/store/lessons-slice/lessons-selector';
+import { AsyncStatus } from '@/const/store';
 
 type LessonItemProps = {
   date: Dayjs;
   hour: keyof typeof Hour;
   grade: Grade;
-  lessons?: Lessons;
+  lesson?: Lesson;
   setCreateDTO: Dispatch<SetStateAction<LessonStoreDTO | undefined>>;
   setEditDTO: Dispatch<SetStateAction<LessonUpdateDTO | undefined>>;
   setDeleteDTO: Dispatch<SetStateAction<LessonDeleteDTO | undefined>>;
@@ -26,38 +28,41 @@ function LessonItem({
   date,
   hour,
   grade,
-  lessons,
+  lesson,
   setCreateDTO,
   setEditDTO,
   setDeleteDTO,
 }: LessonItemProps): JSX.Element {
   const subjects = useAppSelector(getSubjects);
   const users = useAppSelector(getUsers);
-  const lesson = lessons?.find((lesson) => (
-    dayjs(lesson.date).format('YYYY-MM-DD') === dayjs(date).format('YYYY-MM-DD') &&
-    lesson.gradeId === grade.id &&
-    +lesson.hour === +hour
-  ));
+  const lessonsStatus = useAppSelector(getLessonsStatus);
+
+  if (lessonsStatus === AsyncStatus.Loading) {
+    return (
+      <div className="flex flex-col gap-1 items-center animate-pulse">
+        <div className="h-4 bg-gray-200 rounded w-3/5"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+      </div>
+    );
+  }
 
   if (!lesson) {
     return (
-      <>
-        <button
-          className={classNames(
-            'absolute left-0 top-0 w-full h-full transition-all duration-150 hover:bg-blue-50',
-            dayjs().format('YYYY-MM-DD') > dayjs(date).format('YYYY-MM-DD') && 'pointer-events-none'
-          )}
-          type="button"
-          onClick={() => setCreateDTO({
-            date: dayjs(date).format('YYYY-MM-DD'),
-            hour,
-            grade_id: grade.id,
-            subject_id: 0,
-          })}
-        >
-          <span className="sr-only">Добавить урок</span>
-        </button>
-      </>
+      <button
+        className={classNames(
+          'absolute left-0 top-0 w-full h-full transition-all duration-150 hover:bg-blue-50',
+          dayjs().format('YYYY-MM-DD') > dayjs(date).format('YYYY-MM-DD') && 'pointer-events-none'
+        )}
+        type="button"
+        onClick={() => setCreateDTO({
+          date: dayjs(date).format('YYYY-MM-DD'),
+          hour,
+          grade_id: grade.id,
+          subject_id: 0,
+        })}
+      >
+        <span className="sr-only">Добавить урок</span>
+      </button>
     );
   }
 

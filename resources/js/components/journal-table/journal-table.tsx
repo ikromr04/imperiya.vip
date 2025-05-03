@@ -26,7 +26,7 @@ type JournalTableProps = {
   students: Users;
   subjectId: SubjectId;
   gradeId: GradeId;
-  ratingDate: RatingDate | undefined;
+  ratingDate?: RatingDate;
 };
 
 function JournalTable({

@@ -6,9 +6,9 @@ import { getGrades } from '@/store/grades-slice/grades-selector';
 import { capitalizeString } from '@/utils';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
-import React, { Dispatch, memo, ReactNode, SetStateAction } from 'react';
+import React, { Dispatch, memo, ReactNode, SetStateAction, useMemo } from 'react';
 import LessonsItem from './lessons-item';
-import { Lessons } from '@/types/lessons';
+import { Lesson, Lessons } from '@/types/lessons';
 
 type LessonRowProps = {
   date: dayjs.Dayjs;
@@ -28,6 +28,15 @@ function LessonRow({
   setDeleteDTO,
 }: LessonRowProps): ReactNode {
   const grades = useAppSelector(getGrades);
+
+  const lessonMap = useMemo(() => {
+    const map = new Map<string, Lesson>();
+    lessons?.forEach(lesson => {
+      const key = `${lesson.date}_${lesson.gradeId}_${lesson.hour}`;
+      map.set(key, lesson);
+    });
+    return map;
+  }, [lessons]);
 
   return (
     <>
@@ -56,19 +65,24 @@ function LessonRow({
           <td className="min-w-20 w-20 max-w-20 text-sm">
             <LessonHour hour={+hour as keyof typeof Hour} />
           </td>
-          {grades?.map((grade) => (
-            <td key={grade.id} className="relative z-0 p-2 border-l min-w-[260px]">
-              <LessonsItem
-                date={date}
-                hour={+hour as keyof typeof Hour}
-                grade={grade}
-                lessons={lessons}
-                setCreateDTO={setCreateDTO}
-                setEditDTO={setEditDTO}
-                setDeleteDTO={setDeleteDTO}
-              />
-            </td>
-          ))}
+          {grades?.map((grade) => {
+            const key = `${date.format('YYYY-MM-DD')}_${grade.id}_${hour}`;
+            const lesson = lessonMap.get(key);
+
+            return (
+              <td key={grade.id} className="relative z-0 p-2 border-l min-w-[260px]">
+                <LessonsItem
+                  date={date}
+                  hour={+hour as keyof typeof Hour}
+                  grade={grade}
+                  lesson={lesson}
+                  setCreateDTO={setCreateDTO}
+                  setEditDTO={setEditDTO}
+                  setDeleteDTO={setDeleteDTO}
+                />
+              </td>
+            );
+          })}
         </tr>
       ))}
     </>

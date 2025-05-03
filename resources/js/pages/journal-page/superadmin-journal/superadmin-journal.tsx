@@ -1,15 +1,15 @@
 import JournalTable from '@/components/journal-table/journal-table';
-import AppLayout from '@/components/layouts/app-layout';
 import SelectField from '@/components/ui/formik-controls/select-field';
+import { AsyncStatus } from '@/const/store';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
-import { getGrades } from '@/store/grades-slice/grades-selector';
+import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
 import { fetchRatingDatesAction } from '@/store/ratings-slice/ratings-api-actions';
-import { getRatingDates } from '@/store/ratings-slice/ratings-selector';
+import { getRatingDates, getRatingDatesStatus } from '@/store/ratings-slice/ratings-selector';
 import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
-import { getSubjects } from '@/store/subjects-slice/subjects-selector';
+import { getSubjects, getSubjectsStatus } from '@/store/subjects-slice/subjects-selector';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
-import { getUsers } from '@/store/users-slice/users-selector';
+import { getUsers, getUsersStatus } from '@/store/users-slice/users-selector';
 import { GradeId } from '@/types/grades';
 import { SubjectId } from '@/types/subjects';
 import { Form, Formik } from 'formik';
@@ -18,6 +18,10 @@ import { useSearchParams } from 'react-router-dom';
 
 function SuperadminJournal(): JSX.Element {
   const dispatch = useAppDispatch();
+  const gradesStatus = useAppSelector(getGradesStatus);
+  const usersStatus = useAppSelector(getUsersStatus);
+  const subjectsStatus = useAppSelector(getSubjectsStatus);
+  const ratingDatesStatus = useAppSelector(getRatingDatesStatus);
   const grades = useAppSelector(getGrades);
   const users = useAppSelector(getUsers);
   const subjects = useAppSelector(getSubjects);
@@ -25,14 +29,14 @@ function SuperadminJournal(): JSX.Element {
   const [searchParams, setSearchParams] = useSearchParams();
   const gradeId = searchParams.get('gradeId');
   const subjectId = searchParams.get('subjectId');
-  const currentRatingDate = ratingDates.data?.find(({ years }) => years === '2024-2025');
+  const currentRatingDate = ratingDates?.find(({ years }) => years === '2024-2025');
 
   useEffect(() => {
-    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
-    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-    if (!ratingDates.data && !ratingDates.isFetching) dispatch(fetchRatingDatesAction());
-  }, [dispatch, grades.data, grades.isFetching, ratingDates.data, ratingDates.isFetching, subjects.data, subjects.isFetching, users.data, users.isFetching]);
+    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
+    if (subjectsStatus === AsyncStatus.Idle) dispatch(fetchSubjectsAction());
+    if (usersStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
+    if (ratingDatesStatus === AsyncStatus.Idle) dispatch(fetchRatingDatesAction());
+  }, [dispatch, gradesStatus, ratingDatesStatus, subjectsStatus, usersStatus]);
 
   const onSubmit = async (
     values: {
@@ -54,54 +58,52 @@ function SuperadminJournal(): JSX.Element {
   };
 
   return (
-    <AppLayout>
-      <main className="pt-4 pb-40">
-        <header className="relative z-50 flex flex-wrap gap-x-4 gap-y-1 px-3 items-end mb-1">
-          <h1 className="title">Журнал</h1>
+    <main className="pt-4 pb-40">
+      <header className="relative z-50 flex flex-wrap gap-x-4 gap-y-1 px-3 items-end mb-1">
+        <h1 className="title">Журнал</h1>
 
-          <Formik
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-          >
-            {({ handleSubmit }) => (
-              <Form className="flex gap-1">
-                {grades.data && (
-                  <SelectField
-                    className="min-w-16"
-                    inputClassname="!bg-white"
-                    placeholder="Класс"
-                    options={grades.data.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
-                    name="gradeId"
-                    onChange={() => handleSubmit()}
-                  />
-                )}
-                {subjects.data && (
-                  <SelectField
-                    className="min-w-[200px]"
-                    inputClassname="!bg-white"
-                    placeholder="Предмет"
-                    options={subjects.data.map((subject) => ({ value: subject.id, label: subject.name }))}
-                    name="subjectId"
-                    onChange={() => handleSubmit()}
-                    searchable
-                  />
-                )}
-              </Form>
-            )}
-          </Formik>
-        </header>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+        >
+          {({ handleSubmit }) => (
+            <Form className="flex gap-1">
+              {grades && (
+                <SelectField
+                  className="min-w-16"
+                  inputClassname="!bg-white"
+                  placeholder="Класс"
+                  options={grades.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
+                  name="gradeId"
+                  onChange={() => handleSubmit()}
+                />
+              )}
+              {subjects && (
+                <SelectField
+                  className="min-w-[200px]"
+                  inputClassname="!bg-white"
+                  placeholder="Предмет"
+                  options={subjects.map((subject) => ({ value: subject.id, label: subject.name }))}
+                  name="subjectId"
+                  onChange={() => handleSubmit()}
+                  searchable
+                />
+              )}
+            </Form>
+          )}
+        </Formik>
+      </header>
 
-        {(gradeId && +gradeId > 0 && subjectId && +subjectId > 0) && users.data && grades.data && subjects.data && (
-          <JournalTable
-            key={`${subjectId.toString()}${gradeId.toString()}`}
-            students={users.data.filter((user) => user.student?.gradeId === +gradeId)}
-            subjectId={+subjectId}
-            gradeId={+gradeId}
-            ratingDate={currentRatingDate}
-          />
-        )}
-      </main>
-    </AppLayout>
+      {/* {(gradeId && +gradeId > 0 && subjectId && +subjectId > 0) && users && grades && subjects && (
+        <JournalTable
+          key={`${subjectId.toString()}${gradeId.toString()}`}
+          students={users.filter((user) => user.student?.gradeId === +gradeId)}
+          subjectId={+subjectId}
+          gradeId={+gradeId}
+          ratingDate={currentRatingDate}
+        />
+      )} */}
+    </main>
   );
 }
 

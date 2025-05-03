@@ -1,25 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SliceName } from '@/const/store';
-import { RatingDates } from '@/types/ratings';
-import { fetchRatingDatesAction, fetchRatingsAction } from './ratings-api-actions';
+import { AsyncStatus, SliceName } from '@/const/store';
+import { RatingDates, Ratings } from '@/types/ratings';
+import { fetchRatingDatesAction } from './ratings-api-actions';
 
 export type RatingsSlice = {
-  lessons: {
-    isFetching: boolean;
+  ratings: {
+    data?: Ratings;
+    status: AsyncStatus;
   };
   dates: {
-    data: RatingDates | null;
-    isFetching: boolean;
+    data?: RatingDates;
+    status: AsyncStatus;
   };
 }
 
 const initialState: RatingsSlice = {
-  lessons: {
-    isFetching: false,
+  ratings: {
+    status: AsyncStatus.Idle,
   },
   dates: {
-    data: null,
-    isFetching: false,
+    status: AsyncStatus.Idle,
   },
 };
 
@@ -29,25 +29,15 @@ export const ratingsSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(fetchRatingsAction.pending, (state) => {
-        state.lessons.isFetching = true;
-      })
-      .addCase(fetchRatingsAction.fulfilled, (state) => {
-        state.lessons.isFetching = false;
-      })
-      .addCase(fetchRatingsAction.rejected, (state) => {
-        state.lessons.isFetching = false;
-      })
-
       .addCase(fetchRatingDatesAction.pending, (state) => {
-        state.dates.isFetching = true;
+        state.dates.status = AsyncStatus.Loading;
       })
       .addCase(fetchRatingDatesAction.fulfilled, (state, action) => {
+        state.dates.status = AsyncStatus.Succeeded;
         state.dates.data = action.payload;
-        state.dates.isFetching = false;
       })
       .addCase(fetchRatingDatesAction.rejected, (state) => {
-        state.dates.isFetching = false;
+        state.dates.status = AsyncStatus.Failed;
       });
   },
 });
