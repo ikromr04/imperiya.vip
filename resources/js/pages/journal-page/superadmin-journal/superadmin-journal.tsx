@@ -31,16 +31,6 @@ function SuperadminJournal(): JSX.Element {
       <Header />
 
       <Journal />
-
-      {/* {(gradeId && +gradeId > 0 && subjectId && +subjectId > 0) && users && grades && subjects && (
-        <JournalTable
-          key={`${subjectId.toString()}${gradeId.toString()}`}
-          students={users.filter((user) => user.student?.gradeId === +gradeId)}
-          subjectId={+subjectId}
-          gradeId={+gradeId}
-          ratingDate={currentRatingDate}
-        />
-      )} */}
     </main>
   );
 }
