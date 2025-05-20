@@ -68,14 +68,13 @@ export const storeMarkAction = createAsyncThunk<void, {
   extra: AxiosInstance,
   rejectWithValue: ValidationError,
 }>(
-  'marks/store',
+  'marks/storeMark',
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
       const { data } = await api.post<Mark>(APIRoute.Marks.Index, dto);
       if (onSuccess) onSuccess(data);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
       if (!error.response) throw err;
       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
