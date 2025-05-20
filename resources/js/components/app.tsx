@@ -1,37 +1,37 @@
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import React from 'react';
-import LoginPage from '../pages/auth/login-page';
-import { useAppSelector } from '../hooks';
-import { getAuthStatus } from '../store/auth-slice/auth-selector';
 import Spinner from './ui/spinner';
-import ForgotPasswordPage from '../pages/auth/forgot-password-page';
-import ResetPasswordPage from '../pages/auth/reset-password-page';
-import ProfilePage from '../pages/auth/profile-page/profile-page';
-import UsersPage from '../pages/users-page/users-page';
-import { AuthorizationStatus } from '@/const/store';
+import { useAppSelector } from '@/hooks';
+import { getAuthStatus } from '@/store/auth-slice/auth-selector';
 import { AppRoute } from '@/const/routes';
-import UsersShowPage from '../pages/users-show-page/users-show-page';
-import NotFoundPage from '@/pages/not-found-page';
-import RegisterLinksPage from '@/pages/auth/register-links-page/register-links-page';
-import RegisterPage from '../pages/auth/register-page/register-page';
-import UsersCreatePage from '@/pages/users-create-page/users-create-page';
-import LessonsPage from '@/pages/lessons-page/lessons-page';
-import JournalPage from '@/pages/journal-page/journal-page';
-import GradesPage from '@/pages/grades-page/grades-page';
-import GradesShowPage from '@/pages/grades-show-page/grades-show-page';
-import ProfileLessonsPage from '@/pages/auth/profile-page/profile-lessons-page';
-import ProfileDiaryPage from '@/pages/auth/profile-page/profile-diary-page';
-import DiaryPage from '@/pages/diary-page/diary-page';
-import SubjectsPage from '@/pages/subjects-page';
-import NationalitiesPage from '@/pages/nationalities-page';
-import ProfessionsPage from '@/pages/professions-page';
-import LessonsTypesPage from '@/pages/lessons-types-page';
+import { AuthorizationStatus } from '@/const/store';
 import SuperadminRoute from './superadmin-route';
-import UsersLessonsPage from '@/pages/users-show-page/users-lessons-page';
-import UsersDiaryPage from '@/pages/users-show-page/users-diary-page';
-import RatingDatesPage from '@/pages/rating-dates-page';
 import AppLayout from './layouts/app-layout';
 import { ToastContainer } from 'react-toastify';
+
+const LoginPage = lazy(() => import('@/pages/auth/login-page'));
+const ForgotPasswordPage = lazy(() => import('@/pages/auth/forgot-password-page'));
+const ResetPasswordPage = lazy(() => import('@/pages/auth/reset-password-page'));
+const RegisterPage = lazy(() => import('@/pages/auth/register-page/register-page'));
+const RegisterLinksPage = lazy(() => import('@/pages/auth/register-links-page/register-links-page'));
+const ProfilePage = lazy(() => import('@/pages/auth/profile-page/profile-page'));
+const ProfileLessonsPage = lazy(() => import('@/pages/auth/profile-page/profile-lessons-page'));
+const ProfileDiaryPage = lazy(() => import('@/pages/auth/profile-page/profile-diary-page'));
+const UsersPage = lazy(() => import('@/pages/users-page/users-page'));
+const UsersShowPage = lazy(() => import('@/pages/users-show-page/users-show-page'));
+const UsersLessonsPage = lazy(() => import('@/pages/users-show-page/users-lessons-page'));
+const UsersDiaryPage = lazy(() => import('@/pages/users-show-page/users-diary-page'));
+const UsersCreatePage = lazy(() => import('@/pages/users-create-page/users-create-page'));
+const LessonsPage = lazy(() => import('@/pages/lessons-page/lessons-page'));
+const JournalPage = lazy(() => import('@/pages/journal-page/journal-page'));
+const DiaryPage = lazy(() => import('@/pages/diary-page/diary-page'));
+const GradesPage = lazy(() => import('@/pages/grades-page/grades-page'));
+const GradesShowPage = lazy(() => import('@/pages/grades-show-page/grades-show-page'));
+const SubjectsPage = lazy(() => import('@/pages/subjects-page'));
+const NationalitiesPage = lazy(() => import('@/pages/nationalities-page'));
+const ProfessionsPage = lazy(() => import('@/pages/professions-page'));
+const RatingDatesPage = lazy(() => import('@/pages/rating-dates-page'));
+const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -51,44 +51,49 @@ function App(): JSX.Element {
         v7_relativeSplatPath: true,
       }}
     >
-      <Routes>
-        <Route path={AppRoute.Auth.Login} element={<LoginPage />} />
-        <Route path={AppRoute.Auth.ForgotPassword} element={<ForgotPasswordPage />} />
-        <Route path={AppRoute.Auth.ResetPassword} element={<ResetPasswordPage />} />
-        <Route path={AppRoute.Auth.Register} element={<RegisterPage />} />
+      <Suspense
+        fallback={
+          <div className="flex w-screen h-screen justify-center items-center">
+            <Spinner className="w-16 h-16" />
+          </div>
+        }
+      >
+        <Routes>
+          <Route path={AppRoute.Auth.Login} element={<LoginPage />} />
+          <Route path={AppRoute.Auth.ForgotPassword} element={<ForgotPasswordPage />} />
+          <Route path={AppRoute.Auth.ResetPassword} element={<ResetPasswordPage />} />
+          <Route path={AppRoute.Auth.Register} element={<RegisterPage />} />
 
-        <Route element={<AppLayout />}>
-          <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
-          <Route path={AppRoute.Auth.Lessons} element={<ProfileLessonsPage />} />
-          <Route path={AppRoute.Auth.Diary} element={<ProfileDiaryPage />} />
+          <Route element={<AppLayout />}>
+            <Route path={AppRoute.Auth.Profile} element={<ProfilePage />} />
+            <Route path={AppRoute.Auth.Lessons} element={<ProfileLessonsPage />} />
+            <Route path={AppRoute.Auth.Diary} element={<ProfileDiaryPage />} />
 
-          <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} />
+            <Route path={AppRoute.Lessons.Index} element={<LessonsPage />} />
+            <Route path={AppRoute.Journal} element={<JournalPage />} />
+            <Route path={AppRoute.Diary.Index} element={<DiaryPage />} />
 
-          <Route path={AppRoute.Diary.Index} element={<DiaryPage />} />
+            <Route path={AppRoute.Users.Index} element={<UsersPage />} />
+            <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
+            <Route path={AppRoute.Users.Lessons} element={<UsersLessonsPage />} />
+            <Route path={AppRoute.Users.Diary} element={<UsersDiaryPage />} />
 
-          <Route path={AppRoute.Journal} element={<JournalPage />} />
+            <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
+            <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />
 
-          <Route path={AppRoute.Users.Index} element={<UsersPage />} />
-          <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
-          <Route path={AppRoute.Users.Lessons} element={<UsersLessonsPage />} />
-          <Route path={AppRoute.Users.Diary} element={<UsersDiaryPage />} />
-
-          <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
-          <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />
-
-          <Route element={<SuperadminRoute />}>
-            <Route path={AppRoute.Subjects.Index} element={<SubjectsPage />} />
-            <Route path={AppRoute.Nationalities.Index} element={<NationalitiesPage />} />
-            <Route path={AppRoute.Professions.Index} element={<ProfessionsPage />} />
-            {/* <Route path={AppRoute.Lessons.Types} element={<LessonsTypesPage />} /> */}
-            <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
-            <Route path={AppRoute.Users.Create} element={<UsersCreatePage />} />
-            <Route path={AppRoute.Ratings.Dates} element={<RatingDatesPage />} />
+            <Route element={<SuperadminRoute />}>
+              <Route path={AppRoute.Subjects.Index} element={<SubjectsPage />} />
+              <Route path={AppRoute.Nationalities.Index} element={<NationalitiesPage />} />
+              <Route path={AppRoute.Professions.Index} element={<ProfessionsPage />} />
+              <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
+              <Route path={AppRoute.Users.Create} element={<UsersCreatePage />} />
+              <Route path={AppRoute.Ratings.Dates} element={<RatingDatesPage />} />
+            </Route>
           </Route>
-        </Route>
 
-        <Route path={AppRoute.NotFound} element={<NotFoundPage />} />
-      </Routes>
+          <Route path={AppRoute.NotFound} element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
 
       <ToastContainer position="bottom-right" />
     </BrowserRouter>

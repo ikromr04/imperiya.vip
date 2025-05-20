@@ -18,12 +18,21 @@ class MarkController extends Controller
     $marks = [];
 
     switch ($user->role) {
-      case 'student':
-        $marks = Mark::where('student_id', $user->id)
-          ->whereIn('lesson_id', $request->lessons)
+      case 'superadmin':
+        $marks = Mark::whereIn('lesson_id', json_decode($request->query('lessons')))
           ->get();
         break;
+    }
 
+    return response()->json($marks, 200);
+  }
+
+  public function diary(Request $request): JsonResponse
+  {
+    $user = $request->user();
+    $marks = [];
+
+    switch ($user->role) {
       case 'parent':
         $student = Student::where('user_id', $request->studentId)->first();
 
@@ -32,6 +41,12 @@ class MarkController extends Controller
             ->whereIn('lesson_id', $request->lessons)
             ->get();
         }
+        break;
+
+      case 'student':
+        $marks = Mark::where('student_id', $user->id)
+          ->whereIn('lesson_id', $request->lessons)
+          ->get();
         break;
     }
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
 import { getUsersStatus } from '@/store/users-slice/users-selector';
@@ -7,9 +7,6 @@ import { Lessons } from '@/types/lessons';
 import { capitalizeString, getCurrentWeekDates } from '@/utils';
 import { LessonDeleteDTO, LessonStoreDTO, LessonUpdateDTO } from '@/dto/lessons';
 import dayjs from 'dayjs';
-import LessonsCreateForm from '@/components/forms/lessons/lessons-create-form';
-import LessonsEditForm from '@/components/forms/lessons/lessons-edit-form';
-import LessonsDeleteForm from '@/components/forms/lessons/lessons-delete-form';
 import { Icons } from '@/components/icons';
 import LessonRow from './lesson-row';
 import Modal from '@/components/ui/modal';
@@ -18,6 +15,11 @@ import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
 import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
+import Spinner from '@/components/ui/spinner';
+
+const LessonsCreateForm = lazy(() => import('@/components/forms/lessons/lessons-create-form'));
+const LessonsEditForm = lazy(() => import('@/components/forms/lessons/lessons-edit-form'));
+const LessonsDeleteForm = lazy(() => import('@/components/forms/lessons/lessons-delete-form'));
 
 function SuperadminLessons(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -35,10 +37,7 @@ function SuperadminLessons(): JSX.Element {
   const [lessons, setLessons] = useState<Lessons>();
 
   useEffect(() => {
-    dispatch(fetchLessonsAction({
-      week,
-      onSuccess: (lessons) => setLessons(lessons),
-    }));
+    dispatch(fetchLessonsAction({ week, onSuccess: setLessons }));
   }, [dispatch, week]);
 
   useEffect(() => {
@@ -175,7 +174,9 @@ function SuperadminLessons(): JSX.Element {
         </div>
 
         <Modal isOpen={!!(createDTO || editDTO || deleteDTO)}>
-          {modalContent}
+          <Suspense fallback={<Spinner className="w-10 h-10" />}>
+            {modalContent}
+          </Suspense>
         </Modal>
       </div>
     </main>

@@ -5,14 +5,14 @@ import TextField from '@/components/ui/formik-controls/text-field';
 import { LessonUpdateDTO } from '@/dto/lessons';
 import { useAppDispatch } from '@/hooks';
 import { updateLessonAction } from '@/store/lessons-slice/lessons-api-actions';
-import { Lesson, Types } from '@/types/lessons';
+import { Lesson, LessonTypes } from '@/types/lessons';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React, { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 
 type LessonsJournalEditFormProps = {
   lesson: Lesson;
-  types: Types;
+  types: LessonTypes;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 

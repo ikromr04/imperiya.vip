@@ -9,19 +9,16 @@ import React from 'react';
 import { toast } from 'react-toastify';
 
 type RatingsEditFormProps = {
-  rating: Rating;
-  onSuccess?: (rating: Rating) => void
+  dto: RatingUpdateDTO;
+  onSuccess?: (updatedRating: Rating) => void
 };
 
 function RatingsEditForm({
-  rating,
+  dto,
   onSuccess,
 }: RatingsEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const initialValues: RatingUpdateDTO = {
-    id: rating.id,
-    score: rating.score,
-  };
+  const initialValues: RatingUpdateDTO = dto;
 
   const onSubmit = async (
     values: RatingUpdateDTO,
@@ -31,9 +28,8 @@ function RatingsEditForm({
 
     await dispatch(updateRatingAction({
       dto: values,
-      onSuccess: (rating) => {
-        if (onSuccess) onSuccess(rating);
-
+      onSuccess: (updatedRating) => {
+        if (onSuccess) onSuccess(updatedRating);
         toast.success('Данные успешно сохранены.');
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
@@ -54,7 +50,7 @@ function RatingsEditForm({
             className="grow"
             name="score"
             label="Оценка"
-            // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
+            autoFocus
           />
 
           <div className="flex items-center justify-end gap-2 -mt-1">

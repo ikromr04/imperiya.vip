@@ -9,6 +9,10 @@ import dayjs from 'dayjs';
 import React, { Dispatch, memo, ReactNode, SetStateAction, useMemo } from 'react';
 import LessonsItem from './lessons-item';
 import { Lesson, Lessons } from '@/types/lessons';
+import { getSubjects } from '@/store/subjects-slice/subjects-selector';
+import { getUsers } from '@/store/users-slice/users-selector';
+import { Subject } from '@/types/subjects';
+import { User } from '@/types/users';
 
 type LessonRowProps = {
   date: dayjs.Dayjs;
@@ -28,15 +32,35 @@ function LessonRow({
   setDeleteDTO,
 }: LessonRowProps): ReactNode {
   const grades = useAppSelector(getGrades);
+  const subjects = useAppSelector(getSubjects);
+  const users = useAppSelector(getUsers);
 
-  const lessonMap = useMemo(() => {
-    const map = new Map<string, Lesson>();
-    lessons?.forEach(lesson => {
+  const lessonObject = useMemo(() => {
+    const object: Record<string, Lesson> = {};
+    lessons?.forEach((lesson) => {
       const key = `${lesson.date}_${lesson.gradeId}_${lesson.hour}`;
-      map.set(key, lesson);
+      object[key] = lesson;
     });
-    return map;
+    return object;
   }, [lessons]);
+
+  const subjectObject = useMemo(() => {
+    const object: Record<string, Subject> = {};
+    subjects?.forEach((subject) => {
+      object[subject.id] = subject;
+    });
+    return object;
+  }, [subjects]);
+
+  const teacherObject = useMemo(() => {
+    const object: Record<string, User> = {};
+    users?.forEach((user) => {
+      if (user.role === 'teacher') {
+        object[user.id] = user;
+      }
+    });
+    return object;
+  }, [users]);
 
   return (
     <>
@@ -67,7 +91,9 @@ function LessonRow({
           </td>
           {grades?.map((grade) => {
             const key = `${date.format('YYYY-MM-DD')}_${grade.id}_${hour}`;
-            const lesson = lessonMap.get(key);
+            const lesson = lessonObject[key];
+            const subject = lesson?.subjectId ? subjectObject[lesson.subjectId] : undefined;
+            const teacher = lesson?.teacherId ? teacherObject[lesson.teacherId] : undefined;
 
             return (
               <td key={grade.id} className="relative z-0 p-2 border-l min-w-[260px]">
@@ -76,6 +102,8 @@ function LessonRow({
                   hour={+hour as keyof typeof Hour}
                   grade={grade}
                   lesson={lesson}
+                  subject={subject}
+                  teacher={teacher}
                   setCreateDTO={setCreateDTO}
                   setEditDTO={setEditDTO}
                   setDeleteDTO={setDeleteDTO}

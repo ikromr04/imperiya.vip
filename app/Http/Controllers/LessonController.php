@@ -18,9 +18,17 @@ class LessonController extends Controller
 
     switch ($request->user()->role) {
       case 'superadmin':
-        $lessons = Lesson::selectBasic()
-          ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
-          ->get();
+        if ($request->query('subject_id') && $request->query('grade_id')) {
+          $lessons = Lesson::selectBasic()
+            ->orderBy('date')
+            ->where('subject_id', $request->query('subject_id'))
+            ->where('grade_id', $request->query('grade_id'))
+            ->get();
+        } else {
+          $lessons = Lesson::selectBasic()
+            ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
+            ->get();
+        }
         break;
 
       case 'teacher':

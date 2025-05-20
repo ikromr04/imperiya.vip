@@ -1,4 +1,3 @@
-import UsersEditForm from '@/components/forms/users/users-edit-form';
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
 import CopyButton from '@/components/ui/copy-button';
@@ -9,9 +8,12 @@ import { RoleName, SexName } from '@/const/users';
 import { useAppSelector } from '@/hooks';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
 import dayjs from 'dayjs';
-import React, { memo, ReactNode, useMemo, useState } from 'react';
+import React, { lazy, memo, ReactNode, Suspense, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Nationality from './nationality';
+import Spinner from '@/components/ui/spinner';
+
+const UsersEditForm = lazy(() => import('@/components/forms/users/users-edit-form'));
 
 function BaseInfo(): ReactNode {
   const user = useAppSelector(getAuthUser);
@@ -70,13 +72,23 @@ function BaseInfo(): ReactNode {
         </div>
       </section>
 
-      <Modal isOpen={isOpen}>
-        <UsersEditForm
-          key={isOpen.toString()}
-          user={user}
-          setIsOpen={setIsOpen}
-        />
-      </Modal>
+      {isOpen && (
+        <Modal isOpen={isOpen}>
+          <Suspense
+            fallback={
+              <div className="flex justify-center items-center p-4">
+                <Spinner className="w-6 h-6" />
+              </div>
+            }
+          >
+            <UsersEditForm
+              key={isOpen.toString()}
+              user={user}
+              setIsOpen={setIsOpen}
+            />
+          </Suspense>
+        </Modal>
+      )}
     </>
   );
 }

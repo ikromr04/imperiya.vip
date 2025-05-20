@@ -3,7 +3,6 @@ import { ID } from '.';
 import { GradeId } from './grades';
 import { UserId } from './users';
 import { SubjectId } from './subjects';
-import { Marks } from './marks';
 
 export type LessonId = ID;
 
@@ -26,12 +25,6 @@ export type Lesson = {
   subjectId?: SubjectId;
   teacherId?: UserId;
   typeId?: LessonTypeId;
-  marks?: Marks;
 };
 
 export type Lessons = Lesson[];
-
-export type Journal = {
-  id: UserId;
-  name: string;
-} & Record<string, object | string | number>;

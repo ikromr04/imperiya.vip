@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { BaseSyntheticEvent } from 'react';
 import { AppRoute } from '@/const/routes';
 import { Icons } from '../../icons';
 import MainLogo from '../../app-logo';
@@ -9,23 +9,18 @@ import { useAppDispatch } from '@/hooks';
 
 function SuperadminSidebar(): JSX.Element {
   const dispatch = useAppDispatch();
-  const [isShown, setIsShown] = useState(false);
+
+  const handleLinksClick = (evt: BaseSyntheticEvent) => evt.target.closest('aside').classList.remove('sidebar--shown');
 
   return (
     <>
       <aside
-        className={classNames(
-          'fixed left-0 top-0 z-[100] flex flex-row-reverse h-screen transition-all duration-150 transform',
-          isShown ? 'translate-x-0' : 'translate-x-[calc(-100%+10px)]'
-        )}
-        onMouseEnter={() => setIsShown(true)}
-        onMouseLeave={() => setIsShown(false)}
+        className="sidebar fixed left-0 top-0 z-[100] flex flex-row-reverse h-screen transition-all duration-150 transform"
+        onMouseEnter={(evt: BaseSyntheticEvent) => evt.currentTarget.classList.add('sidebar--shown')}
+        onMouseLeave={(evt: BaseSyntheticEvent) => evt.currentTarget.classList.remove('sidebar--shown')}
       >
         <button
-          className={classNames(
-            'text-gray-500 cursor-context-menu transition-all duration-150',
-            isShown && 'invisible opacity-0'
-          )}
+          className="sidebar__toggler text-gray-500 cursor-context-menu transition-all duration-150"
           type="button"
         >
           <Icons.menuArrowOpen width={10} />
@@ -41,6 +36,7 @@ function SuperadminSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Auth.Profile}
+                onClick={handleLinksClick}
               >
                 <Icons.accountCircle className="navlink__icon" width={16} height={16} />
                 Профиль
@@ -50,6 +46,7 @@ function SuperadminSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Lessons.Index}
+                onClick={handleLinksClick}
               >
                 <Icons.schedule className="navlink__icon" width={16} height={16} />
                 Расписание
@@ -59,6 +56,7 @@ function SuperadminSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Journal}
+                onClick={handleLinksClick}
               >
                 <Icons.journal className="navlink__icon" width={16} height={16} />
                 Журнал
@@ -68,6 +66,7 @@ function SuperadminSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Users.Index}
+                onClick={handleLinksClick}
               >
                 <Icons.users className="navlink__icon" width={16} height={16} />
                 Пользователи
@@ -77,6 +76,7 @@ function SuperadminSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Classes.Index}
+                onClick={handleLinksClick}
               >
                 <Icons.class className="navlink__icon" width={16} height={16} />
                 Классы
@@ -86,6 +86,7 @@ function SuperadminSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Subjects.Index}
+                onClick={handleLinksClick}
               >
                 <Icons.subject className="navlink__icon" width={16} height={16} />
                 Предметы
@@ -95,6 +96,7 @@ function SuperadminSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Nationalities.Index}
+                onClick={handleLinksClick}
               >
                 <Icons.nationality className="navlink__icon" width={16} height={16} />
                 Национальности
@@ -104,6 +106,7 @@ function SuperadminSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Professions.Index}
+                onClick={handleLinksClick}
               >
                 <Icons.professions className="navlink__icon" width={16} height={16} />
                 Сфера деятельности
@@ -113,6 +116,7 @@ function SuperadminSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Lessons.Types}
+                onClick={handleLinksClick}
               >
                 <Icons.types className="navlink__icon" width={16} height={16} />
                 Типы экзаменов
@@ -122,6 +126,7 @@ function SuperadminSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Auth.RegisterLinks}
+                onClick={handleLinksClick}
               >
                 <Icons.link className="navlink__icon" width={16} height={16} />
                 Ссылки для регистрации
@@ -131,6 +136,7 @@ function SuperadminSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Ratings.Dates}
+                onClick={handleLinksClick}
               >
                 <Icons.ratingDates className="navlink__icon" width={16} height={16} />
                 Даты рейтингов
@@ -156,12 +162,9 @@ function SuperadminSidebar(): JSX.Element {
       </aside>
 
       <button
-        className={classNames(
-          'fixed left-0 top-0 z-[90] w-screen h-screen transition-all duration-150 bg-black/10 backdrop-blur-[2px]',
-          isShown ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
-        )}
+        className="sidebar-close fixed left-0 top-0 z-[90] w-screen h-screen transition-all duration-150 bg-black/10 backdrop-blur-[2px] invisible opacity-0"
         type="button"
-        onClick={() => setIsShown(false)}
+        onClick={(evt: BaseSyntheticEvent) => evt.currentTarget.previousElementSibling.classList.remove('sidebar--shown')}
       ></button>
     </>
   );

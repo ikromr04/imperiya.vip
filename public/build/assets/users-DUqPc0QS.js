@@ -1,0 +1,1 @@
+const e={superadmin:"Супер-администратор",admin:"Администратор",director:"Директор",teacher:"Педагог",student:"Ученик",parent:"Родитель"},a=["superadmin","admin","director","teacher","parent","student"],t={male:"Мужской",female:"Женский"},n=["Исмоили Сомони","Фирдавси","Шохмансур","Сино","Рудаки","За пределами города"];export{n as R,t as S,a,e as b};

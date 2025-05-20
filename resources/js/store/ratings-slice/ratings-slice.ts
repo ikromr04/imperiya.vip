@@ -1,11 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AsyncStatus, SliceName } from '@/const/store';
-import { RatingDates, Ratings } from '@/types/ratings';
+import { RatingDates } from '@/types/ratings';
 import { fetchRatingDatesAction } from './ratings-api-actions';
 
 export type RatingsSlice = {
   ratings: {
-    data?: Ratings;
     status: AsyncStatus;
   };
   dates: {

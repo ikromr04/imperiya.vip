@@ -32,9 +32,8 @@ export const updateRatingDatesAction = createAsyncThunk<void, {
     try {
       const { data } = await api.put<RatingDate>(APIRoute.Ratings.Dates, dto);
       if (onSuccess) onSuccess(data);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
       if (!error.response) throw err;
       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
@@ -43,18 +42,21 @@ export const updateRatingDatesAction = createAsyncThunk<void, {
   },
 );
 export const fetchRatingsAction = createAsyncThunk<void, {
-  dto: {
-    years: string;
-    gradeId: GradeId;
-    subjectId: SubjectId;
-  };
+  years: string;
+  gradeId: GradeId;
+  subjectId: SubjectId;
   onSuccess: (ratings: Ratings) => void,
 }, {
   extra: AxiosInstance;
 }>(
   'ratings/fetchRatings',
-  async ({ dto, onSuccess }, { extra: api }) => {
-    const { data } = await api.get<Ratings>(`${APIRoute.Ratings.Index}?years=${dto.years}&grade_id=${dto.gradeId}&subject_id=${dto.subjectId}`);
+  async ({ years, gradeId, subjectId, onSuccess }, { extra: api }) => {
+    const params = new URLSearchParams();
+    if (years) params.append('years', years.toString());
+    if (gradeId) params.append('grade_id', gradeId.toString());
+    if (subjectId) params.append('subject_id', subjectId.toString());
+
+    const { data } = await api.get<Ratings>(`${APIRoute.Ratings.Index}?${params.toString()}`);
 
     onSuccess(data);
   },

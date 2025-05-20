@@ -1,12 +1,14 @@
-import UsersPhoneEditForm from '@/components/forms/users/users-phone-edit-form';
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
 import Tooltip from '@/components/ui/tooltip';
 import { useAppSelector } from '@/hooks';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
-import React, { memo, ReactNode, useState } from 'react';
+import React, { lazy, memo, ReactNode, Suspense, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+const UsersPhoneEditForm = lazy(() => import('@/components/forms/users/users-phone-edit-form'));
 
 function PhoneNumbers(): ReactNode {
   const user = useAppSelector(getAuthUser);
@@ -40,13 +42,23 @@ function PhoneNumbers(): ReactNode {
         </ul>
       </section>
 
-      <Modal isOpen={isOpen}>
-        <UsersPhoneEditForm
-          key={isOpen.toString()}
-          user={user}
-          setIsOpen={setIsOpen}
-        />
-      </Modal>
+      {isOpen && (
+        <Modal isOpen={isOpen}>
+          <Suspense
+            fallback={
+              <div className="flex justify-center items-center p-4">
+                <Spinner className="w-6 h-6" />
+              </div>
+            }
+          >
+            <UsersPhoneEditForm
+              key={isOpen.toString()}
+              user={user}
+              setIsOpen={setIsOpen}
+            />
+          </Suspense>
+        </Modal>
+      )}
     </>
   );
 }

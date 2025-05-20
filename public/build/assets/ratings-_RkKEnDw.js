@@ -1,0 +1,1 @@
+import{a6 as a}from"./main-D1X-5qeh.js";const e=t=>t[a.Ratings].ratings.status,n=t=>t[a.Ratings].dates.status,r=t=>t[a.Ratings].dates.data,g={quarter1:"Четверть 1",quarter2:"Четверть 2",semester1:"Полугодие 1",quarter3:"Четверть 3",quarter4:"Четверть 4",semester2:"Полугодие 2",annual:"Годовая",assessment:"Аттестация",final:"Итоговая"};export{g as R,e as a,n as b,r as g};

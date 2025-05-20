@@ -16,7 +16,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .title {
-  @apply leading-[1.2] text-xl text-gray-900 font-semibold;
+  @apply leading-[1.4] text-[16px] text-gray-900 font-semibold md:text-xl;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -25,7 +25,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .styled-scrollbar {
   &::-webkit-scrollbar {
-    @apply h-2 w-2 bg-white;
+    @apply hidden md:block h-2 w-2 bg-white;
   }
 
   &::-webkit-scrollbar-thumb {
@@ -63,4 +63,20 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .shake {
   animation: shake 150ms 2 linear;
+}
+
+.sidebar {
+  @apply translate-x-[calc(-100%+10px)];
+}
+
+.sidebar--shown {
+  @apply translate-x-0;
+}
+
+.sidebar--shown .sidebar__toggler {
+  @apply invisible opacity-0;
+}
+
+.sidebar--shown+.sidebar-close {
+  @apply visible opacity-100;
 }

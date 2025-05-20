@@ -7,9 +7,7 @@ import { MarkStoreDTO } from '@/dto/marks';
 import { useAppDispatch } from '@/hooks';
 import { storeMarkAction } from '@/store/marks-slice/marks-api-actions';
 import { Option } from '@/types';
-import { LessonId } from '@/types/lessons';
 import { Mark } from '@/types/marks';
-import { UserId } from '@/types/users';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { toast } from 'react-toastify';
@@ -20,22 +18,16 @@ const validationSchema = Yup.object().shape({
 });
 
 type MarksCreateFormProps = {
-  studentId: UserId;
-  lessonId: LessonId;
-  onSuccess?: (mark: Mark) => void
+  dto: MarkStoreDTO;
+  onSuccess?: (createdMark: Mark) => void
 };
 
 function MarksCreateForm({
-  studentId,
-  lessonId,
+  dto,
   onSuccess,
 }: MarksCreateFormProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const initialValues: MarkStoreDTO = {
-    student_id: studentId,
-    lesson_id: lessonId,
-    attendance: '',
-  };
+  const initialValues: MarkStoreDTO = dto;
 
   const onSubmit = async (
     values: MarkStoreDTO,
@@ -84,18 +76,12 @@ function MarksCreateForm({
                 className="grow min-w-0"
                 name="score_1"
                 label="Оценка 1"
-                // cleanable
-                // onClean={() => setFieldValue('score_1', null)}
-                // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
               />
               <span className="translate-y-2">/</span>
               <TextField
                 className="grow min-w-0"
                 name="score_2"
                 label="Оценка 2"
-                // cleanable
-                // onClean={() => setFieldValue('score_2', null)}
-                // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
               />
             </div>
           )}

@@ -93,6 +93,7 @@ export const APIRoute = {
   },
   Marks: {
     Index: '/marks',
+    Show: '/marks/:id',
     Diary: '/marks/diary',
   },
   Ratings: {

@@ -10,17 +10,19 @@ import { useAppDispatch, useAppSelector } from '@/hooks';
 import DataTable from '../ui/data-table/data-table';
 import dayjs from 'dayjs';
 import { SubjectId } from '@/types/subjects';
-import { fetchJournalAction, fetchLessonsTypesAction } from '@/store/lessons-slice/lessons-api-actions';
+import { fetchJournalAction, fetchLessonTypesAction } from '@/store/lessons-slice/lessons-api-actions';
 import { Mark } from '@/types/marks';
 import MarkCreate from './mark-create';
 import MarkEdit from './mark-edit';
 import LessonsJournalEditForm from '../forms/lessons/lessons-journal-edit-form';
-import { getLessonsTypes } from '@/store/lessons-slice/lessons-selector';
+import { getJournalStatus, getLessonTypes, getLessonTypesStatus } from '@/store/lessons-slice/lessons-selector';
 import { Rating, RatingDate, Ratings } from '@/types/ratings';
 import { RatingName } from '@/const/ratings';
 import RatingCreate from './rating-create';
 import { fetchRatingsAction } from '@/store/ratings-slice/ratings-api-actions';
 import RatingEdit from './rating-edit';
+import { AsyncStatus } from '@/const/store';
+import { getRatingsStatus } from '@/store/ratings-slice/ratings-selector';
 
 type JournalTableProps = {
   students: Users;
@@ -36,14 +38,17 @@ function JournalTable({
   ratingDate,
 }: JournalTableProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const lessonsTypes = useAppSelector(getLessonsTypes);
+  const lessonsTypesStatus = useAppSelector(getLessonTypesStatus);
+  const ratingsStatus = useAppSelector(getRatingsStatus);
+  const journalStatus = useAppSelector(getJournalStatus);
+  const lessonsTypes = useAppSelector(getLessonTypes);
   const [journal, setJournal] = useState<Journal[] | null>(null);
   const [lessons, setLessons] = useState<Lessons | null>(null);
   const [ratings, setRatings] = useState<Ratings | null>(null);
 
   useEffect(() => {
-    if (!lessonsTypes.data && !lessonsTypes.isFetching) dispatch(fetchLessonsTypesAction());
-    if (ratingDate && !ratings) dispatch(fetchRatingsAction({
+    if (lessonsTypesStatus === AsyncStatus.Idle) dispatch(fetchLessonTypesAction());
+    if (ratingDate && !ratings && ratingsStatus !== AsyncStatus.Loading) dispatch(fetchRatingsAction({
       dto: {
         years: ratingDate.years,
         gradeId,
@@ -52,7 +57,7 @@ function JournalTable({
       onSuccess: (ratings) => setRatings(ratings),
     }));
 
-    if (!journal) dispatch(fetchJournalAction({
+    if (!journal && journalStatus !== AsyncStatus.Loading) dispatch(fetchJournalAction({
       subjectId,
       gradeId,
       onSuccess: (lessons) => {
@@ -73,9 +78,9 @@ function JournalTable({
         }));
       },
     }));
-  }, [dispatch, gradeId, journal, lessonsTypes.data, lessonsTypes.isFetching, ratingDate, ratings, students, subjectId]);
+  }, [dispatch, gradeId, journal, journalStatus, lessonsTypesStatus, ratingDate, ratings, ratingsStatus, students, subjectId]);
 
-  if (!journal || !lessonsTypes.data || !lessons || !ratings) {
+  if (!journal || !lessonsTypes || !lessons || !ratings) {
     return <Spinner className="w-8 h-8" />;
   }
 
@@ -643,7 +648,7 @@ function JournalTable({
           renderFilter: (_, setIsOpen) => (
             <LessonsJournalEditForm
               lesson={item}
-              types={lessonsTypes.data || []}
+              types={lessonsTypes}
               setIsOpen={setIsOpen}
             />
           ),

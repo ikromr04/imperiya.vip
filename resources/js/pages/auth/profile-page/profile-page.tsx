@@ -1,31 +1,45 @@
+import React, { ComponentType, Suspense, lazy } from 'react';
 import { useAppSelector } from '@/hooks';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
-import React, { ReactNode } from 'react';
-import SuperadminProfile from './superadmin-profile/superadmin-profile';
-import NotFoundPage from '@/pages/not-found-page';
-import { Role } from '@/types/users';
-import ParentProfile from './parent-profile/parent-profile';
-import TeacherProfile from './teacher-profile/teacher-profile';
 import { Navigate } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
+import { Role } from '@/types/users';
+import Spinner from '@/components/ui/spinner';
 
-const Page = {
-  'superadmin': () => <SuperadminProfile />,
-  'admin': () => <NotFoundPage />,
-  'director': () => <NotFoundPage />,
-  'teacher': () => <TeacherProfile />,
-  'parent': () => <ParentProfile />,
-  'student': () => <NotFoundPage />,
+const SuperadminProfile = lazy(() => import('./superadmin-profile/superadmin-profile'));
+const ParentProfile = lazy(() => import('./parent-profile/parent-profile'));
+const TeacherProfile = lazy(() => import('./teacher-profile/teacher-profile'));
+const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
+
+const rolePage: Record<Role, ComponentType> = {
+  superadmin: SuperadminProfile,
+  admin: NotFoundPage,
+  director: NotFoundPage,
+  teacher: TeacherProfile,
+  parent: ParentProfile,
+  student: NotFoundPage,
 };
 
-function ProfilePage(): ReactNode {
+function ProfilePage(): JSX.Element {
   const authUser = useAppSelector(getAuthUser);
 
   if (!authUser) {
     return <Navigate to={AppRoute.Auth.Login} />;
   }
 
-  return Page[authUser.role as Role]();
+  const Component = rolePage[authUser.role];
+
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-full w-full">
+          <Spinner className="w-10 h-10" />
+        </div>
+      }
+    >
+      <Component />
+    </Suspense>
+  );
 }
 
 export default ProfilePage;

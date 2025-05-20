@@ -1,21 +1,23 @@
-import React from 'react';
+import React, { lazy, Suspense, ComponentType } from 'react';
 import { useAppSelector } from '@/hooks';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
-import NotFoundPage from '../not-found-page';
-import StudentLessons from './student-lessons/student-lessons';
-import SuperadminLessons from './superadmin-lessons/superadmin-lessons';
-import { Role } from '@/types/users';
 import { Navigate } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
-import TeacherLessons from './teacher-lessons/teacher-lessons';
+import { Role } from '@/types/users';
+import Spinner from '@/components/ui/spinner';
 
-const Page = {
-  'superadmin': () => <SuperadminLessons />,
-  'admin': () => <NotFoundPage />,
-  'director': () => <NotFoundPage />,
-  'teacher': () => <TeacherLessons />,
-  'parent': () => <NotFoundPage />,
-  'student': () => <StudentLessons />,
+const SuperadminLessons = lazy(() => import('./superadmin-lessons/superadmin-lessons'));
+const TeacherLessons = lazy(() => import('./teacher-lessons/teacher-lessons'));
+const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
+const StudentLessons = lazy(() => import('./student-lessons/student-lessons'));
+
+const rolePage: Record<Role, ComponentType> = {
+  superadmin: SuperadminLessons,
+  admin: NotFoundPage,
+  director: NotFoundPage,
+  teacher: TeacherLessons,
+  parent: NotFoundPage,
+  student: StudentLessons,
 };
 
 function LessonsPage(): JSX.Element {
@@ -25,7 +27,19 @@ function LessonsPage(): JSX.Element {
     return <Navigate to={AppRoute.Auth.Login} />;
   }
 
-  return Page[authUser.role as Role]();
+  const Component = rolePage[authUser.role];
+
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-full w-full">
+          <Spinner className="w-10 h-10" />
+        </div>
+      }
+    >
+      <Component />
+    </Suspense>
+  );
 }
 
 export default LessonsPage;

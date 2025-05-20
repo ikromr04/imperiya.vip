@@ -1,4 +1,3 @@
-import { RatingName } from '@/const/ratings';
 import { ID } from '.';
 import { UserId } from './users';
 import { GradeId } from './grades';
@@ -24,9 +23,13 @@ export type RatingDates = RatingDate[];
 
 export type RatingId = ID;
 
+export type RatingSlug = 'quarter1' | 'quarter2' | 'semester1' | 'quarter3' | 'quarter4' | 'semester2' | 'annual' | 'assessment' | 'final';
+
+export type RatingCode = 91 | 92 | 93 | 94 | 95 | 96 | 97 | 98 | 99;
+
 export type Rating = {
   id: RatingId;
-  rating: keyof typeof RatingName;
+  rating: RatingSlug;
   score: number;
   studentId: UserId;
   gradeId: GradeId;

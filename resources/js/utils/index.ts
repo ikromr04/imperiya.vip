@@ -50,3 +50,14 @@ export const formatTime = (totalSeconds: number): string => {
 
   return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 };
+
+export const getEducationYearRange = (): string => {
+  const now = dayjs();
+  const year = now.year();
+  const septemberFirst = dayjs(`${year}-09-01`);
+
+  const startYear = now.isBefore(septemberFirst) ? year - 1 : year;
+  const endYear = startYear + 1;
+
+  return `${startYear}-${endYear}`;
+};

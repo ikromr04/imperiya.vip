@@ -13,22 +13,16 @@ import React from 'react';
 import { toast } from 'react-toastify';
 
 type MarksEditFormProps = {
-  mark: Mark;
+  dto: MarkUpdateDTO;
   onSuccess?: (mark: Mark) => void
 };
 
 function MarksEditForm({
-  mark,
+  dto,
   onSuccess,
 }: MarksEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const initialValues: MarkUpdateDTO = {
-    id: mark.id,
-    score_1: mark.score1,
-    score_2: mark.score2,
-    attendance: mark.attendance,
-    comment: mark.comment,
-  };
+  const initialValues: MarkUpdateDTO = dto;
 
   const onSubmit = async (
     values: MarkUpdateDTO,
@@ -78,18 +72,13 @@ function MarksEditForm({
                 className="grow min-w-0"
                 name="score_1"
                 label="Оценка 1"
-                // cleanable
-                // onClean={() => setFieldValue('score_1', null)}
-                // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
+                autoFocus
               />
               <span className="translate-y-2">/</span>
               <TextField
                 className="grow min-w-0"
                 name="score_2"
                 label="Оценка 2"
-                // cleanable
-                // onClean={() => setFieldValue('score_2', null)}
-                // options={[2, 3, 4, 5].map((score) => ({ value: score, label: score.toString() }))}
               />
             </div>
           )}

@@ -51,6 +51,8 @@ class Lesson extends Model
       'subject_id' => 'subjectId',
       'teacher_id' => 'teacherId',
       'type_id' => 'typeId',
+      'created_at' => 'createdAt',
+      'updated_at' => 'updatedAt',
     ];
 
     foreach ($map as $snake => $camel) {

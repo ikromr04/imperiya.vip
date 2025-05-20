@@ -8,17 +8,19 @@ import classNames from 'classnames';
 import Button from '@/components/ui/button';
 import { LessonDeleteDTO, LessonStoreDTO, LessonUpdateDTO } from '@/dto/lessons';
 import { useAppSelector } from '@/hooks';
-import { getSubjects } from '@/store/subjects-slice/subjects-selector';
-import { getUsers } from '@/store/users-slice/users-selector';
 import { Lesson } from '@/types/lessons';
 import { getLessonsStatus } from '@/store/lessons-slice/lessons-selector';
 import { AsyncStatus } from '@/const/store';
+import { Subject } from '@/types/subjects';
+import { User } from '@/types/users';
 
 type LessonItemProps = {
   date: Dayjs;
   hour: keyof typeof Hour;
   grade: Grade;
   lesson?: Lesson;
+  subject?: Subject;
+  teacher?: User;
   setCreateDTO: Dispatch<SetStateAction<LessonStoreDTO | undefined>>;
   setEditDTO: Dispatch<SetStateAction<LessonUpdateDTO | undefined>>;
   setDeleteDTO: Dispatch<SetStateAction<LessonDeleteDTO | undefined>>;
@@ -29,12 +31,12 @@ function LessonItem({
   hour,
   grade,
   lesson,
+  subject,
+  teacher,
   setCreateDTO,
   setEditDTO,
   setDeleteDTO,
 }: LessonItemProps): JSX.Element {
-  const subjects = useAppSelector(getSubjects);
-  const users = useAppSelector(getUsers);
   const lessonsStatus = useAppSelector(getLessonsStatus);
 
   if (lessonsStatus === AsyncStatus.Loading) {
@@ -66,16 +68,16 @@ function LessonItem({
     );
   }
 
-  const teacher = users?.find(({ id }) => id === lesson.teacherId);
-
   return (
     <div className="flex flex-col text-center leading-none group">
-      <Link
-        className="duration-150 hover:text-blue-600 truncate"
-        to={`${AppRoute.Journal}?gradeId=${lesson.gradeId}&subjectId=${lesson.subjectId}`}
-      >
-        {subjects?.find(({ id }) => id === lesson.subjectId)?.name}
-      </Link>
+      {subject && (
+        <Link
+          className="duration-150 hover:text-blue-600 truncate"
+          to={`${AppRoute.Journal}?gradeId=${lesson.gradeId}&subjectId=${lesson.subjectId}`}
+        >
+          {subject.name}
+        </Link>
+      )}
       {teacher && (
         <div className="flex justify-center text-sm items-baseline">
           (<Link
