@@ -44,13 +44,7 @@ function PhoneNumbers(): ReactNode {
 
       {isOpen && (
         <Modal isOpen={isOpen}>
-          <Suspense
-            fallback={
-              <div className="flex justify-center items-center p-4">
-                <Spinner className="w-6 h-6" />
-              </div>
-            }
-          >
+          <Suspense fallback={<Spinner className="w-6 h-6" />}>
             <UsersPhoneEditForm
               key={isOpen.toString()}
               user={user}

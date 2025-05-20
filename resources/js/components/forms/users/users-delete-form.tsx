@@ -1,12 +1,12 @@
 import Button from '@/components/ui/button';
 import { AppRoute } from '@/const/routes';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { deleteUserAction, fetchUsersAction } from '@/store/users-slice/users-api-actions';
+import { deleteUserAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import { User } from '@/types/users';
 import { getNextUserId } from '@/utils/users';
 import { Form, Formik, FormikHelpers } from 'formik';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -23,10 +23,6 @@ function UsersDeleteForm({
   const navigate = useNavigate();
   const users = useAppSelector(getUsers);
 
-  useEffect(() => {
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-  }, [dispatch, users.data, users.isFetching]);
-
   const onSubmit = async (
     values: object,
     helpers: FormikHelpers<object>
@@ -38,7 +34,7 @@ function UsersDeleteForm({
       onSuccess: () => {
         toast.success('Пользователь успешно удален.');
         setIsOpen(false);
-        navigate(generatePath(AppRoute.Users.Show, { id: getNextUserId(users.data || [], user.id) }));
+        navigate(generatePath(AppRoute.Users.Show, { id: getNextUserId(users || [], user.id) }));
       },
       onFail: (message) => toast.error(message),
     }));

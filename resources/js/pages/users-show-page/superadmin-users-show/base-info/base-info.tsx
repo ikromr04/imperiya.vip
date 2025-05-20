@@ -3,25 +3,27 @@ import Button from '@/components/ui/button';
 import CopyButton from '@/components/ui/copy-button';
 import DescriptionList from '@/components/ui/description-list';
 import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
 import Tooltip from '@/components/ui/tooltip';
 import { RoleName, SexName } from '@/const/users';
-import { useAppSelector } from '@/hooks';
-import { getAuthUser } from '@/store/auth-slice/auth-selector';
+import { User } from '@/types/users';
 import dayjs from 'dayjs';
-import React, { lazy, memo, ReactNode, Suspense, useMemo, useState } from 'react';
+import React, { lazy, memo, Suspense, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Nationality from './nationality';
-import Spinner from '@/components/ui/spinner';
 
 const UsersEditForm = lazy(() => import('@/components/forms/users/users-edit-form'));
 
-function BaseInfo(): ReactNode {
-  const user = useAppSelector(getAuthUser);
+type BaseInfoProps = {
+  user: User;
+};
+
+function BaseInfo({
+  user,
+}: BaseInfoProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
 
   const listData = useMemo(() => {
-    if (!user) return {};
-
     return {
       'Фамилия': user.surname,
       'Имя': user.name,
@@ -43,7 +45,7 @@ function BaseInfo(): ReactNode {
       'Адрес': user.address
         ? `${user.address.region !== 'За пределами города' ? 'район ' : ''}${user.address.region}, ${user.address.physicalAddress}`
         : '-',
-      'Национальность': <Nationality />,
+      'Национальность': <Nationality user={user} />,
       'WhatsApp': user.whatsapp ? (
         <a className="text-blue-600" href={`https://wa.me/+${user.whatsapp.code}${user.whatsapp.numbers}`} target="_blank" rel="noopener noreferrer">
           +{user.whatsapp.code} {user.whatsapp.numbers}
@@ -51,8 +53,6 @@ function BaseInfo(): ReactNode {
       ) : '-',
     };
   }, [user]);
-
-  if (!user) return;
 
   return (
     <>
@@ -68,15 +68,14 @@ function BaseInfo(): ReactNode {
 
         <div className="relative">
           <DescriptionList className="box__body" list={listData} />
-          <div className="absolute top-[1px] right-0 rounded-br-md z-10 min-w-6 h-[calc(100%-1px)] pointer-events-none bg-gradient-to-l from-white to-transparent" />
+          <div className="absolute top-[1px] right-0 rounded-br-md z-10 min-w-6 h-[calc(100%-1px)] pointer-events-none bg-gradient-to-l from-white to-transparent"></div>
         </div>
       </section>
 
       {isOpen && (
         <Modal isOpen={isOpen}>
-          <Suspense fallback={<Spinner className="w-6 h-6" />}>
+          <Suspense fallback={<Spinner className="w-10 h-10" />}>
             <UsersEditForm
-              key={isOpen.toString()}
               user={user}
               setIsOpen={setIsOpen}
             />

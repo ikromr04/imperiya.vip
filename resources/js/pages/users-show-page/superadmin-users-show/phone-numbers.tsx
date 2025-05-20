@@ -1,11 +1,13 @@
-import UsersPhoneEditForm from '@/components/forms/users/users-phone-edit-form';
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
 import Tooltip from '@/components/ui/tooltip';
 import { User } from '@/types/users';
-import React, { useState } from 'react';
+import React, { lazy, memo, Suspense, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+const UsersPhoneEditForm = lazy(() => import('@/components/forms/users/users-phone-edit-form'));
 
 type PhoneNumbersProps = {
   user: User;
@@ -21,6 +23,7 @@ function PhoneNumbers({
       <section className="box">
         <header className="box__header">
           <h2 className="font-medium text-gray-900">Телефонные номера</h2>
+
           <Button variant="light" onClick={() => setIsOpen(true)}>
             <Icons.edit width={14} height={14} />
             <Tooltip label="Редактировать" position="left" />
@@ -41,11 +44,19 @@ function PhoneNumbers({
         </ul>
       </section>
 
-      <Modal isOpen={isOpen}>
-        <UsersPhoneEditForm key={JSON.stringify(user)} user={user} setIsOpen={setIsOpen} />
-      </Modal>
+      {isOpen && (
+        <Modal isOpen={isOpen}>
+          <Suspense fallback={<Spinner className="w-6 h-6" />}>
+            <UsersPhoneEditForm
+              key={isOpen.toString()}
+              user={user}
+              setIsOpen={setIsOpen}
+            />
+          </Suspense>
+        </Modal>
+      )}
     </>
   );
 }
 
-export default PhoneNumbers;
+export default memo(PhoneNumbers);

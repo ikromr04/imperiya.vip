@@ -9,23 +9,17 @@ import React, { Fragment, ReactNode } from 'react';
 import { generatePath, Link } from 'react-router-dom';
 
 type RoleInfoProps = {
-  users: Users;
   user: User;
-  grades: Grades;
-  professions: Professions;
 };
 
 function RoleInfo({
-  users,
   user,
-  grades,
-  professions,
 }: RoleInfoProps): JSX.Element {
   let list: { [term: string]: ReactNode; } = {};
-  const grade = grades.find(({ id }) => id === user.student?.gradeId);
-  const mother = users.find(({ id }) => id === user.student?.motherId);
-  const father = users.find(({ id }) => id === user.student?.fatherId);
-  const children = users.filter(({ id }) => user.parent?.children?.includes(id));
+  const grade = grades?.find(({ id }) => id === user.student?.gradeId);
+  const mother = users?.find(({ id }) => id === user.student?.motherId);
+  const father = users?.find(({ id }) => id === user.student?.fatherId);
+  const children = users?.filter(({ id }) => user.parent?.children?.includes(id));
 
   switch (user.role) {
     // case user.superadmin !== undefined:

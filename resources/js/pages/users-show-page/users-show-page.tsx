@@ -1,31 +1,39 @@
+import React, { lazy, Suspense, ComponentType } from 'react';
 import { useAppSelector } from '@/hooks';
-import React from 'react';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
-import NotFoundPage from '@/pages/not-found-page';
-import { Role } from '@/types/users';
-import SuperadminUsersShow from './superadmin-users-show/superadmin-users-show';
-import StudentUsersShow from './student-users-show/student-users-show';
-import ParentUsersShow from './parent-users-show/parent-users-show';
 import { Navigate } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
+import { Role } from '@/types/users';
+import Spinner from '@/components/ui/spinner';
 
-const Page = {
-  'superadmin': () => <SuperadminUsersShow />,
-  'admin': () => <NotFoundPage />,
-  'director': () => <NotFoundPage />,
-  'teacher': () => <NotFoundPage />,
-  'parent': () => <ParentUsersShow />,
-  'student': () => <StudentUsersShow />,
+const SuperadminUsersShow = lazy(() => import('./superadmin-users-show/superadmin-users-show'));
+const StudentUsersShow = lazy(() => import('./student-users-show/student-users-show'));
+const ParentUsersShow = lazy(() => import('./parent-users-show/parent-users-show'));
+const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
+
+const roleComponentMap: Record<Role, ComponentType> = {
+  superadmin: SuperadminUsersShow,
+  admin: NotFoundPage,
+  director: NotFoundPage,
+  teacher: NotFoundPage,
+  parent: ParentUsersShow,
+  student: StudentUsersShow,
 };
 
 function UsersShowPage(): JSX.Element {
   const authUser = useAppSelector(getAuthUser);
 
   if (!authUser) {
-      return <Navigate to={AppRoute.Auth.Login} />;
-    }
+    return <Navigate to={AppRoute.Auth.Login} />;
+  }
 
-    return Page[authUser.role as Role]();
+  const Component = roleComponentMap[authUser.role];
+
+  return (
+    <Suspense fallback={<Spinner className="w-10 h-10" />}>
+      <Component />
+    </Suspense>
+  );
 }
 
 export default UsersShowPage;

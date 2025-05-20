@@ -1,39 +1,34 @@
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
-import UserAvatar from '@/pages/users-show-page/superadmin-users-show/user-avatar';
 import { AppRoute } from '@/const/routes';
 import { RoleName } from '@/const/users';
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
+import { useAppSelector } from '@/hooks';
 import { getGrades } from '@/store/grades-slice/grades-selector';
 import { User, Users } from '@/types/users';
 import { getNextUserId, getPreviousUserId } from '@/utils/users';
-import React, { useEffect } from 'react';
+import React, { memo } from 'react';
 import { generatePath } from 'react-router-dom';
+import Avatar from './avatar';
 
-type UserHeaderProps = {
+type HeaderProps = {
   users: Users;
   user: User;
 };
 
-function UserHeader({
+function Header({
   users,
   user,
-}: UserHeaderProps): JSX.Element {
-  const dispatch = useAppDispatch();
+}: HeaderProps): JSX.Element {
   const grades = useAppSelector(getGrades);
-  const grade = grades.data?.find(({ id }) => id === user.student?.gradeId);
-
-  useEffect(() => {
-    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
-  }, [dispatch, grades.data, grades.isFetching]);
+  const grade = grades?.find(({ id }) => id === user.student?.gradeId);
 
   return (
     <header className="relative z-10 lg:flex lg:items-top lg:gap-4">
-      <UserAvatar className="mb-2 lg:mb-0" user={user} />
+      <Avatar user={user} />
 
       <div className="lg:grow lg:mt-20">
         <h1 className="title mb-1">{user.surname} {user.name}</h1>
+
         <span className="flex max-w-max text-center bg-blue-200 text-primary rounded-full text-sm py-1 px-2 leading-none">
           {RoleName[user.role]} {grade && `${grade?.level} ${grade.group}`}
         </span>
@@ -59,4 +54,4 @@ function UserHeader({
   );
 }
 
-export default UserHeader;
+export default memo(Header);

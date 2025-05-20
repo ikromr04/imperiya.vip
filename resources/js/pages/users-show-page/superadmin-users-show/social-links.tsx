@@ -1,11 +1,13 @@
-import UsersSocialLinksEditForm from '@/components/forms/users/users-social-links-edit-form';
 import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
 import Tooltip from '@/components/ui/tooltip';
 import { User } from '@/types/users';
-import React, { useState } from 'react';
+import React, { lazy, memo, Suspense, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+const UsersSocialLinksEditForm = lazy(() => import('@/components/forms/users/users-social-links-edit-form'));
 
 type SocialLinksProps = {
   user: User;
@@ -48,11 +50,19 @@ function SocialLinks({
         </div>
       </section>
 
-      <Modal isOpen={isOpen}>
-        <UsersSocialLinksEditForm key={JSON.stringify(user)} user={user} setIsOpen={setIsOpen} />
-      </Modal>
+      {isOpen && (
+        <Modal isOpen={isOpen}>
+          <Suspense fallback={<Spinner className="w-6 h-6" />}>
+            <UsersSocialLinksEditForm
+              key={isOpen.toString()}
+              user={user}
+              setIsOpen={setIsOpen}
+            />
+          </Suspense>
+        </Modal>
+      )}
     </>
   );
 }
 
-export default SocialLinks;
+export default memo(SocialLinks);

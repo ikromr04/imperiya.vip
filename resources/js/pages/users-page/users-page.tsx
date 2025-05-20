@@ -28,9 +28,7 @@ function UsersPage(): JSX.Element {
   const Component = rolePage[authUser.role];
 
   return (
-    <Suspense
-      fallback={<Spinner className="w-10 h-10" />}
-    >
+    <Suspense fallback={<Spinner className="w-10 h-10" />}>
       <Component />
     </Suspense>
   );

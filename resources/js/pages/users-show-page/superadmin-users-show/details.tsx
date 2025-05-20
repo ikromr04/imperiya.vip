@@ -4,7 +4,7 @@ import DescriptionList from '@/components/ui/description-list';
 import { User } from '@/types/users';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { memo } from 'react';
 
 type DetailsProps = {
   user: User;
@@ -54,4 +54,4 @@ function Details({
   );
 }
 
-export default Details;
+export default memo(Details);

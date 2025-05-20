@@ -1,23 +1,21 @@
-import React, { BaseSyntheticEvent, useState } from 'react';
+import React, { BaseSyntheticEvent, memo, useState } from 'react';
 import { User } from '@/types/users';
 import classNames from 'classnames';
 import { useDropdown } from '@/hooks/use-dropdown';
 import { useAppDispatch } from '@/hooks';
-import { deleteUserAvatarAction, updateUserAvatarAction } from '@/store/users-slice/users-api-actions';
 import { toast } from 'react-toastify';
 import Button from '@/components/ui/button';
 import Spinner from '@/components/ui/spinner';
 import { Icons } from '@/components/icons';
+import { deleteUserAvatarAction, updateUserAvatarAction } from '@/store/users-slice/users-api-actions';
 
-type UserAvatarProps = {
-  className?: string;
+type AvatarProps = {
   user: User;
 };
 
-function UserAvatar({
-  className,
+function Avatar({
   user,
-}: UserAvatarProps): JSX.Element {
+}: AvatarProps): JSX.Element {
   const dispatch = useAppDispatch();
   const { ref, isOpen, setIsOpen } = useDropdown<HTMLDivElement>();
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +44,7 @@ function UserAvatar({
   };
 
   return (
-    <div ref={ref} className={classNames('relative z-10 w-36', className)}>
+    <div ref={ref} className="relative z-10 w-36 mb-2 lg:mb-0">
       <Button
         className="relative min-w-36 max-w-36 min-h-36 max-h-36 !p-0"
         variant="text"
@@ -110,4 +108,4 @@ function UserAvatar({
   );
 }
 
-export default UserAvatar;
+export default memo(Avatar);
