@@ -1,4 +1,4 @@
-import BaseInfo from './base-info/base-info';
+import BaseInfo from './bas-info/base-info';
 import Deletion from './deletion';
 import Details from './details';
 import PhoneNumbers from './phone-numbers';

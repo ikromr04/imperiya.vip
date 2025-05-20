@@ -267,9 +267,9 @@ class LessonController extends Controller
     ], 201);
   }
 
-  public function updateType(LessonTypeUpdateRequest $request): JsonResponse
+  public function updateType(LessonTypeUpdateRequest $request, int $id): JsonResponse
   {
-    $type = LessonType::findOrFail($request->id);
+    $type = LessonType::findOrFail($id);
 
     $type->update($request->only('name'));
 

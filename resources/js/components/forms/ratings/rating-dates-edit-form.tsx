@@ -1,6 +1,6 @@
 import Button from '@/components/ui/button';
 import TextField from '@/components/ui/formik-controls/text-field';
-import { RatingName } from '@/const/ratings';
+import { RatingSlugToText } from '@/const/ratings';
 import { RatingDateUpdateDTO } from '@/dto/ratings';
 import { useAppDispatch } from '@/hooks';
 import { updateRatingDatesAction } from '@/store/ratings-slice/ratings-api-actions';
@@ -59,55 +59,55 @@ function RatingDatesEditForm({
           <TextField
             name="quarter1"
             type="date"
-            label={RatingName['quarter1']}
+            label={RatingSlugToText['quarter1']}
           />
 
           <TextField
             name="quarter2"
             type="date"
-            label={RatingName['quarter2']}
+            label={RatingSlugToText['quarter2']}
           />
 
           <TextField
             name="semester1"
             type="date"
-            label={RatingName['semester1']}
+            label={RatingSlugToText['semester1']}
           />
 
           <TextField
             name="quarter3"
             type="date"
-            label={RatingName['quarter3']}
+            label={RatingSlugToText['quarter3']}
           />
 
           <TextField
             name="quarter4"
             type="date"
-            label={RatingName['quarter4']}
+            label={RatingSlugToText['quarter4']}
           />
 
           <TextField
             name="semester2"
             type="date"
-            label={RatingName['semester2']}
+            label={RatingSlugToText['semester2']}
           />
 
           <TextField
             name="annual"
             type="date"
-            label={RatingName['annual']}
+            label={RatingSlugToText['annual']}
           />
 
           <TextField
             name="assessment"
             type="date"
-            label={RatingName['assessment']}
+            label={RatingSlugToText['assessment']}
           />
 
           <TextField
             name="final"
             type="date"
-            label={RatingName['final']}
+            label={RatingSlugToText['final']}
           />
 
           <div className="flex items-center justify-end gap-2 md:col-span-3">

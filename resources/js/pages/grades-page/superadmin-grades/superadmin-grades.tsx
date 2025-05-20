@@ -1,30 +1,34 @@
-import GradesCreateForm from '@/components/forms/grades/grades-create-form';
-import AppLayout from '@/components/layouts/app-layout';
 import Button from '@/components/ui/button';
 import DataTable from '@/components/ui/data-table/data-table';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 import { AppRoute } from '@/const/routes';
+import { AsyncStatus } from '@/const/store';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
-import { getGrades } from '@/store/grades-slice/grades-selector';
+import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
-import { getUsers } from '@/store/users-slice/users-selector';
+import { getUsers, getUsersStatus } from '@/store/users-slice/users-selector';
 import { Grade } from '@/types/grades';
 import { ColumnDef } from '@tanstack/react-table';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { lazy, ReactNode, Suspense, useEffect, useState } from 'react';
 import { generatePath, Link } from 'react-router-dom';
+
+const GradesCreateForm = lazy(() => import('@/components/forms/grades/grades-create-form'));
 
 function SuperadminGrades(): ReactNode {
   const [isCreating, setIsCreating] = useState(false);
+  const gradesStatus = useAppSelector(getGradesStatus);
+  const usersStatus = useAppSelector(getUsersStatus);
+
   const grades = useAppSelector(getGrades);
   const users = useAppSelector(getUsers);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-  }, [dispatch, grades.data, grades.isFetching, users.data, users.isFetching]);
+    if (gradesStatus == AsyncStatus.Idle) dispatch(fetchGradesAction());
+    if (usersStatus == AsyncStatus.Idle) dispatch(fetchUsersAction());
+  }, [dispatch, gradesStatus, usersStatus]);
 
   const columns: ColumnDef<Grade>[] = [
     {
@@ -56,7 +60,7 @@ function SuperadminGrades(): ReactNode {
       header: 'Руководитель',
       size: 320,
       cell: ({ row }) => {
-        const teacher = users.data?.find(({ id }) => id === row.original.teacherId);
+        const teacher = users?.find(({ id }) => id === row.original.teacherId);
 
         if (!teacher) return;
 
@@ -67,8 +71,8 @@ function SuperadminGrades(): ReactNode {
         );
       },
       sortingFn: (rowA, rowB) => {
-        const teacherA = users.data?.find(({ id }) => id === rowA.original.teacherId)?.surname || '';
-        const teacherB = users.data?.find(({ id }) => id === rowB.original.teacherId)?.surname || '';
+        const teacherA = users?.find(({ id }) => id === rowA.original.teacherId)?.surname || '';
+        const teacherB = users?.find(({ id }) => id === rowB.original.teacherId)?.surname || '';
 
         return teacherA.localeCompare(teacherB);
       },
@@ -80,7 +84,7 @@ function SuperadminGrades(): ReactNode {
       size: 240,
       cell: ({ row }) => (
         <div className="flex flex-wrap gap-1 p-1">
-          {users.data?.filter((user) => user.student?.gradeId === row.original.id).map((user) => (
+          {users?.filter((user) => user.student?.gradeId === row.original.id).map((user) => (
             <Link
               key={user.id}
               className="py-1 px-2 border rounded bg-gray-100 hover:bg-blue-50 min-w-max"
@@ -92,8 +96,8 @@ function SuperadminGrades(): ReactNode {
         </div>
       ),
       sortingFn: (rowA, rowB) => {
-        const levelA = users.data?.filter((user) => user.student?.gradeId === rowA.original.id).length || 0;
-        const levelB = users.data?.filter((user) => user.student?.gradeId === rowB.original.id).length || 0;
+        const levelA = users?.filter((user) => user.student?.gradeId === rowA.original.id).length || 0;
+        const levelB = users?.filter((user) => user.student?.gradeId === rowB.original.id).length || 0;
 
         if (levelA < levelB) return -1;
         if (levelA > levelB) return 1;
@@ -107,17 +111,17 @@ function SuperadminGrades(): ReactNode {
   ];
 
   return (
-    <AppLayout>
+    <>
       <main className="pt-4 pb-40">
         <header className="flex justify-between px-3 items-end mb-1">
           <h1 className="title">
-            Классы ({grades.data?.length})
+            Классы ({grades?.length})
           </h1>
         </header>
 
-        {grades.data ? (
+        {grades ? (
           <DataTable
-            data={grades.data}
+            data={grades}
             columns={columns}
             sortingState={[{
               id: 'name',
@@ -137,10 +141,15 @@ function SuperadminGrades(): ReactNode {
           <Spinner className="w-8 h-8" />
         )}
       </main>
-      <Modal isOpen={isCreating}>
-        <GradesCreateForm grades={grades.data || []} setIsOpen={setIsCreating} />
-      </Modal>
-    </AppLayout>
+
+      {isCreating && (
+        <Modal isOpen={isCreating}>
+          <Suspense fallback={<Spinner className="w-8 h-8" />}>
+            <GradesCreateForm grades={grades || []} setIsOpen={setIsCreating} />
+          </Suspense>
+        </Modal>
+      )}
+    </>
   );
 }
 

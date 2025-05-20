@@ -50,7 +50,7 @@ Route::prefix('lessons')->controller(LessonController::class)->group(function ()
   Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::get('/types', 'types')->middleware('auth:sanctum');
   Route::post('/types', 'storeType')->middleware(['auth:sanctum', 'ability:superadmin']);
-  Route::put('/types', 'updateType')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/types/{id}', 'updateType')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::delete('/types/{id}', 'deleteType')->middleware(['auth:sanctum', 'ability:superadmin']);
 });
 

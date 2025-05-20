@@ -52,15 +52,14 @@ export const updateProfessionAction = createAsyncThunk<Profession, {
   extra: AxiosInstance,
   rejectWithValue: ValidationError,
 }>(
-  'professions/update',
+  'professions/updateProfession',
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.put<Profession>(APIRoute.Professions.Index, dto);
+      const { data } = await api.put<Profession>(generatePath(APIRoute.Professions.Show, { id: dto.id }), dto);
       if (onSuccess) onSuccess();
       return data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
       if (!error.response) throw err;
       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);

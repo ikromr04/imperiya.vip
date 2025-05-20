@@ -166,12 +166,11 @@ export const updateLessonsTypeAction = createAsyncThunk<LessonType, {
   'lessons/updateLessonType',
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.put<LessonType>(APIRoute.Lessons.Types, dto);
+      const { data } = await api.put<LessonType>(generatePath(APIRoute.Lessons.TypesShow, { id: dto.id }), dto);
       if (onSuccess) onSuccess();
       return data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
       if (!error.response) throw err;
       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);

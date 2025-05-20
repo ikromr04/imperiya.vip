@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import AppLayout from '@/components/layouts/app-layout';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { getSubjects } from '@/store/subjects-slice/subjects-selector';
+import { getSubjects, getSubjectsStatus } from '@/store/subjects-slice/subjects-selector';
 import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
 import DataTable from '@/components/ui/data-table/data-table';
 import Spinner from '@/components/ui/spinner';
@@ -13,17 +12,19 @@ import Modal from '@/components/ui/modal';
 import SubjectsCreateForm from '@/components/forms/subjects/subjects-create-form';
 import SubjectsEditForm from '@/components/forms/subjects/subjects-edit-form';
 import SubjectsDeleteForm from '@/components/forms/subjects/subjects-delete-form';
+import { AsyncStatus } from '@/const/store';
 
 function SubjectsPage(): JSX.Element {
   const dispatch = useAppDispatch();
+  const subjectsStatus = useAppSelector(getSubjectsStatus);
   const subjects = useAppSelector(getSubjects);
   const [createDTO, setCreateDTO] = useState<SubjectStoreDTO | null>(null);
   const [editDTO, setEditDTO] = useState<SubjectUpdateDTO | null>(null);
   const [deleteDTO, setDeleteDTO] = useState<SubjectId | null>(null);
 
   useEffect(() => {
-    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
-  }, [dispatch, subjects.data, subjects.isFetching]);
+    if (subjectsStatus == AsyncStatus.Idle) dispatch(fetchSubjectsAction());
+  }, [dispatch, subjectsStatus]);
 
   const columns: ColumnDef<Subject>[] = [
     {
@@ -63,15 +64,15 @@ function SubjectsPage(): JSX.Element {
   ];
 
   return (
-    <AppLayout>
+    <>
       <main className="py-2">
         <h1 className="title mb-1 px-3">
-          Предметы ({subjects.data?.length})
+          Предметы ({subjects?.length})
         </h1>
 
-        {subjects.data ? (
+        {subjects ? (
           <DataTable
-            data={subjects.data}
+            data={subjects}
             columns={columns}
             sortingState={[{
               id: 'name',
@@ -106,7 +107,7 @@ function SubjectsPage(): JSX.Element {
           <SubjectsDeleteForm dto={deleteDTO} setDTO={setDeleteDTO} />
         )}
       </Modal>
-    </AppLayout >
+    </ >
   );
 }
 

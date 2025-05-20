@@ -1,31 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import AppLayout from '@/components/layouts/app-layout';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import DataTable from '@/components/ui/data-table/data-table';
 import Spinner from '@/components/ui/spinner';
 import { ColumnDef } from '@tanstack/react-table';
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
-import { getLessonsTypes } from '@/store/lessons-slice/lessons-selector';
 import { TypeStoreDTO, TypeUpdateDTO } from '@/dto/lessons';
-import { Type, TypeId } from '@/types/lessons';
-import { fetchLessonsTypesAction } from '@/store/lessons-slice/lessons-api-actions';
 import TypesCreateForm from '@/components/forms/types/types-create-form';
 import TypesEditForm from '@/components/forms/types/types-edit-form';
 import TypesDeleteForm from '@/components/forms/types/types-delete-form';
+import { getLessonTypes, getLessonTypesStatus } from '@/store/lessons-slice/lessons-selector';
+import { AsyncStatus } from '@/const/store';
+import { fetchLessonTypesAction } from '@/store/lessons-slice/lessons-api-actions';
+import { LessonType, LessonTypeId } from '@/types/lessons';
 
 function LessonsTypesPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const types = useAppSelector(getLessonsTypes);
+  const typesStatus = useAppSelector(getLessonTypesStatus);
+  const types = useAppSelector(getLessonTypes);
   const [createDTO, setCreateDTO] = useState<TypeStoreDTO | null>(null);
   const [editDTO, setEditDTO] = useState<TypeUpdateDTO | null>(null);
-  const [deleteDTO, setDeleteDTO] = useState<TypeId | null>(null);
+  const [deleteDTO, setDeleteDTO] = useState<LessonTypeId | null>(null);
 
   useEffect(() => {
-    if (!types.data && !types.isFetching) dispatch(fetchLessonsTypesAction());
-  }, [dispatch, types.data, types.isFetching]);
+    if (typesStatus === AsyncStatus.Idle) dispatch(fetchLessonTypesAction());
+  }, [dispatch, typesStatus]);
 
-  const columns: ColumnDef<Type>[] = [
+  const columns: ColumnDef<LessonType>[] = [
     {
       id: 'name',
       accessorKey: 'name',
@@ -63,15 +64,15 @@ function LessonsTypesPage(): JSX.Element {
   ];
 
   return (
-    <AppLayout>
+    <>
       <main className="py-2">
         <h1 className="title mb-1 px-3">
-          Типы экзаменов ({types.data?.length})
+          Типы экзаменов ({types?.length})
         </h1>
 
-        {types.data ? (
+        {types ? (
           <DataTable
-            data={types.data}
+            data={types}
             columns={columns}
             sortingState={[{
               id: 'name',
@@ -106,7 +107,7 @@ function LessonsTypesPage(): JSX.Element {
           <TypesDeleteForm dto={deleteDTO} setDTO={setDeleteDTO} />
         )}
       </Modal>
-    </AppLayout >
+    </ >
   );
 }
 

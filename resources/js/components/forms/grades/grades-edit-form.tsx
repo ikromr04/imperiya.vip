@@ -3,11 +3,10 @@ import SelectField from '@/components/ui/formik-controls/select-field';
 import { GradeUpdateDTO } from '@/dto/grades';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { updateGradeAction } from '@/store/grades-slice/grades-api-actions';
-import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { getUsers } from '@/store/users-slice/users-selector';
 import { Grade, Grades } from '@/types/grades';
 import { Form, Formik, FormikHelpers } from 'formik';
-import React, { Dispatch, ReactNode, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
@@ -29,7 +28,7 @@ function GradesEditForm({
 }: GradesEditFormProps): ReactNode {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
-  const students = users.data?.filter((user) => user.student?.gradeId === grade.id);
+  const students = users?.filter((user) => user.student?.gradeId === grade.id);
   const initialValues: GradeUpdateDTO = {
     id: grade.id,
     level: grade.level,
@@ -37,10 +36,6 @@ function GradesEditForm({
     teacher_id: grade.teacherId,
     students: students?.map(({ id }) => id) || [],
   };
-
-  useEffect(() => {
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-  }, [dispatch, users.data, users.isFetching]);
 
   const onSubmit = async (
     values: GradeUpdateDTO,
@@ -70,7 +65,7 @@ function GradesEditForm({
     helpers.setSubmitting(false);
   };
 
-  if (!users.data) return;
+  if (!users) return;
 
   return (
     <Formik
@@ -113,7 +108,7 @@ function GradesEditForm({
             name="teacher_id"
             searchable
             label="Руководитель"
-            options={users.data?.filter((user) => user.role === 'teacher').map((teacher) => ({ value: teacher.id, label: `${teacher.surname} ${teacher.name}` })) || []}
+            options={users?.filter((user) => user.role === 'teacher').map((teacher) => ({ value: teacher.id, label: `${teacher.surname} ${teacher.name}` })) || []}
           />
 
           <SelectField
@@ -122,7 +117,7 @@ function GradesEditForm({
             multiple
             searchable
             label={`Ученики (${values.students?.length})`}
-            options={users.data?.filter((user) => user.role === 'student').map((student) => ({ value: student.id, label: `${student.surname} ${student.name}` })) || []}
+            options={users?.filter((user) => user.role === 'student').map((student) => ({ value: student.id, label: `${student.surname} ${student.name}` })) || []}
           />
 
           <div className="flex items-center justify-end gap-2 sm:col-span-2">

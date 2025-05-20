@@ -3,17 +3,18 @@ import ContentField from '@/components/ui/formik-controls/content-field';
 import Label from '@/components/ui/formik-controls/partials/label';
 import SelectField from '@/components/ui/formik-controls/select-field';
 import TextField from '@/components/ui/formik-controls/text-field';
+import { AsyncStatus } from '@/const/store';
 import { REGIONS, RoleName, ROLES, SexName } from '@/const/users';
 import { UserStoreDTO } from '@/dto/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
-import { getGrades } from '@/store/grades-slice/grades-selector';
+import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
 import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
-import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
+import { getNationalities, getNationalitiesStatus } from '@/store/nationalities-slice/nationalities-selector';
 import { fetchProfessionsAction } from '@/store/professions-slice/professions-api-actions';
-import { getProfessions } from '@/store/professions-slice/professions-selector';
+import { getProfessions, getProfessionsStatus } from '@/store/professions-slice/professions-selector';
 import { fetchUsersAction, storeUserAction } from '@/store/users-slice/users-api-actions';
-import { getUsers } from '@/store/users-slice/users-selector';
+import { getUsers, getUsersStatus } from '@/store/users-slice/users-selector';
 import { Option, Options } from '@/types';
 import { Role, Sex } from '@/types/users';
 import { Form, Formik, FormikErrors, FormikHelpers } from 'formik';
@@ -84,18 +85,24 @@ const validationSchema = Yup.object().shape({
 
 function UsersCreateForm(): JSX.Element {
   const dispatch = useAppDispatch();
+  const nationalitiesStatus = useAppSelector(getNationalitiesStatus);
+  const gradesStatus = useAppSelector(getGradesStatus);
+  const usersStatus = useAppSelector(getUsersStatus);
+  const professionsStatus = useAppSelector(getProfessionsStatus);
+
   const nationalities = useAppSelector(getNationalities);
   const grades = useAppSelector(getGrades);
   const users = useAppSelector(getUsers);
   const professions = useAppSelector(getProfessions);
+
   const [key, setKey] = useState(1);
 
   useEffect(() => {
-    if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
-    if (!professions.data && !professions.isFetching) dispatch(fetchProfessionsAction());
-  }, [dispatch, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching, professions.data, professions.isFetching, users.data, users.isFetching]);
+    if (nationalitiesStatus === AsyncStatus.Idle) dispatch(fetchNationalitiesAction());
+    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
+    if (usersStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
+    if (professionsStatus === AsyncStatus.Idle) dispatch(fetchProfessionsAction());
+  }, [dispatch, gradesStatus, nationalitiesStatus, professionsStatus, usersStatus]);
 
   const initialValues: UserStoreDTO = {
     name: '',
@@ -235,11 +242,11 @@ function UsersCreateForm(): JSX.Element {
             required
           />
 
-          {nationalities.data && (
+          {nationalities && (
             <SelectField
               name="nationality_id"
               label="Национальность"
-              options={nationalities.data.map(({ id, name }) => ({ value: id, label: name }))}
+              options={nationalities.map(({ id, name }) => ({ value: id, label: name }))}
               required
             />
           )}
@@ -309,29 +316,29 @@ function UsersCreateForm(): JSX.Element {
             </div>
           </div>
 
-          {values.role === 'teacher' && grades.data && (
+          {values.role === 'teacher' && grades && (
             <SelectField
               name="teacher.grades"
               label="Назначить руководителем класса"
               multiple
-              options={grades.data.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
+              options={grades.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
             />
           )}
 
-          {values.role === 'parent' && users.data && professions.data && (
+          {values.role === 'parent' && users && professions && (
             <>
               <SelectField
                 name="parent.children"
                 label="Дети"
                 multiple
                 searchable
-                options={users.data.filter(({ role }) => role === 'student').map((user) => ({ value: user.id, label: `${user.surname} ${user.name} ${user.patronymic ?? ''}` }))}
+                options={users.filter(({ role }) => role === 'student').map((user) => ({ value: user.id, label: `${user.surname} ${user.name} ${user.patronymic ?? ''}` }))}
               />
 
               <SelectField
                 name="parent.profession_id"
                 label="Сфера деятельности"
-                options={professions.data.map((profession) => ({ value: profession.id, label: profession.name }))}
+                options={professions.map((profession) => ({ value: profession.id, label: profession.name }))}
                 required
               />
 
@@ -349,12 +356,12 @@ function UsersCreateForm(): JSX.Element {
             </>
           )}
 
-          {values.role === 'student' && users.data && grades.data && (
+          {values.role === 'student' && users && grades && (
             <>
               <SelectField
                 name="student.grade_id"
                 label="Класс"
-                options={grades.data.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
+                options={grades.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
                 required
               />
 
@@ -362,14 +369,14 @@ function UsersCreateForm(): JSX.Element {
                 name="student.mother_id"
                 label="Мать"
                 searchable
-                options={users.data.filter((user) => user.role === 'parent' && user.sex === 'female').map((user) => ({ value: user.id, label: `${user.surname} ${user.name} ${user.patronymic ?? ''}` }))}
+                options={users.filter((user) => user.role === 'parent' && user.sex === 'female').map((user) => ({ value: user.id, label: `${user.surname} ${user.name} ${user.patronymic ?? ''}` }))}
               />
 
               <SelectField
                 name="student.father_id"
                 label="Отец"
                 searchable
-                options={users.data.filter((user) => user.role === 'parent' && user.sex === 'male').map((user) => ({ value: user.id, label: `${user.surname} ${user.name} ${user.patronymic ?? ''}` }))}
+                options={users.filter((user) => user.role === 'parent' && user.sex === 'male').map((user) => ({ value: user.id, label: `${user.surname} ${user.name} ${user.patronymic ?? ''}` }))}
               />
 
               <TextField

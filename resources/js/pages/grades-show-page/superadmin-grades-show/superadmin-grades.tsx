@@ -1,48 +1,49 @@
-import GradesDeleteForm from '@/components/forms/grades/grades-delete-form';
-import GradesEditForm from '@/components/forms/grades/grades-edit-form';
 import { Icons } from '@/components/icons';
-import AppLayout from '@/components/layouts/app-layout';
 import Breadcrumbs from '@/components/ui/breadcrumbs';
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 import Tooltip from '@/components/ui/tooltip';
 import { AppRoute } from '@/const/routes';
+import { AsyncStatus } from '@/const/store';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
-import { getGrades } from '@/store/grades-slice/grades-selector';
+import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
-import { getUsers } from '@/store/users-slice/users-selector';
+import { getUsers, getUsersStatus } from '@/store/users-slice/users-selector';
 import { getNextGradeId, getPreviousGradeId } from '@/utils/grades';
-import React, { useEffect, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { generatePath, Link, useParams } from 'react-router-dom';
 
+const GradesDeleteForm = lazy(() => import('@/components/forms/grades/grades-delete-form'));
+const GradesEditForm = lazy(() => import('@/components/forms/grades/grades-edit-form'));
+
 function SuperadminGradesShow(): JSX.Element {
-  const dispatch = useAppDispatch();
   const params = useParams();
+  const dispatch = useAppDispatch();
+  const gradesStatus = useAppSelector(getGradesStatus);
+  const usersStatus = useAppSelector(getUsersStatus);
+
   const grades = useAppSelector(getGrades);
   const users = useAppSelector(getUsers);
-  const grade = grades.data?.find(({ id }) => id === +(params.id || 0)) || null;
+
   const [isEditting, setIsEditting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const students = users.data?.filter((user) => user.student?.gradeId === grade?.id);
-  const teacher = users.data?.find(({ id }) => id === grade?.teacherId);
+  const grade = grades?.find(({ id }) => id === +(params.id || 0)) || null;
+  const students = users?.filter((user) => user.student?.gradeId === grade?.id);
+  const teacher = users?.find(({ id }) => id === grade?.teacherId);
 
   useEffect(() => {
-    if (!grade && !grades.isFetching && params.id) dispatch(fetchGradesAction());
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-  }, [dispatch, grade, grades.isFetching, params.id, users.data, users.isFetching]);
+    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
+    if (usersStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
+  }, [dispatch, gradesStatus, usersStatus]);
 
-  if (!grade || !grades.data) {
-    return (
-      <AppLayout>
-        <Spinner className="w-8 h-8" />
-      </AppLayout>
-    );
+  if (!grade || !grades) {
+    return <Spinner className="w-8 h-8" />;
   }
 
   return (
-    <AppLayout>
+    <>
       <main className="pt-4 pb-40">
         <Breadcrumbs
           items={[
@@ -55,14 +56,14 @@ function SuperadminGradesShow(): JSX.Element {
           <div className="flex items-center gap-1">
             <Button
               variant="light"
-              href={generatePath(AppRoute.Classes.Show, { id: getPreviousGradeId(grades.data, grade.id) })}
+              href={generatePath(AppRoute.Classes.Show, { id: getPreviousGradeId(grades, grade.id) })}
             >
               <Icons.previous width={14} height={14} />
               <span className="sr-only md:not-sr-only">Предыдущий</span>
             </Button>
             <Button
               variant="light"
-              href={generatePath(AppRoute.Classes.Show, { id: getNextGradeId(grades.data, grade.id) })}
+              href={generatePath(AppRoute.Classes.Show, { id: getNextGradeId(grades, grade.id) })}
             >
               <span className="sr-only md:not-sr-only">Следующий</span>
               <Icons.next width={14} height={14} />
@@ -124,21 +125,32 @@ function SuperadminGradesShow(): JSX.Element {
         </Button>
       </main>
 
-      <Modal isOpen={isDeleting}>
-        <GradesDeleteForm
-          grades={grades.data}
-          grade={grade}
-          setIsOpen={setIsDeleting}
-        />
-      </Modal>
-      <Modal isOpen={isEditting}>
-        <GradesEditForm
-          grade={grade}
-          grades={grades.data}
-          setIsOpen={setIsEditting}
-        />
-      </Modal>
-    </AppLayout>
+      {isDeleting && (
+        <Modal isOpen={isDeleting}>
+          <Suspense fallback={<Spinner className="w-8 h-8" />}>
+            <GradesDeleteForm
+              key={isDeleting.toString()}
+              grades={grades}
+              grade={grade}
+              setIsOpen={setIsDeleting}
+            />
+          </Suspense>
+        </Modal>
+      )}
+
+      {isEditting && (
+        <Modal isOpen={isEditting}>
+          <Suspense fallback={<Spinner className="w-8 h-8" />}>
+            <GradesEditForm
+              key={isEditting.toString()}
+              grade={grade}
+              grades={grades}
+              setIsOpen={setIsEditting}
+            />
+          </Suspense>
+        </Modal>
+      )}
+    </>
   );
 }
 

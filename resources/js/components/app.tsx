@@ -13,7 +13,6 @@ const LoginPage = lazy(() => import('@/pages/auth/login-page'));
 const ForgotPasswordPage = lazy(() => import('@/pages/auth/forgot-password-page'));
 const ResetPasswordPage = lazy(() => import('@/pages/auth/reset-password-page'));
 const RegisterPage = lazy(() => import('@/pages/auth/register-page/register-page'));
-const RegisterLinksPage = lazy(() => import('@/pages/auth/register-links-page/register-links-page'));
 const ProfilePage = lazy(() => import('@/pages/auth/profile-page/profile-page'));
 const ProfileLessonsPage = lazy(() => import('@/pages/auth/profile-page/profile-lessons-page'));
 const ProfileDiaryPage = lazy(() => import('@/pages/auth/profile-page/profile-diary-page'));
@@ -30,6 +29,8 @@ const GradesShowPage = lazy(() => import('@/pages/grades-show-page/grades-show-p
 const SubjectsPage = lazy(() => import('@/pages/subjects-page'));
 const NationalitiesPage = lazy(() => import('@/pages/nationalities-page'));
 const ProfessionsPage = lazy(() => import('@/pages/professions-page'));
+const LessonsTypesPage = lazy(() => import('@/pages/lessons-types-page'));
+const RegisterLinksPage = lazy(() => import('@/pages/auth/register-links-page/register-links-page'));
 const RatingDatesPage = lazy(() => import('@/pages/rating-dates-page'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
@@ -82,11 +83,12 @@ function App(): JSX.Element {
             <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />
 
             <Route element={<SuperadminRoute />}>
+              <Route path={AppRoute.Users.Create} element={<UsersCreatePage />} />
               <Route path={AppRoute.Subjects.Index} element={<SubjectsPage />} />
               <Route path={AppRoute.Nationalities.Index} element={<NationalitiesPage />} />
               <Route path={AppRoute.Professions.Index} element={<ProfessionsPage />} />
+              <Route path={AppRoute.Lessons.Types} element={<LessonsTypesPage />} />
               <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
-              <Route path={AppRoute.Users.Create} element={<UsersCreatePage />} />
               <Route path={AppRoute.Ratings.Dates} element={<RatingDatesPage />} />
             </Route>
           </Route>

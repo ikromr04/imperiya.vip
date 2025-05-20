@@ -1,29 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import AppLayout from '@/components/layouts/app-layout';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import DataTable from '@/components/ui/data-table/data-table';
 import Spinner from '@/components/ui/spinner';
 import { ColumnDef } from '@tanstack/react-table';
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
-import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
+import { getNationalities, getNationalitiesStatus } from '@/store/nationalities-slice/nationalities-selector';
 import { NationalityStoreDTO, NationalityUpdateDTO } from '@/dto/nationalities';
 import { Nationality, NationalityId } from '@/types/nationalities';
 import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
 import NationalitiesCreateForm from '@/components/forms/nationalities/nationalities-create-form';
 import NationalitiesEditForm from '@/components/forms/nationalities/nationalities-edit-form';
 import NationalitiesDeleteForm from '@/components/forms/nationalities/nationalities-delete-form';
+import { AsyncStatus } from '@/const/store';
 
 function NationalitiesPage(): JSX.Element {
   const dispatch = useAppDispatch();
+  const nationalitiesStatus = useAppSelector(getNationalitiesStatus);
   const nationalities = useAppSelector(getNationalities);
   const [createDTO, setCreateDTO] = useState<NationalityStoreDTO | null>(null);
   const [editDTO, setEditDTO] = useState<NationalityUpdateDTO | null>(null);
   const [deleteDTO, setDeleteDTO] = useState<NationalityId | null>(null);
 
   useEffect(() => {
-    if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
-  }, [dispatch, nationalities.data, nationalities.isFetching]);
+    if (nationalitiesStatus === AsyncStatus.Idle) dispatch(fetchNationalitiesAction());
+  }, [dispatch, nationalitiesStatus]);
 
   const columns: ColumnDef<Nationality>[] = [
     {
@@ -63,15 +64,15 @@ function NationalitiesPage(): JSX.Element {
   ];
 
   return (
-    <AppLayout>
+    <>
       <main className="py-2">
         <h1 className="title mb-1 px-3">
-          Национальности ({nationalities.data?.length})
+          Национальности ({nationalities?.length})
         </h1>
 
-        {nationalities.data ? (
+        {nationalities ? (
           <DataTable
-            data={nationalities.data}
+            data={nationalities}
             columns={columns}
             sortingState={[{
               id: 'name',
@@ -106,7 +107,7 @@ function NationalitiesPage(): JSX.Element {
           <NationalitiesDeleteForm dto={deleteDTO} setDTO={setDeleteDTO} />
         )}
       </Modal>
-    </AppLayout >
+    </ >
   );
 }
 

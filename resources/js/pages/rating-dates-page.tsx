@@ -1,33 +1,34 @@
 import React, { useEffect } from 'react';
-import AppLayout from '@/components/layouts/app-layout';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import Spinner from '@/components/ui/spinner';
-import { getRatingDates } from '@/store/ratings-slice/ratings-selector';
+import { getRatingDates, getRatingDatesStatus } from '@/store/ratings-slice/ratings-selector';
 import { fetchRatingDatesAction } from '@/store/ratings-slice/ratings-api-actions';
 import RatingDatesEditForm from '@/components/forms/ratings/rating-dates-edit-form';
+import { AsyncStatus } from '@/const/store';
+import { getEducationYearRange } from '@/utils';
 
 function RatingDatesPage(): JSX.Element {
   const dispatch = useAppDispatch();
+  const ratingDatesStatus = useAppSelector(getRatingDatesStatus);
   const ratingDates = useAppSelector(getRatingDates);
+  const ratingDate = ratingDates?.find(({years}) => years === getEducationYearRange());
 
   useEffect(() => {
-    if (!ratingDates.data && !ratingDates.isFetching) dispatch(fetchRatingDatesAction());
-  }, [dispatch, ratingDates.data, ratingDates.isFetching]);
+    if (ratingDatesStatus === AsyncStatus.Idle) dispatch(fetchRatingDatesAction());
+  }, [dispatch, ratingDatesStatus]);
 
   return (
-    <AppLayout>
-      <main className="py-2">
-        <h1 className="title mb-1 px-3">
-          Даты рейтингов
-        </h1>
+    <main className="py-2">
+      <h1 className="title mb-1 px-3">
+        Даты рейтингов
+      </h1>
 
-        {ratingDates.data ? (
-          <RatingDatesEditForm ratingDate={ratingDates.data[0]} />
-        ) : (
-          <Spinner className="w-8 h-8" />
-        )}
-      </main>
-    </AppLayout >
+      {ratingDate ? (
+        <RatingDatesEditForm ratingDate={ratingDate} />
+      ) : (
+        <Spinner className="w-8 h-8" />
+      )}
+    </main>
   );
 }
 

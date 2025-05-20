@@ -44,23 +44,22 @@ export const storeNationalityAction = createAsyncThunk<Nationality, {
 );
 
 export const updateNationalityAction = createAsyncThunk<Nationality, {
-  dto: NationalityUpdateDTO,
-  onSuccess?: () => void,
-  onValidationError?: (error: ValidationError) => void,
-  onFail?: (message: string) => void,
+  dto: NationalityUpdateDTO;
+  onSuccess?: () => void;
+  onValidationError?: (error: ValidationError) => void;
+  onFail?: (message: string) => void;
 }, {
-  extra: AxiosInstance,
-  rejectWithValue: ValidationError,
+  extra: AxiosInstance;
+  rejectWithValue: ValidationError;
 }>(
-  'nationalities/update',
+  'nationalities/updateNationality',
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      const { data } = await api.put<Nationality>(APIRoute.Nationalities.Index, dto);
+      const { data } = await api.put<Nationality>(generatePath(APIRoute.Nationalities.Show, { id: dto.id }), dto);
       if (onSuccess) onSuccess();
       return data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
       if (!error.response) throw err;
       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);

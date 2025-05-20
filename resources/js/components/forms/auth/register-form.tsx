@@ -10,15 +10,16 @@ import classNames from 'classnames';
 import SelectField from '@/components/ui/formik-controls/select-field';
 import { REGIONS, SexName } from '@/const/users';
 import { Sex } from '@/types/users';
-import { getGrades } from '@/store/grades-slice/grades-selector';
+import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import ContentField from '@/components/ui/formik-controls/content-field';
-import { getProfessions } from '@/store/professions-slice/professions-selector';
+import { getProfessions, getProfessionsStatus } from '@/store/professions-slice/professions-selector';
 import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
 import { fetchProfessionsAction } from '@/store/professions-slice/professions-api-actions';
-import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
+import { getNationalities, getNationalitiesStatus } from '@/store/nationalities-slice/nationalities-selector';
 import Label from '@/components/ui/formik-controls/partials/label';
 import { toast } from 'react-toastify';
+import { AsyncStatus } from '@/const/store';
 
 const validationSchema = Yup.object().shape({
   children: Yup.array().of(
@@ -92,10 +93,16 @@ function RegisterForm({
   token,
 }: RegisterFormProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const nationalitiesStatus = useAppSelector(getNationalitiesStatus);
+  const professionsStatus = useAppSelector(getProfessionsStatus);
+  const gradesStatus = useAppSelector(getGradesStatus);
+
   const nationalities = useAppSelector(getNationalities);
   const professions = useAppSelector(getProfessions);
   const grades = useAppSelector(getGrades);
+
   const [key, setKey] = useState(1);
+
   const initialValues: RegisterDTO = {
     token,
     children: [
@@ -139,10 +146,10 @@ function RegisterForm({
   };
 
   useEffect(() => {
-    if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
-    if (!professions.data && !professions.isFetching) dispatch(fetchProfessionsAction());
-    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
-  }, [dispatch, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching, professions.data, professions.isFetching]);
+    if (nationalitiesStatus === AsyncStatus.Idle) dispatch(fetchNationalitiesAction());
+    if (professionsStatus === AsyncStatus.Idle) dispatch(fetchProfessionsAction());
+    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
+  }, [dispatch, gradesStatus, nationalitiesStatus, professionsStatus]);
 
   const onSubmit = async (
     values: RegisterDTO,
@@ -268,20 +275,20 @@ function RegisterForm({
                         required
                       />
 
-                      {nationalities.data && (
+                      {nationalities && (
                         <SelectField
                           name={`children[${index}].nationality_id`}
                           label="Национальность"
-                          options={nationalities.data.map(({ id, name }) => ({ value: id, label: name }))}
+                          options={nationalities.map(({ id, name }) => ({ value: id, label: name }))}
                           required
                         />
                       )}
 
-                      {grades.data && (
+                      {grades && (
                         <SelectField
                           name={`children[${index}].grade_id`}
                           label="Класс"
-                          options={grades.data.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
+                          options={grades.map((grade) => ({ value: grade.id, label: `${grade.level} ${grade.group}` }))}
                           required
                         />
                       )}
@@ -388,19 +395,19 @@ function RegisterForm({
                         required
                       />
 
-                      {nationalities.data && (
+                      {nationalities && (
                         <SelectField
                           name={`parents[${index}].nationality_id`}
                           label="Национальность"
-                          options={nationalities.data.map(({ id, name }) => ({ value: id, label: name }))}
+                          options={nationalities.map(({ id, name }) => ({ value: id, label: name }))}
                           required
                         />
                       )}
-                      {professions.data && (
+                      {professions && (
                         <SelectField
                           name={`parents[${index}].profession_id`}
                           label="Сфера деятельности"
-                          options={professions.data.map(({ id, name }) => ({ value: id, label: name }))}
+                          options={professions.map(({ id, name }) => ({ value: id, label: name }))}
                           required
                         />
                       )}

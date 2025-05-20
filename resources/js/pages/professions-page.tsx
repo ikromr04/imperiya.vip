@@ -1,29 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import AppLayout from '@/components/layouts/app-layout';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import DataTable from '@/components/ui/data-table/data-table';
 import Spinner from '@/components/ui/spinner';
 import { ColumnDef } from '@tanstack/react-table';
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
-import { getProfessions } from '@/store/professions-slice/professions-selector';
+import { getProfessions, getProfessionsStatus } from '@/store/professions-slice/professions-selector';
 import { ProfessionStoreDTO, ProfessionUpdateDTO } from '@/dto/professions';
 import { Profession, ProfessionId } from '@/types/professions';
 import { fetchProfessionsAction } from '@/store/professions-slice/professions-api-actions';
 import ProfessionsCreateForm from '@/components/forms/professions/professions-create-form';
 import ProfessionsEditForm from '@/components/forms/professions/professions-edit-form';
 import ProfessionsDeleteForm from '@/components/forms/professions/profession-delete-form';
+import { AsyncStatus } from '@/const/store';
 
 function ProfessionsPage(): JSX.Element {
   const dispatch = useAppDispatch();
+  const professionsStatus = useAppSelector(getProfessionsStatus);
   const professions = useAppSelector(getProfessions);
   const [createDTO, setCreateDTO] = useState<ProfessionStoreDTO | null>(null);
   const [editDTO, setEditDTO] = useState<ProfessionUpdateDTO | null>(null);
   const [deleteDTO, setDeleteDTO] = useState<ProfessionId | null>(null);
 
   useEffect(() => {
-    if (!professions.data && !professions.isFetching) dispatch(fetchProfessionsAction());
-  }, [dispatch, professions.data, professions.isFetching]);
+    if (professionsStatus === AsyncStatus.Idle) dispatch(fetchProfessionsAction());
+  }, [dispatch, professionsStatus]);
 
   const columns: ColumnDef<Profession>[] = [
     {
@@ -63,15 +64,15 @@ function ProfessionsPage(): JSX.Element {
   ];
 
   return (
-    <AppLayout>
+    <>
       <main className="py-2">
         <h1 className="title mb-1 px-3">
-          Сфера деятельности ({professions.data?.length})
+          Сфера деятельности ({professions?.length})
         </h1>
 
-        {professions.data ? (
+        {professions ? (
           <DataTable
-            data={professions.data}
+            data={professions}
             columns={columns}
             sortingState={[{
               id: 'name',
@@ -106,7 +107,7 @@ function ProfessionsPage(): JSX.Element {
           <ProfessionsDeleteForm dto={deleteDTO} setDTO={setDeleteDTO} />
         )}
       </Modal>
-    </AppLayout >
+    </ >
   );
 }
 
