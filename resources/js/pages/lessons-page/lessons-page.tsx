@@ -31,11 +31,7 @@ function LessonsPage(): JSX.Element {
 
   return (
     <Suspense
-      fallback={
-        <div className="flex justify-center items-center h-full w-full">
-          <Spinner className="w-10 h-10" />
-        </div>
-      }
+      fallback={<Spinner className="w-10 h-10" />}
     >
       <Component />
     </Suspense>

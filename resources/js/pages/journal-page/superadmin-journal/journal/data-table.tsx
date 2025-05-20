@@ -32,7 +32,7 @@ function DataTable({
   });
 
   return (
-    <div className="flex flex-col rounded-md shadow border bg-white overflow-scroll max-h-[calc(100vh-52px)] text-sm styled-scrollbar md:text-[16px]">
+    <div className="flex flex-col rounded-md shadow border bg-white overflow-scroll max-h-[calc(100vh-52px)] styled-scrollbar text-sm md:text-[16px]">
       <div className="sticky top-0 z-40 shadow min-w-max">
         {table.getHeaderGroups().map((headerGroup) => (
           <div
@@ -47,7 +47,7 @@ function DataTable({
                 return (
                   <div
                     key={header.id}
-                    className="flex items-end bg-gray-100 p-1 md:p-2 leading-none font-semibold min-w-[min(calc(180px+40*((100vw-320px)/960)),220px)] max-w-[min(calc(180px+40*((100vw-320px)/960)),220px)] min-h-20 max-h-20 sticky left-0 z-10 border-r"
+                    className="flex items-end bg-gray-100 p-1 md:p-2 leading-none font-semibold min-w-[180px] max-w-[180px)] md:min-w-[220px] md:max-w-[220px] min-h-20 max-h-20 sticky left-0 z-10 border-r"
                   >
                     Ф.И.
                   </div>

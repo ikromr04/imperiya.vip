@@ -14,7 +14,7 @@ import { UserId } from '@/types/users';
 import { getEducationYearRange } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import React, { BaseSyntheticEvent, lazy, memo, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { BaseSyntheticEvent, lazy, memo, ReactNode, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { generatePath, Link, useSearchParams } from 'react-router-dom';
 import DataTable from './data-table';
 import Spinner from '@/components/ui/spinner';
@@ -38,7 +38,7 @@ export type Column = {
   name: string;
 } & Record<string, object | string | number>;
 
-function Journal(): JSX.Element {
+function Journal(): ReactNode {
   const dispatch = useAppDispatch();
   const ratingsStatus = useAppSelector(getRatingsStatus);
   const ratingDates = useAppSelector(getRatingDates);
@@ -233,7 +233,7 @@ function Journal(): JSX.Element {
               {row.original.name}
             </Link>
           ),
-          meta: { columnClass: 'flex items-center min-w-[min(calc(180px+40*((100vw-320px)/960)),220px)] max-w-[min(calc(180px+40*((100vw-320px)/960)),220px)]' }
+          meta: { columnClass: 'flex items-center min-w-[180px] max-w-[180px)] md:min-w-[220px] md:max-w-[220px]' }
         },
         ...headers.reduce((acc, header) => {
           if (header.length === 13) {
@@ -340,6 +340,8 @@ function Journal(): JSX.Element {
       ];
     }
   }, [gradeId, headers, markObject, onMarkCreateButtonClick, onMarkEditButtonClick, onRatingCreateButtonClick, onRatingEditButtonClick, ratingObject, subjectId, yearRange]);
+
+  if (!gradeId || !subjectId) return;
 
   if (!data || !columns) {
     return <Spinner className="w-8 h-8" />;

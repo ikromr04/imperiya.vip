@@ -1,126 +1,57 @@
 import React, { BaseSyntheticEvent, ReactNode, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { getUsers } from '@/store/users-slice/users-selector';
+import { getUsers, getUsersStatus } from '@/store/users-slice/users-selector';
 import { fetchUsersAction, updateUserAction } from '@/store/users-slice/users-api-actions';
 import Spinner from '@/components/ui/spinner';
-import { ColumnDef, VisibilityState } from '@tanstack/react-table';
-import { User, UserId, Users, UsersFilter } from '@/types/users';
-import DataTable from '@/components/ui/data-table/data-table';
+import { ColumnDef } from '@tanstack/react-table';
+import { User, UserId, UsersFilter } from '@/types/users';
 import { generatePath, Link } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
 import { Icons } from '@/components/icons';
 import { REGIONS, RoleName, ROLES, SexName } from '@/const/users';
-import { getGrades } from '@/store/grades-slice/grades-selector';
+import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import dayjs from 'dayjs';
 import TextField from '@/components/ui/form-controls/text-field';
-import { filterUsers } from '@/utils/users';
+import { exportUsersToExcel, filterUsers } from '@/utils/users';
 import SelectField from '@/components/ui/form-controls/select-field';
 import Button from '@/components/ui/button';
-import AppLayout from '@/components/layouts/app-layout';
-import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
+import { getNationalities, getNationalitiesStatus } from '@/store/nationalities-slice/nationalities-selector';
 import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
-import { getProfessions } from '@/store/professions-slice/professions-selector';
+import { getProfessions, getProfessionsStatus } from '@/store/professions-slice/professions-selector';
 import { fetchProfessionsAction } from '@/store/professions-slice/professions-api-actions';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
 import CopyButton from '@/components/ui/copy-button';
 import { toast } from 'react-toastify';
-import { getAuthUser } from '@/store/auth-slice/auth-selector';
+import { AsyncStatus } from '@/const/store';
+import DataTable from './data-table/data-table';
 
 function SuperadminUsers(): ReactNode {
   const dispatch = useAppDispatch();
+
+  const usersStatus = useAppSelector(getUsersStatus);
+  const gradesStatus = useAppSelector(getGradesStatus);
+  const nationalitiesStatus = useAppSelector(getNationalitiesStatus);
+  const professionsStatus = useAppSelector(getProfessionsStatus);
+
   const users = useAppSelector(getUsers);
-  const authUser = useAppSelector(getAuthUser);
+  const grades = useAppSelector(getGrades);
   const nationalities = useAppSelector(getNationalities);
   const professions = useAppSelector(getProfessions);
-  const grades = useAppSelector(getGrades);
+
   const [filter, setFilter] = useState<UsersFilter>({});
 
   useEffect(() => {
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
-    if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
-    if (!professions.data && !professions.isFetching) dispatch(fetchProfessionsAction());
-  }, [dispatch, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching, professions.data, professions.isFetching, users.data, users.isFetching]);
+    if (usersStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
+    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
+    if (nationalitiesStatus === AsyncStatus.Idle) dispatch(fetchNationalitiesAction());
+    if (professionsStatus === AsyncStatus.Idle) dispatch(fetchProfessionsAction());
+  }, [dispatch, gradesStatus, nationalitiesStatus, professionsStatus, usersStatus]);
 
-  if (authUser?.role !== 'superadmin') return;
-
-  const onExport = (users: Users, columnVisibility: VisibilityState) => {
-    const data = users.map((user) => {
-      let filteredUser = {};
-      if (columnVisibility.name !== false) {
-        filteredUser = { ...filteredUser, 'ФИО': `${user.surname} ${user.name} ${user.patronymic ?? ''}` };
-      }
-      if (columnVisibility.sex !== false) {
-        filteredUser = { ...filteredUser, 'Пол': SexName[user.sex] };
-      }
-      if (columnVisibility.grade !== false) {
-        const grade = grades.data?.find(({ id }) => id === user.student?.gradeId);
-        filteredUser = { ...filteredUser, 'Класс': grade ? `${grade?.level} ${grade?.group}` : '' };
-      }
-      if (columnVisibility.role !== false) {
-        filteredUser = { ...filteredUser, 'Позиция': RoleName[user.role] };
-      }
-      if (columnVisibility.phoneNumbers !== false) {
-        filteredUser = { ...filteredUser, 'Телефоны': user.phoneNumbers?.map((phone) => `+${phone.code} ${phone.numbers}`).join(', \n') };
-      }
-      if (columnVisibility.whatsapp !== false) {
-        filteredUser = { ...filteredUser, 'WhatsApp': user.whatsapp ? `+${user.whatsapp.code} ${user.whatsapp.numbers}` : '' };
-      }
-      if (columnVisibility.email !== false) {
-        filteredUser = { ...filteredUser, 'Электронная почта': user.email ?? '' };
-      }
-      if (columnVisibility.login !== false) {
-        filteredUser = { ...filteredUser, 'Логин': user.login };
-      }
-      if (columnVisibility.password !== false) {
-        filteredUser = { ...filteredUser, 'Пароль': user.password };
-      }
-      if (columnVisibility.birthDate !== false) {
-        filteredUser = { ...filteredUser, 'Дата рождения': user.birthDate ? dayjs(user.birthDate).format('DD MMM YYYY') : '' };
-      }
-      if (columnVisibility.address !== false) {
-        filteredUser = { ...filteredUser, 'Адрес': user.address ? `${(user.address.region !== 'За пределами города') && 'район '} ${user.address.region}, ${user.address.physicalAddress}` : '' };
-      }
-      if (columnVisibility.nationality !== false) {
-        filteredUser = { ...filteredUser, 'Национальность': nationalities.data?.find((nationality) => nationality.id === user.nationalityId)?.name ?? '' };
-      }
-      if (columnVisibility.profession !== false) {
-        filteredUser = { ...filteredUser, 'Сфера деятельности': professions.data?.find(({ id }) => id === user.parent?.professionId)?.name ?? '' };
-      }
-
-      return filteredUser;
-    });
-
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-
-    const wbout = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
-    const blob = new Blob([wbout], { type: 'application/octet-stream' });
-    saveAs(blob, 'usersDataSheet.xlsx');
-  };
-
-  const blockUser = (id: UserId) => () => {
+  const toggleBlockUser = (id: UserId, block: boolean) => () => {
     dispatch(updateUserAction({
-      dto: {
-        id,
-        blocked_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-      },
-      onFail: (message) => toast.error(message),
-      onSuccess: () => toast.success('Пользователь заблокирован.'),
-    }));
-  };
-
-  const unblockUser = (id: UserId) => () => {
-    dispatch(updateUserAction({
-      dto: {
-        id,
-        blocked_at: '',
-      },
-      onFail: (message) => toast.error(message),
-      onSuccess: () => toast.success('Пользователь разблокирован.'),
+      id,
+      dto: { blocked_at: block ? dayjs().format('YYYY-MM-DD HH:mm:ss') : null },
+      onFail: toast.error,
     }));
   };
 
@@ -199,7 +130,7 @@ function SuperadminUsers(): ReactNode {
       header: 'Класс',
       size: 80,
       cell: ({ row }) => {
-        const grade = grades.data?.find(({ id }) => id === row.original.student?.gradeId);
+        const grade = grades?.find(({ id }) => id === row.original.student?.gradeId);
         if (grade) {
           return (
             <Link
@@ -212,8 +143,8 @@ function SuperadminUsers(): ReactNode {
         }
       },
       sortingFn: (rowA, rowB) => {
-        const gradeA = grades.data?.find(({ id }) => id === rowA.original.student?.gradeId)?.level.toString() || '';
-        const gradeB = grades.data?.find(({ id }) => id === rowB.original.student?.gradeId)?.level.toString() || '';
+        const gradeA = grades?.find(({ id }) => id === rowA.original.student?.gradeId)?.level.toString() || '';
+        const gradeB = grades?.find(({ id }) => id === rowB.original.student?.gradeId)?.level.toString() || '';
 
         return gradeA.localeCompare(gradeB);
       },
@@ -222,7 +153,7 @@ function SuperadminUsers(): ReactNode {
         renderFilter: () => (
           <SelectField
             placeholder="--Выбрать--"
-            options={(grades.data || []).map((grade) => ({ value: grade.id.toString(), label: `${grade.level} ${grade.group}` }))}
+            options={(grades || []).map((grade) => ({ value: grade.id.toString(), label: `${grade.level} ${grade.group}` }))}
             value={filter.grade || ''}
             onChange={(value) => setFilter((prev) => ({ ...prev, grade: value }))}
           />
@@ -444,10 +375,10 @@ function SuperadminUsers(): ReactNode {
       header: 'Национальность',
       size: 160,
       enableColumnFilter: filter.nationality ? true : false,
-      cell: ({ row }) => nationalities.data?.find((nationality) => nationality.id === row.original.nationalityId)?.name,
+      cell: ({ row }) => nationalities?.find((nationality) => nationality.id === row.original.nationalityId)?.name,
       sortingFn: (rowA, rowB) => {
-        const nationalityA = nationalities.data?.find(({ id }) => id === rowA.original.nationalityId)?.name || '';
-        const nationalityB = nationalities.data?.find(({ id }) => id === rowB.original.nationalityId)?.name || '';
+        const nationalityA = nationalities?.find(({ id }) => id === rowA.original.nationalityId)?.name || '';
+        const nationalityB = nationalities?.find(({ id }) => id === rowB.original.nationalityId)?.name || '';
 
         return nationalityA.localeCompare(nationalityB);
       },
@@ -455,7 +386,7 @@ function SuperadminUsers(): ReactNode {
         renderFilter: () => (
           <SelectField
             placeholder="--Выбрать--"
-            options={(nationalities.data || []).map((nationality) => ({ value: nationality.id.toString(), label: nationality.name }))}
+            options={(nationalities || []).map((nationality) => ({ value: nationality.id.toString(), label: nationality.name }))}
             value={filter.nationality || ''}
             onChange={(value) => setFilter((prev) => ({ ...prev, nationality: value }))}
           />
@@ -468,12 +399,12 @@ function SuperadminUsers(): ReactNode {
       header: 'Сфера деятельности',
       size: 200,
       enableColumnFilter: filter.professionId ? true : false,
-      cell: ({ row }) => professions.data && row.original.parent?.professionId && (
-        professions.data.find(({ id }) => id === row.original.parent?.professionId)?.name
+      cell: ({ row }) => professions && row.original.parent?.professionId && (
+        professions.find(({ id }) => id === row.original.parent?.professionId)?.name
       ),
       sortingFn: (rowA, rowB) => {
-        const professionA = professions.data?.find(({ id }) => id === rowA.original.parent?.professionId)?.name || '';
-        const professionB = professions.data?.find(({ id }) => id === rowB.original.parent?.professionId)?.name || '';
+        const professionA = professions?.find(({ id }) => id === rowA.original.parent?.professionId)?.name || '';
+        const professionB = professions?.find(({ id }) => id === rowB.original.parent?.professionId)?.name || '';
 
         return professionA.localeCompare(professionB);
       },
@@ -481,7 +412,7 @@ function SuperadminUsers(): ReactNode {
         renderFilter: () => (
           <div className="flex flex-col gap-2">
             <SelectField
-              options={(professions.data || []).map((profession) => ({ value: profession.id.toString(), label: profession.name }))}
+              options={(professions || []).map((profession) => ({ value: profession.id.toString(), label: profession.name }))}
               value={filter.professionId || ''}
               onChange={(value) => setFilter((prev) => ({
                 ...prev,
@@ -502,7 +433,7 @@ function SuperadminUsers(): ReactNode {
           <Button
             className="mb-1"
             variant="danger"
-            onClick={unblockUser(row.original.id)}
+            onClick={toggleBlockUser(row.original.id, false)}
           >
             Разблокировать
           </Button>
@@ -513,7 +444,7 @@ function SuperadminUsers(): ReactNode {
       ) : (
         <Button
           variant="light"
-          onClick={blockUser(row.original.id)}
+          onClick={toggleBlockUser(row.original.id, true)}
         >
           Заблокировать
         </Button>
@@ -564,43 +495,40 @@ function SuperadminUsers(): ReactNode {
   ];
 
   return (
-    <AppLayout>
-      <main className="pt-4 pb-40">
-        <header className="flex justify-between px-3 items-end mb-1">
-          <h1 className="title">
-            Справочник пользователей ({users.data?.length})
-          </h1>
-        </header>
+    <main className="flex flex-col gap-y-1 py-2">
+      <h1 className="title">
+        Пользователи ({users?.length})
+      </h1>
 
-        {users.data ? (
-          <DataTable
-            data={filterUsers(users.data, filter)}
-            columns={columns}
-            searchValue={filter.name}
-            onSearchInput={(evt) => setFilter((prev) => ({
-              ...prev,
-              name: evt.target.value,
-            }))}
-            sortingState={[{
-              id: 'name',
-              desc: false,
-            }]}
-            onExport={onExport}
-            actions={(
-              <Button
-                icon="add"
-                variant="success"
-                href={AppRoute.Users.Create}
-              >
-                <span className="sr-only md:not-sr-only">Добавить</span>
-              </Button>
-            )}
-          />
-        ) : (
-          <Spinner className="w-8 h-8" />
-        )}
-      </main>
-    </AppLayout>
+      {users ? (
+        <DataTable
+          data={filterUsers(users, filter)}
+          columns={columns}
+          searchValue={filter.name}
+          onSearchInput={(evt) => setFilter((prev) => ({
+            ...prev,
+            name: evt.target.value,
+          }))}
+          sortingState={[{
+            id: 'name',
+            desc: false,
+          }]}
+          onExport={(users, columnVisibility) => exportUsersToExcel(users, columnVisibility, { grades, nationalities, professions })}
+          actions={(
+            <Button
+              className="max-h-7"
+              icon="add"
+              variant="success"
+              href={AppRoute.Users.Create}
+            >
+              <span className="sr-only md:not-sr-only">Добавить</span>
+            </Button>
+          )}
+        />
+      ) : (
+        <Spinner className="w-8 h-8" />
+      )}
+    </main>
   );
 }
 

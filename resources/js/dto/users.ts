@@ -80,5 +80,5 @@ export type UserUpdateDTO = {
     code: number;
     numbers: number;
   };
-  blocked_at?: string;
+  blocked_at?: string | null;
 }
