@@ -8,8 +8,8 @@ import { Hour } from '@/const/lessons';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { Lessons } from '@/types/lessons';
 import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
-import { getSubjects } from '@/store/subjects-slice/subjects-selector';
-import { getUsers } from '@/store/users-slice/users-selector';
+import { getSubjects, getSubjectsStatus } from '@/store/subjects-slice/subjects-selector';
+import { getUsers, getUsersStatus } from '@/store/users-slice/users-selector';
 import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
 import Spinner from '../ui/spinner';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
@@ -18,6 +18,7 @@ import { Marks } from '@/types/marks';
 import { fetchMarksAction } from '@/store/marks-slice/marks-api-actions';
 import { Grade } from '@/types/grades';
 import { UserId } from '@/types/users';
+import { AsyncStatus } from '@/const/store';
 
 type ParentDiaryTableProps = {
   grade: Grade;
@@ -29,8 +30,12 @@ function ParentDiaryTable({
   studentId,
 }: ParentDiaryTableProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const subjects = useAppSelector(getSubjects);
+  const usersStatus = useAppSelector(getUsersStatus);
+  const subjectsStatus = useAppSelector(getSubjectsStatus);
+
   const users = useAppSelector(getUsers);
+  const subjects = useAppSelector(getSubjects);
+
   const [lessons, setLessons] = useState<Lessons | null>(null);
   const [marks, setMarks] = useState<Marks | null>(null);
   const [week, setWeek] = useState(0);
@@ -38,19 +43,20 @@ function ParentDiaryTable({
   const tableRef = useRef<HTMLTableElement>(null);
 
   useEffect(() => {
-    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
+    if (usersStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
+    if (subjectsStatus === AsyncStatus.Idle) dispatch(fetchSubjectsAction());
     if (!lessons) dispatch(fetchLessonsAction({
       week,
       gradeId: grade.id,
-      onSuccess: (lessons) => setLessons(lessons),
+      onSuccess: (lessons) => {
+        setLessons(lessons);
+        dispatch(fetchMarksAction({
+          lessons: lessons.map(({ id }) => id),
+          onSuccess: (marks) => setMarks(marks),
+        }));
+      },
     }));
-    if (lessons) dispatch(fetchMarksAction({
-      studentId,
-      lessons: lessons.map(({ id }) => id),
-      onSuccess: (marks) => setMarks(marks),
-    }));
-  }, [dispatch, grade.id, lessons, studentId, subjects.data, subjects.isFetching, users.data, users.isFetching, week]);
+  }, [dispatch, grade.id, lessons, studentId, subjectsStatus, usersStatus, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {
@@ -61,7 +67,7 @@ function ParentDiaryTable({
     }
   };
 
-  if (!lessons || !users.data) return <Spinner className="w-8 h-8" />;
+  if (!lessons || !users) return <Spinner className="w-8 h-8" />;
 
   return (
     <div className="rounded-md shadow border pb-1 bg-[linear-gradient(to_bottom,white_0%,white_50%,#f3f4f6_50%,#f3f4f6_100%)]">
@@ -154,14 +160,15 @@ function ParentDiaryTable({
                     <LessonHour hour={+hour as keyof typeof Hour} />
                   </td>
 
-                  {subjects.data && users.data && marks && (
+                  {subjects && users && marks && (
                     <DiaryItem
                       date={dayjs(date).format()}
                       hour={+hour as keyof typeof Hour}
                       lessons={lessons}
-                      subjects={subjects.data}
+                      subjects={subjects}
                       marks={marks}
-                      users={users.data}
+                      users={users}
+                      studentId={studentId}
                     />
                   )}
                 </tr>

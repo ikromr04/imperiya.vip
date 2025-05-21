@@ -27,6 +27,11 @@ class MarkController extends Controller
           ->get();
         break;
 
+      case 'parent':
+        $marks = Mark::whereIn('lesson_id', json_decode($request->query('lessons')))
+          ->get();
+        break;
+
       case 'student':
         $marks = Mark::whereIn('lesson_id', json_decode($request->query('lessons')))
           ->get();

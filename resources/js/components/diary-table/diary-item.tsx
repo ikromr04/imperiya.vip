@@ -4,7 +4,7 @@ import { Marks } from '@/types/marks';
 import { Subjects } from '@/types/subjects';
 import dayjs from 'dayjs';
 import React, { ReactNode } from 'react';
-import { Users } from '@/types/users';
+import { UserId, Users } from '@/types/users';
 import { generatePath, Link } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
 import { Attendance } from '@/const/marks';
@@ -16,6 +16,7 @@ type DiaryItemProps = {
   subjects: Subjects;
   marks: Marks;
   users: Users;
+  studentId?: UserId;
 };
 
 function DiaryItem({
@@ -25,6 +26,7 @@ function DiaryItem({
   subjects,
   marks,
   users,
+  studentId,
 }: DiaryItemProps): ReactNode {
   const lesson = lessons.find((lesson) => (
     dayjs(lesson.date).format('YYYY-MM-DD') === dayjs(date).format('YYYY-MM-DD') &&
@@ -32,7 +34,7 @@ function DiaryItem({
   ));
   const subject = subjects.find((subject) => lesson?.subjectId === subject.id);
   const teacher = users.find(({ id }) => lesson?.teacherId === id);
-  const mark = marks.find((mark) => mark?.lessonId === lesson?.id);
+  const mark = marks.find((mark) => (mark?.lessonId === lesson?.id) && (studentId ? (mark?.studentId === studentId) : true));
 
   return (
     <>

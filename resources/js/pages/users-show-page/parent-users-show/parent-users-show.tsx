@@ -1,41 +1,42 @@
 import Spinner from '@/components/ui/spinner';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
-import { getUsers } from '@/store/users-slice/users-selector';
+import { getUsers, getUsersStatus } from '@/store/users-slice/users-selector';
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import AppLayout from '@/components/layouts/app-layout';
 import { RoleName, SexName } from '@/const/users';
-import { getGrades } from '@/store/grades-slice/grades-selector';
-import { getNationalities } from '@/store/nationalities-slice/nationalities-selector';
+import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
+import { getNationalities, getNationalitiesStatus } from '@/store/nationalities-slice/nationalities-selector';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
 import DescriptionList from '@/components/ui/description-list';
 import dayjs from 'dayjs';
 import Layout from './layout';
+import { AsyncStatus } from '@/const/store';
 
 function ParentUsersShow(): JSX.Element {
-  const dispatch = useAppDispatch();
   const params = useParams();
+  const dispatch = useAppDispatch();
+  const usersStatus = useAppSelector(getUsersStatus);
+  const gradesStatus = useAppSelector(getGradesStatus);
+  const nationalitiesStatus = useAppSelector(getNationalitiesStatus);
+
   const users = useAppSelector(getUsers);
-  const user = users.data?.find((user) => user.id === +(params.id || 0)) || null;
   const grades = useAppSelector(getGrades);
-  const grade = grades.data?.find(({ id }) => id === user?.student?.gradeId);
   const nationalities = useAppSelector(getNationalities);
-  const teacherGrades = grades.data?.filter((grade) => grade.teacherId === user?.id);
+
+  const user = users?.find((user) => user.id === +(params.id || 0)) || null;
+  const grade = grades?.find(({ id }) => id === user?.student?.gradeId);
+  const teacherGrades = grades?.filter((grade) => grade.teacherId === user?.id);
 
   useEffect(() => {
-    if (!user && params.id && !users.isFetching) dispatch(fetchUsersAction());
-    if (!grades.data && !grades.isFetching) dispatch(fetchGradesAction());
-    if (!nationalities.data && !nationalities.isFetching) dispatch(fetchNationalitiesAction());
-  }, [user, params.id, dispatch, users.isFetching, grades.data, grades.isFetching, nationalities.data, nationalities.isFetching]);
+    if (usersStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
+    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
+    if (nationalitiesStatus === AsyncStatus.Idle) dispatch(fetchNationalitiesAction());
+  }, [dispatch, gradesStatus, nationalitiesStatus, usersStatus]);
 
-  if (!user || !users.data) {
-    return (
-      <AppLayout>
-        <Spinner className="w-8 h-8 m-2" />
-      </AppLayout>
-    );
+  if (!user || !users) {
+    return <Spinner className="w-8 h-8 m-2" />;
   }
 
   return (
@@ -64,7 +65,7 @@ function ParentUsersShow(): JSX.Element {
               'Адрес': user.address ?
                 `${(user.address.region !== 'За пределами города') ? 'район ' : ''}${user.address.region}, ${user.address.physicalAddress}`
                 : '-',
-              'Национальность': nationalities.data?.find(({ id }) => id === user.nationalityId)?.name || '-',
+              'Национальность': nationalities?.find(({ id }) => id === user.nationalityId)?.name || '-',
               'WhatsApp': (user.whatsapp?.code && user.whatsapp?.numbers) ? (
                 <a
                   className="text-blue-600"
