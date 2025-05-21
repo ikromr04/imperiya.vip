@@ -1,27 +1,27 @@
 import React, { useEffect, useRef } from 'react';
 import { Mark } from '@/types/marks';
 import { Icons } from '@/components/icons';
-import MarksEditForm from '@/components/forms/marks/marks-edit-form';
-import { MarkUpdateDTO } from '@/dto/marks';
+import MarksCreateForm from '@/components/forms/marks/marks-create-form';
+import { MarkStoreDTO } from '@/dto/marks';
 
-export type MarkEditProps = {
+export type MarkCreateProps = {
   studentName: string;
   position: {
     top: number;
     left: number;
   };
-  dto: MarkUpdateDTO;
+  dto: MarkStoreDTO;
   onClose: () => void;
-  onSuccess: (updatedMark: Mark) => void;
-}
+  onSuccess: (createdMark: Mark) => void;
+};
 
-function MarkEdit({
+function MarkCreate({
   studentName,
   position,
   dto,
   onClose,
   onSuccess,
-}: MarkEditProps): JSX.Element {
+}: MarkCreateProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -72,10 +72,10 @@ function MarkEdit({
 
       <hr className="my-1" />
 
-      <MarksEditForm
+      <MarksCreateForm
         dto={dto}
-        onSuccess={(updatedMark) => {
-          onSuccess(updatedMark);
+        onSuccess={(createdMark) => {
+          onSuccess(createdMark);
           onClose();
         }}
       />
@@ -83,4 +83,4 @@ function MarkEdit({
   );
 }
 
-export default MarkEdit;
+export default MarkCreate;

@@ -4,7 +4,7 @@ import { ValidationError } from '@/types/validation-error';
 import { APIRoute } from '@/const/routes';
 import { generatePath } from 'react-router-dom';
 import { GradeId } from '@/types/grades';
-import { Lessons, LessonType, LessonTypeId, LessonTypes } from '@/types/lessons';
+import { Lesson, Lessons, LessonType, LessonTypeId, LessonTypes } from '@/types/lessons';
 import { LessonDeleteDTO, LessonStoreDTO, LessonUpdateDTO, TypeUpdateDTO } from '@/dto/lessons';
 import { SubjectId } from '@/types/subjects';
 import { UserId } from '@/types/users';
@@ -74,6 +74,32 @@ export const updateLessonAction = createAsyncThunk<void, {
       const url = week ? `${path}?week=${week}` : path;
 
       const { data } = await api.put<Lessons>(url, dto);
+
+      if (onSuccess) onSuccess(data);
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
+      if (!error.response) throw err;
+      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const updateLessonsTopicAction = createAsyncThunk<void, {
+  dto: LessonUpdateDTO;
+  onSuccess?: (lesson: Lesson) => void;
+  onValidationError?: (error: ValidationError) => void;
+  onFail?: (message: string) => void;
+}, {
+  extra: AxiosInstance;
+  rejectWithValue: ValidationError;
+}>(
+  'lessons/updateLessonsTopic',
+  async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+
+      const { data } = await api.put<Lesson>(generatePath(APIRoute.Lessons.Topic, { id: dto.id }), dto);
 
       if (onSuccess) onSuccess(data);
     } catch (err) {

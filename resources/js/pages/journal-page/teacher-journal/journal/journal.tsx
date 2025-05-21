@@ -19,19 +19,14 @@ import { generatePath, Link, useSearchParams } from 'react-router-dom';
 import DataTable from './data-table';
 import Spinner from '@/components/ui/spinner';
 import classNames from 'classnames';
-import { RatingStoreDTO, RatingUpdateDTO } from '@/dto/ratings';
+import { RatingStoreDTO, } from '@/dto/ratings';
 import { RatingCreateProps } from './rating-create';
-import { RatingEditProps } from './rating-edit';
 import { MarkCreateProps } from './mark-create';
-import { MarkStoreDTO, MarkUpdateDTO } from '@/dto/marks';
+import { MarkStoreDTO } from '@/dto/marks';
 import { AttendanceAbbr } from '@/const/marks';
-import { MarkEditProps } from './mark-edit';
 
 const RatingCreate = lazy(() => import('./rating-create'));
-const RatingEdit = lazy(() => import('./rating-edit'));
-
 const MarkCreate = lazy(() => import('./mark-create'));
-const MarkEdit = lazy(() => import('./mark-edit'));
 
 export type Column = {
   id: UserId;
@@ -54,9 +49,7 @@ function Journal(): ReactNode {
   const [marks, setMarks] = useState<Marks>();
 
   const [ratingCreateProps, setRatingCreateProps] = useState<RatingCreateProps>();
-  const [ratingEditProps, setRatingEditProps] = useState<RatingEditProps>();
   const [markCreateProps, setMarkCreateProps] = useState<MarkCreateProps>();
-  const [markEditProps, setMarkEditProps] = useState<MarkEditProps>();
 
   useEffect(() => {
     if (subjectId && gradeId) {
@@ -166,30 +159,6 @@ function Journal(): ReactNode {
     [],
   );
 
-  const onRatingEditButtonClick = useCallback(
-    (dto: RatingUpdateDTO, studentName: string) => (evt: BaseSyntheticEvent) => {
-      const buttonRect = evt.currentTarget.getBoundingClientRect();
-      const top = buttonRect.top + 36 + 4;
-      const left = buttonRect.left + 36 + 4;
-
-      setRatingEditProps({
-        dto,
-        position: { top, left },
-        studentName,
-        onClose: () => setRatingEditProps(undefined),
-        onSuccess: (updatedRating) => setRatings((prev = []) => {
-          const ratingIndex = prev.findIndex((rating) => rating.id === updatedRating.id);
-          if (ratingIndex !== -1) {
-            prev[ratingIndex] = updatedRating;
-          }
-
-          return [...prev];
-        }),
-      });
-    },
-    [],
-  );
-
   const onMarkCreateButtonClick = useCallback(
     (dto: MarkStoreDTO, studentName: string) => (evt: BaseSyntheticEvent) => {
       const buttonRect = evt.currentTarget.getBoundingClientRect();
@@ -202,30 +171,6 @@ function Journal(): ReactNode {
         studentName,
         onClose: () => setMarkCreateProps(undefined),
         onSuccess: (createdMark) => setMarks((prev = []) => ([...prev, createdMark])),
-      });
-    },
-    [],
-  );
-
-  const onMarkEditButtonClick = useCallback(
-    (dto: MarkUpdateDTO, studentName: string) => (evt: BaseSyntheticEvent) => {
-      const buttonRect = evt.currentTarget.getBoundingClientRect();
-      const top = buttonRect.top + 36 + 4;
-      const left = buttonRect.left + 36 + 4;
-
-      setMarkEditProps({
-        dto,
-        position: { top, left },
-        studentName,
-        onClose: () => setMarkEditProps(undefined),
-        onSuccess: (updatedMark) => setMarks((prev = []) => {
-          const markIndex = prev.findIndex((mark) => mark.id === updatedMark.id);
-          if (markIndex !== -1) {
-            prev[markIndex] = updatedMark;
-          }
-
-          return [...prev];
-        }),
       });
     },
     [],
@@ -276,16 +221,9 @@ function Journal(): ReactNode {
                 }
 
                 return (
-                  <button
-                    className="flex items-center justify-center min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5"
-                    type="button"
-                    onClick={onRatingEditButtonClick({
-                      id: rating.id,
-                      score: rating.score,
-                    }, row.original.name)}
-                  >
+                  <div className="flex items-center justify-center min-w-9 min-h-9">
                     {rating.score}
-                  </button>
+                  </div>
                 );
               },
               meta: { columnClass: 'flex items-center justify-end min-w-9 max-w-9 min-h-9 max-h-9' }
@@ -318,22 +256,12 @@ function Journal(): ReactNode {
                 }
 
                 return (
-                  <button
-                    className="flex items-center justify-center min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5"
-                    type="button"
-                    onClick={onMarkEditButtonClick({
-                      id: mark.id,
-                      score_1: mark.score1,
-                      score_2: mark.score2,
-                      attendance: mark.attendance,
-                      comment: mark.comment,
-                    }, row.original.name)}
-                  >
+                  <div className="flex items-center justify-center min-w-9 min-h-9">
                     {mark.score1}
                     {mark.score1 && mark.score2 && '/'}
                     {mark.score2}
                     {!mark.score1 && !mark.score2 && AttendanceAbbr[mark.attendance as keyof typeof AttendanceAbbr]}
-                  </button>
+                  </div>
                 );
               },
               enableSorting: false,
@@ -350,7 +278,7 @@ function Journal(): ReactNode {
         }, [] as ColumnDef<Column>[])
       ];
     }
-  }, [gradeId, headers, markObject, onMarkCreateButtonClick, onMarkEditButtonClick, onRatingCreateButtonClick, onRatingEditButtonClick, ratingObject, subjectId, yearRange]);
+  }, [gradeId, headers, markObject, onMarkCreateButtonClick, onRatingCreateButtonClick, ratingObject, subjectId, yearRange]);
 
   if (!gradeId || !subjectId) return;
 
@@ -375,21 +303,9 @@ function Journal(): ReactNode {
         </Suspense>
       )}
 
-      {ratingEditProps && (
-        <Suspense fallback={<Spinner className="w-8 h-8" />}>
-          <RatingEdit {...ratingEditProps} />
-        </Suspense>
-      )}
-
       {markCreateProps && (
         <Suspense fallback={<Spinner className="w-8 h-8" />}>
           <MarkCreate {...markCreateProps} />
-        </Suspense>
-      )}
-
-      {markEditProps && (
-        <Suspense fallback={<Spinner className="w-8 h-8" />}>
-          <MarkEdit {...markEditProps} />
         </Suspense>
       )}
     </>

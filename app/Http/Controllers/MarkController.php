@@ -6,7 +6,6 @@ use App\Http\Requests\MarkStoreRequest;
 use App\Http\Requests\MarkUpdateRequest;
 use App\Models\Mark;
 use App\Models\Student;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -19,6 +18,11 @@ class MarkController extends Controller
 
     switch ($user->role) {
       case 'superadmin':
+        $marks = Mark::whereIn('lesson_id', json_decode($request->query('lessons')))
+          ->get();
+        break;
+
+      case 'teacher':
         $marks = Mark::whereIn('lesson_id', json_decode($request->query('lessons')))
           ->get();
         break;

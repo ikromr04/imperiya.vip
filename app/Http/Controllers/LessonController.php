@@ -14,9 +14,10 @@ class LessonController extends Controller
 {
   public function index(Request $request): JsonResponse
   {
+    $user = $request->user();
     $lessons = [];
 
-    switch ($request->user()->role) {
+    switch ($user->role) {
       case 'superadmin':
         if ($request->query('subject_id') && $request->query('grade_id')) {
           $lessons = Lesson::selectBasic()
@@ -32,10 +33,18 @@ class LessonController extends Controller
         break;
 
       case 'teacher':
-        $lessons = Lesson::selectBasic()
-          ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
-          ->where('teacher_id', $request->query('teacher_id'))
-          ->get();
+        if ($request->query('subject_id') && $request->query('grade_id')) {
+          $lessons = Lesson::selectBasic()
+            ->orderBy('date')
+            ->where('subject_id', $request->query('subject_id'))
+            ->where('grade_id', $request->query('grade_id'))
+            ->get();
+        } else {
+          $lessons = Lesson::selectBasic()
+            ->whereIn('date', $this->getCurrentWeekDates($request->query('week', 0)))
+            ->where('teacher_id', $request->query('teacher_id'))
+            ->get();
+        }
         break;
 
       case 'parent':
@@ -163,6 +172,16 @@ class LessonController extends Controller
 
     return response()->json($lessons, 200);
   }
+
+  public function updateTopic(Request $request): JsonResponse
+  {
+    $lesson = Lesson::findOrFail($request->id);
+
+    $lesson->update($request->only(['date', 'hour', 'grade_id', 'subject_id', 'teacher_id', 'type_id', 'topic', 'homework']));
+
+    return response()->json(Lesson::selectBasic()->find($request->id), 200);
+  }
+
 
   public function delete(Request $request)
   {

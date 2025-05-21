@@ -29,6 +29,7 @@ class UserController extends Controller
     switch ($user->role) {
       case 'superadmin':
         $users = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
+          ->orderBy('surname')
           ->with([
             'teacher:id,user_id,education,achievements,work_experience',
             'parent:id,user_id,profession_id,workplace,position',
@@ -39,6 +40,7 @@ class UserController extends Controller
       case 'teacher':
         $users = User::whereIn('role', ['student', 'parent', 'teacher'])
           ->select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'email', 'avatar', 'avatar_thumb', 'birth_date', 'address', 'whatsapp', 'nationality_id', 'social_link', 'phone_numbers'])
+          ->orderBy('surname')
           ->with([
             'student' => fn($query) => $query->select(['id', 'user_id', 'grade_id', 'mother_id', 'father_id', 'admission_date', 'previous_schools', 'medical_recommendations']),
           ])->get();

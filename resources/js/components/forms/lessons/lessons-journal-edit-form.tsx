@@ -1,34 +1,32 @@
-import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
 import SelectField from '@/components/ui/formik-controls/select-field';
 import TextField from '@/components/ui/formik-controls/text-field';
+import { AsyncStatus } from '@/const/store';
 import { LessonUpdateDTO } from '@/dto/lessons';
-import { useAppDispatch } from '@/hooks';
-import { updateLessonAction } from '@/store/lessons-slice/lessons-api-actions';
-import { Lesson, LessonTypes } from '@/types/lessons';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { fetchLessonTypesAction, updateLessonsTopicAction } from '@/store/lessons-slice/lessons-api-actions';
+import { getLessonTypes, getLessonTypesStatus } from '@/store/lessons-slice/lessons-selector';
+import { Lesson } from '@/types/lessons';
 import { Form, Formik, FormikHelpers } from 'formik';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 type LessonsJournalEditFormProps = {
-  lesson: Lesson;
-  types: LessonTypes;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  dto: LessonUpdateDTO;
+  onSuccess?: (updatedLesson: Lesson) => void
 };
 
 function LessonsJournalEditForm({
-  lesson,
-  setIsOpen,
-  types,
+  dto,
+  onSuccess,
 }: LessonsJournalEditFormProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const lessonTypesStatus = useAppSelector(getLessonTypesStatus);
+  const lessonTypes = useAppSelector(getLessonTypes);
 
-  const initialValues: LessonUpdateDTO = {
-    id: lesson.id,
-    topic: lesson.topic,
-    homework: lesson.homework,
-    type_id: lesson.typeId,
-  };
+  useEffect(() => {
+    if (lessonTypesStatus === AsyncStatus.Idle) dispatch(fetchLessonTypesAction());
+  }, [dispatch, lessonTypesStatus]);
 
   const onSubmit = async (
     values: LessonUpdateDTO,
@@ -36,10 +34,10 @@ function LessonsJournalEditForm({
   ) => {
     helpers.setSubmitting(true);
 
-    await dispatch(updateLessonAction({
+    await dispatch(updateLessonsTopicAction({
       dto: values,
-      onSuccess: () => {
-        setIsOpen(false);
+      onSuccess: (updatedLesson) => {
+        if (onSuccess) onSuccess(updatedLesson);
         toast.success('Данные успешно сохранены.');
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
@@ -51,40 +49,24 @@ function LessonsJournalEditForm({
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={dto}
       onSubmit={onSubmit}
     >
       {({ isSubmitting, setFieldValue }) => (
         <Form className="flex flex-col gap-2">
-          <div className="flex justify-between items-center pl-2 pr-1">
-            <button
-              className="absolute right-1 top-1 border rounded p-1 text-danger"
-              type="button"
-              onClick={() => setIsOpen(false)}
-            >
-              <Icons.close width={10} height={10} />
-            </button>
-          </div>
+          <TextField name="topic" label="Тема:" />
 
-          <hr className="-mx-3" />
+          <TextField name="homework" label="Домашнее задание:" />
 
-          <TextField
-            name="topic"
-            label="Тема:"
-          />
-
-          <TextField
-            name="homework"
-            label="Домашнее задание:"
-          />
-
-          <SelectField
-            name="type_id"
-            label="Тип:"
-            cleanable
-            onClean={() => setFieldValue('type_id', null)}
-            options={types.map((type) => ({ value: type.id, label: type.name }))}
-          />
+          {lessonTypes && (
+            <SelectField
+              name="type_id"
+              label="Тип:"
+              cleanable
+              onClean={() => setFieldValue('type_id', null)}
+              options={lessonTypes.map((type) => ({ value: type.id, label: type.name }))}
+            />
+          )}
 
           <div className="flex items-center justify-end gap-2 sm:col-span-2 -mt-1">
             <Button

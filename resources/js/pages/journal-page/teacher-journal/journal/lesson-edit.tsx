@@ -1,27 +1,27 @@
 import React, { useEffect, useRef } from 'react';
-import { Mark } from '@/types/marks';
 import { Icons } from '@/components/icons';
-import MarksEditForm from '@/components/forms/marks/marks-edit-form';
-import { MarkUpdateDTO } from '@/dto/marks';
+import { LessonUpdateDTO } from '@/dto/lessons';
+import LessonsJournalEditForm from '@/components/forms/lessons/lessons-journal-edit-form';
+import { Lesson } from '@/types/lessons';
 
-export type MarkEditProps = {
-  studentName: string;
+export type LessonEditProps = {
+  title: string;
   position: {
     top: number;
     left: number;
   };
-  dto: MarkUpdateDTO;
+  dto: LessonUpdateDTO;
   onClose: () => void;
-  onSuccess: (updatedMark: Mark) => void;
+  onSuccess: (updatedLesson: Lesson) => void;
 }
 
-function MarkEdit({
-  studentName,
+function LessonEdit({
+  title,
   position,
   dto,
   onClose,
   onSuccess,
-}: MarkEditProps): JSX.Element {
+}: LessonEditProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ function MarkEdit({
     >
       <div className="flex justify-between items-center pl-2 pr-1">
         <h3 className="text-sm leading-none text-gray-400">
-          {studentName}
+          {title}
         </h3>
         <button
           className="border rounded p-1 text-danger"
@@ -72,15 +72,17 @@ function MarkEdit({
 
       <hr className="my-1" />
 
-      <MarksEditForm
-        dto={dto}
-        onSuccess={(updatedMark) => {
-          onSuccess(updatedMark);
-          onClose();
-        }}
-      />
+      <div className="px-2">
+        <LessonsJournalEditForm
+          dto={dto}
+          onSuccess={(updatedLesson) => {
+            onSuccess(updatedLesson);
+            onClose();
+          }}
+        />
+      </div>
     </div>
   );
 }
 
-export default MarkEdit;
+export default LessonEdit;

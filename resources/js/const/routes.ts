@@ -73,6 +73,7 @@ export const APIRoute = {
   Lessons: {
     Index: '/lessons',
     Show: '/lessons/:id',
+    Topic: '/lessons/:id/topic',
     Types: '/lessons/types',
     TypesShow: '/lessons/types/:id',
   },

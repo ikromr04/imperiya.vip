@@ -48,6 +48,7 @@ Route::prefix('lessons')->controller(LessonController::class)->group(function ()
   Route::get('/', 'index')->middleware('auth:sanctum');
   Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin,teacher']);
+  Route::put('/{id}/topic', 'updateTopic')->middleware(['auth:sanctum', 'ability:superadmin,teacher']);
   Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::get('/types', 'types')->middleware('auth:sanctum');
   Route::post('/types', 'storeType')->middleware(['auth:sanctum', 'ability:superadmin']);
@@ -63,7 +64,7 @@ Route::prefix('subjects')->controller(SubjectController::class)->group(function 
 });
 
 Route::prefix('marks')->controller(MarkController::class)->group(function () {
-  Route::get('/', 'index')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::get('/', 'index')->middleware(['auth:sanctum', 'ability:superadmin,teacher']);
   Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin,teacher']);
   Route::post('/diary', 'diary')->middleware('auth:sanctum');
   Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
