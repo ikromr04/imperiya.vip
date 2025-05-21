@@ -8,7 +8,7 @@ import SelectField from './select-field';
 function Header(): JSX.Element {
   const grades = useAppSelector(getGrades);
   const subjects = useAppSelector(getSubjects);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   return (
     <header className="relative z-50 flex gap-x-1 gap-y-1 items-end">
@@ -19,7 +19,6 @@ function Header(): JSX.Element {
         placeholder="Класс"
         options={(grades || []).map((grade) => ({ value: grade.id.toString(), label: `${grade.level} ${grade.group}` }))}
         value={searchParams.get('gradeId') || ''}
-        onChange={(value) => setSearchParams({ subjectId: searchParams.get('subjectId') || '', gradeId: value })}
       />
 
       <SelectField
@@ -27,7 +26,6 @@ function Header(): JSX.Element {
         placeholder="Предмет"
         options={(subjects || []).map((subject) => ({ value: subject.id.toString(), label: subject.name }))}
         value={searchParams.get('subjectId') || ''}
-        onChange={(value) => setSearchParams({ gradeId: searchParams.get('gradeId') || '', subjectId: value })}
       />
     </header>
   );
