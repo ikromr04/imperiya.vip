@@ -11,7 +11,7 @@ function Header(): JSX.Element {
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
-    <header className="flex gap-x-1 gap-y-1 items-end">
+    <header className="relative z-50 flex gap-x-1 gap-y-1 items-end">
       <h1 className="title">Журнал</h1>
 
       <SelectField
