@@ -7,8 +7,9 @@ import { Role } from '@/types/users';
 import Spinner from '@/components/ui/spinner';
 
 const SuperadminProfile = lazy(() => import('./superadmin-profile/superadmin-profile'));
-const ParentProfile = lazy(() => import('./parent-profile/parent-profile'));
 const TeacherProfile = lazy(() => import('./teacher-profile/teacher-profile'));
+const ParentProfile = lazy(() => import('./parent-profile/parent-profile'));
+const StudentProfile = lazy(() => import('./student-profile/student-profile'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
 const rolePage: Record<Role, ComponentType> = {
@@ -17,7 +18,7 @@ const rolePage: Record<Role, ComponentType> = {
   director: NotFoundPage,
   teacher: TeacherProfile,
   parent: ParentProfile,
-  student: NotFoundPage,
+  student: StudentProfile,
 };
 
 function ProfilePage(): JSX.Element {
@@ -30,13 +31,7 @@ function ProfilePage(): JSX.Element {
   const Component = rolePage[authUser.role];
 
   return (
-    <Suspense
-      fallback={
-        <div className="flex justify-center items-center h-full w-full">
-          <Spinner className="w-10 h-10" />
-        </div>
-      }
-    >
+    <Suspense fallback={<Spinner className="w-10 h-10" />}>
       <Component />
     </Suspense>
   );

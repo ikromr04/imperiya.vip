@@ -8,20 +8,26 @@ import { Hour } from '@/const/lessons';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { Lessons } from '@/types/lessons';
 import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
-import { getSubjects } from '@/store/subjects-slice/subjects-selector';
-import { getStudent, getUsers } from '@/store/users-slice/users-selector';
+import { getSubjects, getSubjectsStatus } from '@/store/subjects-slice/subjects-selector';
+import { getUsers, getUsersStatus } from '@/store/users-slice/users-selector';
 import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
 import Spinner from '../ui/spinner';
-import { fetchStudentAction, fetchUsersAction } from '@/store/users-slice/users-api-actions';
+import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import DiaryItem from './diary-item';
 import { Marks } from '@/types/marks';
 import { fetchMarksAction } from '@/store/marks-slice/marks-api-actions';
+import { AsyncStatus } from '@/const/store';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
 
 function StudentDiaryTable(): JSX.Element {
   const dispatch = useAppDispatch();
-  const student = {};
+  const authUser = useAppSelector(getAuthUser);
+  const subjectsStatus = useAppSelector(getSubjectsStatus);
+  const usersStatus = useAppSelector(getUsersStatus);
+
   const subjects = useAppSelector(getSubjects);
   const users = useAppSelector(getUsers);
+
   const [lessons, setLessons] = useState<Lessons | null>(null);
   const [marks, setMarks] = useState<Marks | null>(null);
   const [week, setWeek] = useState(0);
@@ -29,18 +35,23 @@ function StudentDiaryTable(): JSX.Element {
   const tableRef = useRef<HTMLTableElement>(null);
 
   useEffect(() => {
-    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-    if (!lessons && student.data) dispatch(fetchLessonsAction({
+    if (subjectsStatus === AsyncStatus.Idle) dispatch(fetchSubjectsAction());
+    if (usersStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
+  }, [dispatch, subjectsStatus, usersStatus]);
+
+  useEffect(() => {
+    if (!lessons && authUser) dispatch(fetchLessonsAction({
       week,
-      gradeId: student.data.grade.id,
-      onSuccess: (lessons) => setLessons(lessons),
+      gradeId: authUser.student?.gradeId,
+      onSuccess: (lessons) => {
+        setLessons(lessons);
+        dispatch(fetchMarksAction({
+          lessons: lessons.map(({ id }) => id),
+          onSuccess: (marks) => setMarks(marks),
+        }));
+      },
     }));
-    if (lessons) dispatch(fetchMarksAction({
-      lessons: lessons.map(({ id }) => id),
-      onSuccess: (marks) => setMarks(marks),
-    }));
-  }, [dispatch, lessons, student.data, student.isFetching, subjects.data, subjects.isFetching, users.data, users.isFetching, week]);
+  }, [authUser, dispatch, lessons, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {
@@ -51,7 +62,7 @@ function StudentDiaryTable(): JSX.Element {
     }
   };
 
-  if (!lessons || !users.data || !student.data) return <Spinner className="w-8 h-8" />;
+  if (!lessons || !users) return <Spinner className="w-8 h-8" />;
 
   return (
     <div className="rounded-md shadow border pb-1 bg-[linear-gradient(to_bottom,white_0%,white_50%,#f3f4f6_50%,#f3f4f6_100%)]">
@@ -144,14 +155,14 @@ function StudentDiaryTable(): JSX.Element {
                     <LessonHour hour={+hour as keyof typeof Hour} />
                   </td>
 
-                  {subjects.data && users.data && marks && (
+                  {subjects && users && marks && (
                     <DiaryItem
                       date={dayjs(date).format()}
                       hour={+hour as keyof typeof Hour}
                       lessons={lessons}
-                      subjects={subjects.data}
+                      subjects={subjects}
                       marks={marks}
-                      users={users.data}
+                      users={users}
                     />
                   )}
                 </tr>

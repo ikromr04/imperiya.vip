@@ -6,7 +6,7 @@ import { AppRoute } from '@/const/routes';
 import { Role } from '@/types/users';
 import Spinner from '@/components/ui/spinner';
 
-const StudentLessons = lazy(() => import('./student-profile/student-lessons'));
+const StudentLessons = lazy(() => import('./student-profile/student-lessons/student-lessons'));
 const TeacherLessons = lazy(() => import('./teacher-profile/teacher-lessons/teacher-lessons'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
@@ -29,13 +29,7 @@ function ProfileLessonsPage(): JSX.Element {
   const Component = rolePage[authUser.role];
 
   return (
-    <Suspense
-      fallback={
-        <div className="flex justify-center items-center h-full w-full">
-          <Spinner className="w-10 h-10" />
-        </div>
-      }
-    >
+    <Suspense fallback={<Spinner className="w-10 h-10" />}>
       <Component />
     </Suspense>
   );

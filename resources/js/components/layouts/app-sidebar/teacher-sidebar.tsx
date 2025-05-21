@@ -36,7 +36,6 @@ function TeacherSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Auth.Profile}
-
                 onClick={handleLinksClick}
               >
                 <Icons.accountCircle className="navlink__icon" width={16} height={16} />
@@ -47,7 +46,6 @@ function TeacherSidebar(): JSX.Element {
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Lessons.Index}
-
                 onClick={handleLinksClick}
               >
                 <Icons.schedule className="navlink__icon" width={16} height={16} />

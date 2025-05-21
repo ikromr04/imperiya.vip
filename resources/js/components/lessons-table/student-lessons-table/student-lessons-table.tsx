@@ -3,38 +3,47 @@ import dayjs from 'dayjs';
 import { Icons } from '@/components/icons';
 import { capitalizeString, getCurrentWeekDates } from '@/utils';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import Spinner from '../ui/spinner';
+import Spinner from '../../ui/spinner';
 import { Lessons } from '@/types/lessons';
-import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
 import classNames from 'classnames';
 import { Hour } from '@/const/lessons';
-import LessonHour from '../lesson-hour';
+import LessonHour from '../../lesson-hour';
 import StudentLessonsItem from './student-lessons-item';
-import { getSubjects } from '@/store/subjects-slice/subjects-selector';
-import { getStudent, getUsers } from '@/store/users-slice/users-selector';
+import { getSubjects, getSubjectsStatus } from '@/store/subjects-slice/subjects-selector';
+import { getUsers, getUsersStatus } from '@/store/users-slice/users-selector';
 import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
 import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
+import { AsyncStatus } from '@/const/store';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
+import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
 
 function StudentLessonsTable(): JSX.Element {
   const dispatch = useAppDispatch();
-  const [lessons, setLessons] = useState<Lessons | null>(null);
+
+  const usersStatus = useAppSelector(getUsersStatus);
+  const subjectsStatus = useAppSelector(getSubjectsStatus);
+
+  const atuhUser = useAppSelector(getAuthUser);
+  const users = useAppSelector(getUsers);
+  const subjects = useAppSelector(getSubjects);
+
+  const [lessons, setLessons] = useState<Lessons>();
   const [week, setWeek] = useState(0);
   const weekDates = getCurrentWeekDates(week);
   const tableRef = useRef<HTMLTableElement>(null);
-  const subjects = useAppSelector(getSubjects);
-  const student = {};
-  const users = useAppSelector(getUsers);
 
   useEffect(() => {
-    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
-    // if (!student.data && !student.isFetching) dispatch(fetchStudentAction());
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-    // if (!lessons && student.data) dispatch(fetchLessonsAction({
-    //   week,
-    //   gradeId: student.data.grade.id,
-    //   onSuccess: (lessons) => setLessons(lessons),
-    // }));
-  }, [dispatch, lessons, subjects.data, subjects.isFetching, users.data, users.isFetching, week]);
+    if (subjectsStatus === AsyncStatus.Idle) dispatch(fetchSubjectsAction());
+    if (usersStatus === AsyncStatus.Idle) dispatch(fetchUsersAction());
+  }, [dispatch, subjectsStatus, usersStatus]);
+
+  useEffect(() => {
+    if (!lessons && atuhUser) dispatch(fetchLessonsAction({
+      week,
+      gradeId: atuhUser.student?.gradeId,
+      onSuccess: (lessons) => setLessons(lessons),
+    }));
+  }, [atuhUser, dispatch, lessons, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {
@@ -45,7 +54,9 @@ function StudentLessonsTable(): JSX.Element {
     }
   };
 
-  if (!lessons || !subjects.data || !student.data || !users.data) return <Spinner className="w-8 h-8" />;
+  if (!lessons || !subjects || !users) {
+    return <Spinner className="w-8 h-8" />;
+  }
 
   return (
     <div className="rounded-md shadow border pb-1 bg-[linear-gradient(to_bottom,white_0%,white_50%,#f3f4f6_50%,#f3f4f6_100%)] max-w-full">
@@ -106,12 +117,12 @@ function StudentLessonsTable(): JSX.Element {
                     dayjs(date).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD') ? 'bg-green-50' : 'bg-white',
                   )}
                 >
-                  {subjects.data && users.data && (
+                  {subjects && users && (
                     <StudentLessonsItem
                       date={date}
                       hour={Number(hour) as keyof typeof Hour}
-                      subjects={subjects.data}
-                      users={users.data}
+                      subjects={subjects}
+                      users={users}
                       lessons={lessons}
                     />
                   )}
@@ -145,7 +156,7 @@ function StudentLessonsTable(): JSX.Element {
             className="flex justify-center items-center gap-x-2 h-8 border-transparent rounded-md border transform disabled:opacity-50 disabled:pointer-events-none"
             onClick={() => {
               setWeek((prev) => prev - 1);
-              setLessons(null);
+              setLessons(undefined);
             }}
           >
             <Icons.previous width={7} />
@@ -156,7 +167,7 @@ function StudentLessonsTable(): JSX.Element {
               className="flex justify-center items-center h-8 rounded-md"
               onClick={() => {
                 setWeek(0);
-                setLessons(null);
+                setLessons(undefined);
               }}
             >
               <Icons.currentWeek width={16} height={16} />
@@ -167,7 +178,7 @@ function StudentLessonsTable(): JSX.Element {
             className="flex justify-center items-center gap-x-2 h-8 border-transparent rounded-md border transform disabled:opacity-50 disabled:pointer-events-none"
             onClick={() => {
               setWeek((prev) => prev + 1);
-              setLessons(null);
+              setLessons(undefined);
             }}
           >
             <span className="sr-only md:not-sr-only">Следующая неделя</span>
