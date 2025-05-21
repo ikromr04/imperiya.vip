@@ -35,7 +35,7 @@ function TeacherSidebar(): JSX.Element {
             <li>
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Auth.Profile}
+                to={AppRoute.Auth.Index}
 
                 onClick={handleLinksClick}
               >

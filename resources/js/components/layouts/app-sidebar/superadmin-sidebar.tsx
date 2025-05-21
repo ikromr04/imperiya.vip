@@ -35,7 +35,7 @@ function SuperadminSidebar(): JSX.Element {
             <li>
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                to={AppRoute.Auth.Profile}
+                to={AppRoute.Auth.Index}
                 onClick={handleLinksClick}
               >
                 <Icons.accountCircle className="navlink__icon" width={16} height={16} />

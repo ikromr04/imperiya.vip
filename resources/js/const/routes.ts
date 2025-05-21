@@ -1,5 +1,6 @@
 export const AppRoute = {
   Auth: {
+    Index: '/auth',
     Login: '/auth/login',
     ForgotPassword: '/auth/forgot-password',
     ResetPassword: '/auth/reset-password/:token',
