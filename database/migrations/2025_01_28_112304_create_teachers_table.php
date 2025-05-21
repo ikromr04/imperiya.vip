@@ -18,6 +18,10 @@ return new class extends Migration
         ->constrained('users')
         ->cascadeOnDelete();
 
+      $table->text('education')->nullable();
+      $table->text('achievements')->nullable();
+      $table->text('work_experience')->nullable();
+
       $table->timestamps();
       $table->softDeletes();
     });

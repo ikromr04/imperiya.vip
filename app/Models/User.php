@@ -79,54 +79,6 @@ class User extends Authenticatable
     return $this->hasOne(Guardian::class);
   }
 
-  public function scopeSelectFullData(Builder $query): Builder
-  {
-    return $query->select([
-      'id',
-      'name',
-      'surname',
-      'patronymic',
-      'login',
-      'password',
-      'role',
-      'sex',
-      'birth_date',
-      'nationality_id',
-      'email',
-      'address',
-      'phone_numbers',
-      'whatsapp',
-      'social_link',
-      'avatar',
-      'avatar_thumb',
-      'blocked_at',
-      'created_at',
-    ]);
-  }
-
-  public function scopeWithRoles(Builder $query): Builder
-  {
-    return $query->with([
-      'student' => fn($query) => $query->select(
-        'id',
-        'user_id',
-        'grade_id',
-        'mother_id',
-        'father_id',
-        'admission_date',
-        'previous_schools',
-        'medical_recommendations',
-      ),
-      'parent' => fn($query) => $query->select(
-        'id',
-        'user_id',
-        'profession_id',
-        'workplace',
-        'position',
-      ),
-    ]);
-  }
-
   public function toArray()
   {
     $array = array_filter(parent::toArray(), fn($value) => $value);

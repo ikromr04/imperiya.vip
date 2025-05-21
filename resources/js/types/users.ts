@@ -44,7 +44,10 @@ export type User = {
   };
   createdAt?: string;
   teacher?: {
-    grades: GradeId[];
+    grades?: GradeId[];
+    education?: string;
+    achievements?: string;
+    workExperience?: string;
   };
   parent?: {
     children?: UserId[];

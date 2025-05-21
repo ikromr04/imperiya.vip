@@ -1,4 +1,4 @@
-import BaseInfo from './bas-info/base-info';
+import BaseInfo from './base-info/base-info';
 import Deletion from './deletion';
 import Details from './details';
 import PhoneNumbers from './phone-numbers';
@@ -19,6 +19,7 @@ import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import Header from './header/header';
 import Navigation from './navigation';
 import NotFoundPage from '@/pages/not-found-page';
+import RoleInfo from './role-info/role-info';
 
 function SuperadminUsersShow(): JSX.Element {
   const params = useParams();
@@ -62,7 +63,7 @@ function SuperadminUsersShow(): JSX.Element {
       <div className="flex flex-col gap-4 xl:grid xl:grid-cols-[3fr_1fr]">
         <div className="flex flex-col gap-4 grow">
           <BaseInfo user={user} />
-          {/* <RoleInfo user={user} /> */}
+          <RoleInfo user={user} />
         </div>
 
         <div className="flex flex-col gap-4">

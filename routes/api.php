@@ -19,6 +19,7 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
   Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::put('/{id}/avatar', 'updateAvatar')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::delete('/{id}/avatar', 'deleteAvatar')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/{id}/role', 'updateRole')->middleware(['auth:sanctum', 'ability:superadmin']);
 });
 
 Route::prefix('nationalities')->controller(NationalityController::class)->group(function () {

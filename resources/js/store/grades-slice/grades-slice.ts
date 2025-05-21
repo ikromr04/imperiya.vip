@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { deleteGradeAction, fetchGradesAction, storeGradeAction, updateGradeAction } from './grades-api-actions';
 import { Grades } from '@/types/grades';
 import { AsyncStatus, SliceName } from '@/const/store';
+import { updateUserRoleAction } from '../users-slice/users-api-actions';
 
 export type GradesSlice = {
   grades: {
@@ -35,7 +36,7 @@ export const gradesSlice = createSlice({
 
       .addCase(storeGradeAction.fulfilled, (state, action) => {
         if (state.grades.data) {
-          state.grades.data =  [action.payload, ...state.grades.data];
+          state.grades.data = [action.payload, ...state.grades.data];
         }
       })
       .addCase(updateGradeAction.fulfilled, (state, action) => {
@@ -51,6 +52,11 @@ export const gradesSlice = createSlice({
         if (state.grades.data) {
           state.grades.data = state.grades.data.filter(({ id }) => id !== action.payload);
         }
+      })
+
+      .addCase(updateUserRoleAction.fulfilled, (state) => {
+        state.grades.data = undefined;
+        state.grades.status = AsyncStatus.Idle;
       });
   },
 });

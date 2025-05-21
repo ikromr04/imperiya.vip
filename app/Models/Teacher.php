@@ -23,7 +23,19 @@ class Teacher extends Model
 
   public function toArray()
   {
-    $array = parent::toArray();
-    return array_filter($array, fn($value) => $value);
+    $array = array_filter(parent::toArray(), fn($value) => $value);
+
+    $map = [
+      'work_experience' => 'workExperience',
+    ];
+
+    foreach ($map as $snake => $camel) {
+      if (isset($array[$snake])) {
+        $array[$camel] = $array[$snake];
+        unset($array[$snake]);
+      }
+    }
+
+    return $array;
   }
 }

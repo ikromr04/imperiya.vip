@@ -31,7 +31,14 @@ class AuthController extends Controller
 
     if (!$user) return response()->json(['message' => 'Вы не авторизованы.'], 401);
 
-    return response()->json(User::selectFullData()->findOrFail($user->id), 200);
+    $user = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
+      ->with([
+        'teacher:id,user_id,education,achievements,work_experience',
+        'parent:id,user_id,profession_id,workplace,position',
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+      ])->findOrFail($user->id);
+
+    return response()->json($user, 200);
   }
 
   public function register(RegisterRequest $request): JsonResponse
@@ -114,16 +121,15 @@ class AuthController extends Controller
       ]);
     }
 
+    $user = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
+      ->with([
+        'teacher:id,user_id,education,achievements,work_experience',
+        'parent:id,user_id,profession_id,workplace,position',
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+      ])->findOrFail($user->id);
+
     return response()->json([
-      'user' => [
-        'id' => $user->id,
-        'name' => $user->name,
-        'login' => $user->login,
-        ...($user->avatar ? [
-          'avatar' => $user->avatar,
-          'avatarThumb' => $user->avatar_thumb,
-        ] : []),
-      ],
+      'user' => $user,
       'token' => $user->createToken('access_token', [$user->role])->plainTextToken,
     ], 200);
   }

@@ -81,4 +81,23 @@ export type UserUpdateDTO = {
     numbers: number;
   };
   blocked_at?: string | null;
+};
+
+export type UserRoleUpdateDTO = {
+  grades?: GradeId[];
+  education?: string;
+  achievements?: string;
+  work_experience?: string;
+
+  children?: UserId[];
+  profession_id?: ProfessionId;
+  workplace?: string;
+  position?: string;
+
+  grade_id?: GradeId;
+  mother_id?: UserId;
+  father_id?: UserId;
+  admission_date?: string;
+  previous_schools?: string;
+  medical_recommendations?: string;
 }

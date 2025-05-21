@@ -63,7 +63,6 @@ export const APIRoute = {
     Show: '/users/:id',
     Avatar: '/users/:id/avatar',
     Role: '/users/:id/role',
-    Login: '/users/login/:login',
     Student: '/users/student',
   },
   Grades: {

@@ -13,6 +13,7 @@ import {
   storeUserAction,
   updateUserAction,
   updateUserAvatarAction,
+  updateUserRoleAction,
 } from './users-api-actions';
 
 export type UsersSlice = {
@@ -81,6 +82,9 @@ export const usersSlice = createSlice({
         if (state.users.data) {
           state.users.data = state.users.data.filter(({ id }) => id !== action.payload);
         }
+      })
+      .addCase(updateUserRoleAction.fulfilled, (state, action) => {
+        state.users.data = action.payload;
       })
 
       .addCase(storeGradeAction.fulfilled, (state) => {

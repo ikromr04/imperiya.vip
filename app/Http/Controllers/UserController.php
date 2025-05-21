@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRoleUpdateRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\Admin;
@@ -23,12 +24,16 @@ class UserController extends Controller
   public function index(Request $request): JsonResponse
   {
     $user = $request->user();
-
     $users = collect();
 
     switch ($user->role) {
       case 'superadmin':
-        $users = User::selectFullData()->withRoles()->get();
+        $users = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
+          ->with([
+            'teacher:id,user_id,education,achievements,work_experience',
+            'parent:id,user_id,profession_id,workplace,position',
+            'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+          ])->get();
         break;
 
       case 'teacher':
@@ -45,84 +50,23 @@ class UserController extends Controller
           ->pluck('user_id');
 
         $users = [
-          ...User::where('role', 'teacher')->select(
-            'id',
-            'name',
-            'surname',
-            'patronymic',
-            'role',
-            'sex',
-            'birth_date',
-            'nationality_id',
-            'email',
-            'address',
-            'phone_numbers',
-            'whatsapp',
-            'social_link',
-            'avatar',
-            'avatar_thumb',
-          )->get(),
-          ...User::select(
-            'id',
-            'name',
-            'surname',
-            'patronymic',
-            'login',
-            'password',
-            'role',
-            'sex',
-            'birth_date',
-            'nationality_id',
-            'email',
-            'address',
-            'phone_numbers',
-            'whatsapp',
-            'social_link',
-            'avatar',
-            'avatar_thumb',
-            'blocked_at',
-            'created_at',
-          )->with([
-            'student' => fn($query) => $query->select(
-              'id',
-              'user_id',
-              'grade_id',
-              'mother_id',
-              'father_id',
-              'admission_date',
-              'previous_schools',
-              'medical_recommendations',
-            ),
-            'parent' => fn($query) => $query->select(
-              'id',
-              'user_id',
-              'profession_id',
-              'workplace',
-              'position',
-            ),
-          ])->whereIn('id', $childIds)->get(),
+          ...User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb'])
+            ->where('role', 'teacher')
+            ->get(),
+          ...User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
+            ->with([
+              'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations',
+              'parent:id,user_id,profession_id,workplace,position'
+            ])
+            ->whereIn('id', $childIds)
+            ->get(),
         ];
         break;
 
       case 'student':
-        $users = User::where('role', 'teacher')
-          ->select(
-            'id',
-            'name',
-            'surname',
-            'patronymic',
-            'role',
-            'sex',
-            'birth_date',
-            'nationality_id',
-            'email',
-            'address',
-            'phone_numbers',
-            'whatsapp',
-            'social_link',
-            'avatar',
-            'avatar_thumb',
-          )->get();
+        $users = User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb'])
+          ->where('role', 'teacher')
+          ->get();
         break;
     }
 
@@ -131,19 +75,7 @@ class UserController extends Controller
 
   public function store(UserStoreRequest $request): JsonResponse
   {
-    $user = User::create($request->only([
-      'name',
-      'surname',
-      'patronymic',
-      'role',
-      'sex',
-      'birth_date',
-      'nationality_id',
-      'email',
-      'address',
-      'phone_numbers',
-      'whatsapp',
-    ]));
+    $user = User::create($request->only(['name', 'surname', 'patronymic', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp']));
 
     switch ($user->role) {
       case 'superadmin':
@@ -201,54 +133,25 @@ class UserController extends Controller
 
         if ($request->has('parent.children')) {
           if ($user->sex === 'male') {
-            Student::whereIn('id', $request->input('parent.children'))->update('father_id', $user->id);
+            Student::whereIn('id', $request->input('parent.children'))
+              ->update('father_id', $user->id);
           }
           if ($user->sex === 'female') {
-            Student::whereIn('id', $request->input('parent.children'))->update('mother_id', $user->id);
+            Student::whereIn('id', $request->input('parent.children'))
+              ->update('mother_id', $user->id);
           }
         }
         break;
     }
 
-    return response()->json(User::select(
-      'id',
-      'name',
-      'surname',
-      'patronymic',
-      'login',
-      'password',
-      'role',
-      'sex',
-      'birth_date',
-      'nationality_id',
-      'email',
-      'address',
-      'phone_numbers',
-      'whatsapp',
-      'social_link',
-      'avatar',
-      'avatar_thumb',
-      'blocked_at',
-      'created_at',
-    )->with([
-      'student' => fn($query) => $query->select(
-        'id',
-        'user_id',
-        'grade_id',
-        'mother_id',
-        'father_id',
-        'admission_date',
-        'previous_schools',
-        'medical_recommendations',
-      ),
-      'parent' => fn($query) => $query->select(
-        'id',
-        'user_id',
-        'profession_id',
-        'workplace',
-        'position',
-      ),
-    ])->find($user->id), 201);
+    $user = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
+      ->with([
+        'teacher:id,user_id,education,achievements,work_experience',
+        'parent:id,user_id,profession_id,workplace,position',
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+      ])->find($user->id);
+
+    return response()->json($user, 201);
   }
 
   public function update(UserUpdateRequest $request, int $id): JsonResponse
@@ -258,67 +161,21 @@ class UserController extends Controller
     if ($user->login !== $request->login && User::where('login', $request->login)->exists()) {
       throw ValidationException::withMessages(['login' => ['Пользователь с таким логином уже существует.']]);
     }
-
-    $user->update($request->only([
-      'name',
-      'surname',
-      'patronymic',
-      'login',
-      'sex',
-      'birth_date',
-      'nationality_id',
-      'email',
-      'address',
-      'social_link',
-      'phone_numbers',
-      'whatsapp',
-      'blocked_at',
-    ]));
+    $user->update($request->only(['name', 'surname', 'patronymic', 'login', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'social_link', 'phone_numbers', 'whatsapp', 'blocked_at']));
 
     if ($request->password) {
       $user->password = Crypt::encryptString($request->password);
     }
     $user->save();
 
-    return response()->json(User::select(
-      'id',
-      'name',
-      'surname',
-      'patronymic',
-      'login',
-      'password',
-      'role',
-      'sex',
-      'birth_date',
-      'nationality_id',
-      'email',
-      'address',
-      'phone_numbers',
-      'whatsapp',
-      'social_link',
-      'avatar',
-      'avatar_thumb',
-      'blocked_at',
-      'created_at',
-    )->with([
-      'student' => fn($query) => $query->select(
-        'id',
-        'user_id',
-        'grade_id',
-        'mother_id',
-        'father_id',
-        'admission_date',
-        'previous_schools',
-        'medical_recommendations',
-      ),
-      'parent' => fn($query) => $query->select(
-        'id',
-        'user_id',
-        'profession_id',
-        'workplace',
-        'position',
-      ),
-    ])->find($user->id), 200);
+    $user = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
+      ->with([
+        'teacher:id,user_id,education,achievements,work_experience',
+        'parent:id,user_id,profession_id,workplace,position',
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+      ])->find($user->id);
+
+    return response()->json($user, 200);
   }
 
   public function delete(Request $request)
@@ -356,45 +213,14 @@ class UserController extends Controller
       'avatar_thumb' => $avatarThumbPath,
     ]);
 
-    return response(User::select(
-      'id',
-      'name',
-      'surname',
-      'patronymic',
-      'login',
-      'password',
-      'role',
-      'sex',
-      'birth_date',
-      'nationality_id',
-      'email',
-      'address',
-      'phone_numbers',
-      'whatsapp',
-      'social_link',
-      'avatar',
-      'avatar_thumb',
-      'blocked_at',
-      'created_at',
-    )->with([
-      'student' => fn($query) => $query->select(
-        'id',
-        'user_id',
-        'grade_id',
-        'mother_id',
-        'father_id',
-        'admission_date',
-        'previous_schools',
-        'medical_recommendations',
-      ),
-      'parent' => fn($query) => $query->select(
-        'id',
-        'user_id',
-        'profession_id',
-        'workplace',
-        'position',
-      ),
-    ])->find($id), 200);
+    $user = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
+      ->with([
+        'teacher:id,user_id,education,achievements,work_experience',
+        'parent:id,user_id,profession_id,workplace,position',
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+      ])->find($user->id);
+
+    return response()->json($user, 200);
   }
 
   public function deleteAvatar($id)
@@ -413,43 +239,50 @@ class UserController extends Controller
     return response()->noContent();
   }
 
-  public function student(Request $request): JsonResponse
+  public function updateRole(UserRoleUpdateRequest $request, int $id): JsonResponse
   {
-    $user = $request->user();
+    $user = User::findOrFail($id);
 
-    $student = Student::select(
-      'id',
-      'user_id',
-      'grade_id',
-      'mother_id',
-      'father_id',
-    )
-      ->where('user_id', $user->id)
+    switch ($user->role) {
+      case 'teacher':
+        if ($request->has('grades')) {
+          Grade::where('teacher_id', $user->id)
+            ->update(['teacher_id' => null]);
+          Grade::whereIn('id', $request->input('grades'))
+            ->update(['teacher_id' => $user->id]);
+        }
+        $user->teacher->update($request->only(['education', 'achievements', 'work_experience']));
+        break;
+      case 'parent':
+        if ($request->has('children')) {
+          if ($user->sex === 'male') {
+            Student::where('father_id', $user->id)
+              ->update(['father_id' => null]);
+            Student::whereIn('user_id', $request->input('children'))
+              ->update(['father_id' => $user->id]);
+          }
+          if ($user->sex === 'female') {
+            Student::where('mother_id', $user->id)
+              ->update(['mother_id' => null]);
+            Student::whereIn('user_id', $request->input('children'))
+              ->update(['mother_id' => $user->id]);
+          }
+
+          $user->parent->update($request->only(['profession_id', 'workplace', 'position']));
+        }
+        break;
+      case 'student':
+        $user->student->update($request->only(['grade_id', 'mother_id', 'father_id', 'admission_date', 'previous_schools', 'medical_recommendations']));
+        break;
+    }
+
+    $users = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
       ->with([
-        'mother' => fn($query) => $query->select(
-          'id',
-          'name',
-          'surname',
-          'patronymic',
-        ),
-        'father' => fn($query) => $query->select(
-          'id',
-          'name',
-          'surname',
-          'patronymic',
-        ),
-        'grade' => fn($query) => $query->select(
-          'id',
-          'level',
-          'group',
-        ),
-      ])
-      ->first();
+        'teacher:id,user_id,education,achievements,work_experience',
+        'parent:id,user_id,profession_id,workplace,position',
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+      ])->get();
 
-    return response()->json([
-      'mother' => $student->mother,
-      'father' => $student->father,
-      'grade' => $student->grade,
-    ], 200);
+    return response()->json($users, 200);
   }
 }

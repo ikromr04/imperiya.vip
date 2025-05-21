@@ -1,6 +1,5 @@
 import { APIRoute } from '@/const/routes';
-import { UserStoreDTO, UserUpdateDTO } from '@/dto/users';
-import { ResponseMessage } from '@/types';
+import { UserRoleUpdateDTO, UserStoreDTO, UserUpdateDTO } from '@/dto/users';
 import { User, UserId, Users } from '@/types/users';
 import { ValidationError } from '@/types/validation-error';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -15,6 +14,31 @@ export const fetchUsersAction = createAsyncThunk<Users, undefined, {
     const { data } = await api.get<Users>(APIRoute.Users.Index);
 
     return data;
+  },
+);
+
+export const storeUserAction = createAsyncThunk<User, {
+  dto: UserStoreDTO;
+  onSuccess?: (user: User) => void;
+  onValidationError?: (error: ValidationError) => void;
+  onFail?: (message: string) => void;
+}, {
+  extra: AxiosInstance;
+  rejectWithValue: ValidationError;
+}>(
+  'users/storeUser',
+  async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      const { data } = await api.post<User>(APIRoute.Users.Index, dto);
+      if (onSuccess) onSuccess(data);
+      return data;
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
+      if (!error.response) throw err;
+      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
   },
 );
 
@@ -35,34 +59,8 @@ export const updateUserAction = createAsyncThunk<User, {
       if (onSuccess) onSuccess(data);
 
       return data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
-      if (!error.response) throw err;
-      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
-      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
-      return rejectWithValue(error.response.data);
-    }
-  },
-);
-
-export const checkUserLoginAction = createAsyncThunk<undefined, {
-  login: string,
-  onSuccess?: () => void,
-  onValidationError?: (error: ValidationError) => void,
-  onFail?: (message: string) => void,
-}, {
-  extra: AxiosInstance,
-  rejectWithValue: ValidationError,
-}>(
-  'users/checkLogin',
-  async ({ login, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
-    try {
-      await api.get<ResponseMessage>(generatePath(APIRoute.Users.Login, { login }));
-      if (onSuccess) onSuccess();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
       if (!error.response) throw err;
       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
@@ -72,49 +70,22 @@ export const checkUserLoginAction = createAsyncThunk<undefined, {
 );
 
 export const deleteUserAction = createAsyncThunk<UserId, {
-  id: UserId,
-  onSuccess?: () => void,
-  onFail?: (message: string) => void,
+  id: UserId;
+  onSuccess?: () => void;
+  onFail?: (message: string) => void;
 }, {
-  extra: AxiosInstance,
-  rejectWithValue: ValidationError,
+  extra: AxiosInstance;
+  rejectWithValue: ValidationError;
 }>(
-  'users/delete',
+  'users/deleteUser',
   async ({ id, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
       await api.delete(generatePath(APIRoute.Users.Show, { id }));
       if (onSuccess) onSuccess();
       return id;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
       if (!error.response) throw err;
-      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
-      return rejectWithValue(error.response.data);
-    }
-  },
-);
-
-export const storeUserAction = createAsyncThunk<User, {
-  dto: UserStoreDTO,
-  onSuccess?: (user: User) => void,
-  onValidationError?: (error: ValidationError) => void,
-  onFail?: (message: string) => void,
-}, {
-  extra: AxiosInstance,
-  rejectWithValue: ValidationError,
-}>(
-  'users/store',
-  async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
-    try {
-      const { data } = await api.post<User>(APIRoute.Users.Index, dto);
-      if (onSuccess) onSuccess(data);
-      return data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
-      if (!error.response) throw err;
-      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
       return rejectWithValue(error.response.data);
     }
@@ -122,16 +93,16 @@ export const storeUserAction = createAsyncThunk<User, {
 );
 
 export const updateUserAvatarAction = createAsyncThunk<User, {
-  id: UserId,
-  formData: FormData,
-  onSuccess?: (user: User) => void,
-  onValidationError?: (error: ValidationError) => void,
-  onFail?: (message: string) => void,
+  id: UserId;
+  formData: FormData;
+  onSuccess?: (user: User) => void;
+  onValidationError?: (error: ValidationError) => void;
+  onFail?: (message: string) => void;
 }, {
-  extra: AxiosInstance,
-  rejectWithValue: ValidationError,
+  extra: AxiosInstance;
+  rejectWithValue: ValidationError;
 }>(
-  'users/updateAvatar',
+  'users/updateUserAvatar',
   async ({ id, formData, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     formData.append('_method', 'put');
 
@@ -140,9 +111,8 @@ export const updateUserAvatarAction = createAsyncThunk<User, {
       if (onSuccess) onSuccess(data);
 
       return data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
       if (!error.response) throw err;
       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
@@ -152,15 +122,42 @@ export const updateUserAvatarAction = createAsyncThunk<User, {
 );
 
 export const deleteUserAvatarAction = createAsyncThunk<UserId, {
-  id: UserId,
-  onSuccess?: () => void,
+  id: UserId;
+  onSuccess?: () => void;
 }, {
-  extra: AxiosInstance
+  extra: AxiosInstance;
 }>(
-  'users/deleteAvatar',
+  'users/deleteUserAvatar',
   async ({ id, onSuccess }, { extra: api }) => {
     await api.delete(generatePath(APIRoute.Users.Avatar, { id }));
     if (onSuccess) onSuccess();
     return id;
+  },
+);
+
+export const updateUserRoleAction = createAsyncThunk<Users, {
+  id: UserId;
+  dto: UserRoleUpdateDTO;
+  onSuccess?: (users: Users) => void;
+  onValidationError?: (error: ValidationError) => void;
+  onFail?: (message: string) => void;
+}, {
+  extra: AxiosInstance;
+  rejectWithValue: ValidationError;
+}>(
+  'users/updateUserRole',
+  async ({ id, dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      const { data } = await api.put<Users>(generatePath(APIRoute.Users.Role, { id }), dto);
+      if (onSuccess) onSuccess(data);
+
+      return data;
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
+      if (!error.response) throw err;
+      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
   },
 );
