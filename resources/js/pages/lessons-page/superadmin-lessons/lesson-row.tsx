@@ -21,7 +21,7 @@ type LessonRowProps = {
   setCreateDTO: Dispatch<SetStateAction<LessonStoreDTO | undefined>>
   setEditDTO: Dispatch<SetStateAction<LessonUpdateDTO | undefined>>
   setDeleteDTO: Dispatch<SetStateAction<LessonDeleteDTO | undefined>>
-}
+};
 
 function LessonRow({
   date,

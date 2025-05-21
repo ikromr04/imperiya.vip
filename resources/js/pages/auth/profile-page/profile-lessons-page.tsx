@@ -7,7 +7,7 @@ import { Role } from '@/types/users';
 import Spinner from '@/components/ui/spinner';
 
 const StudentLessons = lazy(() => import('./student-profile/student-lessons'));
-const TeacherLessons = lazy(() => import('./teacher-profile/teacher-lessons'));
+const TeacherLessons = lazy(() => import('./teacher-profile/teacher-lessons/teacher-lessons'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
 const rolePage: Record<Role, ComponentType> = {

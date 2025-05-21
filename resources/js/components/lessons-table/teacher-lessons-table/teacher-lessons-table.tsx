@@ -3,43 +3,43 @@ import dayjs from 'dayjs';
 import { Icons } from '@/components/icons';
 import { capitalizeString, getCurrentWeekDates } from '@/utils';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import Spinner from '../ui/spinner';
 import { Lessons } from '@/types/lessons';
 import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
 import classNames from 'classnames';
 import { Hour } from '@/const/lessons';
-import LessonHour from '../lesson-hour';
-import StudentLessonsItem from './student-lessons-item';
-import { getSubjects } from '@/store/subjects-slice/subjects-selector';
-import { getUsers } from '@/store/users-slice/users-selector';
 import { fetchSubjectsAction } from '@/store/subjects-slice/subjects-api-actions';
-import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
-import { Grade } from '@/types/grades';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
+import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
+import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
+import { getSubjects, getSubjectsStatus } from '@/store/subjects-slice/subjects-selector';
+import { AsyncStatus } from '@/const/store';
+import LessonItem from './lessons-item';
+import Spinner from '@/components/ui/spinner';
+import LessonHour from '@/components/lesson-hour';
 
-type UserLessonsTableProps = {
-  grade: Grade;
-}
-
-function UserLessonsTable({
-  grade,
-}: UserLessonsTableProps): JSX.Element {
+function TeacherLessonsTable(): JSX.Element {
   const dispatch = useAppDispatch();
+  const authUser = useAppSelector(getAuthUser);
   const [lessons, setLessons] = useState<Lessons | null>(null);
   const [week, setWeek] = useState(0);
   const weekDates = getCurrentWeekDates(week);
   const tableRef = useRef<HTMLTableElement>(null);
+
+  const subjectsStatus = useAppSelector(getSubjectsStatus);
+  const gradesStatus = useAppSelector(getGradesStatus);
+
   const subjects = useAppSelector(getSubjects);
-  const users = useAppSelector(getUsers);
+  const grades = useAppSelector(getGrades);
 
   useEffect(() => {
-    if (!subjects.data && !subjects.isFetching) dispatch(fetchSubjectsAction());
-    if (!users.data && !users.isFetching) dispatch(fetchUsersAction());
-    if (!lessons) dispatch(fetchLessonsAction({
+    if (subjectsStatus === AsyncStatus.Idle) dispatch(fetchSubjectsAction());
+    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
+    if (!lessons && authUser) dispatch(fetchLessonsAction({
       week,
-      gradeId: grade.id,
+      teacherId: authUser.id,
       onSuccess: (lessons) => setLessons(lessons),
     }));
-  }, [dispatch, grade.id, lessons, subjects.data, subjects.isFetching, users.data, users.isFetching, week]);
+  }, [authUser, dispatch, gradesStatus, lessons, subjectsStatus, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {
@@ -50,7 +50,9 @@ function UserLessonsTable({
     }
   };
 
-  if (!lessons || !subjects.data || !users.data) return <Spinner className="w-8 h-8" />;
+  if (!lessons || !subjects || !authUser || !grades) {
+    return <Spinner className="w-8 h-8" />;
+  };
 
   return (
     <div className="rounded-md shadow border pb-1 bg-[linear-gradient(to_bottom,white_0%,white_50%,#f3f4f6_50%,#f3f4f6_100%)] max-w-full">
@@ -111,13 +113,13 @@ function UserLessonsTable({
                     dayjs(date).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD') ? 'bg-green-50' : 'bg-white',
                   )}
                 >
-                  {subjects.data && users.data && (
-                    <StudentLessonsItem
+                  {subjects && grades && (
+                    <LessonItem
                       date={date}
                       hour={Number(hour) as keyof typeof Hour}
-                      subjects={subjects.data}
-                      users={users.data}
+                      subjects={subjects}
                       lessons={lessons}
+                      grades={grades}
                     />
                   )}
                 </td>
@@ -184,4 +186,4 @@ function UserLessonsTable({
   );
 }
 
-export default UserLessonsTable;
+export default TeacherLessonsTable;

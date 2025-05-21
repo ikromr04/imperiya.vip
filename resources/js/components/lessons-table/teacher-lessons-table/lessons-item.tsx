@@ -7,7 +7,7 @@ import { Grades } from '@/types/grades';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
 
-type TeacherLessonItemProps = {
+type LessonItemProps = {
   date: Dayjs;
   hour: keyof typeof Hour;
   subjects: Subjects;
@@ -15,13 +15,13 @@ type TeacherLessonItemProps = {
   grades: Grades;
 };
 
-function TeacherLessonItem({
+function LessonItem({
   date,
   hour,
   subjects,
   lessons,
   grades,
-}: TeacherLessonItemProps): ReactNode {
+}: LessonItemProps): ReactNode {
   const lesson = lessons.find((lesson) => (
     dayjs(lesson.date).format('YYYY-MM-DD') === dayjs(date).format('YYYY-MM-DD') &&
     +lesson.hour === +hour
@@ -50,4 +50,4 @@ function TeacherLessonItem({
   );
 }
 
-export default TeacherLessonItem;
+export default LessonItem;

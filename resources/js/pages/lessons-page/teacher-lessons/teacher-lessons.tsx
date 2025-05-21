@@ -1,6 +1,6 @@
 import React from 'react';
 import AppLayout from '@/components/layouts/app-layout';
-import TeacherLessonsTable from '@/components/lessons-table/teacher-lessons-table';
+import TeacherLessonsTable from '@/components/lessons-table/teacher-lessons-table/teacher-lessons-table';
 
 function TeacherLessons(): JSX.Element {
   return (

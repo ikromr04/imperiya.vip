@@ -3,7 +3,6 @@ import React, { memo, ReactNode } from 'react';
 import { useAppSelector } from '@/hooks';
 import { getGrades } from '@/store/grades-slice/grades-selector';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
-import Avatar from './avatar';
 
 function Header(): ReactNode {
   const user = useAppSelector(getAuthUser);
@@ -14,7 +13,17 @@ function Header(): ReactNode {
 
   return (
     <header className="relative z-10 lg:flex lg:items-top lg:gap-4">
-      <Avatar />
+      <div className="relative z-10 w-36 mb-2 lg:mb-0">
+        <div>
+          <img
+            className="block w-full h-full rounded-full object-cover border-[2px] border-white"
+            src={user.avatarThumb || '/images/avatar.png'}
+            width={144}
+            height={144}
+            alt={user.name}
+          />
+        </div>
+      </div>
 
       <div className="lg:grow lg:mt-20">
         <h1 className="title mb-1">{user.surname} {user.name}</h1>

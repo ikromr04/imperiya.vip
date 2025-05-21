@@ -144,7 +144,7 @@ function SuperadminSidebar(): JSX.Element {
             </li>
           </ul>
 
-          <hr className="mt-auto" />
+          <hr />
 
           <ul className="flex flex-col p-1 gap-1">
             <li>
