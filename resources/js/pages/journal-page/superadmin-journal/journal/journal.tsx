@@ -88,6 +88,7 @@ function Journal(): ReactNode {
         const key = `${rating.studentId}_${RatingSlugToCode[rating.rating as RatingSlug]}`;
         object[key] = rating;
       });
+
       return object;
     }
   }, [ratings]);
@@ -121,10 +122,34 @@ function Journal(): ReactNode {
         if (currentRatingDate[slug as RatingSlug]) headers.push(`${currentRatingDate[slug as RatingSlug]}_${code}`);
       });
       headers.sort();
+
       return headers;
     }
-
   }, [currentRatingDate, lessons]);
+
+  const ratingLessonIdsObject = useMemo(() => {
+    if (headers) {
+      const object = headers.reduce((acc, header) => {
+        if (header.length === 13) {
+          const ratingCode = Number(header.split('_')[1]);
+          acc.data[ratingCode] = acc.lessonIds;
+          acc.lessonIds = [];
+        } else {
+          const lessonId = Number(header.split('_')[2]);
+          acc.lessonIds.push(lessonId);
+        }
+        return acc;
+      }, {
+        lessonIds: [],
+        data: {},
+      } as {
+        lessonIds: number[],
+        data: Record<number, number[]>,
+      });
+
+      return object;
+    }
+  }, [headers]);
 
   const data = useMemo(() => {
     if (headers && users && gradeId && subjectId && marks) {
@@ -248,7 +273,7 @@ function Journal(): ReactNode {
         },
         ...headers.reduce((acc, header) => {
           if (header.length === 13) {
-            const [ratingDate, ratingCode] = header.split('_');
+            const [, ratingCode] = header.split('_');
 
             acc.push({
               id: header,
@@ -258,11 +283,24 @@ function Journal(): ReactNode {
                 const rating = ratingObject?.[`${row.original.id}_${ratingCode}`];
 
                 if (!rating) {
-                  if (dayjs(ratingDate) > dayjs()) return;
+                  const lessonIds = ratingLessonIdsObject?.data[+ratingCode];
+                  let markSum = 0;
+                  let markCount = 0;
+
+                  marks?.map((mark) => {
+                    if (lessonIds?.includes(mark.lessonId) && mark.studentId === row.original.id) {
+                      if (mark.score1) {
+                        markSum = markSum + mark.score1;
+                        markCount = markCount + 1;
+                      }
+                    }
+                  });
+
+                  const recommendedScore = (markSum / markCount) || 0;
 
                   return (
                     <button
-                      className="flex min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5"
+                      className="flex justify-center items-center text-blue-200 min-w-9 min-h-9 cursor-pointer hover:bg-blue-50"
                       type="button"
                       onClick={onRatingCreateButtonClick({
                         rating: RatingCodeToSlug[+ratingCode as RatingCode] as RatingSlug,
@@ -271,13 +309,15 @@ function Journal(): ReactNode {
                         grade_id: +gradeId,
                         subject_id: +subjectId,
                       }, row.original.name)}
-                    ></button>
+                    >
+                      {recommendedScore || ''}
+                    </button>
                   );
                 }
 
                 return (
                   <button
-                    className="flex items-center justify-center min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5"
+                    className="flex items-center justify-center min-w-9 min-h-9 cursor-pointer font-bold hover:bg-blue-50"
                     type="button"
                     onClick={onRatingEditButtonClick({
                       id: rating.id,
@@ -350,7 +390,7 @@ function Journal(): ReactNode {
         }, [] as ColumnDef<Column>[])
       ];
     }
-  }, [gradeId, headers, markObject, onMarkCreateButtonClick, onMarkEditButtonClick, onRatingCreateButtonClick, onRatingEditButtonClick, ratingObject, subjectId, yearRange]);
+  }, [gradeId, headers, markObject, marks, onMarkCreateButtonClick, onMarkEditButtonClick, onRatingCreateButtonClick, onRatingEditButtonClick, ratingLessonIdsObject?.data, ratingObject, subjectId, yearRange]);
 
   if (!gradeId || !subjectId) return;
 
