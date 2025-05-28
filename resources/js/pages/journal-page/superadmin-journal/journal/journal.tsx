@@ -310,7 +310,7 @@ function Journal(): ReactNode {
                         subject_id: +subjectId,
                       }, row.original.name)}
                     >
-                      {recommendedScore || ''}
+                      {recommendedScore.toFixed(2) || ''}
                     </button>
                   );
                 }
