@@ -2,13 +2,15 @@ import { Icons } from '@/components/icons';
 import Button from '@/components/ui/button';
 import { AppRoute } from '@/const/routes';
 import { RoleName } from '@/const/users';
-import { useAppSelector } from '@/hooks';
-import { getGrades } from '@/store/grades-slice/grades-selector';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
 import { User, Users } from '@/types/users';
 import { getNextUserId, getPreviousUserId } from '@/utils/users';
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { generatePath } from 'react-router-dom';
 import Avatar from './avatar';
+import { AsyncStatus } from '@/const/store';
+import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 
 type HeaderProps = {
   users: Users;
@@ -19,8 +21,14 @@ function Header({
   users,
   user,
 }: HeaderProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  const gradesStatus = useAppSelector(getGradesStatus);
   const grades = useAppSelector(getGrades);
   const grade = grades?.find(({ id }) => id === user.student?.gradeId);
+
+  useEffect(() => {
+    if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
+  }, [dispatch, gradesStatus]);
 
   return (
     <header className="relative z-10 lg:flex lg:items-top lg:gap-4">

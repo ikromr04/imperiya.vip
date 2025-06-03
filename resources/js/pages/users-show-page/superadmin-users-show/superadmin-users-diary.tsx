@@ -39,7 +39,7 @@ function SuperadminUsersDiary(): ReactNode {
       <Navigation user={user} />
 
       <div className="flex flex-col gap-4">
-        <StudentDiaryTable />
+        <StudentDiaryTable user={user} />
       </div>
     </main>
   );

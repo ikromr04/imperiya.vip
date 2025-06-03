@@ -43,8 +43,8 @@ function SuperadminUsersLessons(): ReactNode {
 
       <div className="flex flex-col gap-4">
         <Suspense fallback={<Spinner className="w-10 h-10" />}>
-          {user?.role === 'student' && <StudentLessonsTable />}
-          {user?.role === 'teacher' && <TeacherLessonsTable />}
+          {user?.role === 'student' && <StudentLessonsTable user={user} />}
+          {user?.role === 'teacher' && <TeacherLessonsTable user={user} />}
         </Suspense>
       </div>
     </main>

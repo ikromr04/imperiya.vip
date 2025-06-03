@@ -16,14 +16,21 @@ import { fetchUsersAction } from '@/store/users-slice/users-api-actions';
 import { AsyncStatus } from '@/const/store';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
 import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
+import { User } from '@/types/users';
 
-function StudentLessonsTable(): JSX.Element {
+type StudentLessonsTableProps ={
+  user?: User;
+};
+
+function StudentLessonsTable({
+  user
+}: StudentLessonsTableProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const usersStatus = useAppSelector(getUsersStatus);
   const subjectsStatus = useAppSelector(getSubjectsStatus);
 
-  const atuhUser = useAppSelector(getAuthUser);
+  const authUser = useAppSelector(getAuthUser);
   const users = useAppSelector(getUsers);
   const subjects = useAppSelector(getSubjects);
 
@@ -38,12 +45,12 @@ function StudentLessonsTable(): JSX.Element {
   }, [dispatch, subjectsStatus, usersStatus]);
 
   useEffect(() => {
-    if (!lessons && atuhUser) dispatch(fetchLessonsAction({
+    if (!lessons && authUser) dispatch(fetchLessonsAction({
       week,
-      gradeId: atuhUser.student?.gradeId,
+      gradeId: user?.student?.gradeId || authUser.student?.gradeId,
       onSuccess: (lessons) => setLessons(lessons),
     }));
-  }, [atuhUser, dispatch, lessons, week]);
+  }, [authUser, dispatch, lessons, user?.student?.gradeId, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {

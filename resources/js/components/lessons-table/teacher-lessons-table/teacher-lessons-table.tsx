@@ -16,8 +16,15 @@ import { AsyncStatus } from '@/const/store';
 import LessonItem from './lessons-item';
 import Spinner from '@/components/ui/spinner';
 import LessonHour from '@/components/lesson-hour';
+import { User } from '@/types/users';
 
-function TeacherLessonsTable(): JSX.Element {
+type TeacherLessonsTableProps = {
+  user?: User;
+};
+
+function TeacherLessonsTable({
+  user,
+}:TeacherLessonsTableProps): JSX.Element {
   const dispatch = useAppDispatch();
   const authUser = useAppSelector(getAuthUser);
   const [lessons, setLessons] = useState<Lessons | null>(null);
@@ -36,10 +43,10 @@ function TeacherLessonsTable(): JSX.Element {
     if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
     if (!lessons && authUser) dispatch(fetchLessonsAction({
       week,
-      teacherId: authUser.id,
+      teacherId: user?.id || authUser.id,
       onSuccess: (lessons) => setLessons(lessons),
     }));
-  }, [authUser, dispatch, gradesStatus, lessons, subjectsStatus, week]);
+  }, [authUser, dispatch, gradesStatus, lessons, subjectsStatus, user?.id, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {

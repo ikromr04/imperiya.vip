@@ -18,8 +18,15 @@ import { Marks } from '@/types/marks';
 import { fetchMarksAction } from '@/store/marks-slice/marks-api-actions';
 import { AsyncStatus } from '@/const/store';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
+import { User } from '@/types/users';
 
-function StudentDiaryTable(): JSX.Element {
+type StudentDiaryTableProps = {
+  user?: User;
+};
+
+function StudentDiaryTable({
+  user,
+}: StudentDiaryTableProps): JSX.Element {
   const dispatch = useAppDispatch();
   const authUser = useAppSelector(getAuthUser);
   const subjectsStatus = useAppSelector(getSubjectsStatus);
@@ -42,7 +49,7 @@ function StudentDiaryTable(): JSX.Element {
   useEffect(() => {
     if (!lessons && authUser) dispatch(fetchLessonsAction({
       week,
-      gradeId: authUser.student?.gradeId,
+      gradeId: user?.student?.gradeId || authUser.student?.gradeId,
       onSuccess: (lessons) => {
         setLessons(lessons);
         dispatch(fetchMarksAction({
@@ -51,7 +58,7 @@ function StudentDiaryTable(): JSX.Element {
         }));
       },
     }));
-  }, [authUser, dispatch, lessons, week]);
+  }, [authUser, dispatch, lessons, user?.student?.gradeId, week]);
 
   const scrollSync = (event: React.UIEvent<HTMLDivElement>) => {
     if (tableRef.current) {
