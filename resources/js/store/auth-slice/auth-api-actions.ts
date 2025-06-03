@@ -1,5 +1,5 @@
 import { APIRoute } from '@/const/routes';
-import { LoginCredentials, RegisterDTO, ResetPasswordDTO } from '@/dto/auth-dto';
+import { LoginCredentials, RegisterDTO, ResetPasswordDTO, UserRatings } from '@/dto/auth-dto';
 import { dropToken, saveToken, Token } from '@/services/token';
 import { ResponseMessage } from '@/types';
 import { RegisterLink, RegisterLinkId, RegisterLinks } from '@/types/auth';
@@ -226,6 +226,32 @@ export const checkRegisterLinkAction = createAsyncThunk<void, {
       const error: AxiosError<ValidationError> = err;
       if (!error.response) throw err;
       if (onFail) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const fetchAuthRatingsAction = createAsyncThunk<void, {
+  years: string;
+  onSuccess?: (data: UserRatings) => void;
+  onFail?: (message: string) => void;
+}, {
+  extra: AxiosInstance;
+  rejectWithValue: ValidationError;
+}>(
+  'auth/getRatings',
+  async ({ years, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      const params = new URLSearchParams();
+      params.append('years', years);
+
+      const { data } = await api.get<UserRatings>(`${APIRoute.Auth.Ratings}?${params.toString()}`);
+
+      if (onSuccess) onSuccess(data);
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
+      if (!error.response) throw err;
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
       return rejectWithValue(error.response.data);
     }
   },

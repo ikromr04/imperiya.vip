@@ -1,6 +1,8 @@
 import { GradeId } from '@/types/grades';
 import { NationalityId } from '@/types/nationalities';
 import { ProfessionId } from '@/types/professions';
+import { Ratings } from '@/types/ratings';
+import { SubjectId } from '@/types/subjects';
 
 export type LoginCredentials = {
   login: string;
@@ -56,4 +58,9 @@ export type RegisterDTO = {
       region: string;
     };
   }[];
+};
+
+export type UserRatings = {
+  subjectIds: SubjectId[];
+  ratings: Ratings;
 };

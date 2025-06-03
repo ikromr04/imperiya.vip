@@ -120,28 +120,28 @@ function Journal(): ReactNode {
   }, [currentRatingDate, lessons]);
 
   const ratingLessonIdsObject = useMemo(() => {
-      if (headers) {
-        const object = headers.reduce((acc, header) => {
-          if (header.length === 13) {
-            const ratingCode = Number(header.split('_')[1]);
-            acc.data[ratingCode] = acc.lessonIds;
-            acc.lessonIds = [];
-          } else {
-            const lessonId = Number(header.split('_')[2]);
-            acc.lessonIds.push(lessonId);
-          }
-          return acc;
-        }, {
-          lessonIds: [],
-          data: {},
-        } as {
-          lessonIds: number[],
-          data: Record<number, number[]>,
-        });
+    if (headers) {
+      const object = headers.reduce((acc, header) => {
+        if (header.length === 13) {
+          const ratingCode = Number(header.split('_')[1]);
+          acc.data[ratingCode] = acc.lessonIds;
+          acc.lessonIds = [];
+        } else {
+          const lessonId = Number(header.split('_')[2]);
+          acc.lessonIds.push(lessonId);
+        }
+        return acc;
+      }, {
+        lessonIds: [],
+        data: {},
+      } as {
+        lessonIds: number[],
+        data: Record<number, number[]>,
+      });
 
-        return object;
-      }
-    }, [headers]);
+      return object;
+    }
+  }, [headers]);
 
   const data = useMemo(() => {
     if (headers && users && gradeId && subjectId && marks) {
@@ -261,7 +261,7 @@ function Journal(): ReactNode {
 
                   return (
                     <button
-                       className="flex justify-center items-center text-blue-200 min-w-9 min-h-9 cursor-pointer hover:bg-blue-50"
+                      className="flex justify-center items-center text-blue-200 min-w-9 min-h-9 cursor-pointer hover:bg-blue-50"
                       type="button"
                       onClick={onRatingCreateButtonClick({
                         rating: RatingCodeToSlug[+ratingCode as RatingCode] as RatingSlug,
@@ -334,7 +334,7 @@ function Journal(): ReactNode {
         }, [] as ColumnDef<Column>[])
       ];
     }
-  }, [gradeId, headers, markObject, onMarkCreateButtonClick, onRatingCreateButtonClick, ratingObject, subjectId, yearRange]);
+  }, [gradeId, headers, markObject, marks, onMarkCreateButtonClick, onRatingCreateButtonClick, ratingLessonIdsObject?.data, ratingObject, subjectId, yearRange]);
 
   if (!gradeId || !subjectId) return;
 

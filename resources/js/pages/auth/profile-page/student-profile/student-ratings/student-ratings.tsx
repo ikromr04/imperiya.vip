@@ -4,9 +4,9 @@ import React from 'react';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
 import Header from '../header';
 import Navigation from '../navigation';
-import StudentLessonsTable from '@/components/lessons-table/student-lessons-table/student-lessons-table';
+import StudentRatingsTable from '@/components/ratings-table/student-ratings-table/student-ratings-table';
 
-function StudentLessons(): JSX.Element {
+function StudentRatings(): JSX.Element {
   const user = useAppSelector(getAuthUser);
 
   if (!user) return <Spinner className="w-8 h-8 m-2" />;
@@ -17,9 +17,9 @@ function StudentLessons(): JSX.Element {
 
       <Navigation />
 
-      <StudentLessonsTable />
+      <StudentRatingsTable />
     </main>
   );
 }
 
-export default StudentLessons;
+export default StudentRatings;

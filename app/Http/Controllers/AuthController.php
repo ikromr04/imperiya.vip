@@ -9,6 +9,8 @@ use App\Http\Requests\RegisterRequest;
 use App\Mail\LoginCredentialsEmail;
 use App\Mail\PasswordResetEmail;
 use App\Models\Guardian;
+use App\Models\Lesson;
+use App\Models\Rating;
 use App\Models\RegisterLink;
 use App\Models\Student;
 use App\Models\User;
@@ -239,5 +241,24 @@ class AuthController extends Controller
     RegisterLink::findOrFail($id)->delete();
 
     return response()->noContent();
+  }
+
+  public function getRatings(Request $request): JsonResponse
+  {
+    $user = $request->user();
+
+    $subjectIds = Lesson::where('grade_id', $user->student->grade_id)
+      ->distinct()
+      ->pluck('subject_id');
+      
+    $ratings = Rating::where('years', $request->query('years'))
+      ->where('student_id', $user->id)
+      ->where('grade_id', $user->student->grade_id)
+      ->get();
+
+    return response()->json([
+      'subjectIds' => $subjectIds,
+      'ratings' => $ratings,
+    ], 200);
   }
 }

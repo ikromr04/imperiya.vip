@@ -17,5 +17,6 @@ Route::prefix('auth')->group(function () {
     Route::post('/register/links', [AuthController::class, 'generateRegisterLink']);
     Route::put('/register/links/{id}', [AuthController::class, 'updateRegisterLink']);
     Route::delete('/register/links/{id}', [AuthController::class, 'deleteRegisterLink']);
+    Route::get('/ratings', [AuthController::class, 'getRatings']);
   });
 });
