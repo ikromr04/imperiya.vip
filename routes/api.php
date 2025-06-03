@@ -20,7 +20,7 @@ Route::prefix('users')->controller(UserController::class)->group(function () {
   Route::put('/{id}/avatar', 'updateAvatar')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::delete('/{id}/avatar', 'deleteAvatar')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::put('/{id}/role', 'updateRole')->middleware(['auth:sanctum', 'ability:superadmin']);
-  Route::get('/{id}/ratings', 'getRatings')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::get('/{id}/ratings', 'getRatings')->middleware(['auth:sanctum', 'ability:superadmin,parent']);
 });
 
 Route::prefix('nationalities')->controller(NationalityController::class)->group(function () {
