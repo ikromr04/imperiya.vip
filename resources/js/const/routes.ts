@@ -25,6 +25,7 @@ export const AppRoute = {
     Show: '/users/:id',
     Lessons: '/users/:id/lessons',
     Diary: '/users/:id/diary',
+    Ratings: '/users/:id/ratings',
   },
   Classes: {
     Index: '/classes',
@@ -66,7 +67,7 @@ export const APIRoute = {
     Show: '/users/:id',
     Avatar: '/users/:id/avatar',
     Role: '/users/:id/role',
-    Student: '/users/student',
+    Ratings: '/users/:id/ratings',
   },
   Grades: {
     Index: '/grades',

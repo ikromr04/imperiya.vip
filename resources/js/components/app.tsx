@@ -9,6 +9,7 @@ import SuperadminRoute from './superadmin-route';
 import AppLayout from './layouts/app-layout';
 import { ToastContainer } from 'react-toastify';
 
+const UsersRatingsPage = lazy(() => import('@/pages/users-show-page/users-ratings-page'));
 const ProfileRatingsPage = lazy(() => import('@/pages/auth/profile-page/profile-ratings-page'));
 const LoginPage = lazy(() => import('@/pages/auth/login-page'));
 const ForgotPasswordPage = lazy(() => import('@/pages/auth/forgot-password-page'));
@@ -81,6 +82,7 @@ function App(): JSX.Element {
             <Route path={AppRoute.Users.Show} element={<UsersShowPage />} />
             <Route path={AppRoute.Users.Lessons} element={<UsersLessonsPage />} />
             <Route path={AppRoute.Users.Diary} element={<UsersDiaryPage />} />
+            <Route path={AppRoute.Users.Ratings} element={<UsersRatingsPage />} />
 
             <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
             <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />

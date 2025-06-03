@@ -12,13 +12,21 @@ import classNames from 'classnames';
 import React, { useEffect, useMemo, useState } from 'react';
 import DataTable from './data-table';
 import Spinner from '@/components/ui/spinner';
+import { User } from '@/types/users';
+import { fetchUserRatingsAction } from '@/store/users-slice/users-api-actions';
 
 export type Column = {
   id: SubjectId;
   name: string;
 } & Record<string, object | string | number>;
 
-function StudentRatingsTable(): JSX.Element {
+type StudentRatingsTableProps = {
+  user?: User;
+};
+
+function StudentRatingsTable({
+  user,
+}: StudentRatingsTableProps): JSX.Element {
   const dispatch = useAppDispatch();
   const subjectsStatus = useAppSelector(getSubjectsStatus);
   const subjects = useAppSelector(getSubjects);
@@ -30,14 +38,22 @@ function StudentRatingsTable(): JSX.Element {
   }, [dispatch, subjectsStatus]);
 
   useEffect(() => {
-    if (!ratings) dispatch(fetchAuthRatingsAction({
+    if (!ratings && user) dispatch(fetchUserRatingsAction({
+      id: user.id,
       years: getEducationYearRange(),
       onSuccess: (data) => {
         setSubjectIds(data.subjectIds);
         setRatings(data.ratings);
       },
     }));
-  }, [dispatch, ratings, subjectIds]);
+    if (!ratings && !user) dispatch(fetchAuthRatingsAction({
+      years: getEducationYearRange(),
+      onSuccess: (data) => {
+        setSubjectIds(data.subjectIds);
+        setRatings(data.ratings);
+      },
+    }));
+  }, [dispatch, ratings, subjectIds, user]);
 
   const ratingObject = useMemo(() => {
     const object: Record<string, number> = {};

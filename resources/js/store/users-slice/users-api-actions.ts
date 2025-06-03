@@ -1,4 +1,5 @@
 import { APIRoute } from '@/const/routes';
+import { UserRatings } from '@/dto/auth-dto';
 import { UserRoleUpdateDTO, UserStoreDTO, UserUpdateDTO } from '@/dto/users';
 import { User, UserId, Users } from '@/types/users';
 import { ValidationError } from '@/types/validation-error';
@@ -156,6 +157,33 @@ export const updateUserRoleAction = createAsyncThunk<Users, {
       const error = err as AxiosError<ValidationError>;
       if (!error.response) throw err;
       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const fetchUserRatingsAction = createAsyncThunk<void, {
+  id: UserId;
+  years: string;
+  onSuccess?: (data: UserRatings) => void;
+  onFail?: (message: string) => void;
+}, {
+  extra: AxiosInstance;
+  rejectWithValue: ValidationError;
+}>(
+  'users/fetchUserRatings',
+  async ({ id, years, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      const params = new URLSearchParams();
+      params.append('years', years);
+
+      const { data } = await api.get<UserRatings>(`${generatePath(APIRoute.Users.Ratings, { id })}?${params.toString()}`);
+
+      if (onSuccess) onSuccess(data);
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
+      if (!error.response) throw err;
       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
       return rejectWithValue(error.response.data);
     }

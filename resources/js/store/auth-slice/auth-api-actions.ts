@@ -239,7 +239,7 @@ export const fetchAuthRatingsAction = createAsyncThunk<void, {
   extra: AxiosInstance;
   rejectWithValue: ValidationError;
 }>(
-  'auth/getRatings',
+  'auth/fetchAuthRatings',
   async ({ years, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
       const params = new URLSearchParams();

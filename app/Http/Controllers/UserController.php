@@ -9,6 +9,8 @@ use App\Models\Admin;
 use App\Models\Director;
 use App\Models\Grade;
 use App\Models\Guardian;
+use App\Models\Lesson;
+use App\Models\Rating;
 use App\Models\Student;
 use App\Models\Superadmin;
 use App\Models\Teacher;
@@ -289,5 +291,24 @@ class UserController extends Controller
       ])->get();
 
     return response()->json($users, 200);
+  }
+
+  public function getRatings(Request $request): JsonResponse
+  {
+    $user = User::find($request->id);
+
+    $subjectIds = Lesson::where('grade_id', $user->student->grade_id)
+      ->distinct()
+      ->pluck('subject_id');
+
+    $ratings = Rating::where('years', $request->query('years'))
+      ->where('student_id', $user->id)
+      ->where('grade_id', $user->student->grade_id)
+      ->get();
+
+    return response()->json([
+      'subjectIds' => $subjectIds,
+      'ratings' => $ratings,
+    ], 200);
   }
 }
