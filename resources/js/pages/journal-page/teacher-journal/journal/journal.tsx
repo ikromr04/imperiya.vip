@@ -119,6 +119,30 @@ function Journal(): ReactNode {
 
   }, [currentRatingDate, lessons]);
 
+  const ratingLessonIdsObject = useMemo(() => {
+      if (headers) {
+        const object = headers.reduce((acc, header) => {
+          if (header.length === 13) {
+            const ratingCode = Number(header.split('_')[1]);
+            acc.data[ratingCode] = acc.lessonIds;
+            acc.lessonIds = [];
+          } else {
+            const lessonId = Number(header.split('_')[2]);
+            acc.lessonIds.push(lessonId);
+          }
+          return acc;
+        }, {
+          lessonIds: [],
+          data: {},
+        } as {
+          lessonIds: number[],
+          data: Record<number, number[]>,
+        });
+
+        return object;
+      }
+    }, [headers]);
+
   const data = useMemo(() => {
     if (headers && users && gradeId && subjectId && marks) {
       return users.filter((user) => user.student?.gradeId === +gradeId).map((user) => {
@@ -193,7 +217,7 @@ function Journal(): ReactNode {
         },
         ...headers.reduce((acc, header) => {
           if (header.length === 13) {
-            const [ratingDate, ratingCode] = header.split('_');
+            const [, ratingCode] = header.split('_');
 
             acc.push({
               id: header,
@@ -203,11 +227,41 @@ function Journal(): ReactNode {
                 const rating = ratingObject?.[`${row.original.id}_${ratingCode}`];
 
                 if (!rating) {
-                  if (dayjs(ratingDate) > dayjs()) return;
+                  let markSum = 0;
+                  let markCount = 0;
+                  let lessonIds = [];
+
+                  if (ratingCode === '93') {
+                    lessonIds = [...(ratingLessonIdsObject?.data[91] || []), ...(ratingLessonIdsObject?.data[92] || []), ...(ratingLessonIdsObject?.data[93] || [])];
+                  } else if (ratingCode === '96') {
+                    lessonIds = [...(ratingLessonIdsObject?.data[94] || []), ...(ratingLessonIdsObject?.data[95] || []), ...(ratingLessonIdsObject?.data[96] || [])];
+                  } else if (ratingCode === '97') {
+                    lessonIds = [
+                      ...(ratingLessonIdsObject?.data[91] || []), ...(ratingLessonIdsObject?.data[92] || []), ...(ratingLessonIdsObject?.data[93] || []),
+                      ...(ratingLessonIdsObject?.data[94] || []), ...(ratingLessonIdsObject?.data[95] || []), ...(ratingLessonIdsObject?.data[96] || [])
+                    ];
+                  } else {
+                    lessonIds = ratingLessonIdsObject?.data[+ratingCode] || [];
+                  }
+
+                  marks?.map((mark) => {
+                    if (lessonIds?.includes(mark.lessonId) && mark.studentId === row.original.id) {
+                      if (mark.score1) {
+                        markSum = markSum + mark.score1;
+                        markCount = markCount + 1;
+                      }
+                      if (mark.score2) {
+                        markSum = markSum + mark.score2;
+                        markCount = markCount + 1;
+                      }
+                    }
+                  });
+
+                  const recommendedScore = (markSum / markCount) || 0;
 
                   return (
                     <button
-                      className="flex min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5"
+                       className="flex justify-center items-center text-blue-200 min-w-9 min-h-9 cursor-pointer hover:bg-blue-50"
                       type="button"
                       onClick={onRatingCreateButtonClick({
                         rating: RatingCodeToSlug[+ratingCode as RatingCode] as RatingSlug,
@@ -216,7 +270,9 @@ function Journal(): ReactNode {
                         grade_id: +gradeId,
                         subject_id: +subjectId,
                       }, row.original.name)}
-                    ></button>
+                    >
+                      {!['98', '99'].includes(ratingCode) && recommendedScore.toFixed(2) || ''}
+                    </button>
                   );
                 }
 

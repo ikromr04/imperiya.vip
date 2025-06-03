@@ -25,6 +25,47 @@ function Navigation({
             Профиль
           </NavLink>
         </li>
+
+        {user.role === 'teacher' && (
+          <li>
+            <NavLink
+              className={({ isActive }) => classNames(
+                'flex items-center h-7 px-2 transition-all duration-150 border border-transparent min-w-max',
+                isActive && 'rounded shadow bg-white border-gray-200'
+              )}
+              to={generatePath(AppRoute.Users.Lessons, { id: user.id })}
+            >
+              Расписание занятий
+            </NavLink>
+          </li>
+        )}
+
+        {user.role === 'student' && (
+          <>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames(
+                  'flex items-center h-7 px-2 transition-all duration-150 border border-transparent min-w-max',
+                  isActive && 'rounded shadow bg-white border-gray-200'
+                )}
+                to={generatePath(AppRoute.Users.Lessons, { id: user.id })}
+              >
+                Расписание занятий
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames(
+                  'flex items-center h-7 px-2 transition-all duration-150 border border-transparent min-w-max',
+                  isActive && 'rounded shadow bg-white border-gray-200'
+                )}
+                to={generatePath(AppRoute.Users.Diary, { id: user.id })}
+              >
+                Дневник
+              </NavLink>
+            </li>
+          </>
+        )}
       </ul>
       <div className="absolute top-0 right-0 z-10 min-w-6 h-full pointer-events-none bg-gradient-to-l from-gray-100 to-transparent"></div>
     </div>

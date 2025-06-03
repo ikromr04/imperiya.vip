@@ -283,14 +283,31 @@ function Journal(): ReactNode {
                 const rating = ratingObject?.[`${row.original.id}_${ratingCode}`];
 
                 if (!rating) {
-                  const lessonIds = ratingLessonIdsObject?.data[+ratingCode];
                   let markSum = 0;
                   let markCount = 0;
+                  let lessonIds = [];
+
+                  if (ratingCode === '93') {
+                    lessonIds = [...(ratingLessonIdsObject?.data[91] || []), ...(ratingLessonIdsObject?.data[92] || []), ...(ratingLessonIdsObject?.data[93] || [])];
+                  } else if (ratingCode === '96') {
+                    lessonIds = [...(ratingLessonIdsObject?.data[94] || []), ...(ratingLessonIdsObject?.data[95] || []), ...(ratingLessonIdsObject?.data[96] || [])];
+                  } else if (ratingCode === '97') {
+                    lessonIds = [
+                      ...(ratingLessonIdsObject?.data[91] || []), ...(ratingLessonIdsObject?.data[92] || []), ...(ratingLessonIdsObject?.data[93] || []),
+                      ...(ratingLessonIdsObject?.data[94] || []), ...(ratingLessonIdsObject?.data[95] || []), ...(ratingLessonIdsObject?.data[96] || [])
+                    ];
+                  } else {
+                    lessonIds = ratingLessonIdsObject?.data[+ratingCode] || [];
+                  }
 
                   marks?.map((mark) => {
                     if (lessonIds?.includes(mark.lessonId) && mark.studentId === row.original.id) {
                       if (mark.score1) {
                         markSum = markSum + mark.score1;
+                        markCount = markCount + 1;
+                      }
+                      if (mark.score2) {
+                        markSum = markSum + mark.score2;
                         markCount = markCount + 1;
                       }
                     }
@@ -310,7 +327,7 @@ function Journal(): ReactNode {
                         subject_id: +subjectId,
                       }, row.original.name)}
                     >
-                      {recommendedScore.toFixed(2) || ''}
+                      {!['98', '99'].includes(ratingCode) && recommendedScore.toFixed(2) || ''}
                     </button>
                   );
                 }
