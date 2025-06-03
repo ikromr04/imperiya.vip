@@ -21,6 +21,7 @@ function Navigation({
               isActive && 'rounded shadow bg-white border-gray-200'
             )}
             to={generatePath(AppRoute.Users.Show, { id: user.id })}
+            end
           >
             Профиль
           </NavLink>

@@ -1,19 +1,22 @@
+import React, { lazy, Suspense, ComponentType } from 'react';
 import { useAppSelector } from '@/hooks';
-import React from 'react';
 import { getAuthUser } from '@/store/auth-slice/auth-selector';
-import NotFoundPage from '@/pages/not-found-page';
-import { Role } from '@/types/users';
-import ParentUsersLesson from './parent-users-show/parent-users-lesson';
 import { Navigate } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
+import { Role } from '@/types/users';
+import Spinner from '@/components/ui/spinner';
 
-const Page = {
-  'superadmin': () => <NotFoundPage />,
-  'admin': () => <NotFoundPage />,
-  'director': () => <NotFoundPage />,
-  'teacher': () => <NotFoundPage />,
-  'parent': () => <ParentUsersLesson />,
-  'student': () => <NotFoundPage />,
+const ParentUsersLesson = lazy(() => import('./parent-users-show/parent-users-lesson'));
+const SuperadminUsersLessons = lazy(() => import('./superadmin-users-show/superadmin-users-lessons'));
+const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
+
+const roleComponentMap: Record<Role, ComponentType> = {
+  superadmin: SuperadminUsersLessons,
+  admin: NotFoundPage,
+  director: NotFoundPage,
+  teacher: NotFoundPage,
+  parent: ParentUsersLesson,
+  student: NotFoundPage,
 };
 
 function UsersLessonsPage(): JSX.Element {
@@ -23,7 +26,13 @@ function UsersLessonsPage(): JSX.Element {
     return <Navigate to={AppRoute.Auth.Login} />;
   }
 
-  return Page[authUser.role as Role]();
+  const Component = roleComponentMap[authUser.role] ?? NotFoundPage;
+
+  return (
+    <Suspense fallback={<Spinner className="w-10 h-10" />}>
+      <Component />
+    </Suspense>
+  );
 }
 
 export default UsersLessonsPage;
