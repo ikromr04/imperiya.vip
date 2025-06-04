@@ -6,8 +6,8 @@ export const RatingSlugToText = {
   'quarter4': 'Четверть 4',
   'semester2': 'Полугодие 2',
   'annual': 'Годовая',
-  'assessment': 'Итоговая',
-  'final': 'Экзамен',
+  'assessment': 'Экзамен',
+  'final': 'Итоговая',
 };
 
 export const RatingSlugToCode = {
@@ -30,8 +30,8 @@ export const RatingCodeToText = {
   95: 'Четверть 4',
   96: 'Полугодие 2',
   97: 'Годовая',
-  98: 'Итоговая',
-  99: 'Экзамен',
+  98: 'Экзамен',
+  99: 'Итоговая',
 };
 
 export const RatingCodeToSlug = {
