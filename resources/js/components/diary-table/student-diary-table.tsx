@@ -170,6 +170,7 @@ function StudentDiaryTable({
                       subjects={subjects}
                       marks={marks}
                       users={users}
+                      studentId={user?.id || authUser?.id || 0}
                     />
                   )}
                 </tr>

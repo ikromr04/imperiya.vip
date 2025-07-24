@@ -16,7 +16,7 @@ type DiaryItemProps = {
   subjects: Subjects;
   marks: Marks;
   users: Users;
-  studentId?: UserId;
+  studentId: UserId;
 };
 
 function DiaryItem({
