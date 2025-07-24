@@ -35,6 +35,9 @@ const LessonsTypesPage = lazy(() => import('@/pages/lessons-types-page'));
 const RegisterLinksPage = lazy(() => import('@/pages/auth/register-links-page/register-links-page'));
 const RatingDatesPage = lazy(() => import('@/pages/rating-dates-page'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
+const ReportsPage = lazy(() => import('@/pages/reports-page'));
+const ReportsGradePage = lazy(() => import('@/pages/reports-grade-page'));
+const ReportsGradesPage = lazy(() => import('@/pages/reports-grades-page'));
 
 function App(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
@@ -95,6 +98,9 @@ function App(): JSX.Element {
               <Route path={AppRoute.Lessons.Types} element={<LessonsTypesPage />} />
               <Route path={AppRoute.Auth.RegisterLinks} element={<RegisterLinksPage />} />
               <Route path={AppRoute.Ratings.Dates} element={<RatingDatesPage />} />
+              <Route path={AppRoute.Reports.Index} element={<ReportsPage />} />
+              <Route path={AppRoute.Reports.Grade} element={<ReportsGradePage />} />
+              <Route path={AppRoute.Reports.Grades} element={<ReportsGradesPage />} />
             </Route>
           </Route>
 

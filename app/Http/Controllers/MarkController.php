@@ -93,4 +93,11 @@ class MarkController extends Controller
 
     return response()->json(Mark::selectBasic()->find($request->id), 200);
   }
+
+  public function getMarksByStudentIds(Request $request): JsonResponse
+  {
+    $marks = Mark::whereIn('student_id', $request->ids)->get();
+
+    return response()->json($marks, 200);
+  }
 }

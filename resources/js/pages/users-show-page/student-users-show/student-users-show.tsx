@@ -138,30 +138,6 @@ function StudentUsersShow(): JSX.Element {
               <div className="absolute top-[1px] right-0 rounded-br-md z-10 min-w-6 h-[calc(100%-1px)] pointer-events-none bg-gradient-to-l from-white to-transparent"></div>
             </div>
           </section>
-
-          <section className="box">
-            <header className="box__header">
-              <h2 className="title !text-lg">{RoleName[user.role]}</h2>
-            </header>
-
-            <div className="relative">
-              <DescriptionList
-                className="box__body"
-                list={{
-                  'Руководитель классов': grades ? (
-                    <div className="flex flex-wrap gap-2">
-                      {grades.filter((grade) => grade.teacherId === user.id).map((grade) => (
-                        <Link className="text-blue-600" to={generatePath(AppRoute.Classes.Show, { id: grade.id })}>
-                          {grade.level} {grade.group}
-                        </Link>
-                      ))}
-                    </div>
-                  ) : '-',
-                }}
-              />
-              <div className="absolute top-[1px] right-0 rounded-br-md z-10 min-w-6 h-[calc(100%-1px)] pointer-events-none bg-gradient-to-l from-white to-transparent"></div>
-            </div>
-          </section>
         </div>
 
         <div className="flex flex-col gap-4">

@@ -46,6 +46,11 @@ export const AppRoute = {
   Settings: {
     Index: '/settings',
   },
+  Reports: {
+    Index: '/reports',
+    Grades: '/reports/grades',
+    Grade: '/reports/grades/:id',
+  },
   NotFound: '*',
 };
 
@@ -99,6 +104,7 @@ export const APIRoute = {
     Index: '/marks',
     Show: '/marks/:id',
     Diary: '/marks/diary',
+    Students: '/marks/students',
   },
   Ratings: {
     Index: '/ratings',

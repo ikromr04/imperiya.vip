@@ -59,6 +59,7 @@ class UserStoreRequest extends FormRequest
       'student.admission_date' => ['required_with:student', 'date'],
       'student.previous_schools' => ['required_with:student', 'string', 'not_regex:/^\d+$/'],
       'student.medical_recommendations' => ['required_with:student', 'string', 'not_regex:/^\d+$/'],
+      'student.talents' => ['required_with:student', 'string', 'not_regex:/^\d+$/'],
     ];
   }
 
@@ -145,6 +146,8 @@ class UserStoreRequest extends FormRequest
       'student.medical_recommendations.required_with' => 'Поле "Медицинские рекомендации" обязательно, если указан ученик.',
       'student.medical_recommendations.string' => 'Поле "Медицинские рекомендации" должно быть строкой.',
       'student.medical_recommendations.not_regex' => 'Поле "Медицинские рекомендации" не может содержать только цифры.',
+      'talents.string' => 'Поле "Таланты" должно быть строкой.',
+      'talents.not_regex' => 'Поле "Таланты" не может содержать только цифры.',
     ];
   }
 

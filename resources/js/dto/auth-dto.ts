@@ -33,6 +33,7 @@ export type RegisterDTO = {
     admission_date: string;
     previous_schools: string;
     medical_recommendations: string;
+    talents: string;
   }[];
   parents: {
     name: string;

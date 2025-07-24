@@ -451,6 +451,32 @@ function SuperadminUsers(): ReactNode {
       ),
     },
     {
+      id: 'talents',
+      accessorKey: 'talents',
+      header: 'Таланты',
+      size: 200,
+      enableColumnFilter: filter.talents ? true : false,
+      cell: ({ row }) => row.original.student?.talents,
+      meta: {
+        renderFilter: () => (
+          <div className="flex flex-col gap-2">
+            <TextField
+              placeholder="Искать..."
+              value={filter.talents || ''}
+              onInput={(evt: BaseSyntheticEvent) => setFilter((prev) => ({
+                ...prev,
+                talents: evt.target.value,
+              }))}
+              onChange={(value) => setFilter((prev) => ({
+                ...prev,
+                talents: value as string,
+              }))}
+            />
+          </div>
+        ),
+      }
+    },
+    {
       id: 'socialLinks',
       accessorKey: 'socialLinks',
       header: 'Социальные сети',

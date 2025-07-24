@@ -37,7 +37,7 @@ class AuthController extends Controller
       ->with([
         'teacher:id,user_id,education,achievements,work_experience',
         'parent:id,user_id,profession_id,workplace,position',
-        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations,talents'
       ])->findOrFail($user->id);
 
     return response()->json($user, 200);
@@ -107,6 +107,7 @@ class AuthController extends Controller
         'admission_date' => Carbon::now(),
         'previous_schools' => $child['previous_schools'],
         'medical_recommendations' => $child['medical_recommendations'],
+        'talents' => $child['talents'],
       ]);
     }
 
@@ -127,7 +128,7 @@ class AuthController extends Controller
       ->with([
         'teacher:id,user_id,education,achievements,work_experience',
         'parent:id,user_id,profession_id,workplace,position',
-        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations,talents'
       ])->findOrFail($user->id);
 
     return response()->json([
@@ -250,7 +251,7 @@ class AuthController extends Controller
     $subjectIds = Lesson::where('grade_id', $user->student->grade_id)
       ->distinct()
       ->pluck('subject_id');
-      
+
     $ratings = Rating::where('years', $request->query('years'))
       ->where('student_id', $user->id)
       ->where('grade_id', $user->student->grade_id)

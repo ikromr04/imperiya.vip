@@ -70,6 +70,7 @@ function StudentInfo({
                 user.student?.admissionDate ? dayjs(user.student.admissionDate).format('DD MMMM YYYY') : '-',
               'Предыдущие школы': user.student?.previousSchools ?? '-',
               'Медицинские и психологические рекомендации': user.student?.medicalRecommendations ?? '-',
+              'Таланты': user.student?.talents ?? '-',
             }}
           />
           <div className="absolute top-[1px] right-0 rounded-br-md z-10 min-w-6 h-[calc(100%-1px)] pointer-events-none bg-gradient-to-l from-white to-transparent"></div>

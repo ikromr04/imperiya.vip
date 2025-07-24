@@ -142,6 +142,16 @@ function SuperadminSidebar(): JSX.Element {
                 Даты рейтингов
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Reports.Index}
+                onClick={handleLinksClick}
+              >
+                <Icons.reports className="navlink__icon" width={16} height={16} />
+                Отчеты
+              </NavLink>
+            </li>
           </ul>
 
           <hr />

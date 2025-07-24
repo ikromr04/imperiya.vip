@@ -36,6 +36,7 @@ return new class extends Migration
       $table->date('admission_date');
       $table->text('previous_schools');
       $table->text('medical_recommendations');
+      $table->text('talents');
 
       $table->timestamps();
       $table->softDeletes();

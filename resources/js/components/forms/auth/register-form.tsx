@@ -39,6 +39,7 @@ const validationSchema = Yup.object().shape({
         .min(1, 'Укажите дату поступления.'),
       previous_schools: Yup.string().required('Информация о предыдущих школах обязательна. Если нет - напишите \'Нет\'.'),
       medical_recommendations: Yup.string().required('Медицинские рекомендации обязательны. Если нет - напишите \'Нет\'.'),
+      talents: Yup.string().required('Таланты обязательны. Если нет - напишите \'Нет\'.'),
     })
   ).min(1, 'Необходимо указать как минимум одного ребенка.'),
 
@@ -116,6 +117,7 @@ function RegisterForm({
         admission_date: '',
         previous_schools: '',
         medical_recommendations: '',
+        talents: '',
       },
     ],
     parents: [
@@ -313,6 +315,14 @@ function RegisterForm({
                         className="md:col-span-2 lg:col-span-3"
                         name={`children[${index}].medical_recommendations`}
                         label="Медицинские и психологические рекомендации для ребенка"
+                        placeholder="Если нет — пишите «Нет»"
+                        required
+                      />
+
+                      <ContentField
+                        className="md:col-span-2 lg:col-span-3"
+                        name={`children[${index}].talents`}
+                        label="Таланты"
                         placeholder="Если нет — пишите «Нет»"
                         required
                       />

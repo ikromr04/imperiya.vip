@@ -74,8 +74,9 @@ const validationSchema = Yup.object().shape({
     mother_id: Yup.number(),
     father_id: Yup.number(),
     admission_date: Yup.string().required('Укажите дату поступления.'),
-    previous_schools: Yup.string().required('Предыдущие школы обязательны.'),
-    medical_recommendations: Yup.string().required('Медицинские рекомендации обязательны.'),
+    previous_schools: Yup.string().required('Предыдущие школы обязательны. Если нет - напишите \'Нет\'.'),
+    medical_recommendations: Yup.string().required('Медицинские рекомендации обязательны. Если нет - напишите \'Нет\'.'),
+    talents: Yup.string().required('Таланты обязательны. Если нет - напишите \'Нет\'.'),
   })
     .nullable()
     .notRequired()
@@ -196,6 +197,7 @@ function UsersCreateForm(): JSX.Element {
             admission_date: '',
             previous_schools: '',
             medical_recommendations: '',
+            talents: '',
           });
           break;
 
@@ -399,6 +401,14 @@ function UsersCreateForm(): JSX.Element {
                 className="md:col-span-2 lg:col-span-3"
                 name="student.medical_recommendations"
                 label="Медицинские и психологические рекомендации для ребенка"
+                placeholder="Если нет — пишите «Нет»"
+                required
+              />
+
+              <ContentField
+                className="md:col-span-2 lg:col-span-3"
+                name="student.talents"
+                label="Таланты"
                 placeholder="Если нет — пишите «Нет»"
                 required
               />

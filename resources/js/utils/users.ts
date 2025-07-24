@@ -26,6 +26,7 @@ export const filterUsers = (users: Users, filter: UsersFilter): Users => {
     && (filter.address?.region ? user.address?.region === filter.address.region : true)
     && (filter.nationality ? (user.nationalityId?.toString() === filter.nationality) : true)
     && (filter.professionId ? (user.parent?.professionId.toString() === filter.professionId) : true)
+    && (filter.talents ? (user.student?.talents?.includes(filter.talents || '')) : true)
   ));
 
   return users;

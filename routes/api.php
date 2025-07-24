@@ -67,8 +67,9 @@ Route::prefix('subjects')->controller(SubjectController::class)->group(function 
 Route::prefix('marks')->controller(MarkController::class)->group(function () {
   Route::get('/', 'index')->middleware(['auth:sanctum', 'ability:superadmin,teacher,parent,student']);
   Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin,teacher']);
-  Route::post('/diary', 'diary')->middleware('auth:sanctum');
+  Route::get('/', 'index')->middleware(['auth:sanctum', 'ability:superadmin,teacher,parent,student']);
   Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::post('/students', 'getMarksByStudentIds')->middleware('auth:sanctum', 'ability:superadmin');
 });
 
 Route::prefix('ratings')->controller(RatingController::class)->group(function () {

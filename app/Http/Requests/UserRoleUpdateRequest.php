@@ -35,6 +35,7 @@ class UserRoleUpdateRequest extends FormRequest
       'admission_date' => ['nullable', 'date'],
       'previous_schools' => ['nullable', 'string', 'not_regex:/^\d+$/'],
       'medical_recommendations' => ['nullable', 'string', 'not_regex:/^\d+$/'],
+      'talents' => ['nullable', 'string', 'not_regex:/^\d+$/'],
     ];
   }
 
@@ -66,6 +67,8 @@ class UserRoleUpdateRequest extends FormRequest
       'previous_schools.not_regex' => 'Поле "Предыдущие школы" не может содержать только цифры.',
       'medical_recommendations.string' => 'Поле "Медицинские рекомендации" должно быть строкой.',
       'medical_recommendations.not_regex' => 'Поле "Медицинские рекомендации" не может содержать только цифры.',
+      'talents.string' => 'Поле "Таланты" должно быть строкой.',
+      'talents.not_regex' => 'Поле "Таланты" не может содержать только цифры.',
     ];
   }
 

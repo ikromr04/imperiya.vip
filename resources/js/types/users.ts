@@ -62,6 +62,7 @@ export type User = {
     admissionDate: string;
     previousSchools: string;
     medicalRecommendations: string;
+    talents: string;
   };
   blockedAt?: string;
 };
@@ -69,20 +70,20 @@ export type User = {
 export type Users = User[];
 
 export type UsersFilter = {
-  name?: string,
-  sex?: string,
-  grade?: string,
-  role?: string,
-  phone?: string,
-  whatsapp?: string,
-  email?: string,
-  login?: string,
-  password?: string,
+  name?: string;
+  sex?: string;
+  grade?: string;
+  role?: string;
+  phone?: string;
+  whatsapp?: string;
+  email?: string;
+  login?: string;
+  password?: string;
   birthDate?: {
     day: string;
     month: string;
     year: string;
-  },
+  };
   address?: {
     physicalAddress: string;
     region: string;
@@ -90,4 +91,5 @@ export type UsersFilter = {
   blockedAt?: string;
   nationality?: string;
   professionId?: string;
+  talents?: string;
 };

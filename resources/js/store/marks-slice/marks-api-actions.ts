@@ -6,6 +6,7 @@ import { MarkStoreDTO, MarkUpdateDTO } from '@/dto/marks';
 import { Mark, Marks } from '@/types/marks';
 import { LessonId } from '@/types/lessons';
 import { generatePath } from 'react-router-dom';
+import { UserId } from '@/types/users';
 
 export const fetchMarksAction = createAsyncThunk<void, {
   lessons?: LessonId[];
@@ -33,31 +34,6 @@ export const fetchMarksAction = createAsyncThunk<void, {
     }
   },
 );
-
-// export const fetchMarksAction = createAsyncThunk<void, {
-//   studentId?: UserId;
-//   lessons?: LessonId[];
-//   onSuccess?: (marks: Marks) => void;
-//   onValidationError?: (error: ValidationError) => void;
-//   onFail?: (message: string) => void;
-// }, {
-//   extra: AxiosInstance;
-//   rejectWithValue: ValidationError;
-// }>(
-//   'marks/fetch',
-//   async ({ studentId, lessons, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
-//     try {
-//       const { data } = await api.post<Marks>(APIRoute.Marks.Diary, { studentId, lessons });
-//       if (onSuccess) onSuccess(data);
-//     } catch (err) {
-//       const error = err as AxiosError<ValidationError>;
-//       if (!error.response) throw err;
-//       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
-//       if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
-//       return rejectWithValue(error.response.data);
-//     }
-//   },
-// );
 
 export const storeMarkAction = createAsyncThunk<void, {
   dto: MarkStoreDTO,
@@ -96,6 +72,30 @@ export const updateMarkAction = createAsyncThunk<void, {
   async ({ dto, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
       const { data } = await api.put<Mark>(generatePath(APIRoute.Marks.Show, { id: dto.id }), dto);
+      if (onSuccess) onSuccess(data);
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
+      if (!error.response) throw err;
+      if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onFail && (error.response?.status !== 422)) onFail(error.response.data.message);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const fetchMarksByStudentIdsAction = createAsyncThunk<void, {
+  ids: UserId[];
+  onSuccess?: (marks: Marks) => void;
+  onValidationError?: (error: ValidationError) => void;
+  onFail?: (message: string) => void;
+}, {
+  extra: AxiosInstance;
+  rejectWithValue: ValidationError;
+}>(
+  'marks/fetchMarksByStudentIds',
+  async ({ ids, onValidationError, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+    try {
+      const { data } = await api.post<Marks>(APIRoute.Marks.Students, { ids });
       if (onSuccess) onSuccess(data);
     } catch (err) {
       const error = err as AxiosError<ValidationError>;

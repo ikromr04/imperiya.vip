@@ -49,6 +49,7 @@ export type UserStoreDTO = {
     admission_date: string;
     previous_schools: string;
     medical_recommendations: string;
+    talents: string;
   };
 };
 
@@ -100,4 +101,5 @@ export type UserRoleUpdateDTO = {
   admission_date?: string;
   previous_schools?: string;
   medical_recommendations?: string;
-}
+  talents?: string;
+};

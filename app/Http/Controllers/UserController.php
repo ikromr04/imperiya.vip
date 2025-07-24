@@ -35,7 +35,7 @@ class UserController extends Controller
           ->with([
             'teacher:id,user_id,education,achievements,work_experience',
             'parent:id,user_id,profession_id,workplace,position',
-            'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+            'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations,talents'
           ])->get();
         break;
 
@@ -43,9 +43,7 @@ class UserController extends Controller
         $users = User::whereIn('role', ['student', 'parent', 'teacher'])
           ->select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'email', 'avatar', 'avatar_thumb', 'birth_date', 'address', 'whatsapp', 'nationality_id', 'social_link', 'phone_numbers'])
           ->orderBy('surname')
-          ->with([
-            'student' => fn($query) => $query->select(['id', 'user_id', 'grade_id', 'mother_id', 'father_id', 'admission_date', 'previous_schools', 'medical_recommendations']),
-          ])->get();
+          ->with(['student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations,talents'])->get();
         break;
 
       case 'parent':
@@ -59,7 +57,7 @@ class UserController extends Controller
             ->get(),
           ...User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
             ->with([
-              'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations',
+              'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations,talents',
               'parent:id,user_id,profession_id,workplace,position'
             ])
             ->whereIn('id', $childIds)
@@ -136,6 +134,7 @@ class UserController extends Controller
           'admission_date' => $request->input('student.admission_date'),
           'previous_schools' => $request->input('student.previous_schools'),
           'medical_recommendations' => $request->input('student.medical_recommendations'),
+          'talents' => $request->input('student.talents'),
         ]);
 
         if ($request->has('parent.children')) {
@@ -155,7 +154,7 @@ class UserController extends Controller
       ->with([
         'teacher:id,user_id,education,achievements,work_experience',
         'parent:id,user_id,profession_id,workplace,position',
-        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations,talents'
       ])->find($user->id);
 
     return response()->json($user, 201);
@@ -179,7 +178,7 @@ class UserController extends Controller
       ->with([
         'teacher:id,user_id,education,achievements,work_experience',
         'parent:id,user_id,profession_id,workplace,position',
-        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations,talents'
       ])->find($user->id);
 
     return response()->json($user, 200);
@@ -224,7 +223,7 @@ class UserController extends Controller
       ->with([
         'teacher:id,user_id,education,achievements,work_experience',
         'parent:id,user_id,profession_id,workplace,position',
-        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations,talents'
       ])->find($user->id);
 
     return response()->json($user, 200);
@@ -260,6 +259,7 @@ class UserController extends Controller
         }
         $user->teacher->update($request->only(['education', 'achievements', 'work_experience']));
         break;
+
       case 'parent':
         if ($request->has('children')) {
           if ($user->sex === 'male') {
@@ -278,8 +278,9 @@ class UserController extends Controller
           $user->parent->update($request->only(['profession_id', 'workplace', 'position']));
         }
         break;
+
       case 'student':
-        $user->student->update($request->only(['grade_id', 'mother_id', 'father_id', 'admission_date', 'previous_schools', 'medical_recommendations']));
+        $user->student->update($request->only(['grade_id', 'mother_id', 'father_id', 'admission_date', 'previous_schools', 'medical_recommendations', 'talents']));
         break;
     }
 
@@ -287,7 +288,7 @@ class UserController extends Controller
       ->with([
         'teacher:id,user_id,education,achievements,work_experience',
         'parent:id,user_id,profession_id,workplace,position',
-        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations'
+        'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations,talents'
       ])->get();
 
     return response()->json($users, 200);

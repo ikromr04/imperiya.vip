@@ -44,6 +44,7 @@ function RoleEditForm({
     admission_date: user.student?.admissionDate,
     previous_schools: user.student?.previousSchools,
     medical_recommendations: user.student?.medicalRecommendations,
+    talents: user.student?.talents,
   };
 
   const onSubmit = async (
@@ -167,6 +168,13 @@ function RoleEditForm({
               <ContentField
                 name="medical_recommendations"
                 label="Медицинские и психологические рекомендации для ребенка"
+                placeholder="Если нет — пишите «Нет»"
+                required
+              />
+
+              <ContentField
+                name="talents"
+                label="Таланты"
                 placeholder="Если нет — пишите «Нет»"
                 required
               />
