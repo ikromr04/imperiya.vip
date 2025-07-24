@@ -84,23 +84,23 @@ function ReportsGradePage(): JSX.Element {
           boys: students.filter(({ sex }) => sex === 'male').length,
           excellent: {
             count: dataStudents.excellent.length,
-            percent: +((dataStudents.excellent.length * 100) / students.length).toFixed(4),
+            percent: +((dataStudents.excellent.length * 100) / students.length).toFixed(2),
           },
           good: {
             count: dataStudents.good.length,
-            percent: +((dataStudents.good.length * 100) / students.length).toFixed(4),
+            percent: +((dataStudents.good.length * 100) / students.length).toFixed(2),
           },
           average: {
             count: dataStudents.average.length,
-            percent: +((dataStudents.average.length * 100) / students.length).toFixed(4),
+            percent: +((dataStudents.average.length * 100) / students.length).toFixed(2),
           },
           poor: {
             count: dataStudents.poor.length,
-            percent: +((dataStudents.poor.length * 100) / students.length).toFixed(4),
+            percent: +((dataStudents.poor.length * 100) / students.length).toFixed(2),
           },
           noGrades: {
             count: dataStudents.noGrades.length,
-            percent: +((dataStudents.noGrades.length * 100) / students.length).toFixed(4),
+            percent: +((dataStudents.noGrades.length * 100) / students.length).toFixed(2),
           },
         },
         students: dataStudents,
@@ -189,7 +189,7 @@ function ReportsGradePage(): JSX.Element {
                           </Link>
                         </td>
                         <td className="pr-10 font-medium text-lg">
-                          {student.average?.toFixed(5)}
+                          {student.average?.toFixed(2)}
                         </td>
                         <td className="pr-10 font-medium text-lg">
                           {student.rounded}
