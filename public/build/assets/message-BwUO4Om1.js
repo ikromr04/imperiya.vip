@@ -1,1 +1,0 @@
-import{j as t,c as e}from"./main-XRo2qOUM.js";const a={success:"text-success",error:"text-error",warn:"text-warn"};function n({className:s,message:r}){if(r)return t.jsx("p",{className:e(s,a[r[1]]),children:r[0]})}export{n as M};
