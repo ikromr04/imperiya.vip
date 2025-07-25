@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Books extends Model
+class Book extends Model
 {
   protected $guarded = ['id'];
 
@@ -26,7 +26,7 @@ class Books extends Model
     $array = array_filter(parent::toArray(), fn($value) => $value);
 
     $map = [
-      'book_category_id' => 'bookCategoryId',
+      'book_category_id' => 'categoryId',
     ];
 
     foreach ($map as $snake => $camel) {

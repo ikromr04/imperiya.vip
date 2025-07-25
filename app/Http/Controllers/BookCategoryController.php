@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 
 class BookCategoryController extends Controller
 {
-public function index(): JsonResponse
+  public function index(): JsonResponse
   {
     $categories = BookCategory::selectBasic()->orderBy('title')->get();
 
