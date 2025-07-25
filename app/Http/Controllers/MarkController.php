@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MarkEvents;
+use App\Events\MarkUpdateEvent;
 use App\Http\Requests\MarkStoreRequest;
 use App\Http\Requests\MarkUpdateRequest;
 use App\Models\Mark;
@@ -78,6 +80,8 @@ class MarkController extends Controller
       'comment',
     ]));
 
+    broadcast(new MarkEvents());
+
     return response()->json(Mark::selectBasic()->find($mark->id), 201);
   }
 
@@ -91,12 +95,16 @@ class MarkController extends Controller
         'comment',
       ]));
 
+    broadcast(new MarkEvents());
+
     return response()->json(Mark::selectBasic()->find($request->id), 200);
   }
 
   public function getMarksByStudentIds(Request $request): JsonResponse
   {
     $marks = Mark::whereIn('student_id', $request->ids)->get();
+
+    broadcast(new MarkEvents());
 
     return response()->json($marks, 200);
   }

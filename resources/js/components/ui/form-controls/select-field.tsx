@@ -12,6 +12,7 @@ type SelectFieldProps = {
   options: { value: string; label: string; }[];
   label?: string;
   placeholder?: string;
+  notNull?: boolean;
 };
 
 function SelectField({
@@ -22,6 +23,7 @@ function SelectField({
   options,
   label,
   placeholder,
+  notNull,
 }: SelectFieldProps): JSX.Element {
   const uniqueId = useId();
   const { ref, menuRef, isOpen, setIsOpen } = useDropdown<HTMLDivElement>();
@@ -55,7 +57,7 @@ function SelectField({
           {renderSelectedOptions()}
         </button>
 
-        {value && (
+        {value && !notNull && (
           <Cleanable
             className={classNames('absolute right-0 top-1/2')}
             onClean={() => onChange('')}

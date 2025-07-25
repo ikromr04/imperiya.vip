@@ -58,7 +58,7 @@ function ReportsGradePage(): JSX.Element {
   const reportData = useMemo(() => {
     if (markObject && grade && students) {
       const studentsMap = students.map((student) => {
-        const average = markObject[student.id] ? (markObject[student.id].reduce((acc, curr) => acc + curr, 0) / markObject[student.id].length) : 0;
+        const average = markObject[student.id] ? (markObject[student.id].reduce((acc, score) => acc + score, 0) / markObject[student.id].length) : 0;
 
         return {
           id: student.id,

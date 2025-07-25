@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\BooksController;
 use App\Http\Controllers\GradeController;
+use App\Http\Controllers\LeadershipController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\MarkController;
 use App\Http\Controllers\SubjectController;
@@ -103,3 +104,5 @@ Route::prefix('books')->controller(BooksController::class)->group(function () {
   Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
 });
+
+Route::get('/leadership', [LeadershipController::class, 'index'])->middleware(['auth:sanctum', 'ability:superadmin,leadership']);

@@ -59,6 +59,9 @@ export const AppRoute = {
     Show: '/books/:id',
     Categories: '/books-categories',
   },
+  Leadership: {
+    Index: '/leadership'
+  },
   NotFound: '*',
 };
 
@@ -127,5 +130,8 @@ export const APIRoute = {
     Show: '/books/:id',
     Categories: '/book-categories',
     CategoriesShow: '/book-categories/:id',
+  },
+  Leadership: {
+    Index: '/leadership'
   },
 };
