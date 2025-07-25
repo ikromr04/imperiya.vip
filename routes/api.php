@@ -85,21 +85,21 @@ Route::prefix('ratings')->controller(RatingController::class)->group(function ()
 });
 
 Route::prefix('reasons')->controller(ReasonController::class)->group(function () {
-  Route::get('/', 'index');
+  Route::get('/', 'index')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
 });
 
 Route::prefix('book-categories')->controller(BookCategoryController::class)->group(function () {
-  Route::get('/', 'index');
+  Route::get('/', 'index')->middleware(['auth:sanctum', 'ability:superadmin,parent,student,teacher']);
   Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
 });
 
 Route::prefix('books')->controller(BooksController::class)->group(function () {
-  Route::get('/', 'index');
+  Route::get('/', 'index')->middleware(['auth:sanctum', 'ability:superadmin,parent,student,teacher']);
   Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
