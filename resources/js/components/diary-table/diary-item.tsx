@@ -63,7 +63,7 @@ function DiaryItem({
       <td className="p-2 min-w-[320px] w-[320px] max-w-[320px] text-start">
         {teacher && (
           (<Link
-            className="duration-150 hover:text-blue-600 truncate"
+            className="duration-150 text-blue-600 truncate"
             to={generatePath(AppRoute.Users.Show, { id: teacher.id })}
           >
             {teacher?.surname} {teacher?.name} {teacher?.patronymic}

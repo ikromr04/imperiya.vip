@@ -2,36 +2,14 @@ import SelectField from '@/components/ui/form-controls/select-field';
 import Spinner from '@/components/ui/spinner';
 import { useAppDispatch } from '@/hooks';
 import { fetchLeadershipDataAction } from '@/store/leadership-slice/leadership-api-actions';
-import { GradeId } from '@/types/grades';
-import { MarkId } from '@/types/marks';
-import { UserId } from '@/types/users';
 import classNames from 'classnames';
 import Pusher from 'pusher-js';
 import React, { useEffect, useMemo, useState } from 'react';
+import { Data } from './leadership-page';
+import { generatePath, Link } from 'react-router-dom';
+import { AppRoute } from '@/const/routes';
 
-export type Data = {
-  users: {
-    id: UserId;
-    name: string;
-    surname: string;
-    patronymic: string;
-    avatarThumb: string;
-    student: { gradeId: GradeId; };
-  }[];
-  marks: {
-    id: MarkId;
-    studentId: UserId;
-    score1: number;
-    score2: number;
-  }[];
-  grades: {
-    id: GradeId;
-    level: number;
-    group: string;
-  }[];
-};
-
-function LeadershipPage(): JSX.Element {
+function SuperadminLeadership(): JSX.Element {
   const dispatch = useAppDispatch();
   const [data, setData] = useState<Data>();
   const [grade, setGrade] = useState('0');
@@ -181,7 +159,9 @@ function LeadershipPage(): JSX.Element {
                 </div>
               </td>
               <td className="flex items-center text-lg">
-                {user.name}
+                <Link className="text-blue-600" to={generatePath(AppRoute.Users.Show, { id: user.id })}>
+                  {user.name}
+                </Link>
               </td>
               <td className="flex items-center justify-center text-lg font-medium">
                 {user.grade}
@@ -197,4 +177,4 @@ function LeadershipPage(): JSX.Element {
   );
 }
 
-export default LeadershipPage;
+export default SuperadminLeadership;

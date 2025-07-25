@@ -62,6 +62,16 @@ function StudentSidebar(): JSX.Element {
                 Дневник
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Auth.MyClass}
+                onClick={handleLinksClick}
+              >
+                <Icons.class className="navlink__icon" width={16} height={16} />
+                Мой класс
+              </NavLink>
+            </li>
           </ul>
 
           <hr />

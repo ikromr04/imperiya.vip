@@ -67,11 +67,19 @@ class UserController extends Controller
 
       case 'student':
         $student = Student::where('user_id', $user->id)->first();
-        $users = User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb'])
-          ->where('role', 'teacher')
-          ->orWhere('id', $student->father_id)
-          ->orWhere('id', $student->mother_id)
-          ->get();
+        $classmateIds = Student::where('grade_id', $student->grade_id)->pluck('user_id');
+
+        $users = [
+          ...User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb'])
+            ->where('role', 'teacher')
+            ->orWhere('id', $student->father_id)
+            ->orWhere('id', $student->mother_id)
+            ->get(),
+          ...User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb'])
+            ->whereIn('id', $classmateIds)
+            ->with(['student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations,talents'])
+            ->get()
+        ];
         break;
     }
 

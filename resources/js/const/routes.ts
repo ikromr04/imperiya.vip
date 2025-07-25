@@ -10,6 +10,7 @@ export const AppRoute = {
     Lessons: '/auth/lessons',
     Diary: '/auth/diary',
     Ratings: '/auth/ratings',
+    MyClass: '/auth/class',
   },
   Journal: '/journal',
   Lessons: {
