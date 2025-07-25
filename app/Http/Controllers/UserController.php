@@ -186,9 +186,11 @@ class UserController extends Controller
 
   public function delete(Request $request)
   {
-    User::findOrFail($request->id)->delete();
+    $user = User::findOrFail($request->id);
+    $user->update(['reason_id' => $request->query('reason_id')]);
+    $user->delete();
 
-    return response()->noContent();
+    return response()->json($request->query('reason_id'));
   }
 
   public function updateAvatar(int $id)

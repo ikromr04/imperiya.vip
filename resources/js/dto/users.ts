@@ -62,6 +62,7 @@ export type UserUpdateDTO = {
   sex?: Sex;
   birth_date?: Date;
   nationality_id?: NationalityId;
+  reason_id?: NationalityId;
   email?: string;
   address?: {
     physical_address: string;
@@ -102,4 +103,8 @@ export type UserRoleUpdateDTO = {
   previous_schools?: string;
   medical_recommendations?: string;
   talents?: string;
+};
+
+export type UserDeleteDTO = {
+  reason_id: string;
 };

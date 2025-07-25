@@ -7,6 +7,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\ProfessionController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\ReasonController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -78,4 +79,11 @@ Route::prefix('ratings')->controller(RatingController::class)->group(function ()
   Route::put('/dates', 'updateDate')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::put('/', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin,teacher']);
+});
+
+Route::prefix('reasons')->controller(ReasonController::class)->group(function () {
+  Route::get('/', 'index');
+  Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
 });

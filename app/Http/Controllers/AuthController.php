@@ -33,7 +33,7 @@ class AuthController extends Controller
 
     if (!$user) return response()->json(['message' => 'Вы не авторизованы.'], 401);
 
-    $user = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
+    $user = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'reason_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
       ->with([
         'teacher:id,user_id,education,achievements,work_experience',
         'parent:id,user_id,profession_id,workplace,position',
@@ -124,7 +124,7 @@ class AuthController extends Controller
       ]);
     }
 
-    $user = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
+    $user = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'reason_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
       ->with([
         'teacher:id,user_id,education,achievements,work_experience',
         'parent:id,user_id,profession_id,workplace,position',

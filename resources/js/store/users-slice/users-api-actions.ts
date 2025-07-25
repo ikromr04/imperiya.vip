@@ -1,6 +1,7 @@
 import { APIRoute } from '@/const/routes';
 import { UserRatings } from '@/dto/auth-dto';
 import { UserRoleUpdateDTO, UserStoreDTO, UserUpdateDTO } from '@/dto/users';
+import { ReasonId } from '@/types/reasons';
 import { User, UserId, Users } from '@/types/users';
 import { ValidationError } from '@/types/validation-error';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -72,6 +73,7 @@ export const updateUserAction = createAsyncThunk<User, {
 
 export const deleteUserAction = createAsyncThunk<UserId, {
   id: UserId;
+  reasonId: ReasonId;
   onSuccess?: () => void;
   onFail?: (message: string) => void;
 }, {
@@ -79,9 +81,9 @@ export const deleteUserAction = createAsyncThunk<UserId, {
   rejectWithValue: ValidationError;
 }>(
   'users/deleteUser',
-  async ({ id, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
+  async ({ id, reasonId, onSuccess, onFail }, { extra: api, rejectWithValue }) => {
     try {
-      await api.delete(generatePath(APIRoute.Users.Show, { id }));
+      await api.delete(`${generatePath(APIRoute.Users.Show, { id })}?reason_id=${reasonId}`);
       if (onSuccess) onSuccess();
       return id;
     } catch (err) {

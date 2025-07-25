@@ -145,6 +145,16 @@ function SuperadminSidebar(): JSX.Element {
             <li>
               <NavLink
                 className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Reasons.Index}
+                onClick={handleLinksClick}
+              >
+                <Icons.reason className="navlink__icon" width={16} height={16} />
+                Причины
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
                 to={AppRoute.Reports.Index}
                 onClick={handleLinksClick}
               >

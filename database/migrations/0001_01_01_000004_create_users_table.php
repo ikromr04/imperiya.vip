@@ -20,6 +20,11 @@ return new class extends Migration
         ->constrained('nationalities')
         ->nullOnDelete();
 
+      $table->foreignId('reason_id')
+        ->nullable()
+        ->constrained('reasons')
+        ->nullOnDelete();
+
       $table->string('name');
       $table->string('surname');
       $table->string('patronymic')->nullable();

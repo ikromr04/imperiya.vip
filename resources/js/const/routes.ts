@@ -51,6 +51,9 @@ export const AppRoute = {
     Grades: '/reports/grades',
     Grade: '/reports/grades/:id',
   },
+  Reasons: {
+    Index: '/reasons'
+  },
   NotFound: '*',
 };
 
@@ -109,5 +112,9 @@ export const APIRoute = {
   Ratings: {
     Index: '/ratings',
     Dates: '/ratings/dates',
+  },
+  Reasons: {
+    Index: '/reasons',
+    Show: '/reasons/:id',
   },
 };

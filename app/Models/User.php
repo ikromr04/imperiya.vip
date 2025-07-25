@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Spatie\Sluggable\SlugOptions;
 use Spatie\Sluggable\HasSlug;
-use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -86,6 +85,7 @@ class User extends Authenticatable
     $map = [
       'birth_date' => 'birthDate',
       'nationality_id' => 'nationalityId',
+      'reason_id' => 'reasonId',
       'phone_numbers' => 'phoneNumbers',
       'social_link' => 'socialLink',
       'avatar_thumb' => 'avatarThumb',
