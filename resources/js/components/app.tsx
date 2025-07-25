@@ -38,6 +38,7 @@ const ReportsPage = lazy(() => import('@/pages/reports-page'));
 const ReportsGradePage = lazy(() => import('@/pages/reports-grade-page'));
 const ReportsGradesPage = lazy(() => import('@/pages/reports-grades-page'));
 const ReasonsPage = lazy(() => import('@/pages/reasons-page'));
+const BookCategoriesPage = lazy(() => import('@/pages/books/book-categories-page'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
 function App(): JSX.Element {
@@ -103,6 +104,7 @@ function App(): JSX.Element {
               <Route path={AppRoute.Reports.Grade} element={<ReportsGradePage />} />
               <Route path={AppRoute.Reports.Grades} element={<ReportsGradesPage />} />
               <Route path={AppRoute.Reasons.Index} element={<ReasonsPage />} />
+              <Route path={AppRoute.Books.Categories} element={<BookCategoriesPage />} />
             </Route>
           </Route>
 

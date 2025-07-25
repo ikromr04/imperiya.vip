@@ -16,6 +16,7 @@ export enum SliceName {
   Ratings = 'Ratings',
   Marks = 'Marks',
   Reasons = 'Reasons',
+  Books = 'Books',
 };
 
 export enum AsyncStatus {

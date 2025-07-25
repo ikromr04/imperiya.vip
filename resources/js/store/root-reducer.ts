@@ -10,6 +10,7 @@ import { lessonsSlice } from './lessons-slice/lessons-slice';
 import { ratingsSlice } from './ratings-slice/ratings-slice';
 import { marksSlice } from './marks-slice/marks-slice';
 import { reasonsSlice } from './reasons-slice/reasons-slice';
+import { booksSlice } from './books-slice/books-slice';
 
 export const rootReducer = combineReducers({
   [SliceName.Auth]: authSlice.reducer,
@@ -22,4 +23,5 @@ export const rootReducer = combineReducers({
   [SliceName.Ratings]: ratingsSlice.reducer,
   [SliceName.Marks]: marksSlice.reducer,
   [SliceName.Reasons]: reasonsSlice.reducer,
+  [SliceName.Books]: booksSlice.reducer,
 });

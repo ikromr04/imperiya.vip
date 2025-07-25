@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\MarkController;
@@ -82,6 +83,13 @@ Route::prefix('ratings')->controller(RatingController::class)->group(function ()
 });
 
 Route::prefix('reasons')->controller(ReasonController::class)->group(function () {
+  Route::get('/', 'index');
+  Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);
+  Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
+});
+
+Route::prefix('book-categories')->controller(BookCategoryController::class)->group(function () {
   Route::get('/', 'index');
   Route::post('/', 'store')->middleware(['auth:sanctum', 'ability:superadmin']);
   Route::put('/{id}', 'update')->middleware(['auth:sanctum', 'ability:superadmin']);

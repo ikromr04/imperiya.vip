@@ -149,7 +149,17 @@ function SuperadminSidebar(): JSX.Element {
                 onClick={handleLinksClick}
               >
                 <Icons.reason className="navlink__icon" width={16} height={16} />
-                Причины
+                Причины удаления
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Books.Categories}
+                onClick={handleLinksClick}
+              >
+                <Icons.categories className="navlink__icon" width={16} height={16} />
+                Категории книг
               </NavLink>
             </li>
             <li>

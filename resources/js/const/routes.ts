@@ -54,6 +54,11 @@ export const AppRoute = {
   Reasons: {
     Index: '/reasons'
   },
+  Books: {
+    Index: '/books',
+    Show: '/books/:id',
+    Categories: '/books-categories',
+  },
   NotFound: '*',
 };
 
@@ -116,5 +121,11 @@ export const APIRoute = {
   Reasons: {
     Index: '/reasons',
     Show: '/reasons/:id',
+  },
+  Books: {
+    Index: '/books',
+    Show: '/books/:id',
+    Categories: '/book-categories',
+    CategoriesShow: '/book-categories/:id',
   },
 };
