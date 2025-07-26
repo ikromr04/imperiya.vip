@@ -37,9 +37,9 @@ function ColumnFilter<TData, TValue>({
     <div ref={ref} className="relative ml-auto column-filter">
       <button
         className={classNames(
-          'flex md:hidden justify-center items-center min-w-6 min-h-6 rounded-full bg-gray-100 hover:bg-gray-200',
+          'flex justify-center items-center min-w-6 min-h-6 rounded-full bg-gray-100 hover:bg-gray-200',
           (columnPinning.left?.includes(header.column.id) || columnPinning.right?.includes(header.column.id) || header.column.getCanFilter())
-            ? 'flex text-error' : 'group-hover:flex'
+            ? 'flex text-error' : 'md:hidden group-hover:flex'
         )}
         onClick={handleButtonClick}
       >
