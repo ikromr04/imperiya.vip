@@ -39,7 +39,7 @@ const ReportsGradePage = lazy(() => import('@/pages/reports-grade-page'));
 const ReportsGradesPage = lazy(() => import('@/pages/reports-grades-page'));
 const ReasonsPage = lazy(() => import('@/pages/reasons-page'));
 const BookCategoriesPage = lazy(() => import('@/pages/books/book-categories-page'));
-const BooksPage = lazy(() => import('@/pages/books/books-page'));
+const BooksPage = lazy(() => import('@/pages/books/books-page/books-page'));
 const LeadershipPage = lazy(() => import('@/pages/leadership-page/leadership-page'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
@@ -95,6 +95,8 @@ function App(): JSX.Element {
             <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
             <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />
 
+            <Route path={AppRoute.Books.Index} element={<BooksPage />} />
+
             <Route element={<SuperadminRoute />}>
               <Route path={AppRoute.Users.Create} element={<UsersCreatePage />} />
               <Route path={AppRoute.Subjects.Index} element={<SubjectsPage />} />
@@ -108,7 +110,6 @@ function App(): JSX.Element {
               <Route path={AppRoute.Reports.Grades} element={<ReportsGradesPage />} />
               <Route path={AppRoute.Reasons.Index} element={<ReasonsPage />} />
               <Route path={AppRoute.Books.Categories} element={<BookCategoriesPage />} />
-              <Route path={AppRoute.Books.Index} element={<BooksPage />} />
               <Route path={AppRoute.Leadership.Index} element={<LeadershipPage />} />
             </Route>
           </Route>

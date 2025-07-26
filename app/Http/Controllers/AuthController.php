@@ -31,6 +31,12 @@ class AuthController extends Controller
   {
     $user = $request->user();
 
+    if ($user->blocked_at) {
+      $user->currentAccessToken()->delete();
+
+      return response()->json(['message' => 'Ваш профиль заблокирован.'], 403);
+    }
+
     if (!$user) return response()->json(['message' => 'Вы не авторизованы.'], 401);
 
     $user = User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'reason_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
@@ -117,6 +123,10 @@ class AuthController extends Controller
   public function login(LoginRequest $request): JsonResponse
   {
     $user = User::where('login', $request->login)->first();
+
+    if ($user->blocked_at) {
+      return response()->json(['message' => 'Ваш профиль заблокирован.'], 403);
+    }
 
     if ($request->password != Crypt::decryptString($user->password)) {
       throw ValidationException::withMessages([

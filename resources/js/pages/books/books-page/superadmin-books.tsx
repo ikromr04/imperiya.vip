@@ -16,7 +16,7 @@ import BooksDeleteForm from '@/components/forms/books/books-delete-form';
 import { AccessText } from '@/const/books';
 import { Link } from 'react-router-dom';
 
-function BooksPage(): JSX.Element {
+function SuperadminBooks(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const booksStatus = useAppSelector(getBooksStatus);
@@ -47,6 +47,12 @@ function BooksPage(): JSX.Element {
       header: 'Категория',
       size: 360,
       cell: ({ row }) => categories?.find(({ id }) => +id === +row.original.categoryId)?.title,
+       sortingFn: (rowA, rowB) => {
+        const gradeA = categories?.find(({ id }) => +id === +rowA.original.categoryId)?.title || '';
+        const gradeB = categories?.find(({ id }) => +id === +rowB.original.categoryId)?.title || '';
+
+        return gradeA.localeCompare(gradeB);
+      },
     },
     {
       id: 'access',
@@ -111,7 +117,7 @@ function BooksPage(): JSX.Element {
     <>
       <main className="py-2">
         <h1 className="title mb-1 px-3">
-          Причины ({categories?.length})
+          Книги ({categories?.length})
         </h1>
 
         {books ? (
@@ -160,4 +166,4 @@ function BooksPage(): JSX.Element {
   );
 }
 
-export default BooksPage;
+export default SuperadminBooks;

@@ -10,7 +10,22 @@ class BooksController extends Controller
 {
   public function index(): JsonResponse
   {
-    $books = Book::selectBasic()->orderBy('title')->get();
+    $user = request()->user();
+    $books = collect();
+
+    switch ($user->role) {
+      case 'superadmin':
+        $books = Book::selectBasic()->orderBy('title')->get();
+        break;
+
+      case 'student':
+        $books = Book::selectBasic()
+          ->whereIn('access', ['students', 'all'])
+          ->orderBy('title')
+          ->get();
+        break;
+    }
+
 
     return response()->json($books, 200);
   }

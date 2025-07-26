@@ -67,7 +67,7 @@ function BookCategoriesPage(): JSX.Element {
     <>
       <main className="py-2">
         <h1 className="title mb-1 px-3">
-          Причины ({categories?.length})
+          Категории книг ({categories?.length})
         </h1>
 
         {categories ? (

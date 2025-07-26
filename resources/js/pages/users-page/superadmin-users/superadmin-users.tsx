@@ -429,7 +429,7 @@ function SuperadminUsers(): ReactNode {
       header: 'Блокировка',
       size: 160,
       cell: ({ row }) => row.original.blockedAt ? (
-        <>
+        <div className="flex flex-col">
           <Button
             className="mb-1"
             variant="danger"
@@ -440,7 +440,7 @@ function SuperadminUsers(): ReactNode {
           <span className="flex text-sm leading-none text-danger">
             Заблокирован с <br /> {dayjs(row.original.blockedAt).format('DD MMMM YYYY HH:mm')}
           </span>
-        </>
+        </div>
       ) : (
         <Button
           variant="light"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Form, Formik, FormikHelpers } from 'formik';
 import classNames from 'classnames';
@@ -25,6 +25,7 @@ function LoginForm({
 }: LoginFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const initialValues: LoginCredentials = { login: '', password: '' };
+  const [isBlocked, setIsBlocked] = useState(false);
 
   const onSubmit = async (
     values: LoginCredentials,
@@ -35,6 +36,7 @@ function LoginForm({
     await dispatch(loginAction({
       dto: values,
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
+      onBlocked: () => setIsBlocked(true),
     }));
 
     helpers.setSubmitting(false);
@@ -48,6 +50,11 @@ function LoginForm({
     >
       {({ isSubmitting }) => (
         <Form className={classNames(className, 'flex flex-col')}>
+          {isBlocked && (
+            <p className="text-danger leading-[1.2] mb-4">
+              Профиль заблокирован. <a className="text-blue-600" href="https://wa.me/+992918339939" target="_blank">Узнать причину.</a>
+            </p>
+          )}
           <TextField name="login" label="Логин" />
 
           <div className="flex flex-col mb-5">

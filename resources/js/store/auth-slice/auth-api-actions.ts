@@ -20,23 +20,24 @@ export const checkAuthAction = createAsyncThunk<User, undefined, {
 );
 
 export const loginAction = createAsyncThunk<User, {
-  dto: LoginCredentials,
-  onValidationError?: (error: ValidationError) => void,
+  dto: LoginCredentials;
+  onValidationError?: (error: ValidationError) => void;
+  onBlocked?: () => void;
 }, {
-  extra: AxiosInstance,
-  rejectWithValue: ValidationError,
+  extra: AxiosInstance;
+  rejectWithValue: ValidationError;
 }>(
   'auth/login',
-  async ({ dto, onValidationError }, { extra: api, rejectWithValue }) => {
+  async ({ dto, onValidationError, onBlocked }, { extra: api, rejectWithValue }) => {
     try {
       const { data } = await api.post<{ user: User, token: Token }>(APIRoute.Auth.Login, dto);
       saveToken(data.token);
       return data.user;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const error: AxiosError<ValidationError> = err;
+    } catch (err) {
+      const error = err as AxiosError<ValidationError>;
       if (!error.response) throw err;
       if (onValidationError && (error.response?.status === 422)) onValidationError(error.response.data);
+      if (onBlocked && (error.response?.status === 403)) onBlocked();
       return rejectWithValue(error.response.data);
     }
   },
