@@ -22,6 +22,7 @@ const UsersPage = lazy(() => import('@/pages/users-page/users-page'));
 const UsersShowPage = lazy(() => import('@/pages/users-show-page/users-show-page'));
 const UsersLessonsPage = lazy(() => import('@/pages/users-show-page/users-lessons-page'));
 const UsersDiaryPage = lazy(() => import('@/pages/users-show-page/users-diary-page'));
+const UsersLeadershipPage= lazy(() => import('@/pages/users-show-page/users-leadership-page'));
 const UsersCreatePage = lazy(() => import('@/pages/users-create-page/users-create-page'));
 const LessonsPage = lazy(() => import('@/pages/lessons-page/lessons-page'));
 const JournalPage = lazy(() => import('@/pages/journal-page/journal-page'));
@@ -91,6 +92,7 @@ function App(): JSX.Element {
             <Route path={AppRoute.Users.Lessons} element={<UsersLessonsPage />} />
             <Route path={AppRoute.Users.Diary} element={<UsersDiaryPage />} />
             <Route path={AppRoute.Users.Ratings} element={<UsersRatingsPage />} />
+            <Route path={AppRoute.Users.Leadership} element={<UsersLeadershipPage />} />
 
             <Route path={AppRoute.Classes.Index} element={<GradesPage />} />
             <Route path={AppRoute.Classes.Show} element={<GradesShowPage />} />

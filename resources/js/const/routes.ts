@@ -27,6 +27,7 @@ export const AppRoute = {
     Lessons: '/users/:id/lessons',
     Diary: '/users/:id/diary',
     Ratings: '/users/:id/ratings',
+    Leadership: '/users/:id/leadership',
   },
   Classes: {
     Index: '/classes',

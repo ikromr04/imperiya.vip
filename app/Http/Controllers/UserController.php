@@ -306,16 +306,42 @@ class UserController extends Controller
 
   public function getRatings(Request $request): JsonResponse
   {
-    $user = User::find($request->id);
+    $authUser = $request->user();
+    $subjectIds = collect();
+    $ratings = collect();
 
-    $subjectIds = Lesson::where('grade_id', $user->student->grade_id)
-      ->distinct()
-      ->pluck('subject_id');
+    switch ($authUser->role) {
+      case 'superadmin':
+      case 'student':
+        $user = User::find($request->id);
 
-    $ratings = Rating::where('years', $request->query('years'))
-      ->where('student_id', $user->id)
-      ->where('grade_id', $user->student->grade_id)
-      ->get();
+        $subjectIds = Lesson::where('grade_id', $user->student->grade_id)
+          ->distinct()
+          ->pluck('subject_id');
+
+        $ratings = Rating::where('years', $request->query('years'))
+          ->where('student_id', $user->id)
+          ->where('grade_id', $user->student->grade_id)
+          ->get();
+        break;
+
+      case 'parent':
+        $user = User::find($request->id);
+
+        if (!$user->blocked_at) {
+          $subjectIds = Lesson::where('grade_id', $user->student->grade_id)
+            ->distinct()
+            ->pluck('subject_id');
+
+          $ratings = Rating::where('years', $request->query('years'))
+            ->where('student_id', $user->id)
+            ->where('grade_id', $user->student->grade_id)
+            ->get();
+        }
+
+        break;
+    }
+
 
     return response()->json([
       'subjectIds' => $subjectIds,

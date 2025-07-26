@@ -51,23 +51,42 @@ function ParentSidebar(): JSX.Element {
                 Профиль
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                to={AppRoute.Books.Index}
+                onClick={handleLinksClick}
+              >
+                <Icons.books className="navlink__icon" width={16} height={16} />
+                Библиотека
+              </NavLink>
+            </li>
           </ul>
 
           <h2 className="text-sm text-gray-400 pl-4">Дети</h2>
 
           <ul className="flex flex-col p-1 gap-1">
-            {users?.filter(({ role }) => role === 'student').map((user) => (
-              <li key={user.id}>
-                <NavLink
-                  className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
-                  to={generatePath(AppRoute.Users.Show, { id: user.id })}
-                  onClick={handleLinksClick}
-                >
-                  <Icons.accountCircle className="navlink__icon" width={16} height={16} />
-                  {user.surname} {user.name}
-                </NavLink>
-              </li>
-            ))}
+            {users?.filter(({ role }) => role === 'student').map((user) =>
+              !user.blockedAt ? (
+                <li key={user.id}>
+                  <NavLink
+                    className={({ isActive }) => classNames('navlink', isActive && 'navlink--active')}
+                    to={generatePath(AppRoute.Users.Show, { id: user.id })}
+                    onClick={handleLinksClick}
+                  >
+                    <Icons.accountCircle className="navlink__icon" width={16} height={16} />
+                    {user.surname} {user.name}
+                  </NavLink>
+                </li>
+              ) : (
+                <li key={user.id}>
+                  <div className="navlink pointer-events-none text-red-300">
+                    <Icons.lock className="navlink__icon" width={18} height={18} />
+                    {user.surname} {user.name}
+                  </div>
+                </li>
+              )
+            )}
           </ul>
 
           <hr />

@@ -10,7 +10,7 @@ import { fetchBookCategoriesAction, fetchBooksAction } from '@/store/books-slice
 import { AccessText } from '@/const/books';
 import { Link } from 'react-router-dom';
 
-function StudentBooks(): JSX.Element {
+function ParentBooks(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const booksStatus = useAppSelector(getBooksStatus);
@@ -95,4 +95,4 @@ function StudentBooks(): JSX.Element {
   );
 }
 
-export default StudentBooks;
+export default ParentBooks;

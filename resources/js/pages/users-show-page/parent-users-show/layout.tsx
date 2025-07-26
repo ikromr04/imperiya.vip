@@ -117,6 +117,17 @@ function Layout({
                   Оценки за четверть
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  className={({ isActive }) => classNames(
+                    'flex items-center h-7 px-2 transition-all duration-150 border border-transparent min-w-max',
+                    isActive && 'rounded shadow bg-white border-gray-200'
+                  )}
+                  to={generatePath(AppRoute.Users.Leadership, { id: user.id })}
+                >
+                  Рейтинг
+                </NavLink>
+              </li>
             </>
           )}
         </ul>

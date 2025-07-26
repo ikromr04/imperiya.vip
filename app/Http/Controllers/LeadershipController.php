@@ -13,6 +13,9 @@ class LeadershipController extends Controller
   public function index(): JsonResponse
   {
     $user = request()->user();
+    $users = collect();
+    $marks = collect();
+    $grades = collect();
 
     switch ($user->role) {
       case 'superadmin':
@@ -27,12 +30,30 @@ class LeadershipController extends Controller
           ->get();
 
         $grades = Grade::select('id', 'level', 'group')->get();
+        break;
 
-        return response()->json([
-          'users' => $users,
-          'marks' => $marks,
-          'grades' => $grades,
-        ], 200);
+      case 'parent':
+        $user = User::findOrFail(request()->query('studentId'));
+
+        if (!$user->blocked_at) {
+          $student = Student::where('user_id', $user->id)->first();
+          $userIds = Student::where('grade_id', $student->grade_id)->pluck('user_id');
+
+          $users = User::select('id', 'name', 'surname', 'patronymic', 'avatar_thumb', 'role')
+            ->whereIn('id', $userIds)
+            ->with(['student:id,user_id,grade_id'])->get();
+
+          $marks = Mark::select('id', 'student_id', 'score_1', 'score_2')
+            ->whereIn('student_id', $userIds)
+            ->where(function ($query) {
+              $query->whereNotNull('score_1')
+                ->orWhereNotNull('score_2');
+            })
+            ->get();
+
+          $grades = Grade::select('id', 'level', 'group')->get();
+        }
+        break;
 
       case 'student':
         $student = Student::where('user_id', $user->id)->first();
@@ -51,15 +72,13 @@ class LeadershipController extends Controller
           ->get();
 
         $grades = Grade::select('id', 'level', 'group')->get();
-
-        return response()->json([
-          'users' => $users,
-          'marks' => $marks,
-          'grades' => $grades,
-        ], 200);
-
-      default:
-        return response()->json([], 404);
+        break;
     }
+
+    return response()->json([
+      'users' => $users,
+      'marks' => $marks,
+      'grades' => $grades,
+    ], 200);
   }
 }

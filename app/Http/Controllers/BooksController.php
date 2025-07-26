@@ -18,6 +18,12 @@ class BooksController extends Controller
         $books = Book::selectBasic()->orderBy('title')->get();
         break;
 
+      case 'parent':
+        $books = Book::selectBasic()
+          ->whereIn('access', ['parents', 'all'])
+          ->orderBy('title')
+          ->get();
+
       case 'student':
         $books = Book::selectBasic()
           ->whereIn('access', ['students', 'all'])
