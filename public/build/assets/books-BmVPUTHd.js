@@ -1,0 +1,1 @@
+const e=[{value:"all",label:"Для всех"},{value:"students",label:"Для учеников"},{value:"parents",label:"Для родителей"},{value:"teachers",label:"Для учителей"}],a={all:"Для всех",students:"Для учеников",parents:"Для родителей",teachers:"Для учителей"};export{e as A,a};
