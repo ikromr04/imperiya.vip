@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Events\MarkEvents;
-use App\Events\MarkUpdateEvent;
 use App\Http\Requests\MarkStoreRequest;
 use App\Http\Requests\MarkUpdateRequest;
 use App\Models\Mark;

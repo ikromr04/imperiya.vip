@@ -17,8 +17,8 @@ class MarkStoreRequest extends FormRequest
     return [
       'student_id' => ['required', 'exists:users,id'],
       'lesson_id' => ['required', 'exists:lessons,id'],
-      'score_1' => ['nullable', 'numeric', Rule::in([2, 3, 4, 5])],
-      'score_2' => ['nullable', 'numeric', Rule::in([2, 3, 4, 5])],
+      'score_1' => ['nullable', 'numeric', 'between:1,10'],
+      'score_2' => ['nullable', 'numeric', 'between:1,10'],
       'attendance' => ['required', 'string', Rule::in(['P', 'L', 'A', 'EA', 'SUS'])],
       'comment' => ['nullable', 'string', 'not_regex:/^\d+$/'],
     ];
@@ -34,10 +34,10 @@ class MarkStoreRequest extends FormRequest
       'id.exists' => 'Предмет с таким ID не найдена.',
 
       'score_1.numeric' => 'Оценка 1 должна быть числом.',
-      'score_1.in' => 'Оценка 1 должна быть одной из следующих: 2, 3, 4, 5, null.',
+      'score_1.between' => 'Оценка должна быть от 1 до 10.',
 
       'score_2.numeric' => 'Оценка 2 должна быть числом.',
-      'score_2.in' => 'Оценка 2 должна быть одной из следующих: 2, 3, 4, 5, null.',
+      'score_2.between' => 'Оценка должна быть от 1 до 10.',
 
       'attendance.required' => 'Укажите посещаемость.',
       'attendance.string' => 'Тип посещаемости должен быть строкой.',

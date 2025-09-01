@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
 
 class Mark extends Model
 {
@@ -46,5 +48,12 @@ class Mark extends Model
     }
 
     return $array;
+  }
+
+  protected static function booted()
+  {
+    static::addGlobalScope('active', function (Builder $builder) {
+      $builder->whereBetween('created_at', Helper::getCurrentEducationPeriod());
+    });
   }
 }

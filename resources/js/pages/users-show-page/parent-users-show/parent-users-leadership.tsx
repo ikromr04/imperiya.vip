@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Data } from '@/pages/leadership-page/leadership-page';
 import Layout from './layout';
+import { ScoreMap } from '@/const/leadership';
 
 function ParentUsersLeadership(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -33,12 +34,7 @@ function ParentUsersLeadership(): JSX.Element {
       const list = data.users.map((user) => {
         const grade = data.grades.find(({ id }) => id === (user.student?.gradeId || 0));
 
-        const score = marksObject[user.id]?.reduce((acc, score) => {
-          if (score === 4 || score == 5) return acc + score;
-          if (score === 3) return acc - score;
-          if (score === 2) return acc - 5;
-          return 0;
-        }, 0);
+        const score = marksObject[user.id]?.reduce((acc, score) => (acc += ScoreMap[score as keyof typeof ScoreMap]), 0);
 
         return {
           id: user.id,

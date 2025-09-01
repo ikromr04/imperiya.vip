@@ -16,8 +16,8 @@ class MarkUpdateRequest extends FormRequest
   {
     return [
       'id' => ['required', 'exists:marks,id'],
-      'score_1' => ['nullable', 'numeric', Rule::in([2, 3, 4, 5, null])],
-      'score_2' => ['nullable', 'numeric', Rule::in([2, 3, 4, 5, null])],
+      'score_1' => ['nullable', 'numeric', 'between:1,10'],
+      'score_2' => ['nullable', 'numeric', 'between:1,10'],
       'attendance' => ['nullable', 'string', Rule::in(['P', 'L', 'A', 'EA', 'SUS'])],
       'comment' => ['nullable', 'string', 'not_regex:/^\d+$/'],
     ];
@@ -30,10 +30,10 @@ class MarkUpdateRequest extends FormRequest
       'id.exists' => 'Оценка с таким ID не найдена.',
 
       'score_1.numeric' => 'Оценка 1 должна быть числом.',
-      'score_1.in' => 'Оценка 1 должна быть одной из следующих: 2, 3, 4, 5, null.',
+      'score_1.between' => 'Оценка должна быть от 1 до 10.',
 
       'score_2.numeric' => 'Оценка 2 должна быть числом.',
-      'score_2.in' => 'Оценка 2 должна быть одной из следующих: 2, 3, 4, 5, null.',
+      'score_2.between' => 'Оценка должна быть от 1 до 10.',
 
       'attendance.string' => 'Тип посещаемости должен быть строкой.',
       'attendance.in' => 'Недопустимое значение посещаемости. Возможные варианты: P, L, A, EA, SUS.',

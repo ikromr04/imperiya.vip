@@ -8,6 +8,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Data } from './leadership-page';
 import { generatePath, Link } from 'react-router-dom';
 import { AppRoute } from '@/const/routes';
+import { ScoreMap } from '@/const/leadership';
 
 function SuperadminLeadership(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -56,12 +57,7 @@ function SuperadminLeadership(): JSX.Element {
       const list = data.users.map((user) => {
         const grade = data.grades.find(({ id }) => id === (user.student?.gradeId || 0));
 
-        const score = marksObject[user.id]?.reduce((acc, score) => {
-          if (score === 4 || score == 5) return acc + score;
-          if (score === 3) return acc - score;
-          if (score === 2) return acc - 5;
-          return 0;
-        }, 0);
+        const score = marksObject[user.id]?.reduce((acc, score) => (acc += ScoreMap[score as keyof typeof ScoreMap]), 0);
 
         return {
           id: user.id,
