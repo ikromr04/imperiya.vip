@@ -1,1 +1,0 @@
-import{ah as c,ai as r}from"./main-ConWnhM4.js";const i=c("leadership/fetchData",async({studentId:a,onSuccess:e},{extra:t})=>{const{data:s}=await t.get(`${r.Leadership.Index}${a?`?studentId=${a}`:""}`);e(s)});export{i as f};
