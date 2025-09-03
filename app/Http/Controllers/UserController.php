@@ -70,7 +70,7 @@ class UserController extends Controller
         $classmateIds = Student::where('grade_id', $student->grade_id)->pluck('user_id');
 
         $users = [
-          ...User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb'])
+          ...User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'nationality_id', 'whatsapp', 'avatar', 'avatar_thumb'])
             ->where('role', 'teacher')
             ->orWhere('id', $student->father_id)
             ->orWhere('id', $student->mother_id)

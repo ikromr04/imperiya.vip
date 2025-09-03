@@ -23,6 +23,7 @@ return new class extends Migration
       $table->foreignId('reason_id')
         ->nullable()
         ->constrained('reasons')
+        ->default(null)
         ->nullOnDelete();
 
       $table->string('name');

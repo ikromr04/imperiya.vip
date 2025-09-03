@@ -14,7 +14,6 @@ import { getNationalities, getNationalitiesStatus } from '@/store/nationalities-
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { fetchNationalitiesAction } from '@/store/nationalities-slice/nationalities-api-actions';
 import DescriptionList from '@/components/ui/description-list';
-import dayjs from 'dayjs';
 import classNames from 'classnames';
 import { AsyncStatus } from '@/const/store';
 
@@ -113,16 +112,6 @@ function StudentUsersShow(): JSX.Element {
                   'Отчество': user.patronymic ?? '-',
                   'Позиция': RoleName[user.role],
                   'Пол': SexName[user.sex],
-                  'Электронная почта':
-                    user.email ? (
-                      <Link className="text-blue-600" to={`mailto:${user.email}`}>
-                        {user.email}
-                      </Link>
-                    ) : '-',
-                  'Дата рождения': user.birthDate ? dayjs(user.birthDate).format('DD MMMM YYYY') : '-',
-                  'Адрес': user.address ?
-                    `${(user.address.region !== 'За пределами города') ? 'район ' : ''}${user.address.region}, ${user.address.physicalAddress}`
-                    : '-',
                   'Национальность': nationalities?.find(({ id }) => id === user.nationalityId)?.name || '-',
                   'WhatsApp': (user.whatsapp?.code && user.whatsapp?.numbers) ? (
                     <a
@@ -140,87 +129,89 @@ function StudentUsersShow(): JSX.Element {
           </section>
         </div>
 
-        <div className="flex flex-col gap-4">
-          <section className="box">
-            <div className="box__header flex-col !items-start">
-              <Button
-                className="flex items-center gap-2 text-blue-600 leading-none"
-                variant="default"
-                href={user.email ? `mailto:${user.email}` : ''}
-              >
-                <span className="flex items-center justify-center w-7 h-7 rounded bg-blue-50 text-success">
-                  <Icons.mail width={16} height={16} />
-                </span>
-                {user.email ?? '-'}
-              </Button>
+        {user.role === 'student' && (
+          <div className="flex flex-col gap-4">
+            <section className="box">
+              <div className="box__header flex-col !items-start">
+                <Button
+                  className="flex items-center gap-2 text-blue-600 leading-none"
+                  variant="default"
+                  href={user.email ? `mailto:${user.email}` : ''}
+                >
+                  <span className="flex items-center justify-center w-7 h-7 rounded bg-blue-50 text-success">
+                    <Icons.mail width={16} height={16} />
+                  </span>
+                  {user.email ?? '-'}
+                </Button>
 
-              <Button
-                className={classNames(
-                  'flex items-center gap-2 text-blue-600 leading-none',
-                  !user.whatsapp && 'pointer-events-none',
-                )}
-                variant="default"
-                href={`https://wa.me/+${user.whatsapp?.code}${user.whatsapp?.numbers}`}
-                target="_blank"
-              >
-                <span className="flex items-center justify-center w-7 h-7 rounded bg-blue-50 text-success">
-                  <Icons.whatsapp width={16} height={16} />
-                </span>
-                {user.whatsapp ? `+${user.whatsapp.code} ${user.whatsapp.numbers}` : '-'}
-              </Button>
-            </div>
+                <Button
+                  className={classNames(
+                    'flex items-center gap-2 text-blue-600 leading-none',
+                    !user.whatsapp && 'pointer-events-none',
+                  )}
+                  variant="default"
+                  href={`https://wa.me/+${user.whatsapp?.code}${user.whatsapp?.numbers}`}
+                  target="_blank"
+                >
+                  <span className="flex items-center justify-center w-7 h-7 rounded bg-blue-50 text-success">
+                    <Icons.whatsapp width={16} height={16} />
+                  </span>
+                  {user.whatsapp ? `+${user.whatsapp.code} ${user.whatsapp.numbers}` : '-'}
+                </Button>
+              </div>
 
-            <DescriptionList
-              className="box__body"
-              variant="detailed"
-              list={{}}
-            />
-          </section>
+              <DescriptionList
+                className="box__body"
+                variant="detailed"
+                list={{}}
+              />
+            </section>
 
-          <section className="box">
-            <div className="box__header">
-              <h2 className="font-medium text-gray-900">Телефонные номера</h2>
-            </div>
+            <section className="box">
+              <div className="box__header">
+                <h2 className="font-medium text-gray-900">Телефонные номера</h2>
+              </div>
 
-            <ul className="box__body flex flex-col gap-2">
-              {user.phoneNumbers?.map(({ code, numbers }) => (
-                <li key={numbers}>
-                  <Link className="flex items-center gap-2 w-max text-blue-600" to={`tel:+${code}${numbers}`}>
-                    <span className="flex items-center w-7 h-7 justify-center bg-blue-50 rounded text-success">
-                      <Icons.phone width={16} height={16} />
-                    </span>
-                    +{code} {numbers}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
+              <ul className="box__body flex flex-col gap-2">
+                {user.phoneNumbers?.map(({ code, numbers }) => (
+                  <li key={numbers}>
+                    <Link className="flex items-center gap-2 w-max text-blue-600" to={`tel:+${code}${numbers}`}>
+                      <span className="flex items-center w-7 h-7 justify-center bg-blue-50 rounded text-success">
+                        <Icons.phone width={16} height={16} />
+                      </span>
+                      +{code} {numbers}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
 
-          <section className="box">
-            <div className="box__header">
-              <h2 className="font-medium text-gray-900">Социальные сети</h2>
-            </div>
+            <section className="box">
+              <div className="box__header">
+                <h2 className="font-medium text-gray-900">Социальные сети</h2>
+              </div>
 
-            <div className="box__body flex flex-wrap gap-2">
-              {user.socialLink?.facebook &&
-                <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink.facebook} target="_blank">
-                  <Icons.facebook width={24} height={24} />
-                </Link>}
-              {user.socialLink?.instagram &&
-                <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink?.instagram} target="_blank">
-                  <Icons.instagram width={24} height={24} />
-                </Link>}
-              {user.socialLink?.telegram &&
-                <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink?.telegram} target="_blank">
-                  <Icons.telegram width={24} height={24} />
-                </Link>}
-              {user.socialLink?.odnoklassniki &&
-                <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink?.odnoklassniki} target="_blank">
-                  <Icons.odnoklassniki width={24} height={24} />
-                </Link>}
-            </div>
-          </section>
-        </div>
+              <div className="box__body flex flex-wrap gap-2">
+                {user.socialLink?.facebook &&
+                  <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink.facebook} target="_blank">
+                    <Icons.facebook width={24} height={24} />
+                  </Link>}
+                {user.socialLink?.instagram &&
+                  <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink?.instagram} target="_blank">
+                    <Icons.instagram width={24} height={24} />
+                  </Link>}
+                {user.socialLink?.telegram &&
+                  <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink?.telegram} target="_blank">
+                    <Icons.telegram width={24} height={24} />
+                  </Link>}
+                {user.socialLink?.odnoklassniki &&
+                  <Link className="flex shadow-md rounded-full transition-all duration-150 hover:shadow-none" to={user.socialLink?.odnoklassniki} target="_blank">
+                    <Icons.odnoklassniki width={24} height={24} />
+                  </Link>}
+              </div>
+            </section>
+          </div>
+        )}
       </div>
     </main>
   );
