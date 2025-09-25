@@ -35,7 +35,7 @@ return new class extends Migration
       $table->date('date');
       $table->enum('hour', [1, 2, 3, 4, 5, 6, 7, 8]);
       $table->string('topic')->nullable();
-      $table->string('homework')->nullable();
+      $table->text('homework')->nullable();
 
       $table->timestamps();
     });

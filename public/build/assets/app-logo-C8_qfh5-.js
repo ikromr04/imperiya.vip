@@ -1,0 +1,1 @@
+import{j as a,c as e}from"./main-BqixXxem.js";function r({className:s,imgClass:m}){return a.jsx("a",{className:e(s,"max-w-max max-h-max"),href:"/",children:a.jsx("img",{className:m,src:"/images/app-logo.svg",width:185,height:51,alt:"Логотип школы «Империя Знаний»"})})}export{r as A};

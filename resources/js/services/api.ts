@@ -2,7 +2,7 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { getToken } from './token';
 
 const BACKEND_URL = '/api';
-const REQUEST_TIMEOUT = 5000;
+const REQUEST_TIMEOUT = 0;
 
 export const createAPI = (): AxiosInstance => {
   const api = axios.create({
