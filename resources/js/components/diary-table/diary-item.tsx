@@ -62,12 +62,18 @@ function DiaryItem({
       </td>
       <td className="p-2 min-w-[320px] w-[320px] max-w-[320px] text-start">
         {teacher && (
-          (<Link
-            className="duration-150 text-blue-600 truncate"
-            to={generatePath(AppRoute.Users.Show, { id: teacher.id })}
-          >
-            {teacher?.surname} {teacher?.name} {teacher?.patronymic}
-          </Link>)
+          teacher.deletedAt ? (
+            <div className="truncate">
+              {teacher?.surname} {teacher?.name} {teacher?.patronymic}
+            </div>
+          ) : (
+            <Link
+              className="duration-150 text-blue-600 truncate"
+              to={generatePath(AppRoute.Users.Show, { id: teacher.id })}
+            >
+              {teacher?.surname} {teacher?.name} {teacher?.patronymic}
+            </Link>
+          )
         )}
       </td>
     </>

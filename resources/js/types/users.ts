@@ -65,6 +65,7 @@ export type User = {
     talents: string;
   };
   blockedAt?: string;
+  deletedAt?: string;
 };
 
 export type Users = User[];
