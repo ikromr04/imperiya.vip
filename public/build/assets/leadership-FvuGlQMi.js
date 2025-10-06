@@ -1,0 +1,1 @@
+import{ah as c,ai as o}from"./main-DyZOqu_f.js";const n=c("leadership/fetchData",async({studentId:a,onSuccess:e},{extra:t})=>{const{data:s}=await t.get(`${o.Leadership.Index}${a?`?studentId=${a}`:""}`);e(s)}),h={1:-10,2:-9,3:-8,4:4,5:4,6:4,7:7,8:8,9:9,10:10};export{h as S,n as f};
