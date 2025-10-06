@@ -104,4 +104,4 @@ Route::prefix('books')->controller(BooksController::class)->group(function () {
   Route::delete('/{id}', 'delete')->middleware(['auth:sanctum', 'ability:superadmin']);
 });
 
-Route::get('/leadership', [LeadershipController::class, 'index'])->middleware(['auth:sanctum', 'ability:superadmin,admin,parent,student']);
+Route::get('/leadership', [LeadershipController::class, 'index'])->middleware(['auth:sanctum', 'ability:superadmin,admin,parent,teacher,student']);

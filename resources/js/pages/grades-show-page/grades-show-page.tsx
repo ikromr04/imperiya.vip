@@ -6,14 +6,15 @@ import { AppRoute } from '@/const/routes';
 import { Role } from '@/types/users';
 import Spinner from '@/components/ui/spinner';
 
-const SuperadminGradesShow = lazy(() => import('./superadmin-grades-show/superadmin-grades'));
+const SuperadminGradesShow = lazy(() => import('./superadmin-grades-show/superadmin-grades-show'));
+const TeacherGradesShow = lazy(() => import('./teacher-grades-show/teacher-grades-show'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
 const roleComponentMap: Record<Role, ComponentType> = {
   superadmin: SuperadminGradesShow,
   admin: NotFoundPage,
   director: NotFoundPage,
-  teacher: NotFoundPage,
+  teacher: TeacherGradesShow,
   parent: NotFoundPage,
   student: NotFoundPage,
 };

@@ -34,6 +34,24 @@ class LeadershipController extends Controller
         $grades = Grade::select('id', 'level', 'group')->get();
         break;
 
+      case 'teacher':
+        $userIds = Student::where('grade_id', request()->query('gradeId'))->pluck('user_id');
+
+        $users = User::select('id', 'name', 'surname', 'patronymic', 'avatar_thumb', 'role')
+          ->whereIn('id', $userIds)
+          ->with(['student:id,user_id,grade_id'])->get();
+
+        $marks = Mark::select('id', 'student_id', 'score_1', 'score_2')
+          ->whereIn('student_id', $userIds)
+          ->where(function ($query) {
+            $query->whereNotNull('score_1')
+              ->orWhereNotNull('score_2');
+          })
+          ->get();
+
+        $grades = Grade::select('id', 'level', 'group')->get();
+        break;
+
       case 'parent':
         $user = User::findOrFail(request()->query('studentId'));
 
