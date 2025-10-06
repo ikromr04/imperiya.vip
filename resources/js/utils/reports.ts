@@ -1,6 +1,7 @@
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import { UserId } from '@/types/users';
+import { UserId, Users } from '@/types/users';
+import { REGIONS } from '../const/users';
 
 type Student = {
   id: UserId;
@@ -15,8 +16,8 @@ type ReportData = {
   classInfo: {
     class: string;
     totalStudents: number;
-    girls: number;
-    boys: number;
+    girls: Users;
+    boys: Users;
     excellent: { count: number; percent: number };
     good: { count: number; percent: number };
     average: { count: number; percent: number };
@@ -39,8 +40,12 @@ export const exportGradeReportToExcel = (data: ReportData): void => {
     { Параметр: 'Класс', Значение: data.classInfo.class },
     {
       Параметр: 'Количество учеников',
-      Значение: `${data.classInfo.totalStudents} (девочек ${data.classInfo.girls} / мальчиков ${data.classInfo.boys})`,
+      Значение: `${data.classInfo.totalStudents} (девочек ${data.classInfo.girls.length} / мальчиков ${data.classInfo.boys.length})`,
     },
+    ...REGIONS.map((region) => ({
+      Параметр: region,
+      Значение: `(девочек ${data.classInfo.girls.filter((girl) => girl.address?.region === region).length} / мальчиков ${data.classInfo.boys.filter((boy) => boy.address?.region === region).length})`,
+    })),
     { Параметр: 'Отличники', Значение: `${data.classInfo.excellent.count} (${data.classInfo.excellent.percent}%)` },
     { Параметр: 'Четвёрочники', Значение: `${data.classInfo.good.count} (${data.classInfo.good.percent}%)` },
     { Параметр: 'Троечники', Значение: `${data.classInfo.average.count} (${data.classInfo.average.percent}%)` },
@@ -61,10 +66,10 @@ export const exportGradeReportToExcel = (data: ReportData): void => {
     const students = data.students[key];
     const sheetData = students.length
       ? students.map((s) => ({
-          ФИО: s.name,
-          'Средний балл': s.average,
-          'Округлённая оценка': s.rounded,
-        }))
+        ФИО: s.name,
+        'Средний балл': s.average,
+        'Округлённая оценка': s.rounded,
+      }))
       : [{ Сообщение: 'Нет учеников' }];
 
     const sheet = XLSX.utils.json_to_sheet(sheetData);

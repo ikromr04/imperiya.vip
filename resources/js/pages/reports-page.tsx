@@ -2,6 +2,7 @@ import DescriptionList from '@/components/ui/description-list';
 import Spinner from '@/components/ui/spinner';
 import { AppRoute } from '@/const/routes';
 import { AsyncStatus } from '@/const/store';
+import { REGIONS } from '@/const/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
@@ -24,6 +25,12 @@ function ReportsPage(): JSX.Element {
     if (gradesStatus === AsyncStatus.Idle) dispatch(fetchGradesAction());
   }, [dispatch, gradesStatus, usersStatus]);
 
+  const students = users?.filter(({ role }) => role === 'student') || [];
+  const girls = students.filter(({ sex }) => sex === 'female');
+  const boys = students.filter(({ sex }) => sex === 'male');
+  const parents = users?.filter(({ role }) => role === 'parent') || [];
+  const teachers = users?.filter(({ role }) => role === 'teacher') || [];
+
   return (
     <main className="py-2 flex flex-col gap-4">
       <h1 className="title mb-1 px-3">
@@ -40,9 +47,21 @@ function ReportsPage(): JSX.Element {
             <DescriptionList
               className="box__body"
               list={{
-                'Ученики': users.filter(({ role }) => role === 'student').length,
-                'Родители': users.filter(({ role }) => role === 'parent').length,
-                'Педагоги': users.filter(({ role }) => role === 'teacher').length,
+                'Ученики': (
+                  <div className="flex justify-between gap-8">
+                    {students.length} (девочек {girls.length} / мальчиков {boys.length})
+
+                    <div className="flex flex-col">
+                      {REGIONS.map((region) => (
+                        <div>
+                          <span className="font-medium">{region}</span> (девочек {girls.filter((girl) => girl.address?.region === region).length} / мальчиков {boys.filter((boy) => boy.address?.region === region).length})
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ),
+                'Родители': parents.length,
+                'Педагоги': teachers.length,
               }}
             />
           ) : (

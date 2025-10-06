@@ -4,6 +4,7 @@ import DescriptionList from '@/components/ui/description-list';
 import Spinner from '@/components/ui/spinner';
 import { AppRoute } from '@/const/routes';
 import { AsyncStatus } from '@/const/store';
+import { REGIONS } from '@/const/users';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchGradesAction } from '@/store/grades-slice/grades-api-actions';
 import { getGrades, getGradesStatus } from '@/store/grades-slice/grades-selector';
@@ -78,8 +79,8 @@ function ReportsGradesPage(): JSX.Element {
         classInfo: {
           class: 'Все классы',
           totalStudents: students.length,
-          girls: students.filter(({ sex }) => sex === 'female').length,
-          boys: students.filter(({ sex }) => sex === 'male').length,
+          girls: students.filter(({ sex }) => sex === 'female'),
+          boys: students.filter(({ sex }) => sex === 'male'),
           excellent: {
             count: dataStudents.excellent.length,
             percent: +((dataStudents.excellent.length * 100) / students.length).toFixed(2),
@@ -149,7 +150,19 @@ function ReportsGradesPage(): JSX.Element {
           <DescriptionList
             className="box__body"
             list={{
-              'Количество учеников': `${reportData.classInfo.totalStudents} (девочек ${reportData.classInfo.girls} / мальчиков ${reportData.classInfo.boys})`,
+              'Количество учеников': (
+                <div className="flex justify-between gap-8">
+                  {reportData.classInfo.totalStudents} (девочек {reportData.classInfo.girls.length} / мальчиков {reportData.classInfo.boys.length})
+
+                  <div className="flex flex-col">
+                    {REGIONS.map((region) => (
+                      <div>
+                        <span className="font-medium">{region}</span> (девочек {reportData.classInfo.girls.filter((girl) => girl.address?.region === region).length} / мальчиков {reportData.classInfo.boys.filter((boy) => boy.address?.region === region).length})
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ),
               'Отличники': `${reportData.classInfo.excellent.count} (${reportData.classInfo.excellent.percent}%)`,
               'Четвёрочники': `${reportData.classInfo.good.count} (${reportData.classInfo.good.percent}%)`,
               'Троечники': `${reportData.classInfo.average.count} (${reportData.classInfo.average.percent}%)`,

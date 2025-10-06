@@ -12,7 +12,7 @@ function LoginPage(): JSX.Element {
 
   useEffect(() => {
     if (authorizationStatus === AuthorizationStatus.Auth) {
-      if (authUser?.role === 'superadmin') {
+      if (authUser?.role === 'superadmin' || authUser?.role === 'director') {
         window.location.href = AppRoute.Reports.Index;
       } else {
         window.location.href = AppRoute.Auth.Profile;
