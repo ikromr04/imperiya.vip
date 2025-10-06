@@ -3,17 +3,22 @@ import LoginForm from '@/components/forms/auth/login-form';
 import { AppRoute } from '@/const/routes';
 import { AuthorizationStatus } from '@/const/store';
 import { useAppSelector } from '@/hooks';
-import { getAuthStatus } from '@/store/auth-slice/auth-selector';
+import { getAuthStatus, getAuthUser } from '@/store/auth-slice/auth-selector';
 import React, { useEffect } from 'react';
 
 function LoginPage(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthStatus);
+  const authUser = useAppSelector(getAuthUser);
 
   useEffect(() => {
     if (authorizationStatus === AuthorizationStatus.Auth) {
-      window.location.href = AppRoute.Auth.Profile;
+      if (authUser?.role === 'superadmin') {
+        window.location.href = AppRoute.Reports.Index;
+      } else {
+        window.location.href = AppRoute.Auth.Profile;
+      }
     }
-  }, [authorizationStatus]);
+  }, [authUser?.role, authorizationStatus]);
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-illustrations bg-bottom bg-contain bg-no-repeat md:bg-gray-100">
