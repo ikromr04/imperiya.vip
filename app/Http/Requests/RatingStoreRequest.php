@@ -27,7 +27,7 @@ class RatingStoreRequest extends FormRequest
         'assessment',
         'final',
       ])],
-      'score' => ['nullable', 'numeric', Rule::in([2, 3, 4, 5])],
+      'score' => ['nullable', 'numeric', 'between:1,10'],
       'student_id' => ['required', 'exists:users,id'],
       'grade_id' => ['required', 'exists:grades,id'],
       'subject_id' => ['required', 'exists:subjects,id'],
@@ -37,8 +37,8 @@ class RatingStoreRequest extends FormRequest
   public function messages(): array
   {
     return [
-      'score.numeric' => 'Оценка должна быть числом.',
-      'score.in' => 'Оценка должна быть одной из следующих: 2, 3, 4, 5, null.',
+      'score.numeric' => 'Оценка 1 должна быть числом.',
+      'score.between' => 'Оценка должна быть от 1 до 10.',
     ];
   }
 

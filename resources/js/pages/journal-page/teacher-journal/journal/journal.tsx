@@ -3,8 +3,8 @@ import { AppRoute } from '@/const/routes';
 import { AsyncStatus } from '@/const/store';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
-import { fetchMarksAction } from '@/store/marks-slice/marks-api-actions';
-import { fetchRatingsAction } from '@/store/ratings-slice/ratings-api-actions';
+import { fetchMarksAction, storeMarkAction } from '@/store/marks-slice/marks-api-actions';
+import { fetchRatingsAction, storeRatingAction } from '@/store/ratings-slice/ratings-api-actions';
 import { getRatingDates, getRatingsStatus } from '@/store/ratings-slice/ratings-selector';
 import { getUsers } from '@/store/users-slice/users-selector';
 import { Lesson, Lessons } from '@/types/lessons';
@@ -14,19 +14,15 @@ import { UserId } from '@/types/users';
 import { getEducationYearRange } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import React, { BaseSyntheticEvent, lazy, memo, ReactNode, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { BaseSyntheticEvent, memo, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { generatePath, Link, useSearchParams } from 'react-router-dom';
 import DataTable from './data-table';
 import Spinner from '@/components/ui/spinner';
 import classNames from 'classnames';
 import { RatingStoreDTO, } from '@/dto/ratings';
-import { RatingCreateProps } from './rating-create';
-import { MarkCreateProps } from './mark-create';
 import { MarkStoreDTO } from '@/dto/marks';
 import { AttendanceAbbr } from '@/const/marks';
-
-const RatingCreate = lazy(() => import('./rating-create'));
-const MarkCreate = lazy(() => import('./mark-create'));
+import { toast } from 'react-toastify';
 
 export type Column = {
   id: UserId;
@@ -47,9 +43,6 @@ function Journal(): ReactNode {
   const [lessons, setLessons] = useState<Lessons>();
   const [ratings, setRatings] = useState<Ratings>();
   const [marks, setMarks] = useState<Marks>();
-
-  const [ratingCreateProps, setRatingCreateProps] = useState<RatingCreateProps>();
-  const [markCreateProps, setMarkCreateProps] = useState<MarkCreateProps>();
 
   useEffect(() => {
     if (subjectId && gradeId) {
@@ -166,38 +159,65 @@ function Journal(): ReactNode {
     }
   }, [gradeId, headers, markObject, marks, ratingObject, subjectId, users]);
 
-  const onRatingCreateButtonClick = useCallback(
-    (dto: RatingStoreDTO, studentName: string) => (evt: BaseSyntheticEvent) => {
-      const buttonRect = evt.currentTarget.getBoundingClientRect();
-      const top = buttonRect.top + 36 + 4;
-      const left = buttonRect.left + 36 + 4;
+  const onRatingCreateInputBlur = useCallback(
+    (dto: RatingStoreDTO) => async (evt: BaseSyntheticEvent) => {
+      const value = +evt.target.value.trim();
 
-      setRatingCreateProps({
-        dto,
-        position: { top, left },
-        studentName,
-        onClose: () => setRatingCreateProps(undefined),
-        onSuccess: (createdRating) => setRatings((prev = []) => ([...prev, createdRating])),
-      });
+      if (value && value >= 1 && value <= 10 && value !== +evt.target.defaultValue) {
+        evt.target.classList.add('opacity-50');
+        dto.score = value;
+
+        await dispatch(storeRatingAction({
+          dto,
+          onSuccess: (createdRating) => setRatings((prev = []) => ([...prev, createdRating])),
+          onValidationError: (error) => toast.error(error.message),
+          onFail: (message) => toast.success(message),
+        }));
+
+        evt.target.classList.remove('opacity-50');
+      } else {
+        evt.target.value = evt.target.defaultValue;
+        return;
+      }
     },
-    [],
+    [dispatch],
   );
 
-  const onMarkCreateButtonClick = useCallback(
-    (dto: MarkStoreDTO, studentName: string) => (evt: BaseSyntheticEvent) => {
-      const buttonRect = evt.currentTarget.getBoundingClientRect();
-      const top = buttonRect.top + 36 + 4;
-      const left = buttonRect.left + 36 + 4;
+  const onMarkCreateInputBlur = useCallback(
+    (dto: MarkStoreDTO) => async (evt: BaseSyntheticEvent) => {
+      const value = evt.target.value.toLowerCase().trim();
 
-      setMarkCreateProps({
+      if (value === 'н') {
+        dto.attendance = 'A';
+      } else {
+        const [scores, comment] = value.split(/ (.+)/);
+        const [score1, score2] = scores.split('/');
+
+        if (!(+score1 >= 1 && +score1 <= 10)) {
+          evt.target.value = '';
+          return;
+        }
+        if (score2 && !(+score2 >= 1 && +score2 <= 10)) {
+          evt.target.value = '';
+          return;
+        }
+        dto.score_1 = +score1;
+        dto.score_2 = +score2 || undefined;
+        dto.comment = comment?.trim();
+        dto.attendance = 'P';
+      }
+
+      evt.target.classList.add('opacity-50');
+
+      await dispatch(storeMarkAction({
         dto,
-        position: { top, left },
-        studentName,
-        onClose: () => setMarkCreateProps(undefined),
         onSuccess: (createdMark) => setMarks((prev = []) => ([...prev, createdMark])),
-      });
+        onFail: (message) => toast.success(message),
+      }));
+
+      evt.target.classList.remove('opacity-50');
     },
-    [],
+    [dispatch],
   );
 
   const columns: ColumnDef<Column>[] | undefined = useMemo(() => {
@@ -258,26 +278,26 @@ function Journal(): ReactNode {
                   });
 
                   const recommendedScore = (markSum / markCount) || 0;
+                  const defaultValue = !['98', '99'].includes(ratingCode) && recommendedScore.toFixed(2) || '';
 
                   return (
-                    <button
-                      className="flex justify-center items-center text-blue-200 min-w-9 min-h-9 cursor-pointer hover:bg-blue-50"
-                      type="button"
-                      onClick={onRatingCreateButtonClick({
+                    <input
+                      className="flex justify-center items-center text-center min-w-9 min-h-9 cursor-pointer hover:bg-blue-50 bg-transparent focus:outline-0 text-blue-500 placeholder:text-blue-300"
+                      type="number"
+                      onBlur={onRatingCreateInputBlur({
                         rating: RatingCodeToSlug[+ratingCode as RatingCode] as RatingSlug,
                         years: yearRange,
                         student_id: row.original.id,
                         grade_id: +gradeId,
                         subject_id: +subjectId,
-                      }, row.original.name)}
-                    >
-                      {!['98', '99'].includes(ratingCode) && recommendedScore.toFixed(2) || ''}
-                    </button>
+                      })}
+                      placeholder={defaultValue}
+                    />
                   );
                 }
 
                 return (
-                  <div className="flex items-center justify-center min-w-9 min-h-9">
+                  <div className="flex items-center font-semibold text-blue-500 justify-center min-w-9 min-h-9">
                     {rating.score}
                   </div>
                 );
@@ -299,15 +319,14 @@ function Journal(): ReactNode {
                   if (dayjs(lessonDate) > dayjs()) return;
 
                   return (
-                    <button
-                      className="flex min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5"
-                      type="button"
-                      onClick={onMarkCreateButtonClick({
+                    <input
+                      className="flex justify-center items-center text-center min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5 bg-transparent focus:outline-0"
+                      onBlur={onMarkCreateInputBlur({
                         attendance: '',
                         lesson_id: +lessonId,
                         student_id: row.original.id,
-                      }, row.original.name)}
-                    ></button>
+                      })}
+                    />
                   );
                 }
 
@@ -334,7 +353,7 @@ function Journal(): ReactNode {
         }, [] as ColumnDef<Column>[])
       ];
     }
-  }, [gradeId, headers, markObject, marks, onMarkCreateButtonClick, onRatingCreateButtonClick, ratingLessonIdsObject?.data, ratingObject, subjectId, yearRange]);
+  }, [gradeId, headers, markObject, marks, onMarkCreateInputBlur, onRatingCreateInputBlur, ratingLessonIdsObject?.data, ratingObject, subjectId, yearRange]);
 
   if (!gradeId || !subjectId) return;
 
@@ -351,18 +370,6 @@ function Journal(): ReactNode {
           setLessons={setLessons}
           lessonObject={lessonObject}
         />
-      )}
-
-      {ratingCreateProps && (
-        <Suspense fallback={<Spinner className="w-8 h-8" />}>
-          <RatingCreate {...ratingCreateProps} />
-        </Suspense>
-      )}
-
-      {markCreateProps && (
-        <Suspense fallback={<Spinner className="w-8 h-8" />}>
-          <MarkCreate {...markCreateProps} />
-        </Suspense>
       )}
     </>
   );

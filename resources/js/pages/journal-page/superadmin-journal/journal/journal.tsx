@@ -3,8 +3,8 @@ import { AppRoute } from '@/const/routes';
 import { AsyncStatus } from '@/const/store';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { fetchLessonsAction } from '@/store/lessons-slice/lessons-api-actions';
-import { fetchMarksAction } from '@/store/marks-slice/marks-api-actions';
-import { fetchRatingsAction } from '@/store/ratings-slice/ratings-api-actions';
+import { fetchMarksAction, storeMarkAction, updateMarkAction } from '@/store/marks-slice/marks-api-actions';
+import { fetchRatingsAction, storeRatingAction, updateRatingAction } from '@/store/ratings-slice/ratings-api-actions';
 import { getRatingDates, getRatingsStatus } from '@/store/ratings-slice/ratings-selector';
 import { getUsers } from '@/store/users-slice/users-selector';
 import { Lesson, Lessons } from '@/types/lessons';
@@ -14,24 +14,14 @@ import { UserId } from '@/types/users';
 import { getEducationYearRange } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import React, { BaseSyntheticEvent, lazy, memo, ReactNode, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { BaseSyntheticEvent, memo, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { generatePath, Link, useSearchParams } from 'react-router-dom';
 import DataTable from './data-table';
 import Spinner from '@/components/ui/spinner';
 import classNames from 'classnames';
 import { RatingStoreDTO, RatingUpdateDTO } from '@/dto/ratings';
-import { RatingCreateProps } from './rating-create';
-import { RatingEditProps } from './rating-edit';
-import { MarkCreateProps } from './mark-create';
 import { MarkStoreDTO, MarkUpdateDTO } from '@/dto/marks';
-import { AttendanceAbbr } from '@/const/marks';
-import { MarkEditProps } from './mark-edit';
-
-const RatingCreate = lazy(() => import('./rating-create'));
-const RatingEdit = lazy(() => import('./rating-edit'));
-
-const MarkCreate = lazy(() => import('./mark-create'));
-const MarkEdit = lazy(() => import('./mark-edit'));
+import { toast } from 'react-toastify';
 
 export type Column = {
   id: UserId;
@@ -52,11 +42,7 @@ function Journal(): ReactNode {
   const [lessons, setLessons] = useState<Lessons>();
   const [ratings, setRatings] = useState<Ratings>();
   const [marks, setMarks] = useState<Marks>();
-
-  const [ratingCreateProps, setRatingCreateProps] = useState<RatingCreateProps>();
-  const [ratingEditProps, setRatingEditProps] = useState<RatingEditProps>();
-  const [markCreateProps, setMarkCreateProps] = useState<MarkCreateProps>();
-  const [markEditProps, setMarkEditProps] = useState<MarkEditProps>();
+  const [comment, setComment] = useState<string>();
 
   useEffect(() => {
     if (subjectId && gradeId) {
@@ -174,86 +160,149 @@ function Journal(): ReactNode {
     }
   }, [gradeId, headers, markObject, marks, ratingObject, subjectId, users]);
 
-  const onRatingCreateButtonClick = useCallback(
-    (dto: RatingStoreDTO, studentName: string) => (evt: BaseSyntheticEvent) => {
-      const buttonRect = evt.currentTarget.getBoundingClientRect();
-      const top = buttonRect.top + 36 + 4;
-      const left = buttonRect.left + 36 + 4;
+  const onRatingCreateInputBlur = useCallback(
+    (dto: RatingStoreDTO) => async (evt: BaseSyntheticEvent) => {
+      const value = +evt.target.value.trim();
 
-      setRatingCreateProps({
-        dto,
-        position: { top, left },
-        studentName,
-        onClose: () => setRatingCreateProps(undefined),
-        onSuccess: (createdRating) => setRatings((prev = []) => ([...prev, createdRating])),
-      });
+      if (value && value >= 1 && value <= 10 && value !== +evt.target.defaultValue) {
+        evt.target.classList.add('opacity-50');
+        dto.score = value;
+
+        await dispatch(storeRatingAction({
+          dto,
+          onSuccess: (createdRating) => setRatings((prev = []) => ([...prev, createdRating])),
+          onValidationError: (error) => toast.error(error.message),
+          onFail: (message) => toast.success(message),
+        }));
+
+        evt.target.classList.remove('opacity-50');
+      } else {
+        evt.target.value = evt.target.defaultValue;
+        return;
+      }
     },
-    [],
+    [dispatch],
   );
 
-  const onRatingEditButtonClick = useCallback(
-    (dto: RatingUpdateDTO, studentName: string) => (evt: BaseSyntheticEvent) => {
-      const buttonRect = evt.currentTarget.getBoundingClientRect();
-      const top = buttonRect.top + 36 + 4;
-      const left = buttonRect.left + 36 + 4;
+  const onRatingEditInputBlur = useCallback(
+    (dto: RatingUpdateDTO) => async (evt: BaseSyntheticEvent) => {
+      const value = +evt.target.value.trim();
 
-      setRatingEditProps({
-        dto,
-        position: { top, left },
-        studentName,
-        onClose: () => setRatingEditProps(undefined),
-        onSuccess: (updatedRating) => setRatings((prev = []) => {
-          const ratingIndex = prev.findIndex((rating) => rating.id === updatedRating.id);
-          if (ratingIndex !== -1) {
-            prev[ratingIndex] = updatedRating;
-          }
+      if (value && value >= 1 && value <= 10 && dto.score !== value) {
+        evt.target.classList.add('opacity-50');
+        dto.score = value;
 
-          return [...prev];
-        }),
-      });
+        await dispatch(updateRatingAction({
+          dto,
+          onSuccess: (updatedRating) => setRatings((prev = []) => {
+            const ratingIndex = prev.findIndex((rating) => rating.id === updatedRating.id);
+
+            if (ratingIndex !== -1) {
+              prev[ratingIndex] = updatedRating;
+            }
+
+            return [...prev];
+          }),
+          onValidationError: (error) => toast.error(error.message),
+          onFail: (message) => toast.error(message),
+        }));
+
+        evt.target.classList.remove('opacity-50');
+      } else {
+        evt.target.value = evt.target.defaultValue;
+        return;
+      }
     },
-    [],
+    [dispatch],
   );
 
-  const onMarkCreateButtonClick = useCallback(
-    (dto: MarkStoreDTO, studentName: string) => (evt: BaseSyntheticEvent) => {
-      const buttonRect = evt.currentTarget.getBoundingClientRect();
-      const top = buttonRect.top + 36 + 4;
-      const left = buttonRect.left + 36 + 4;
+  const onMarkCreateInputBlur = useCallback(
+    (dto: MarkStoreDTO) => async (evt: BaseSyntheticEvent) => {
+      const value = evt.target.value.toLowerCase().trim();
 
-      setMarkCreateProps({
+      if (value === 'н') {
+        dto.attendance = 'A';
+      } else {
+        const [scores, comment] = value.split(/ (.+)/);
+        const [score1, score2] = scores.split('/');
+
+        if (!(+score1 >= 1 && +score1 <= 10)) {
+          evt.target.value = '';
+          return;
+        }
+        if (score2 && !(+score2 >= 1 && +score2 <= 10)) {
+          evt.target.value = '';
+          return;
+        }
+        dto.score_1 = +score1;
+        dto.score_2 = +score2 || undefined;
+        dto.comment = comment?.trim();
+        dto.attendance = 'P';
+      }
+
+      evt.target.classList.add('opacity-50');
+
+      await dispatch(storeMarkAction({
         dto,
-        position: { top, left },
-        studentName,
-        onClose: () => setMarkCreateProps(undefined),
         onSuccess: (createdMark) => setMarks((prev = []) => ([...prev, createdMark])),
-      });
+        onFail: (message) => toast.success(message),
+      }));
+
+      evt.target.classList.remove('opacity-50');
     },
-    [],
+    [dispatch],
   );
 
-  const onMarkEditButtonClick = useCallback(
-    (dto: MarkUpdateDTO, studentName: string) => (evt: BaseSyntheticEvent) => {
-      const buttonRect = evt.currentTarget.getBoundingClientRect();
-      const top = buttonRect.top + 36 + 4;
-      const left = buttonRect.left + 36 + 4;
+  const onMarkEditInputBlur = useCallback(
+    (dto: MarkUpdateDTO) => async (evt: BaseSyntheticEvent) => {
+      const value = evt.target.value.toLowerCase().trim();
+      const mark = JSON.parse(JSON.stringify(dto));
 
-      setMarkEditProps({
-        dto,
-        position: { top, left },
-        studentName,
-        onClose: () => setMarkEditProps(undefined),
-        onSuccess: (updatedMark) => setMarks((prev = []) => {
-          const markIndex = prev.findIndex((mark) => mark.id === updatedMark.id);
-          if (markIndex !== -1) {
-            prev[markIndex] = updatedMark;
-          }
+      if (value === 'н') {
+        dto.attendance = 'A';
+      } else {
+        const [scores, comment] = value.split(/ (.+)/);
+        const [score1, score2] = scores.split('/');
 
-          return [...prev];
-        }),
-      });
+        if (!(+score1 >= 1 && +score1 <= 10)) {
+          evt.target.value = '';
+          setComment(undefined);
+          return;
+        }
+        if (score2 && !(+score2 >= 1 && +score2 <= 10)) {
+          evt.target.value = '';
+          setComment(undefined);
+          return;
+        }
+        dto.score_1 = +score1;
+        dto.score_2 = +score2 || undefined;
+        if (comment) {
+          dto.comment = comment.trim();
+        }
+        dto.attendance = 'P';
+      }
+
+      evt.target.classList.add('opacity-50');
+
+      if (JSON.stringify(mark) !== JSON.stringify(dto)) {
+        await dispatch(updateMarkAction({
+          dto,
+          onSuccess: (updatedMark) => setMarks((prev = []) => {
+            const markIndex = prev.findIndex((mark) => mark.id === updatedMark.id);
+            if (markIndex !== -1) {
+              prev[markIndex] = updatedMark;
+            }
+
+            return [...prev];
+          }),
+          onFail: (message) => toast.success(message),
+        }));
+      }
+
+      evt.target.classList.remove('opacity-50');
+      setComment(undefined);
     },
-    [],
+    [dispatch],
   );
 
   const columns: ColumnDef<Column>[] | undefined = useMemo(() => {
@@ -314,35 +363,34 @@ function Journal(): ReactNode {
                   });
 
                   const recommendedScore = (markSum / markCount) || 0;
+                  const defaultValue = !['98', '99'].includes(ratingCode) && recommendedScore.toFixed(2) || '';
 
                   return (
-                    <button
-                      className="flex justify-center items-center text-blue-200 min-w-9 min-h-9 cursor-pointer hover:bg-blue-50"
-                      type="button"
-                      onClick={onRatingCreateButtonClick({
+                    <input
+                      className="flex justify-center items-center text-center min-w-9 min-h-9 cursor-pointer hover:bg-blue-50 bg-transparent focus:outline-0 text-blue-500 placeholder:text-blue-300"
+                      type="number"
+                      onBlur={onRatingCreateInputBlur({
                         rating: RatingCodeToSlug[+ratingCode as RatingCode] as RatingSlug,
                         years: yearRange,
                         student_id: row.original.id,
                         grade_id: +gradeId,
                         subject_id: +subjectId,
-                      }, row.original.name)}
-                    >
-                      {!['98', '99'].includes(ratingCode) && recommendedScore.toFixed(2) || ''}
-                    </button>
+                      })}
+                      placeholder={defaultValue}
+                    />
                   );
                 }
 
                 return (
-                  <button
-                    className="flex items-center justify-center min-w-9 min-h-9 cursor-pointer font-bold hover:bg-blue-50"
-                    type="button"
-                    onClick={onRatingEditButtonClick({
+                  <input
+                    className="flex justify-center items-center text-center font-semibold text-blue-500 min-w-9 min-h-9 cursor-pointer hover:bg-blue-50 bg-transparent focus:outline-0"
+                    type="number"
+                    onBlur={onRatingEditInputBlur({
                       id: rating.id,
                       score: rating.score,
-                    }, row.original.name)}
-                  >
-                    {rating.score}
-                  </button>
+                    })}
+                    defaultValue={rating.score}
+                  />
                 );
               },
               meta: { columnClass: 'flex items-center justify-end min-w-9 max-w-9 min-h-9 max-h-9' }
@@ -362,35 +410,40 @@ function Journal(): ReactNode {
                   if (dayjs(lessonDate) > dayjs()) return;
 
                   return (
-                    <button
-                      className="flex min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5"
-                      type="button"
-                      onClick={onMarkCreateButtonClick({
+                    <input
+                      className="flex justify-center items-center text-center min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5 bg-transparent focus:outline-0"
+                      onBlur={onMarkCreateInputBlur({
                         attendance: '',
                         lesson_id: +lessonId,
                         student_id: row.original.id,
-                      }, row.original.name)}
-                    ></button>
+                      })}
+                    />
                   );
                 }
 
+                let value = '';
+
+                if (mark.score1 || mark.score2) {
+                  const score1 = mark.score1?.toString() ?? '';
+                  const score2 = mark.score2?.toString() ?? '';
+                  value = score1 && score2 ? `${score1}/${score2}` : score1 || score2;
+                } else if (mark.attendance === 'A') {
+                  value = 'н';
+                }
+
                 return (
-                  <button
-                    className="flex items-center justify-center min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5"
-                    type="button"
-                    onClick={onMarkEditButtonClick({
+                  <input
+                    className="flex justify-center items-center text-center min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5 bg-transparent focus:outline-0"
+                    onBlur={onMarkEditInputBlur({
                       id: mark.id,
                       score_1: mark.score1,
                       score_2: mark.score2,
                       attendance: mark.attendance,
                       comment: mark.comment,
-                    }, row.original.name)}
-                  >
-                    {mark.score1}
-                    {mark.score1 && mark.score2 && '/'}
-                    {mark.score2}
-                    {!mark.score1 && !mark.score2 && AttendanceAbbr[mark.attendance as keyof typeof AttendanceAbbr]}
-                  </button>
+                    })}
+                    onFocus={() => setComment(mark.comment)}
+                    defaultValue={value}
+                  />
                 );
               },
               enableSorting: false,
@@ -407,7 +460,7 @@ function Journal(): ReactNode {
         }, [] as ColumnDef<Column>[])
       ];
     }
-  }, [gradeId, headers, markObject, marks, onMarkCreateButtonClick, onMarkEditButtonClick, onRatingCreateButtonClick, onRatingEditButtonClick, ratingLessonIdsObject?.data, ratingObject, subjectId, yearRange]);
+  }, [gradeId, headers, markObject, marks, onMarkCreateInputBlur, onMarkEditInputBlur, onRatingCreateInputBlur, onRatingEditInputBlur, ratingLessonIdsObject?.data, ratingObject, subjectId, yearRange]);
 
   if (!gradeId || !subjectId) return;
 
@@ -426,28 +479,8 @@ function Journal(): ReactNode {
         />
       )}
 
-      {ratingCreateProps && (
-        <Suspense fallback={<Spinner className="w-8 h-8" />}>
-          <RatingCreate {...ratingCreateProps} />
-        </Suspense>
-      )}
-
-      {ratingEditProps && (
-        <Suspense fallback={<Spinner className="w-8 h-8" />}>
-          <RatingEdit {...ratingEditProps} />
-        </Suspense>
-      )}
-
-      {markCreateProps && (
-        <Suspense fallback={<Spinner className="w-8 h-8" />}>
-          <MarkCreate {...markCreateProps} />
-        </Suspense>
-      )}
-
-      {markEditProps && (
-        <Suspense fallback={<Spinner className="w-8 h-8" />}>
-          <MarkEdit {...markEditProps} />
-        </Suspense>
+      {comment && (
+        <div className="fixed right-1 bottom-1 m-0 bg-white py-1 px-2 border">{comment}</div>
       )}
     </>
   );

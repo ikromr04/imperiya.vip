@@ -86,13 +86,24 @@ class MarkController extends Controller
 
   public function update(MarkUpdateRequest $request): JsonResponse
   {
-    Mark::findOrFail($request->id)
-      ->update($request->only([
-        'score_1',
-        'score_2',
-        'attendance',
-        'comment',
-      ]));
+    if ($request->attendance === 'A') {
+      Mark::findOrFail($request->id)
+        ->update([
+          'score_1' => null,
+          'score_2' => null,
+          'attendance' => $request->attendance,
+          'comment' => null,
+        ]);
+    } else {
+      Mark::findOrFail($request->id)
+        ->update($request->only([
+          'score_1',
+          'score_2',
+          'attendance',
+          'comment',
+        ]));
+    }
+
 
     broadcast(new MarkEvents());
 

@@ -16,7 +16,7 @@ class RatingUpdateRequest extends FormRequest
   {
     return [
       'id' => ['required', 'exists:ratings,id'],
-      'score' => ['nullable', 'numeric', Rule::in([2, 3, 4, 5, null])],
+      'score' => ['nullable', 'numeric', 'between:1,10'],
     ];
   }
 
@@ -26,8 +26,8 @@ class RatingUpdateRequest extends FormRequest
       'id.required' => 'Поле "id" обязательно для заполнения.',
       'id.exists' => 'Рейтинг с таким ID не найдена.',
 
-      'score.numeric' => 'Оценка должна быть числом.',
-      'score.in' => 'Оценка должна быть одной из следующих: 2, 3, 4, 5, null.',
+      'score.numeric' => 'Оценка 1 должна быть числом.',
+      'score.between' => 'Оценка должна быть от 1 до 10.',
     ];
   }
 
