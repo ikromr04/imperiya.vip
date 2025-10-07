@@ -43,6 +43,7 @@ function Journal(): ReactNode {
   const [lessons, setLessons] = useState<Lessons>();
   const [ratings, setRatings] = useState<Ratings>();
   const [marks, setMarks] = useState<Marks>();
+  const [comment, setComment] = useState<string>();
 
   useEffect(() => {
     if (subjectId && gradeId) {
@@ -330,13 +331,24 @@ function Journal(): ReactNode {
                   );
                 }
 
+                 let value = '';
+
+                if (mark.score1 || mark.score2) {
+                  const score1 = mark.score1?.toString() ?? '';
+                  const score2 = mark.score2?.toString() ?? '';
+                  value = score1 && score2 ? `${score1}/${score2}` : score1 || score2;
+                } else if (mark.attendance === 'A') {
+                  value = 'н';
+                }
+
                 return (
-                  <div className="flex items-center justify-center min-w-9 min-h-9">
-                    {mark.score1}
-                    {mark.score1 && mark.score2 && '/'}
-                    {mark.score2}
-                    {!mark.score1 && !mark.score2 && AttendanceAbbr[mark.attendance as keyof typeof AttendanceAbbr]}
-                  </div>
+                 <input
+                    className="flex justify-center items-center text-center min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5 bg-transparent focus:outline-0"
+                    onBlur={() => setComment(undefined)}
+                    onFocus={() => setComment(mark.comment)}
+                    readOnly
+                    defaultValue={value}
+                  />
                 );
               },
               enableSorting: false,
@@ -370,6 +382,10 @@ function Journal(): ReactNode {
           setLessons={setLessons}
           lessonObject={lessonObject}
         />
+      )}
+
+      {comment && (
+        <div className="fixed right-1 bottom-1 m-0 bg-white py-1 px-2 border">{comment}</div>
       )}
     </>
   );
