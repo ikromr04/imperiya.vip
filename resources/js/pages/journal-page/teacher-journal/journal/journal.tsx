@@ -21,7 +21,6 @@ import Spinner from '@/components/ui/spinner';
 import classNames from 'classnames';
 import { RatingStoreDTO, } from '@/dto/ratings';
 import { MarkStoreDTO } from '@/dto/marks';
-import { AttendanceAbbr } from '@/const/marks';
 import { toast } from 'react-toastify';
 
 export type Column = {
