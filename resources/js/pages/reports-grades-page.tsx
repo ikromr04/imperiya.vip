@@ -58,21 +58,23 @@ function ReportsGradesPage(): JSX.Element {
     if (markObject && students) {
       const studentsMap = students.map((student) => {
         const average = markObject[student.id] ? (markObject[student.id].reduce((acc, curr) => acc + curr, 0) / markObject[student.id].length) : 0;
+        const score = markObject[student.id] ? (Math.min(...markObject[student.id])) : 0;
 
         return {
           id: student.id,
           name: `${student.surname} ${student.name} ${student.patronymic || ''}`,
           average,
           rounded: Math.round(average),
+          score,
         };
       });
 
       const dataStudents = {
-        excellent: studentsMap.filter((student) => student.average && (Math.round(student.average) === 5)),
-        good: studentsMap.filter((student) => student.average && (Math.round(student.average) === 4)),
-        average: studentsMap.filter((student) => student.average && (Math.round(student.average) === 3)),
-        poor: studentsMap.filter((student) => student.average && (Math.round(student.average) === 2)),
-        noGrades: studentsMap.filter((student) => !student.average),
+        excellent: studentsMap.filter((student) => [10, 9].includes(student.score)),
+        good: studentsMap.filter((student) => [8, 7].includes(student.score)),
+        average: studentsMap.filter((student) => [6, 5, 4].includes(student.score)),
+        poor: studentsMap.filter((student) => [3, 2, 1].includes(student.score)),
+        noGrades: studentsMap.filter((student) => [0].includes(student.score)),
       };
 
       return {

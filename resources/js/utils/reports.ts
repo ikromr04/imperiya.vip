@@ -6,6 +6,7 @@ import { REGIONS } from '../const/users';
 type Student = {
   id: UserId;
   name: string;
+  score: number;
   average: number;
   rounded: number;
 };
