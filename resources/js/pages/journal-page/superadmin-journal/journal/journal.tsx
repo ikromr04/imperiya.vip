@@ -444,10 +444,10 @@ function Journal(): ReactNode {
                     className="flex justify-center items-center text-center min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5 bg-transparent focus:outline-0"
                     onBlur={onMarkEditInputBlur({
                       id: mark.id,
-                      score_1: mark.score1,
-                      score_2: mark.score2,
+                      score_1: mark.score1 || null,
+                      score_2: mark.score2 || null,
                       attendance: mark.attendance,
-                      comment: mark.comment,
+                      comment: mark.comment || null,
                     })}
                     onFocus={() => setComment(mark.comment)}
                     defaultValue={value}
