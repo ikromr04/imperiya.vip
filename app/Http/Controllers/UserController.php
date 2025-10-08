@@ -31,12 +31,10 @@ class UserController extends Controller
     switch ($user->role) {
       case 'superadmin':
         $users = [
-          ...User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at', 'deleted_at'])
-            ->orderBy('surname')
-            ->with(['teacher:id,user_id,education,achievements,work_experience'])->get(),
           ...User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
             ->orderBy('surname')
             ->with([
+              'teacher:id,user_id,education,achievements,work_experience',
               'parent:id,user_id,profession_id,workplace,position',
               'student:id,user_id,grade_id,mother_id,father_id,admission_date,previous_schools,medical_recommendations,talents'
             ])->get()
@@ -78,7 +76,7 @@ class UserController extends Controller
             ->where('id', $student->father_id)
             ->orWhere('id', $student->mother_id)
             ->get(),
-          ...User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'nationality_id', 'whatsapp', 'avatar', 'avatar_thumb', 'deleted_at'])
+          ...User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'nationality_id', 'whatsapp', 'avatar', 'avatar_thumb'])
             ->where('role', 'teacher')
             ->get(),
           ...User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb'])
