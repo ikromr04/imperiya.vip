@@ -258,24 +258,32 @@ function Journal(): ReactNode {
       const value = evt.target.value.toLowerCase().trim();
       const mark = JSON.parse(JSON.stringify(dto));
 
+      const [scores, comment] = value.split(/ (.+)/);
+      const [score1, score2] = scores.split('/');
+
       if (value === 'н') {
         dto.attendance = 'A';
+        dto.score_1 = null;
+        dto.score_2 = null;
+        dto.comment = null;
+      } else if (value === 'п') {
+        dto.attendance = 'P';
+        dto.score_1 = null;
+        dto.score_2 = null;
+        dto.comment = comment ? comment.trim() : null;
       } else {
-        const [scores, comment] = value.split(/ (.+)/);
-        const [score1, score2] = scores.split('/');
-
         if (!(+score1 >= 1 && +score1 <= 10)) {
-          evt.target.value = '';
+          evt.target.value = evt.target.defaultValue;
           setComment(undefined);
           return;
         }
         if (score2 && !(+score2 >= 1 && +score2 <= 10)) {
-          evt.target.value = '';
+          evt.target.value = evt.target.defaultValue;
           setComment(undefined);
           return;
         }
         dto.score_1 = +score1;
-        dto.score_2 = +score2 || undefined;
+        dto.score_2 = +score2 || null;
         if (comment) {
           dto.comment = comment.trim();
         }

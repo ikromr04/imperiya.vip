@@ -14,8 +14,8 @@ export type MarkStoreDTO = {
 
 export type MarkUpdateDTO = {
   id: MarkId;
-  score_1?: number;
-  score_2?: number;
+  score_1?: number | null;
+  score_2?: number | null;
   attendance?: keyof typeof AttendanceAbbr;
-  comment?: string;
+  comment?: string | null;
 };
