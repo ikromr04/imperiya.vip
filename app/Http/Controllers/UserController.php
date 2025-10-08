@@ -31,8 +31,7 @@ class UserController extends Controller
     switch ($user->role) {
       case 'superadmin':
         $users = [
-          ...User::withTrashed()
-            ->select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at', 'deleted_at'])
+          ...User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at', 'deleted_at'])
             ->orderBy('surname')
             ->with(['teacher:id,user_id,education,achievements,work_experience'])->get(),
           ...User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
@@ -57,8 +56,7 @@ class UserController extends Controller
           ->pluck('user_id');
 
         $users = [
-          ...User::withTrashed()
-            ->select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'deleted_at'])
+          ...User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'deleted_at'])
             ->where('role', 'teacher')
             ->get(),
           ...User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
@@ -80,8 +78,7 @@ class UserController extends Controller
             ->where('id', $student->father_id)
             ->orWhere('id', $student->mother_id)
             ->get(),
-          ...User::withTrashed()
-            ->select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'nationality_id', 'whatsapp', 'avatar', 'avatar_thumb', 'deleted_at'])
+          ...User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'nationality_id', 'whatsapp', 'avatar', 'avatar_thumb', 'deleted_at'])
             ->where('role', 'teacher')
             ->get(),
           ...User::select(['id', 'name', 'surname', 'patronymic', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb'])
