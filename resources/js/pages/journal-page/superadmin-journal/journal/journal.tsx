@@ -222,6 +222,8 @@ function Journal(): ReactNode {
 
       if (value === 'н') {
         dto.attendance = 'A';
+      } else if (value === 'п') {
+        dto.attendance = 'P';
       } else {
         const [scores, comment] = value.split(/ (.+)/);
         const [score1, score2] = scores.split('/');
@@ -437,6 +439,8 @@ function Journal(): ReactNode {
                   value = score1 && score2 ? `${score1}/${score2}` : score1 || score2;
                 } else if (mark.attendance === 'A') {
                   value = 'н';
+                } else if (mark.attendance === 'P') {
+                  value = 'п';
                 }
 
                 return (
