@@ -189,6 +189,8 @@ function Journal(): ReactNode {
 
       if (value === 'н') {
         dto.attendance = 'A';
+      } else if (value === 'п') {
+        dto.attendance = 'P';
       } else {
         const [scores, comment] = value.split(/ (.+)/);
         const [score1, score2] = scores.split('/');
@@ -330,7 +332,7 @@ function Journal(): ReactNode {
                   );
                 }
 
-                 let value = '';
+                let value = '';
 
                 if (mark.score1 || mark.score2) {
                   const score1 = mark.score1?.toString() ?? '';
@@ -338,10 +340,12 @@ function Journal(): ReactNode {
                   value = score1 && score2 ? `${score1}/${score2}` : score1 || score2;
                 } else if (mark.attendance === 'A') {
                   value = 'н';
+                } else if (mark.attendance === 'P') {
+                  value = 'п';
                 }
 
                 return (
-                 <input
+                  <input
                     className="flex justify-center items-center text-center min-w-9 min-h-9 cursor-pointer hover:bg-gray-600/5 bg-transparent focus:outline-0"
                     onBlur={() => setComment(undefined)}
                     onFocus={() => setComment(mark.comment)}
