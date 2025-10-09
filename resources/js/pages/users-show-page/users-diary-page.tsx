@@ -8,13 +8,14 @@ import Spinner from '@/components/ui/spinner';
 
 const SuperadminUsersDiary = lazy(() => import('./superadmin-users-show/superadmin-users-diary'));
 const AdminUsersDiary = lazy(() => import('./admin-users-show/admin-users-diary'));
+const DirectorUsersDiary = lazy(() => import('./director-users-show/director-users-diary'));
 const ParentUsersDiary = lazy(() => import('./parent-users-show/parent-users-diary'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
 const roleComponentMap: Record<Role, ComponentType> = {
   superadmin: SuperadminUsersDiary,
   admin: AdminUsersDiary,
-  director: NotFoundPage,
+  director: DirectorUsersDiary,
   teacher: NotFoundPage,
   parent: ParentUsersDiary,
   student: NotFoundPage,

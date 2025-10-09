@@ -20,6 +20,7 @@ class LeadershipController extends Controller
     switch ($user->role) {
       case 'superadmin':
       case 'admin':
+      case 'director':
         $users = User::select('id', 'name', 'surname', 'patronymic', 'avatar_thumb', 'role')
           ->where('role', 'student')
           ->with(['student:id,user_id,grade_id'])->get();

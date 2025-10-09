@@ -8,15 +8,15 @@ import Spinner from '@/components/ui/spinner';
 
 const SuperadminProfile = lazy(() => import('./superadmin-profile/superadmin-profile'));
 const AdminProfile = lazy(() => import('./admin-profile/admin-profile'));
+const DirectorProfile = lazy(() => import('./director-profile/director-profile'));
 const TeacherProfile = lazy(() => import('./teacher-profile/teacher-profile'));
 const ParentProfile = lazy(() => import('./parent-profile/parent-profile'));
 const StudentProfile = lazy(() => import('./student-profile/student-profile'));
-const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
 const rolePage: Record<Role, ComponentType> = {
   superadmin: SuperadminProfile,
   admin: AdminProfile,
-  director: NotFoundPage,
+  director: DirectorProfile,
   teacher: TeacherProfile,
   parent: ParentProfile,
   student: StudentProfile,

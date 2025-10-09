@@ -2,7 +2,8 @@ import Button from '@/components/ui/button';
 import TextField from '@/components/ui/formik-controls/text-field';
 import { RatingSlugToText } from '@/const/ratings';
 import { RatingDateUpdateDTO } from '@/dto/ratings';
-import { useAppDispatch } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
 import { updateRatingDatesAction } from '@/store/ratings-slice/ratings-api-actions';
 import { RatingDate } from '@/types/ratings';
 import { Form, Formik, FormikHelpers } from 'formik';
@@ -16,6 +17,7 @@ type RatingDatesEditFormProps = {
 function RatingDatesEditForm({
   ratingDate,
 }: RatingDatesEditFormProps): JSX.Element {
+  const authUser = useAppSelector(getAuthUser);
   const dispatch = useAppDispatch();
   const initialValues: RatingDateUpdateDTO = {
     id: ratingDate.id,
@@ -41,7 +43,7 @@ function RatingDatesEditForm({
       dto: values,
       onSuccess: () => toast.success('Данные успешно сохранены.'),
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
-      onFail: (message) => toast.success(message),
+      onFail: (message) => toast.error(message),
     }));
 
     helpers.setSubmitting(false);
@@ -110,16 +112,18 @@ function RatingDatesEditForm({
             label={RatingSlugToText['final']}
           />
 
-          <div className="flex items-center justify-end gap-2 md:col-span-3">
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              loading={isSubmitting}
-              variant="success"
-            >
-              Сохранить
-            </Button>
-          </div>
+          {authUser?.role === 'superadmin' && (
+            <div className="flex items-center justify-end gap-2 md:col-span-3">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                loading={isSubmitting}
+                variant="success"
+              >
+                Сохранить
+              </Button>
+            </div>
+          )}
         </Form>
       )}
     </Formik>

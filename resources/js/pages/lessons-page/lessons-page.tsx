@@ -8,6 +8,7 @@ import Spinner from '@/components/ui/spinner';
 
 const SuperadminLessons = lazy(() => import('./superadmin-lessons/superadmin-lessons'));
 const AdminLessons = lazy(() => import('./admin-lessons/admin-lessons'));
+const DirectorLessons = lazy(() => import('./director-lessons/director-lessons'));
 const TeacherLessons = lazy(() => import('./teacher-lessons/teacher-lessons'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 const StudentLessons = lazy(() => import('./student-lessons/student-lessons'));
@@ -15,7 +16,7 @@ const StudentLessons = lazy(() => import('./student-lessons/student-lessons'));
 const rolePage: Record<Role, ComponentType> = {
   superadmin: SuperadminLessons,
   admin: AdminLessons,
-  director: NotFoundPage,
+  director: DirectorLessons,
   teacher: TeacherLessons,
   parent: NotFoundPage,
   student: StudentLessons,

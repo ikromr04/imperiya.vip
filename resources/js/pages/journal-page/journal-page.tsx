@@ -7,13 +7,14 @@ import { Role } from '@/types/users';
 import Spinner from '@/components/ui/spinner';
 
 const SuperadminJournal = lazy(() => import('./superadmin-journal/superadmin-journal'));
+const DirectorJournal = lazy(() => import('./director-journal/director-journal'));
 const TeacherJournal = lazy(() => import('./teacher-journal/teacher-journal'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
 const rolePage: Record<Role, ComponentType> = {
   superadmin: SuperadminJournal,
   admin: NotFoundPage,
-  director: NotFoundPage,
+  director: DirectorJournal,
   teacher: TeacherJournal,
   parent: NotFoundPage,
   student: NotFoundPage,

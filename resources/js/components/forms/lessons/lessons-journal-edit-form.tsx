@@ -41,7 +41,7 @@ function LessonsJournalEditForm({
         toast.success('Данные успешно сохранены.');
       },
       onValidationError: (error) => helpers.setErrors({ ...error.errors }),
-      onFail: (message) => toast.success(message),
+      onFail: (message) => toast.error(message),
     }));
 
     helpers.setSubmitting(false);

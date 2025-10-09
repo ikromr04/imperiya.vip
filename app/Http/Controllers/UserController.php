@@ -29,8 +29,9 @@ class UserController extends Controller
     $users = collect();
 
     switch ($user->role) {
-      case 'admin':
       case 'superadmin':
+      case 'admin':
+      case 'director':
         $users = [
           ...User::select(['id', 'name', 'surname', 'patronymic', 'login', 'password', 'role', 'sex', 'birth_date', 'nationality_id', 'email', 'address', 'phone_numbers', 'whatsapp', 'social_link', 'avatar', 'avatar_thumb', 'blocked_at', 'created_at'])
             ->orderBy('surname')
@@ -318,6 +319,7 @@ class UserController extends Controller
     switch ($authUser->role) {
       case 'superadmin':
       case 'admin':
+      case 'director':
       case 'student':
         $user = User::find($request->id);
 

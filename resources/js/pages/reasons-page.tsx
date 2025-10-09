@@ -13,11 +13,13 @@ import { fetchReasonsAction } from '@/store/reasons-slice/reasons-api-actions';
 import ReasonsCreateForm from '@/components/forms/reasons/reasons-create-form';
 import ReasonsEditForm from '@/components/forms/reasons/reasons-edit-form';
 import ReasonsDeleteForm from '@/components/forms/reasons/reasons-delete-form';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
 
 function ReasonsPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const reasonsStatus = useAppSelector(getReasonsStatus);
   const reasons = useAppSelector(getReasons);
+  const authUser = useAppSelector(getAuthUser);
   const [createDTO, setCreateDTO] = useState<ReasonStoreDTO | null>(null);
   const [editDTO, setEditDTO] = useState<ReasonUpdateDTO | null>(null);
   const [deleteDTO, setDeleteDTO] = useState<ReasonId | null>(null);
@@ -26,42 +28,53 @@ function ReasonsPage(): JSX.Element {
     if (reasonsStatus === AsyncStatus.Idle) dispatch(fetchReasonsAction());
   }, [dispatch, reasonsStatus]);
 
-  const columns: ColumnDef<Reason>[] = [
+  let columns: ColumnDef<Reason>[] = [
     {
       id: 'description',
       accessorKey: 'description',
       header: 'Описание',
       size: 1686,
     },
-    {
-      id: 'actions',
-      accessorKey: 'actions',
-      header: 'Действия',
-      enableSorting: false,
-      size: 120,
-      cell: ({ row }) => (
-        <div className="flex items-center gap-1">
-          <Button
-            icon="edit"
-            variant="warning"
-            onClick={() => setEditDTO({
-              id: row.original.id,
-              description: row.original.description,
-            })}
-          >
-            <span className="sr-only">Редактировать</span>
-          </Button>
-          <Button
-            icon="delete"
-            variant="danger"
-            onClick={() => setDeleteDTO(row.original.id)}
-          >
-            <span className="sr-only">Удалить</span>
-          </Button>
-        </div>
-      ),
-    },
   ];
+
+  if (authUser?.role === 'superadmin') {
+    columns = [
+      {
+        id: 'description',
+        accessorKey: 'description',
+        header: 'Описание',
+        size: 1686,
+      },
+      {
+        id: 'actions',
+        accessorKey: 'actions',
+        header: 'Действия',
+        enableSorting: false,
+        size: 120,
+        cell: ({ row }) => (
+          <div className="flex items-center gap-1">
+            <Button
+              icon="edit"
+              variant="warning"
+              onClick={() => setEditDTO({
+                id: row.original.id,
+                description: row.original.description,
+              })}
+            >
+              <span className="sr-only">Редактировать</span>
+            </Button>
+            <Button
+              icon="delete"
+              variant="danger"
+              onClick={() => setDeleteDTO(row.original.id)}
+            >
+              <span className="sr-only">Удалить</span>
+            </Button>
+          </div>
+        ),
+      },
+    ];
+  }
 
   return (
     <>
@@ -81,7 +94,7 @@ function ReasonsPage(): JSX.Element {
             columnPinningState={{
               right: ['actions']
             }}
-            actions={(
+            actions={authUser?.role === 'superadmin' && (
               <Button
                 icon="add"
                 variant="success"

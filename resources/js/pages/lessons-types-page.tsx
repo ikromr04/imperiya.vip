@@ -13,11 +13,13 @@ import { getLessonTypes, getLessonTypesStatus } from '@/store/lessons-slice/less
 import { AsyncStatus } from '@/const/store';
 import { fetchLessonTypesAction } from '@/store/lessons-slice/lessons-api-actions';
 import { LessonType, LessonTypeId } from '@/types/lessons';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
 
 function LessonsTypesPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const typesStatus = useAppSelector(getLessonTypesStatus);
   const types = useAppSelector(getLessonTypes);
+  const authUser = useAppSelector(getAuthUser);
   const [createDTO, setCreateDTO] = useState<TypeStoreDTO | null>(null);
   const [editDTO, setEditDTO] = useState<TypeUpdateDTO | null>(null);
   const [deleteDTO, setDeleteDTO] = useState<LessonTypeId | null>(null);
@@ -26,42 +28,53 @@ function LessonsTypesPage(): JSX.Element {
     if (typesStatus === AsyncStatus.Idle) dispatch(fetchLessonTypesAction());
   }, [dispatch, typesStatus]);
 
-  const columns: ColumnDef<LessonType>[] = [
+  let columns: ColumnDef<LessonType>[] = [
     {
       id: 'name',
       accessorKey: 'name',
       header: 'Название',
       size: 1686,
     },
-    {
-      id: 'actions',
-      accessorKey: 'actions',
-      header: 'Действия',
-      enableSorting: false,
-      size: 120,
-      cell: ({ row }) => (
-        <div className="flex items-center gap-1">
-          <Button
-            icon="edit"
-            variant="warning"
-            onClick={() => setEditDTO({
-              id: row.original.id,
-              name: row.original.name,
-            })}
-          >
-            <span className="sr-only">Редактировать</span>
-          </Button>
-          <Button
-            icon="delete"
-            variant="danger"
-            onClick={() => setDeleteDTO(row.original.id)}
-          >
-            <span className="sr-only">Удалить</span>
-          </Button>
-        </div>
-      ),
-    },
   ];
+
+  if (authUser?.role === 'superadmin') {
+    columns = [
+      {
+        id: 'name',
+        accessorKey: 'name',
+        header: 'Название',
+        size: 1686,
+      },
+      {
+        id: 'actions',
+        accessorKey: 'actions',
+        header: 'Действия',
+        enableSorting: false,
+        size: 120,
+        cell: ({ row }) => (
+          <div className="flex items-center gap-1">
+            <Button
+              icon="edit"
+              variant="warning"
+              onClick={() => setEditDTO({
+                id: row.original.id,
+                name: row.original.name,
+              })}
+            >
+              <span className="sr-only">Редактировать</span>
+            </Button>
+            <Button
+              icon="delete"
+              variant="danger"
+              onClick={() => setDeleteDTO(row.original.id)}
+            >
+              <span className="sr-only">Удалить</span>
+            </Button>
+          </div>
+        ),
+      },
+    ];
+  }
 
   return (
     <>
@@ -81,7 +94,7 @@ function LessonsTypesPage(): JSX.Element {
             columnPinningState={{
               right: ['actions']
             }}
-            actions={(
+            actions={authUser?.role === 'superadmin' &&(
               <Button
                 icon="add"
                 variant="success"

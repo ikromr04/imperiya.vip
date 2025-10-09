@@ -6,6 +6,7 @@ import { Role } from '@/types/users';
 
 const SuperadminSidebar = lazy(() => import('./superadmin-sidebar'));
 const AdminSidebar = lazy(() => import('./admin-sidebar'));
+const DirectorSidebar = lazy(() => import('./director-sidebar'));
 const StudentSidebar = lazy(() => import('./student-sidebar'));
 const ParentSidebar = lazy(() => import('./parent-sidebar'));
 const TeacherSidebar = lazy(() => import('./teacher-sidebar'));
@@ -14,7 +15,7 @@ const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 const sidebars: Record<Role, ComponentType> = {
   superadmin: SuperadminSidebar,
   admin: AdminSidebar,
-  director: NotFoundPage,
+  director: DirectorSidebar,
   teacher: TeacherSidebar,
   parent: ParentSidebar,
   student: StudentSidebar,

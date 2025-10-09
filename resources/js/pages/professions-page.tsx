@@ -94,7 +94,7 @@ function ProfessionsPage(): JSX.Element {
             columnPinningState={{
               right: ['actions']
             }}
-            actions={(
+            actions={authUser?.role === 'superadmin' && (
               <Button
                 icon="add"
                 variant="success"

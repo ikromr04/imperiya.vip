@@ -16,6 +16,7 @@ class BooksController extends Controller
     switch ($user->role) {
       case 'admin':
       case 'superadmin':
+      case 'director':
         $books = Book::selectBasic()->orderBy('title')->get();
         break;
 
