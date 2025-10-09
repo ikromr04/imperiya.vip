@@ -13,11 +13,13 @@ import ProfessionsCreateForm from '@/components/forms/professions/professions-cr
 import ProfessionsEditForm from '@/components/forms/professions/professions-edit-form';
 import ProfessionsDeleteForm from '@/components/forms/professions/profession-delete-form';
 import { AsyncStatus } from '@/const/store';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
 
 function ProfessionsPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const professionsStatus = useAppSelector(getProfessionsStatus);
   const professions = useAppSelector(getProfessions);
+  const authUser = useAppSelector(getAuthUser);
   const [createDTO, setCreateDTO] = useState<ProfessionStoreDTO | null>(null);
   const [editDTO, setEditDTO] = useState<ProfessionUpdateDTO | null>(null);
   const [deleteDTO, setDeleteDTO] = useState<ProfessionId | null>(null);
@@ -26,42 +28,53 @@ function ProfessionsPage(): JSX.Element {
     if (professionsStatus === AsyncStatus.Idle) dispatch(fetchProfessionsAction());
   }, [dispatch, professionsStatus]);
 
-  const columns: ColumnDef<Profession>[] = [
+  let columns: ColumnDef<Profession>[] = [
     {
       id: 'name',
       accessorKey: 'name',
       header: 'Название',
       size: 1686,
     },
-    {
-      id: 'actions',
-      accessorKey: 'actions',
-      header: 'Действия',
-      enableSorting: false,
-      size: 120,
-      cell: ({ row }) => (
-        <div className="flex items-center gap-1">
-          <Button
-            icon="edit"
-            variant="warning"
-            onClick={() => setEditDTO({
-              id: row.original.id,
-              name: row.original.name,
-            })}
-          >
-            <span className="sr-only">Редактировать</span>
-          </Button>
-          <Button
-            icon="delete"
-            variant="danger"
-            onClick={() => setDeleteDTO(row.original.id)}
-          >
-            <span className="sr-only">Удалить</span>
-          </Button>
-        </div>
-      ),
-    },
   ];
+
+  if (authUser?.role === 'superadmin') {
+    columns = [
+      {
+        id: 'name',
+        accessorKey: 'name',
+        header: 'Название',
+        size: 1686,
+      },
+      {
+        id: 'actions',
+        accessorKey: 'actions',
+        header: 'Действия',
+        enableSorting: false,
+        size: 120,
+        cell: ({ row }) => (
+          <div className="flex items-center gap-1">
+            <Button
+              icon="edit"
+              variant="warning"
+              onClick={() => setEditDTO({
+                id: row.original.id,
+                name: row.original.name,
+              })}
+            >
+              <span className="sr-only">Редактировать</span>
+            </Button>
+            <Button
+              icon="delete"
+              variant="danger"
+              onClick={() => setDeleteDTO(row.original.id)}
+            >
+              <span className="sr-only">Удалить</span>
+            </Button>
+          </div>
+        ),
+      },
+    ];
+  }
 
   return (
     <>

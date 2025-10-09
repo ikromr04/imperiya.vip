@@ -9,7 +9,7 @@ const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 function SuperadminRoute(): JSX.Element {
   const authUser = useAppSelector(getAuthUser);
 
-  if (authUser?.role !== 'superadmin') {
+  if (authUser?.role !== 'superadmin' && authUser?.role !== 'admin') {
     return (
       <Suspense
         fallback={

@@ -13,10 +13,12 @@ import SubjectsCreateForm from '@/components/forms/subjects/subjects-create-form
 import SubjectsEditForm from '@/components/forms/subjects/subjects-edit-form';
 import SubjectsDeleteForm from '@/components/forms/subjects/subjects-delete-form';
 import { AsyncStatus } from '@/const/store';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
 
 function SubjectsPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const subjectsStatus = useAppSelector(getSubjectsStatus);
+  const authUser = useAppSelector(getAuthUser);
   const subjects = useAppSelector(getSubjects);
   const [createDTO, setCreateDTO] = useState<SubjectStoreDTO | null>(null);
   const [editDTO, setEditDTO] = useState<SubjectUpdateDTO | null>(null);
@@ -26,42 +28,53 @@ function SubjectsPage(): JSX.Element {
     if (subjectsStatus == AsyncStatus.Idle) dispatch(fetchSubjectsAction());
   }, [dispatch, subjectsStatus]);
 
-  const columns: ColumnDef<Subject>[] = [
+  let columns: ColumnDef<Subject>[] = [
     {
       id: 'name',
       accessorKey: 'name',
       header: 'Название',
       size: 1686,
     },
-    {
-      id: 'actions',
-      accessorKey: 'actions',
-      header: 'Действия',
-      enableSorting: false,
-      size: 120,
-      cell: ({ row }) => (
-        <div className="flex items-center gap-1">
-          <Button
-            icon="edit"
-            variant="warning"
-            onClick={() => setEditDTO({
-              id: row.original.id,
-              name: row.original.name,
-            })}
-          >
-            <span className="sr-only">Редактировать</span>
-          </Button>
-          <Button
-            icon="delete"
-            variant="danger"
-            onClick={() => setDeleteDTO(row.original.id)}
-          >
-            <span className="sr-only">Удалить</span>
-          </Button>
-        </div>
-      ),
-    },
   ];
+
+  if (authUser?.role === 'superadmin') {
+    columns = [
+      {
+        id: 'name',
+        accessorKey: 'name',
+        header: 'Название',
+        size: 1686,
+      },
+      {
+        id: 'actions',
+        accessorKey: 'actions',
+        header: 'Действия',
+        enableSorting: false,
+        size: 120,
+        cell: ({ row }) => (
+          <div className="flex items-center gap-1">
+            <Button
+              icon="edit"
+              variant="warning"
+              onClick={() => setEditDTO({
+                id: row.original.id,
+                name: row.original.name,
+              })}
+            >
+              <span className="sr-only">Редактировать</span>
+            </Button>
+            <Button
+              icon="delete"
+              variant="danger"
+              onClick={() => setDeleteDTO(row.original.id)}
+            >
+              <span className="sr-only">Удалить</span>
+            </Button>
+          </div>
+        ),
+      },
+    ];
+  }
 
   return (
     <>
@@ -81,7 +94,7 @@ function SubjectsPage(): JSX.Element {
             columnPinningState={{
               right: ['actions']
             }}
-            actions={(
+            actions={authUser?.role === 'superadmin' && (
               <Button
                 icon="add"
                 variant="success"

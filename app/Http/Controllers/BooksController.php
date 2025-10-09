@@ -14,6 +14,7 @@ class BooksController extends Controller
     $books = collect();
 
     switch ($user->role) {
+      case 'admin':
       case 'superadmin':
         $books = Book::selectBasic()->orderBy('title')->get();
         break;

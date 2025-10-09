@@ -19,6 +19,7 @@ class LessonController extends Controller
 
     switch ($user->role) {
       case 'superadmin':
+        case 'admin':
         if ($request->query('subject_id') && $request->query('grade_id')) {
           $lessons = Lesson::selectBasic()
             ->orderBy('date')

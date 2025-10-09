@@ -9,6 +9,7 @@ import { GradeId } from '@/types/grades';
 import { MarkId } from '@/types/marks';
 
 const SuperadminLeadership= lazy(() => import('./superadmin-leadership'));
+const AdminLeadership= lazy(() => import('./admin-leadership'));
 const StudentLeadership= lazy(() => import('./student-leadership'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
@@ -36,7 +37,7 @@ export type Data = {
 
 const rolePage: Record<Role, ComponentType> = {
   superadmin: SuperadminLeadership,
-  admin: NotFoundPage,
+  admin: AdminLeadership,
   director: NotFoundPage,
   teacher: NotFoundPage,
   parent: NotFoundPage,

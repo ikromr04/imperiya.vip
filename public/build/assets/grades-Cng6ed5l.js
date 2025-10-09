@@ -1,0 +1,1 @@
+const s=(r,t)=>{const e=r.map(({id:d})=>d),n=e.indexOf(t);if(n===-1)throw new Error("Current grade ID not found in the list of grades");const o=(n+1)%e.length;return e[o]},a=(r,t)=>{const e=r.map(({id:d})=>d),n=e.indexOf(t);if(n===-1)throw new Error("Current grade ID not found in the list of grades");const o=(n-1+e.length)%e.length;return e[o]};export{s as a,a as g};

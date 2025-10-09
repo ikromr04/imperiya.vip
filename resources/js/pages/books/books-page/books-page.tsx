@@ -7,6 +7,7 @@ import { Role } from '@/types/users';
 import Spinner from '@/components/ui/spinner';
 
 const SuperadminBooks = lazy(() => import('./superadmin-books'));
+const AdminBooks = lazy(() => import('./admin-books'));
 const TeacherBooks = lazy(() => import('./teacher-books'));
 const ParentBooks = lazy(() => import('./parent-books'));
 const StudentBooks = lazy(() => import('./student-books'));
@@ -14,7 +15,7 @@ const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
 const rolePage: Record<Role, ComponentType> = {
   superadmin: SuperadminBooks,
-  admin: NotFoundPage,
+  admin: AdminBooks,
   director: NotFoundPage,
   teacher: TeacherBooks,
   parent: ParentBooks,

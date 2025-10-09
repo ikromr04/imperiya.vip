@@ -7,12 +7,13 @@ import { Role } from '@/types/users';
 import Spinner from '@/components/ui/spinner';
 
 const SuperadminUsersRatings = lazy(() => import('./superadmin-users-show/superadmin-users-ratings'));
+const AdminUsersRatings = lazy(() => import('./admin-users-show/admin-users-ratings'));
 const ParentUsersRatings =  lazy(() => import('./parent-users-show/parent-users-ratings'));
 const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
 const roleComponentMap: Record<Role, ComponentType> = {
   superadmin: SuperadminUsersRatings,
-  admin: NotFoundPage,
+  admin: AdminUsersRatings,
   director: NotFoundPage,
   teacher: NotFoundPage,
   parent: ParentUsersRatings,

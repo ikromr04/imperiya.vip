@@ -5,6 +5,7 @@ import Spinner from '@/components/ui/spinner';
 import { Role } from '@/types/users';
 
 const SuperadminSidebar = lazy(() => import('./superadmin-sidebar'));
+const AdminSidebar = lazy(() => import('./admin-sidebar'));
 const StudentSidebar = lazy(() => import('./student-sidebar'));
 const ParentSidebar = lazy(() => import('./parent-sidebar'));
 const TeacherSidebar = lazy(() => import('./teacher-sidebar'));
@@ -12,7 +13,7 @@ const NotFoundPage = lazy(() => import('@/pages/not-found-page'));
 
 const sidebars: Record<Role, ComponentType> = {
   superadmin: SuperadminSidebar,
-  admin: NotFoundPage,
+  admin: AdminSidebar,
   director: NotFoundPage,
   teacher: TeacherSidebar,
   parent: ParentSidebar,

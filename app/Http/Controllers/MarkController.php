@@ -19,6 +19,7 @@ class MarkController extends Controller
 
     switch ($user->role) {
       case 'superadmin':
+      case 'admin':
         $marks = Mark::whereIn('lesson_id', json_decode($request->query('lessons')))
           ->get();
         break;

@@ -13,10 +13,12 @@ import { fetchBookCategoriesAction } from '@/store/books-slice/books-api-actions
 import BookCategoriesCreateForm from '@/components/forms/books/book-categories-create-form';
 import BookCategoriesEditForm from '@/components/forms/books/book-categories-edit-form';
 import BookCategoriesDeleteForm from '@/components/forms/books/book-categories-delete-form';
+import { getAuthUser } from '@/store/auth-slice/auth-selector';
 
 function BookCategoriesPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const categoriesStatus = useAppSelector(getBookCategoriesStatus);
+  const authUser = useAppSelector(getAuthUser);
   const categories = useAppSelector(getBookCategories);
   const [createDTO, setCreateDTO] = useState<BookCategoryStoreDTO | null>(null);
   const [editDTO, setEditDTO] = useState<BookCategoryUpdateDTO | null>(null);
@@ -26,42 +28,53 @@ function BookCategoriesPage(): JSX.Element {
     if (categoriesStatus === AsyncStatus.Idle) dispatch(fetchBookCategoriesAction());
   }, [categoriesStatus, dispatch]);
 
-  const columns: ColumnDef<BookCategory>[] = [
+  let columns: ColumnDef<BookCategory>[] = [
     {
       id: 'title',
       accessorKey: 'title',
       header: 'Название',
       size: 1686,
     },
-    {
-      id: 'actions',
-      accessorKey: 'actions',
-      header: 'Действия',
-      enableSorting: false,
-      size: 120,
-      cell: ({ row }) => (
-        <div className="flex items-center gap-1">
-          <Button
-            icon="edit"
-            variant="warning"
-            onClick={() => setEditDTO({
-              id: row.original.id,
-              title: row.original.title,
-            })}
-          >
-            <span className="sr-only">Редактировать</span>
-          </Button>
-          <Button
-            icon="delete"
-            variant="danger"
-            onClick={() => setDeleteDTO(row.original.id)}
-          >
-            <span className="sr-only">Удалить</span>
-          </Button>
-        </div>
-      ),
-    },
   ];
+
+  if (authUser?.role === 'superadmin') {
+    columns = [
+      {
+        id: 'title',
+        accessorKey: 'title',
+        header: 'Название',
+        size: 1686,
+      },
+      {
+        id: 'actions',
+        accessorKey: 'actions',
+        header: 'Действия',
+        enableSorting: false,
+        size: 120,
+        cell: ({ row }) => (
+          <div className="flex items-center gap-1">
+            <Button
+              icon="edit"
+              variant="warning"
+              onClick={() => setEditDTO({
+                id: row.original.id,
+                title: row.original.title,
+              })}
+            >
+              <span className="sr-only">Редактировать</span>
+            </Button>
+            <Button
+              icon="delete"
+              variant="danger"
+              onClick={() => setDeleteDTO(row.original.id)}
+            >
+              <span className="sr-only">Удалить</span>
+            </Button>
+          </div>
+        ),
+      },
+    ];
+  }
 
   return (
     <>
@@ -81,7 +94,7 @@ function BookCategoriesPage(): JSX.Element {
             columnPinningState={{
               right: ['actions']
             }}
-            actions={(
+            actions={authUser?.role === 'superadmin' && (
               <Button
                 icon="add"
                 variant="success"
